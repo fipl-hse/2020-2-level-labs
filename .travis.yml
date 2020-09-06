@@ -25,4 +25,6 @@ jobs:
         - pylint ./**/*.py
 
 notifications:
-  email: true
+  email:
+    on_success: always
+    on_failure: always
