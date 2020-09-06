@@ -2,6 +2,10 @@ language: python
 
 python: '3.8'
 
+os: linux
+
+dist: xenial
+
 cache: pip
 
 install:
@@ -15,7 +19,7 @@ jobs:
   include:
     - stage: test
       script:
-        - . ./config/run-tests.sh
+        - bash config/run-tests.sh
     - stage: lint
       script:
         - pylint ./**/*.py
