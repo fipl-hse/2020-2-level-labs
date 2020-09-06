@@ -36,7 +36,7 @@ class CalculateFrequenciesTest(unittest.TestCase):
         """
         bad_inputs = ['string', {}, (), None, 9, 9.34, True]
         for bad_input in bad_inputs:
-            self.assertEqual(calculate_frequencies(bad_input), [])
+            self.assertEqual(calculate_frequencies(bad_input), {})
 
     def test_calculate_frequencies_return_value(self):
         """
