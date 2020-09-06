@@ -44,7 +44,7 @@ python -m unittest discover -p "*_test.py" -s .
 1. Создаем `upstream` таргет в репозитории:
 
 ```bash
-git remote add upstream https://github.com/fipl-hse/2019-2-level-labs
+git remote add upstream https://github.com/fipl-hse/2020-2-level-labs
 ```
 
 2. Получаем данные об изменениях в удаленном репозитории:
