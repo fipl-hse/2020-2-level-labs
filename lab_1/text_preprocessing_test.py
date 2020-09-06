@@ -1,15 +1,16 @@
 # pylint: skip-file
 """
-Checks the first lab tokenize function
+Checks the first lab text preprocessing functions
 """
 
 import unittest
 from lab_1.main import tokenize
+from lab_1.main import remove_stop_words
 
 
 class TokenizeTest(unittest.TestCase):
     """
-    Tests token creation
+    Tests tokenize function
     """
 
     def test_tokenize_ideal(self):
@@ -54,3 +55,40 @@ class TokenizeTest(unittest.TestCase):
         bad_inputs = [[], {}, (), None, 9, 9.34, True]
         for bad_input in bad_inputs:
             self.assertEqual(tokenize(bad_input), [])
+
+
+class RemoveStopWordsTest(unittest.TestCase):
+    """
+    Tests remove stop words function
+    """
+    STOP_WORDS = ['the', 'a', 'is']
+
+    def test_remove_stop_words_ideal(self):
+        """
+        Ideal removing stop words scenario
+        """
+        self.assertEqual(remove_stop_words(['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy'],
+                                           RemoveStopWordsTest.STOP_WORDS), ['weather', 'sunny', 'man', 'happy'])
+
+    def test_remove_stop_words_bad_input(self):
+        """
+        Remove stop words bad input scenario
+        """
+        bad_inputs_first = [{}, (), None, 9, 9.34, True]
+        bad_inputs_second = [{}, (), None, 9, 9.34, True]
+        for bad_input in range(0, 5):
+            self.assertEqual(remove_stop_words(bad_inputs_first[bad_input], bad_inputs_second[bad_input]), [])
+            self.assertEqual(remove_stop_words([], bad_inputs_second[bad_input]), [])
+            self.assertEqual(remove_stop_words(bad_inputs_first[bad_input], []), [])
+
+    def test_remove_stop_words_no_stop_words(self):
+        """
+        Remove stop words without stop words scenario
+        """
+        self.assertEqual(remove_stop_words(['token1', 'token2'], []), ['token1', 'token2'])
+
+    def test_remove_stop_words_all_words(self):
+        """
+        Remove stop words as the whole text scenario
+        """
+        self.assertEqual(remove_stop_words(['the', 'a', 'is'], RemoveStopWordsTest.STOP_WORDS), [])
