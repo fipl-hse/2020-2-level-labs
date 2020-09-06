@@ -1,0 +1,26 @@
+language: python
+
+python: '3.8'
+
+sudo: required
+
+cache: pip
+
+install:
+  - pip3 install -r requirements.txt
+
+stages:
+  - test
+  - lint
+
+jobs:
+  include:
+    - stage: test
+      script:
+        - . ./config/run-tests.sh
+    - stage: lint
+      script:
+        - pylint ./**/*.py
+
+notifications:
+  email: true
