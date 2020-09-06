@@ -18,6 +18,19 @@
 3. TBD (to be defined)
 4. TBD (to be defined)
 
+## Дополнительные материалы
+
+1. Mark Lutz. 
+   [Learning Python](https://www.amazon.com/Learning-Python-5th-Mark-Lutz/dp/1449355730).
+2. Mark Lutz. 
+   [Programming Python: Powerful Object-Oriented Programming](https://www.amazon.com/Programming-Python-Powerful-Object-Oriented/dp/0596158106)
+3. Хирьянов Тимофей Фёдорович. Видеолекции. 
+   [Практика программирования на Python 3](https://www.youtube.com/watch?v=fgf57Sa5A-A&list=PLRDzFCPr95fLuusPXwvOPgXzBL3ZTzybY) 
+4. Хирьянов Тимофей Фёдорович. Видеолекции. 
+   [Алгоритмы и структуры данных на Python 3](https://www.youtube.com/watch?v=KdZ4HF1SrFs&list=PLRDzFCPr95fK7tr47883DFUbm4GeOjjc0)
+5. [Official Python 3 documentation](https://docs.python.org/3/).
+
+
 ## Запуск тестов
 
 Для запуска тестов выполните следующую команду:
