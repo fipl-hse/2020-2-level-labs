@@ -1,4 +1,4 @@
-echo running tests
+echo Running tests
 WAS_FAILED=0
 LABS=$(cat config/labs.txt)
 echo "$LABS"
@@ -10,7 +10,7 @@ for lab in $LABS; do
 	fi
 done
 
-if [[ "$WAS_FAILED" ]]; then
-	echo tests failed
-	return 1
+if [[ $WAS_FAILED -eq 1 ]]; then
+	echo Tests failed
+	exit 1
 fi
