@@ -90,17 +90,17 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     pass
 
 
-def write_to_file(path_to_file: str, content: tuple):
-    """
-    Writes the result in a file
-    """
-    pass
-
-
 def read_from_file(path_to_file: str) -> str:
     """
     Opens the file and reads its content
     :return: the initial text in string format
+    """
+    pass
+
+
+def write_to_file(path_to_file: str, content: tuple):
+    """
+    Writes the result in a file
     """
     pass
 

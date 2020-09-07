@@ -246,9 +246,9 @@ class GetAndSortConcordanceTest(unittest.TestCase):
     """
 
     @unittest.skip
-    def test_get_and_sort_concordance_ideal(self):
+    def test_get_and_left_sort_concordance_ideal(self):
         """
-        Ideal get and sort concordance scenario
+        Ideal left sort concordance scenario
         """
         tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
                   'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
@@ -258,5 +258,21 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         left_sort = True
 
         expected = ['dog is happy but the cat', 'man is happy the dog is']
+        actual = get_and_sort_concordance(tokens, word, left_range, right_range, left_sort)
+        self.assertEqual(expected, actual)
+
+    @unittest.skip
+    def test_get_and_right_sort_concordance_ideal(self):
+        """
+        Ideal right sort concordance scenario
+        """
+        tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
+                  'dog', 'is', 'happy', 'still', 'the', 'cat', 'is', 'sad']
+        word = 'happy'
+        left_range = 2
+        right_range = 3
+        left_sort = False
+
+        expected = ['man is happy dog is happy', 'dog is happy still the cat']
         actual = get_and_sort_concordance(tokens, word, left_range, right_range, left_sort)
         self.assertEqual(expected, actual)
