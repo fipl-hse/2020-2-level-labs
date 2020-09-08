@@ -14,6 +14,7 @@ install:
 stages:
   - test
   - lint
+  - plagiarism_check
 
 jobs:
   include:
@@ -23,6 +24,12 @@ jobs:
     - stage: lint
       script:
         - pylint ./**/*.py
+    - stage: plagiarism_check
+      script:
+        - if [ -n "$TRAVIS_COMMIT" ]; then echo yes to commit; fi
+        - if [ -n "$FIPL_ACCESS_TOKEN" ]; then echo yes to token; fi
+        - python3 config/pr_crawler.py
+        - bash config/run-plagiarism-check.sh
 
 notifications:
   email:
