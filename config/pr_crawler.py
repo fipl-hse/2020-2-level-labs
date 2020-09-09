@@ -67,7 +67,8 @@ if __name__ == '__main__':
     first_file_url = content[0]['raw_url']
     http = urllib3.PoolManager()
     request = http.request('GET', first_file_url, preload_content=False)
-    with open('test.txt', 'wb') as out:
+    os.makedirs('tmp/lab')
+    with open('tmp/lab/test.txt', 'wb') as out:
         while True:
             data = request.read(100)
             if not data:

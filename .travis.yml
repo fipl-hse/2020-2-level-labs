@@ -23,6 +23,8 @@ jobs:
     - stage: lint
       script:
         - python3 config/pr_crawler.py
+        - ls -la ./
+        - cat ./tmp/lab/test.txt
         - pylint ./**/*.py
 
 notifications:
