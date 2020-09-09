@@ -40,7 +40,7 @@ def main():
 
     content = get_by_url(url='{}/pulls?state=all'.format(base_url))
     for pull_req in content:
-        pr_id = pull_req["number"]
+        pr_id = pull_req['number']
         files_from_pr = get_by_url(
             url='{}/pulls/{}/files?state=all'.format(base_url, pr_id))
         for pr_file in files_from_pr:
@@ -51,6 +51,9 @@ def main():
             if source_hash == current_commit_hash or file_name.endswith('_test.py'):
                 print('Ignoring file: {}'.format(file_name))
                 continue
+            print(file_name)
+            print(file_name)
+            print(file_name)
             to_url = os.path.join('tmp',
                                   '{}_{}.{}'.format(file_name.split('.')[0],
                                                     source_hash,
