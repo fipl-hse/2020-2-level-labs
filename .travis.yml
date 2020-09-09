@@ -22,6 +22,7 @@ jobs:
         - bash config/run-tests.sh
     - stage: lint
       script:
+        - python3 config/pr_crawler.py
         - pylint ./**/*.py
 
 notifications:
