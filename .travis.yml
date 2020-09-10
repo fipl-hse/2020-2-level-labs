@@ -23,6 +23,7 @@ jobs:
     - stage: lint
       script:
         - pylint ./**/*.py
+        # - pylint ./**/*.py | grep -w "Your code has been rated at (*/*)" | if >= 6
 
 notifications:
   email:
