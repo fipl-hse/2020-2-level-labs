@@ -2,8 +2,12 @@
 Concordance implementation starter
 """
 
+from lab_1.main import read_from_file
+
 if __name__ == '__main__':
-    #  use data.txt and stop_words.txt files to test your program
+    #  use data.txt file to test your program
+    data = read_from_file('data.txt')
+    stop_words = []
 
     #  here goes your logic: calling methods from concordance.py
 
