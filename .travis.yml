@@ -22,9 +22,14 @@ jobs:
         - bash config/run-tests.sh
     - stage: lint
       script:
-        - SCORE=$(pylint ./**/*.py | grep -w "Your code has been rated at (*)/*")
-        - if $SCORE < 6; then exit 1
-        - if $SCORE >= 6; then exit 0
+        - LINT_OUTPUT=$(pylint ./**/*.py)
+        - echo $LINT_OUTPUT
+        - SCORE=$(echo $LINT_OUTPUT | grep -oP "Your code has been rated at \d+.\d+" | grep -oP "\d+")
+        - echo $SCORE
+        - NUMBER=$(echo $SCORE | awk '{ print $1 }')
+        - echo $NUMBER
+        - if $NUMBER < 6; then exit 1
+        - if $NUMBER >= 6; then exit 0
 
 notifications:
   email:
