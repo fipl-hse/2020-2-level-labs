@@ -22,8 +22,9 @@ jobs:
         - bash config/run-tests.sh
     - stage: lint
       script:
-        - pylint ./**/*.py
-        # - pylint ./**/*.py | grep -w "Your code has been rated at (*/*)" | if >= 6
+        - SCORE=$(pylint ./**/*.py | grep -w "Your code has been rated at (*)/*")
+        - if $SCORE < 6; then exit 1
+        - if $SCORE >= 6; then exit 0
 
 notifications:
   email:
