@@ -6,11 +6,10 @@ echo "$LABS"
 
 for lab in $LABS; do
 	echo "Running tests for lab #${lab}"
-	pushd lab_"${lab}" || exit 1
-	if ! python3 -m unittest discover -p *_test.py;  then
+
+	if ! python3 -m unittest discover -p *_test.py -s lab_"${lab}";  then
     	WAS_FAILED=1
 	fi
-	popd || exit 1
 done
 
 if [[ $WAS_FAILED -eq 1 ]]; then
