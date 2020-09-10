@@ -201,6 +201,7 @@ class GetConcordanceTest(unittest.TestCase):
             self.assertEqual(expected, actual_3)
 
 
+@unittest.skip
 class GetAdjacentWordsTest(unittest.TestCase):
     """
     Tests get adjacent words function
@@ -276,6 +277,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
             self.assertEqual(expected, actual_3)
 
 
+@unittest.skip
 class GetAndSortConcordanceTest(unittest.TestCase):
     """
     Tests get and sort concordance function

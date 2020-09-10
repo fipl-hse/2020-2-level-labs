@@ -10,6 +10,3 @@ if __name__ == '__main__':
     RESULT = None
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [(), ()], 'Concordance not working'
-
-# Test: a) assert concordance_realize is in file
-# Test: b) call start.py, expect it does not throw Error
