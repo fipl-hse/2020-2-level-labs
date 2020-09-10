@@ -95,7 +95,7 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r') as fs:
+    with open(path_to_file, 'r', encoding='utf-8') as fs:
         data = fs.read()
 
     return data
