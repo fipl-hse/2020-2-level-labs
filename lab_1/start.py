@@ -7,9 +7,9 @@ if __name__ == '__main__':
 
     #  here goes your logic: calling methods from concordance.py
 
-    ResultedConcordance = None
+    RESULT = None
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert ResultedConcordance == [(), ()], 'Concordance not working'
+    assert RESULT == [(), ()], 'Concordance not working'
 
 # Test: a) assert concordance_realize is in file
 # Test: b) call start.py, expect it does not throw Error
