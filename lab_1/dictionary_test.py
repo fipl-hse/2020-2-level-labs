@@ -248,7 +248,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         Checks if function can handle great right range numbers,
         that exceed the number of given tokens
         """
-        expected = [['happy', 'man']]
+        expected = [['man']]
         actual = get_adjacent_words(['one', 'happy', 'man'], 'happy', 0, 1000)
         self.assertEqual(expected, actual)
 
@@ -257,7 +257,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         Checks if function can handle great left range numbers,
         that exceed the number of given tokens
         """
-        expected = [['one', 'happy']]
+        expected = [['one']]
         actual = get_concordance(['one', 'happy', 'man'], 'happy', 1000, 0)
         self.assertEqual(expected, actual)
 
@@ -303,12 +303,12 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
                   'dog', 'is', 'happy', 'still', 'the', 'cat', 'is', 'sad']
         word = 'happy'
-        left_range = 2
-        right_range = 3
+        left_context_size = 2
+        right_context_size = 3
         left_sort = False
 
         expected = [['man', 'is', 'happy', 'dog', 'is', 'happy'], ['dog', 'is', 'happy', 'still', 'the', 'cat']]
-        actual = sort_concordance(tokens, word, left_range, right_range, left_sort)
+        actual = sort_concordance(tokens, word, left_context_size, right_context_size, left_sort)
         self.assertEqual(expected, actual)
 
     def test_get_and_sort_concordance_bad_tokens_inputs(self):
