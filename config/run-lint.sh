@@ -1,5 +1,5 @@
 echo "$PYTHONPATH"
-export PYTHONPATH="$(pwd)":${PYTHONPATH}
+export PYTHONPATH="$(pwd):lab_1":${PYTHONPATH}
 echo "$PYTHONPATH"
 
 echo 'Running lint check...'
