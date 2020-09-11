@@ -1,6 +1,8 @@
-export PYTHONPATH=${PYTHONPATH}:{pwd}
+echo "$PYTHONPATH"
+export PYTHONPATH=${PYTHONPATH}:"{$(pwd)}"
+echo "$PYTHONPATH"
 
-echo 'Running Lint Check'
+echo 'Running lint check...'
 MINIMUM_LEVEL=9
 FAILED=0
 
