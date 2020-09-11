@@ -1,14 +1,12 @@
-echo "$PYTHONPATH"
-export PYTHONPATH="$(pwd):lab_1":${PYTHONPATH}
-echo "$PYTHONPATH"
+export PYTHONPATH="$(pwd):lab_1:$(pwd):lab_2:$(pwd):lab_3:$(pwd):lab_4:$(pwd):${PYTHONPATH}"
 
 echo 'Running lint check...'
-MINIMUM_LEVEL=9
+MINIMUM_LEVEL=7
 FAILED=0
 
 lint_output=$(pylint ./**/*.py)
 score=$(echo "$lint_output" | grep -oP "Your code has been rated at \d+.\d+" | grep -oP "\d+")
-readarray -t score <<<"$score"
+readarray -t score <<< "$score"
 
 if [[ $score -lt $MINIMUM_LEVEL ]]; then
   echo "Lint Check FAILED!"
