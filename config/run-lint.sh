@@ -1,12 +1,12 @@
 echo 'Running Lint Check'
-MINIMUM_LEVEL=7
+MINIMUM_LEVEL=9
 FAILED=0
 
 lint_output=$(pylint ./**/*.py)
 echo "$lint_output"
 score=$(echo "$lint_output" | grep -oP "Your code has been rated at \d+.\d+" | grep -oP "\d+")
 echo "$score"
-score=$(echo "$score" | awk '{ print $1 }')
+readarray -t score <<<"$score"
 echo "$score"
 
 if [[ $score -lt $MINIMUM_LEVEL ]]; then
