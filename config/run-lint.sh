@@ -4,6 +4,5 @@ echo 'Running lint check...'
 MINIMUM_LEVEL=7
 
 lint_output=$(pylint ./**/*.py)
-lint_parser_exit=$(python3 config/lint_level.py --lint-output "$lint_output" --lint-level $MINIMUM_LEVEL)
-echo $lint_parser_exit
-exit $lint_parser_exit
+python3 config/lint_level.py --lint-output "$lint_output" --lint-level $MINIMUM_LEVEL
+echo $?
