@@ -2,7 +2,7 @@
 Lab 1
 A concordance extraction
 """
-
+#some words just for practise 
 
 def tokenize(text: str) -> list:
     """
