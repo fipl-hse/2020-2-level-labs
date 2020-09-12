@@ -87,7 +87,14 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    a = 0
+    b = 3
+    for i in range(10):
+
+
+
+
+        print(i)
 
 
 def read_from_file(path_to_file: str) -> str:

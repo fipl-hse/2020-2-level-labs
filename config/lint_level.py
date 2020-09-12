@@ -12,11 +12,11 @@ def is_passed(lint_output: str, minimum_lint_level: int):
         print('Link ')
         return 1
     elif lint_score != 10:
-        print('Lint check passed but there are thing to improve:\n')
+        print('\nLint check passed but there are thing to improve:\n')
         print(lint_output)
         return 0
     else:
-        print('Lint check passed!')
+        print('\nLint check passed!\n')
         return 0
 
 
