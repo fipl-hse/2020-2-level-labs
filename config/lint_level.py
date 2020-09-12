@@ -9,7 +9,9 @@ def is_passed(lint_output: str, minimum_lint_level: int):
     lint_score = int(re.search(r'\d+', lint_level).group(0))
 
     if lint_score < minimum_lint_level:
-        print('Link ')
+        print('\nLint check is not passed!')
+        print('Fix the following issues and try again.\n')
+        print(lint_output)
         return 1
     elif lint_score != 10:
         print('\nLint check passed but there are thing to improve:\n')
