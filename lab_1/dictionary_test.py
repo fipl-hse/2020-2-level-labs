@@ -4,11 +4,11 @@ Checks the first lab dictionary functions
 """
 
 import unittest
-from lab_1.main import calculate_frequencies
-from lab_1.main import get_top_n_words
-from lab_1.main import get_concordance
-from lab_1.main import get_adjacent_words
-from lab_1.main import sort_concordance
+from main import calculate_frequencies
+from main import get_top_n_words
+from main import get_concordance
+from main import get_adjacent_words
+from main import sort_concordance
 
 
 class CalculateFrequenciesTest(unittest.TestCase):
