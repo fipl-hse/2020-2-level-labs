@@ -259,7 +259,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         that exceed the number of given tokens
         """
         expected = [['one']]
-        actual = get_concordance(['one', 'happy', 'man'], 'happy', 1000, 0)
+        actual = get_adjacent_words(['one', 'happy', 'man'], 'happy', 1000, 0)
         self.assertEqual(expected, actual)
 
     def test_get_adjacent_words_bad_inputs(self):
