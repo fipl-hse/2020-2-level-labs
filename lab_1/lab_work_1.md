@@ -173,11 +173,7 @@ def write_to_file(path_to_file: str, content: list):
 
 Интерфейс: 
 ```py
-<<<<<<< HEAD
-def get_and_sort_concordance(tokens: list, word: str, left_range: int, right_range: int, left_sort: bool) -> list:
-=======
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
->>>>>>> upstream/master
   pass
 ```
 

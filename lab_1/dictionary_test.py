@@ -136,7 +136,6 @@ class GetConcordanceTest(unittest.TestCase):
         """
         Checks that a concordance list can be created for several contexts
         """
-
         expected = [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
         actual = get_concordance(['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
                                   'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad'],
@@ -160,7 +159,6 @@ class GetConcordanceTest(unittest.TestCase):
         """
         Checks that function can handle incorrect number inputs
         """
-
         expected = []
         actual = get_concordance(['happy', 'man'], 'happy', -1, 0)
         self.assertEqual(expected, actual)
@@ -176,7 +174,6 @@ class GetConcordanceTest(unittest.TestCase):
         Checks if function can handle great right range numbers,
         that exceed the number of given tokens
         """
-
         expected = [['happy', 'man']]
         actual = get_concordance(['one', 'happy', 'man'], 'happy', 0, 1000)
         self.assertEqual(expected, actual)
@@ -186,7 +183,6 @@ class GetConcordanceTest(unittest.TestCase):
         Checks if function can handle great left range numbers,
         that exceed the number of given tokens
         """
-
         expected = [['one', 'happy']]
         actual = get_concordance(['one', 'happy', 'man'], 'happy', 1000, 0)
         self.assertEqual(expected, actual)
@@ -254,7 +250,6 @@ class GetAdjacentWordsTest(unittest.TestCase):
         Checks if function can handle great right range numbers,
         that exceed the number of given tokens
         """
-
         expected = [['man']]
         actual = get_adjacent_words(['one', 'happy', 'man'], 'happy', 0, 1000)
         self.assertEqual(expected, actual)
@@ -264,7 +259,6 @@ class GetAdjacentWordsTest(unittest.TestCase):
         Checks if function can handle great left range numbers,
         that exceed the number of given tokens
         """
-
         expected = [['one']]
         actual = get_adjacent_words(['one', 'happy', 'man'], 'happy', 1000, 0)
         self.assertEqual(expected, actual)
@@ -312,7 +306,6 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
                   'dog', 'is', 'happy', 'still', 'the', 'cat', 'is', 'sad']
         word = 'happy'
-
         left_context_size = 2
         right_context_size = 3
         left_sort = False
