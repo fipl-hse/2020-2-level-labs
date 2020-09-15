@@ -4,8 +4,12 @@ Checks the first lab text preprocessing functions
 """
 
 import unittest
+import re
 from main import tokenize
 from main import remove_stop_words
+from main import read_from_file
+
+TEXT = read_from_file('data.txt')
 
 
 class TokenizeTest(unittest.TestCase):
@@ -63,6 +67,14 @@ class TokenizeTest(unittest.TestCase):
         for bad_input in bad_inputs:
             actual = tokenize(bad_input)
             self.assertEqual(expected, actual)
+
+    def test_tokenize_big_text_case(self):
+        """
+        Tokenize big input text scenario
+        """
+        expected = [re.findall('\w+', TEXT)]
+        actual = tokenize(TEXT)
+        self.assertEqual(expected, actual)
 
 
 class RemoveStopWordsTest(unittest.TestCase):
