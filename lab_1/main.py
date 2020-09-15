@@ -52,22 +52,22 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     pass
 
 
-def get_concordance(tokens: list, word: str, left_range: int, right_range: int) -> list:
+def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
     Gets a concordance of a word
     A concordance is a listing of each occurrence of a word in a text,
     presented with the words surrounding it
     :param tokens: a list of tokens
     :param word: a word-base for a concordance
-    :param left_range: the number of words in the left context
-    :param right_range: the number of words in the right context
+    :param left_context_size: the number of words in the left context
+    :param right_context_size: the number of words in the right context
     :return: a concordance
     e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
                     'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
     word = 'happy'
-    left_range = 2
-    right_range = 3
-    --> ['man is happy the dog is', 'dog is happy but the cat']
+    left_context_size = 2
+    right_context_size = 3
+    --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     pass
 
@@ -85,7 +85,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     word = 'happy'
     left_n = 2
     right_n = 3
-    --> [('man', 'is'), ('dog, 'cat')]
+    --> [['man', 'is'], ['dog, 'cat']]
     """
     pass
 
@@ -95,31 +95,34 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    pass
+    with open(path_to_file, 'r', encoding='utf-8') as fs:
+        data = fs.read()
+
+    return data
 
 
-def write_to_file(path_to_file: str, content: tuple):
+def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
     pass
 
 
-def get_and_sort_concordance(tokens: list, word: str, left_range: int, right_range: int, left_sort=True) -> list:
+def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
     """
     Gets a concordance of a word and sorts it by either left or right context
     :param tokens: a list of tokens
     :param word: a word-base for a concordance
-    :param left_range: the number of words in the left context
-    :param right_range: the number of words in the right context
-    :param left_sort: True if sorting by the left context, False – the right context
+    :param left_context_size: the number of words in the left context
+    :param right_context_size: the number of words in the right context
+    :param left_sort: if True, sort by the left context, False – by the right context
     :return: a concordance
     e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
                     'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
     word = 'happy'
-    left_range = 2
-    right_range = 3
+    left_context_size = 2
+    right_context_size = 3
     left_sort = True
-    --> ['dog is happy but the cat', 'man is happy the dog is']
+    --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     pass

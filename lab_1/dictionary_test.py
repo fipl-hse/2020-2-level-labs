@@ -4,11 +4,11 @@ Checks the first lab dictionary functions
 """
 
 import unittest
-from lab_1.main import calculate_frequencies
-from lab_1.main import get_top_n_words
-from lab_1.main import get_concordance
-from lab_1.main import get_adjacent_words
-from lab_1.main import get_and_sort_concordance
+from main import calculate_frequencies
+from main import get_top_n_words
+from main import get_concordance
+from main import get_adjacent_words
+from main import sort_concordance
 
 
 class CalculateFrequenciesTest(unittest.TestCase):
@@ -125,7 +125,8 @@ class GetConcordanceTest(unittest.TestCase):
         """
         Ideal get concordance scenario
         """
-        expected = ['man is happy the dog is']
+
+        expected = [['man', 'is', 'happy', 'the', 'dog', 'is']]
         actual = get_concordance(['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
                                   'the', 'dog', 'is', 'glad', 'but', 'the', 'cat', 'is', 'sad'],
                                  'happy', 2, 3)
@@ -135,7 +136,8 @@ class GetConcordanceTest(unittest.TestCase):
         """
         Checks that a concordance list can be created for several contexts
         """
-        expected = ['man is happy the dog is', 'dog is happy but the cat']
+
+        expected = [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
         actual = get_concordance(['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
                                   'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad'],
                                  'happy', 2, 3)
@@ -150,7 +152,7 @@ class GetConcordanceTest(unittest.TestCase):
         self.assertEqual(expected, actual)
         actual = get_concordance(['happy'], '', 2, 3)
         self.assertEqual(expected, actual)
-        expected = ['happy']
+        expected = []
         actual = get_concordance(['happy'], 'happy', 0, 0)
         self.assertEqual(expected, actual)
 
@@ -158,13 +160,14 @@ class GetConcordanceTest(unittest.TestCase):
         """
         Checks that function can handle incorrect number inputs
         """
-        expected = ['happy']
+
+        expected = []
         actual = get_concordance(['happy', 'man'], 'happy', -1, 0)
         self.assertEqual(expected, actual)
-        expected = ['happy man']
+        expected = [['happy', 'man']]
         actual = get_concordance(['happy', 'man'], 'happy', 0, 1)
         self.assertEqual(expected, actual)
-        expected = ['man']
+        expected = []
         actual = get_concordance(['happy', 'man'], 'man', -1, 0)
         self.assertEqual(expected, actual)
 
@@ -173,7 +176,8 @@ class GetConcordanceTest(unittest.TestCase):
         Checks if function can handle great right range numbers,
         that exceed the number of given tokens
         """
-        expected = ['happy man']
+
+        expected = [['happy', 'man']]
         actual = get_concordance(['one', 'happy', 'man'], 'happy', 0, 1000)
         self.assertEqual(expected, actual)
 
@@ -182,7 +186,8 @@ class GetConcordanceTest(unittest.TestCase):
         Checks if function can handle great left range numbers,
         that exceed the number of given tokens
         """
-        expected = ['one happy']
+
+        expected = [['one', 'happy']]
         actual = get_concordance(['one', 'happy', 'man'], 'happy', 1000, 0)
         self.assertEqual(expected, actual)
 
@@ -201,6 +206,7 @@ class GetConcordanceTest(unittest.TestCase):
             self.assertEqual(expected, actual_3)
 
 
+@unittest.skip
 class GetAdjacentWordsTest(unittest.TestCase):
     """
     Tests get adjacent words function
@@ -216,7 +222,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         left_n = 2
         right_n = 3
 
-        expected = [('man', 'is'), ('dog', 'cat')]
+        expected = [['man', 'is'], ['dog', 'cat']]
         actual = get_adjacent_words(tokens, word, left_n, right_n)
         self.assertEqual(expected, actual)
 
@@ -239,7 +245,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         self.assertEqual(expected, actual)
         actual = get_adjacent_words(['happy', 'man'], 'man', -1, 0)
         self.assertEqual(expected, actual)
-        expected = [('', 'man')]
+        expected = [['man']]
         actual = get_adjacent_words(['happy', 'man'], 'happy', 0, 1)
         self.assertEqual(expected, actual)
 
@@ -248,7 +254,8 @@ class GetAdjacentWordsTest(unittest.TestCase):
         Checks if function can handle great right range numbers,
         that exceed the number of given tokens
         """
-        expected = []
+
+        expected = [['man']]
         actual = get_adjacent_words(['one', 'happy', 'man'], 'happy', 0, 1000)
         self.assertEqual(expected, actual)
 
@@ -257,8 +264,9 @@ class GetAdjacentWordsTest(unittest.TestCase):
         Checks if function can handle great left range numbers,
         that exceed the number of given tokens
         """
-        expected = []
-        actual = get_concordance(['one', 'happy', 'man'], 'happy', 1000, 0)
+
+        expected = [['one']]
+        actual = get_adjacent_words(['one', 'happy', 'man'], 'happy', 1000, 0)
         self.assertEqual(expected, actual)
 
     def test_get_adjacent_words_bad_inputs(self):
@@ -276,6 +284,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
             self.assertEqual(expected, actual_3)
 
 
+@unittest.skip
 class GetAndSortConcordanceTest(unittest.TestCase):
     """
     Tests get and sort concordance function
@@ -288,12 +297,12 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
                   'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
         word = 'happy'
-        left_range = 2
-        right_range = 3
+        left_context_size = 2
+        right_context_size = 3
         left_sort = True
 
-        expected = ['dog is happy but the cat', 'man is happy the dog is']
-        actual = get_and_sort_concordance(tokens, word, left_range, right_range, left_sort)
+        expected = [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
+        actual = sort_concordance(tokens, word, left_context_size, right_context_size, left_sort)
         self.assertEqual(expected, actual)
 
     def test_get_and_right_sort_concordance_ideal(self):
@@ -303,12 +312,13 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
                   'dog', 'is', 'happy', 'still', 'the', 'cat', 'is', 'sad']
         word = 'happy'
-        left_range = 2
-        right_range = 3
+
+        left_context_size = 2
+        right_context_size = 3
         left_sort = False
 
-        expected = ['man is happy dog is happy', 'dog is happy still the cat']
-        actual = get_and_sort_concordance(tokens, word, left_range, right_range, left_sort)
+        expected = [['man', 'is', 'happy', 'dog', 'is', 'happy'], ['dog', 'is', 'happy', 'still', 'the', 'cat']]
+        actual = sort_concordance(tokens, word, left_context_size, right_context_size, left_sort)
         self.assertEqual(expected, actual)
 
     def test_get_and_sort_concordance_bad_tokens_inputs(self):
@@ -318,7 +328,7 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         bad_inputs = [(), {}, '', None, True, 8, 8.94, [None]]
         expected = []
         for bad_input in bad_inputs:
-            actual = get_and_sort_concordance(bad_input, 'happy', 2, 3, False)
+            actual = sort_concordance(bad_input, 'happy', 2, 3, False)
             self.assertEqual(expected, actual)
 
     def test_get_and_sort_concordance_bad_word_inputs(self):
@@ -328,7 +338,7 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         bad_inputs = [(), {}, None, True, 8, 8.94, [None]]
         expected = []
         for bad_input in bad_inputs:
-            actual = get_and_sort_concordance(['one', 'happy', 'man'], bad_input, 2, 3, True)
+            actual = sort_concordance(['one', 'happy', 'man'], bad_input, 2, 3, True)
             self.assertEqual(expected, actual)
 
     def test_get_and_sort_concordance_bad_number_inputs(self):
@@ -338,16 +348,16 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         bad_inputs = [(), {}, None, True, [None]]
         expected = []
         for bad_input in bad_inputs:
-            actual = get_and_sort_concordance(['happy'],
-                                              'happy', bad_input, bad_input, True)
+            actual = sort_concordance(['happy'],
+                                      'happy', bad_input, bad_input, True)
             self.assertEqual(expected, actual)
 
     def test_get_and_sort_concordance_bad_number_numeric_inputs(self):
         """
         Checks if function can handle incorrect numeric range inputs
         """
-        expected = ['happy man']
-        actual = get_and_sort_concordance(['one', 'happy', 'man'], 'happy', -1, 1000, True)
+        expected = [['happy', 'man']]
+        actual = sort_concordance(['one', 'happy', 'man'], 'happy', -1, 1000, True)
         self.assertEqual(expected, actual)
 
     def test_get_and_sort_concordance_bad_sorting_option_inputs(self):
@@ -357,6 +367,6 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         bad_inputs = [[], (), {}, '', None, 8, 8.99]
         expected = []
         for bad_input in bad_inputs:
-            actual = get_and_sort_concordance(['one', 'happy', 'man'],
-                                              'happy', 2, 3, bad_input)
+            actual = sort_concordance(['one', 'happy', 'man'],
+                                      'happy', 2, 3, bad_input)
             self.assertEqual(expected, actual)

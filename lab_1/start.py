@@ -1,13 +1,16 @@
+"""
+Concordance implementation starter
+"""
+
+from main import read_from_file
+
 if __name__ == '__main__':
-  text = read_text('a.txt')
-  text = 'Mary...'
-  
-  # here goes your logic: calling methods from concordance.py
-  
-  concordance_realize = None
-  
-  ## DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-  assert concordance_realize == [(), ()], 'Concordance not working'
-  
-  ### Test: a) assert concordance_realize is in file
-  ### Test: b) call start.py, expect it does not throw Error
+    #  use data.txt file to test your program
+    data = read_from_file('data.txt')
+    stop_words = []
+
+    #  here goes your logic: calling methods from concordance.py
+
+    RESULT = None
+    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
+    assert RESULT == [(), ()], 'Concordance not working'
