@@ -2,7 +2,15 @@ export PYTHONPATH="$(pwd):lab_1:$(pwd):lab_2:$(pwd):lab_3:$(pwd):lab_4:$(pwd):${
 
 echo ''
 echo 'Running lint check...'
-MINIMUM_SCORE=7
+LABS=$(cat config/labs.txt)
 
-lint_output=$(pylint ./**/*.py)
-python3 config/lint_level.py --lint-output "$lint_output" --lint-level $MINIMUM_SCORE
+for lab in $LABS; do
+	echo "Running lint for lab #${lab}"
+
+  TARGET_SCORE=$(cat lab_"${lab}"/target_level.txt)
+  echo $TARGET_SCORE
+
+	lint_output=$(pylint lab_"${lab}")
+  python3 config/lint_level.py --lint-output "$lint_output" --lint-level $TARGET_SCORE
+done
+
