@@ -1,1 +1,5 @@
-text_preprocessing_test.py
+tokenize_test.py
+remove_stop_words_test.py
+calculate_frequencies_test.py
+get_top_n_words_test.py
+get_concordance_test.py
