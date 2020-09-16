@@ -6,7 +6,7 @@ echo "$LABS"
 
 for lab in $LABS; do
 	echo "Running tests for lab #${lab}"
-
+	export PYTHONPATH=./lab_"${lab}"
 	if ! python3 -m unittest discover -p *_test.py -s lab_"${lab}";  then
     	WAS_FAILED=1
 	fi
