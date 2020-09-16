@@ -1,2 +1,2 @@
-sum_test.py
 text_preprocessing_test.py
+dictionary_test.py
