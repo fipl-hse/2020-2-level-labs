@@ -12,6 +12,8 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
+    if not isinstance(text, str):
+        return []
     text_list = text.lower().split()
     text_output = []
     for word in text_list:
@@ -34,10 +36,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
+    if not isinstance(tokens, list):
+        return []
     list_words = tokens.copy()
-    for word in list_words:
+    for word in tokens:
         if word in stop_words:
             list_words.remove(word)
+            print(list_words)
     return list_words
 
 
