@@ -7,7 +7,7 @@ LABS=$(cat config/labs.txt)
 for lab in $LABS; do
 	echo "Running lint for lab #${lab}"
 
-  TARGET_SCORE=$(cat lab_"${lab}"/target_level.txt)
+  TARGET_SCORE=$(cat lab_"${lab}"/target_score.txt)
   echo $TARGET_SCORE
 
 	lint_output=$(pylint lab_"${lab}")
