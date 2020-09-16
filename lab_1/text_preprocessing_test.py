@@ -9,8 +9,6 @@ from main import tokenize
 from main import remove_stop_words
 from main import read_from_file
 
-TEXT = read_from_file('data.txt')
-
 
 class TokenizeTest(unittest.TestCase):
     """
@@ -68,12 +66,15 @@ class TokenizeTest(unittest.TestCase):
             actual = tokenize(bad_input)
             self.assertEqual(expected, actual)
 
+    @unittest.skip
     def test_tokenize_big_text_case(self):
         """
         Tokenize big input text scenario
         """
-        expected = [re.findall('\w+', TEXT)]
-        actual = tokenize(TEXT)
+        text = read_from_file('lab_1/data.txt')
+
+        expected = [re.findall('\w+', text)]
+        actual = tokenize(text)
         self.assertEqual(expected, actual)
 
 
