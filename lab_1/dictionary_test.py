@@ -3,12 +3,20 @@
 Checks the first lab dictionary functions
 """
 
+import re
 import unittest
 from main import calculate_frequencies
 from main import get_top_n_words
 from main import get_concordance
 from main import get_adjacent_words
 from main import sort_concordance
+from main import read_from_file
+from main import tokenize
+from main import calculate_frequencies
+
+
+# TEXT = re.findall('\w+', read_from_file('data.txt').lower())
+# print(TEXT.count('tex'))
 
 
 class CalculateFrequenciesTest(unittest.TestCase):
@@ -201,6 +209,22 @@ class GetConcordanceTest(unittest.TestCase):
             self.assertEqual(expected, actual_2)
             self.assertEqual(expected, actual_3)
 
+    def test_big_text_get_concordance_term(self):
+        """
+        Checks if a context for a given term can be found properly
+        """
+        text = read_from_file('data.txt')
+        tokens = tokenize(text)
+
+        expected = [['although', 'less', 'compact', 'than', 'tex', 'the',
+                     'xml', 'structuring', 'promises', 'to', 'make', 'it',
+                     'widely', 'usable', 'and', 'allows', 'for', 'instant',
+                     'display', 'in', 'applications', 'such', 'as', 'web',
+                     'browsers', 'and', 'facilitates', 'an', 'interpretation',
+                     'of', 'its', 'meaning', 'in', 'mathematical', 'software', 'products']]
+        actual = get_concordance(tokens, 'tex', 4, 31)
+        self.assertEqual(expected, actual)
+
 
 @unittest.skip
 class GetAdjacentWordsTest(unittest.TestCase):
@@ -276,6 +300,16 @@ class GetAdjacentWordsTest(unittest.TestCase):
             self.assertEqual(expected, actual_1)
             self.assertEqual(expected, actual_2)
             self.assertEqual(expected, actual_3)
+
+    def test_big_text_get_adjacent_words_term(self):
+        """
+        Checks if adjacent words for a given term can be found properly
+        """
+        text = read_from_file('data.txt')
+        tokens = tokenize(text)
+        expected = [['although', 'products']]
+        actual = get_adjacent_words(tokens, 'tex', 4, 31)
+        self.assertEqual(expected, actual)
 
 
 @unittest.skip
@@ -363,3 +397,17 @@ class GetAndSortConcordanceTest(unittest.TestCase):
             actual = sort_concordance(['one', 'happy', 'man'],
                                       'happy', 2, 3, bad_input)
             self.assertEqual(expected, actual)
+
+    def test_big_text_get_and_sort_concordance_term(self):
+        """
+        Checks if a context sorts right for a given term and can be found properly
+        """
+        text = read_from_file('data.txt')
+        tokens = tokenize(text)
+
+        expected = [['although', 'less', 'compact', 'than', 'tex', 'the',
+                     'xml', 'structuring', 'promises', 'to', 'make', 'it',
+                     'widely', 'usable', 'and', 'allows', 'for', 'instant',
+                     'display']]
+        actual = sort_concordance(tokens, 'tex', 4, 14, True)
+        self.assertEqual(expected, actual)
