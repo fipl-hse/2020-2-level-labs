@@ -332,7 +332,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
                     ['means', 'aluminate'],
                     ['by', 'bicarbonate'],
                     ['the', 'salt']]
-        actual = get_concordance(tokens, 'sodium', 1, 1)
+        actual = get_adjacent_words(tokens, 'sodium', 1, 1)
         self.assertEqual(expected, actual)
 
 
@@ -458,7 +458,7 @@ class GetAndSortConcordanceTest(unittest.TestCase):
                     ['epithelial', 'sodium', 'channels'],
                     ['means', 'sodium', 'aluminate'],
                     ['the', 'sodium', 'salt']]
-        actual = get_concordance(tokens, 'sodium', 1, 1, True)
+        actual = sort_concordance(tokens, 'sodium', 1, 1, True)
         self.assertEqual(expected, actual)
 
     def test_get_concordance_several_contexts_big_text_right(self):
@@ -473,5 +473,5 @@ class GetAndSortConcordanceTest(unittest.TestCase):
                     ['by', 'sodium', 'bicarbonate'],
                     ['epithelial', 'sodium', 'channels'],
                     ['the', 'sodium', 'salt']]
-        actual = get_concordance(tokens, 'sodium', 1, 1, False)
+        actual = sort_concordance(tokens, 'sodium', 1, 1, False)
         self.assertEqual(expected, actual)
