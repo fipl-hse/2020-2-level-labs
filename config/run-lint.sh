@@ -10,6 +10,6 @@ for lab in $LABS; do
   TARGET_SCORE=$(cat lab_"${lab}"/target_score.txt)
 
 	lint_output=$(pylint lab_"${lab}")
-  python3 config/lint_level.py --lint-output "$lint_output" --lint-level $TARGET_SCORE
+  python3 config/lint_level.py --lint-output "$lint_output" --target-score $TARGET_SCORE
 done
 
