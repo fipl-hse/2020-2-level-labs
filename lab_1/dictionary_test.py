@@ -15,8 +15,15 @@ from main import tokenize
 from main import calculate_frequencies
 
 
-# TEXT = re.findall('\w+', read_from_file('data.txt').lower())
-# print(TEXT.count('tex'))
+TEXT = re.findall('\w+', read_from_file('data.txt').lower())
+print(TEXT.count('sodium'))
+
+context = []
+for token in range(0, len(TEXT)):
+    if TEXT[token] == 'sodium':
+        context.append([TEXT[token-1], TEXT[token+1]])
+print(context)
+
 
 
 class CalculateFrequenciesTest(unittest.TestCase):
@@ -225,6 +232,20 @@ class GetConcordanceTest(unittest.TestCase):
         actual = get_concordance(tokens, 'tex', 4, 31)
         self.assertEqual(expected, actual)
 
+    def test_get_concordance_several_contexts_big_text(self):
+        """
+        Checks if contexts for a given term can be found in real text properly
+        """
+        text = read_from_file('data.txt')
+        tokens = tokenize(text)
+
+        expected = [['epithelial', 'sodium', 'channels'],
+                    ['means', 'sodium', 'aluminate'],
+                    ['by', 'sodium', 'bicarbonate'],
+                    ['the', 'sodium', 'salt']]
+        actual = get_concordance(tokens, 'sodium', 1, 1)
+        self.assertEqual(expected, actual)
+
 
 @unittest.skip
 class GetAdjacentWordsTest(unittest.TestCase):
@@ -311,6 +332,20 @@ class GetAdjacentWordsTest(unittest.TestCase):
         actual = get_adjacent_words(tokens, 'tex', 4, 31)
         self.assertEqual(expected, actual)
 
+    def test_get_adjacent_words_several_contexts_big_text(self):
+        """
+        Checks if adjacent words for a given term can be found in real text properly
+        """
+        text = read_from_file('data.txt')
+        tokens = tokenize(text)
+
+        expected = [['epithelial', 'channels'],
+                    ['means', 'aluminate'],
+                    ['by', 'bicarbonate'],
+                    ['the', 'salt']]
+        actual = get_concordance(tokens, 'sodium', 1, 1)
+        self.assertEqual(expected, actual)
+
 
 @unittest.skip
 class GetAndSortConcordanceTest(unittest.TestCase):
@@ -384,7 +419,17 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         Checks if function can handle incorrect numeric range inputs
         """
         expected = [['happy', 'man']]
+        actual = sort_concordance(['one', 'happy', 'man'], 'happy', -1, 1000, False)
+        self.assertEqual(expected, actual)
+
+    def test_get_and_sort_concordance_context_size_with_no_context(self):
+        """
+        Checks if function can handle left or right context without given context
+        """
+        expected = []
         actual = sort_concordance(['one', 'happy', 'man'], 'happy', -1, 1000, True)
+        self.assertEqual(expected, actual)
+        actual = sort_concordance(['one', 'happy', 'man'], 'happy', 1000, -1, False)
         self.assertEqual(expected, actual)
 
     def test_get_and_sort_concordance_bad_sorting_option_inputs(self):
@@ -410,4 +455,34 @@ class GetAndSortConcordanceTest(unittest.TestCase):
                      'widely', 'usable', 'and', 'allows', 'for', 'instant',
                      'display']]
         actual = sort_concordance(tokens, 'tex', 4, 14, True)
+        self.assertEqual(expected, actual)
+
+    def test_get_concordance_several_contexts_big_text_left(self):
+        """
+        Checks if contexts for a given term can be found in real text properly
+        Taking into consideration left context
+        """
+        text = read_from_file('data.txt')
+        tokens = tokenize(text)
+
+        expected = [['by', 'sodium', 'bicarbonate'],
+                    ['epithelial', 'sodium', 'channels'],
+                    ['means', 'sodium', 'aluminate'],
+                    ['the', 'sodium', 'salt']]
+        actual = get_concordance(tokens, 'sodium', 1, 1, True)
+        self.assertEqual(expected, actual)
+
+    def test_get_concordance_several_contexts_big_text_right(self):
+        """
+        Checks if contexts for a given term can be found in real text properly
+        Taking into consideration right context
+        """
+        text = read_from_file('data.txt')
+        tokens = tokenize(text)
+
+        expected = [['means', 'sodium', 'aluminate'],
+                    ['by', 'sodium', 'bicarbonate'],
+                    ['epithelial', 'sodium', 'channels'],
+                    ['the', 'sodium', 'salt']]
+        actual = get_concordance(tokens, 'sodium', 1, 1, False)
         self.assertEqual(expected, actual)
