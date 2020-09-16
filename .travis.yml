@@ -22,6 +22,7 @@ jobs:
         - bash config/run-tests.sh
     - stage: lint
       script:
+        - export PYTHONPATH=./lab_"${lab}"
         - pylint ./**/*.py
 
 notifications:
