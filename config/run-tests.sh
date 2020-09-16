@@ -9,7 +9,7 @@ for lab in $LABS; do
 	echo "Running tests for lab #${lab}"
 
 	TARGET_SCORE=$(cat lab_"${lab}"/target_score.txt)
-	TARGET_TESTS=lab_"${lab}"/target_tests_"${TARGET_SCORE}".txt
+	TARGET_TESTS=config/lab_"${lab}"/target_tests_"${TARGET_SCORE}".txt
 
 	while read test_file_name || [[ -n $test_file_name ]]
 	do
