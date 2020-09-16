@@ -15,17 +15,6 @@ from main import tokenize
 from main import calculate_frequencies
 
 
-TEXT = re.findall('\w+', read_from_file('data.txt').lower())
-print(TEXT.count('sodium'))
-
-context = []
-for token in range(0, len(TEXT)):
-    if TEXT[token] == 'sodium':
-        context.append([TEXT[token-1], TEXT[token+1]])
-print(context)
-
-
-
 class CalculateFrequenciesTest(unittest.TestCase):
     """
     Tests calculating frequencies function
@@ -220,7 +209,7 @@ class GetConcordanceTest(unittest.TestCase):
         """
         Checks if a context for a given term can be found properly
         """
-        text = read_from_file('data.txt')
+        text = read_from_file('./data.txt')
         tokens = tokenize(text)
 
         expected = [['although', 'less', 'compact', 'than', 'tex', 'the',
@@ -236,7 +225,7 @@ class GetConcordanceTest(unittest.TestCase):
         """
         Checks if contexts for a given term can be found in real text properly
         """
-        text = read_from_file('data.txt')
+        text = read_from_file('./data.txt')
         tokens = tokenize(text)
 
         expected = [['epithelial', 'sodium', 'channels'],
@@ -326,7 +315,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         """
         Checks if adjacent words for a given term can be found properly
         """
-        text = read_from_file('data.txt')
+        text = read_from_file('./data.txt')
         tokens = tokenize(text)
         expected = [['although', 'products']]
         actual = get_adjacent_words(tokens, 'tex', 4, 31)
@@ -336,7 +325,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         """
         Checks if adjacent words for a given term can be found in real text properly
         """
-        text = read_from_file('data.txt')
+        text = read_from_file('./data.txt')
         tokens = tokenize(text)
 
         expected = [['epithelial', 'channels'],
@@ -447,7 +436,7 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         """
         Checks if a context sorts right for a given term and can be found properly
         """
-        text = read_from_file('data.txt')
+        text = read_from_file('./data.txt')
         tokens = tokenize(text)
 
         expected = [['although', 'less', 'compact', 'than', 'tex', 'the',
@@ -462,7 +451,7 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         Checks if contexts for a given term can be found in real text properly
         Taking into consideration left context
         """
-        text = read_from_file('data.txt')
+        text = read_from_file('./data.txt')
         tokens = tokenize(text)
 
         expected = [['by', 'sodium', 'bicarbonate'],
@@ -477,7 +466,7 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         Checks if contexts for a given term can be found in real text properly
         Taking into consideration right context
         """
-        text = read_from_file('data.txt')
+        text = read_from_file('./data.txt')
         tokens = tokenize(text)
 
         expected = [['means', 'sodium', 'aluminate'],
