@@ -70,9 +70,9 @@ class TokenizeTest(unittest.TestCase):
         """
         Tokenize big input text scenario
         """
-        text = read_from_file('lab_1/data.txt')
+        text = read_from_file('config/test_files/tokens.txt')
 
-        expected = re.findall('\w+', text.lower())
+        expected = text.split()
         actual = tokenize(text)
         self.assertEqual(expected, actual)
 
@@ -80,9 +80,9 @@ class TokenizeTest(unittest.TestCase):
         """
         Tokenize big input text and assert equal
         """
-        text = read_from_file('lab_1/data.txt')
+        text = read_from_file('config/test_files/tokens.txt')
 
-        expected = len(re.findall('\w+', text.lower()))
+        expected = len(text.split())
         actual = len(tokenize(text))
         self.assertEqual(expected, actual)
 
