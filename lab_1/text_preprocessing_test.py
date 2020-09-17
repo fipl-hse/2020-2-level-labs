@@ -66,14 +66,13 @@ class TokenizeTest(unittest.TestCase):
             actual = tokenize(bad_input)
             self.assertEqual(expected, actual)
 
-    @unittest.skip
     def test_tokenize_big_text_case(self):
         """
         Tokenize big input text scenario
         """
         text = read_from_file('lab_1/data.txt')
 
-        expected = [re.findall('\w+', text)]
+        expected = [re.findall('\w+', text.lower())]
         actual = tokenize(text)
         self.assertEqual(expected, actual)
 
