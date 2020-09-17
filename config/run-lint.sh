@@ -1,6 +1,6 @@
 export PYTHONPATH="$(pwd)/lab_1:$(pwd)/lab_2:$(pwd)/lab_3:$(pwd)/lab_4:$(pwd):${PYTHONPATH}"
 
-echo ''
+echo -e '\n'
 echo 'Running lint check...'
 LABS=$(cat config/labs.txt)
 
