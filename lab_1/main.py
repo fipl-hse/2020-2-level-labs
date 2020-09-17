@@ -9,7 +9,7 @@ def tokenize(text: str) -> list:
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
     :return: a list of lowercased tokens without punctuation
-    e.g. text = 'The weather is sunny, the man is happy.'
+    e111. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     pass
