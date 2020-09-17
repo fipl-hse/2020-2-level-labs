@@ -4,7 +4,6 @@ Checks the first lab text preprocessing functions
 """
 
 import unittest
-import re
 from main import tokenize
 from main import remove_stop_words
 from main import read_from_file
