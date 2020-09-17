@@ -3,54 +3,45 @@ Lab 1
 A concordance extraction
 """
 
-
+# токенезирование текста - пунктуация и заглавные
 def tokenize(text: str) -> list:
-    """
-    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
-    :param text: the initial text
-    :return: a list of lowercased tokens without punctuation
-    e.g. text = 'The weather is sunny, the man is happy.'
-    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    """
-    pass
+    tokens = []
+
+    for token in text.lower().split():
+        token = "".join([a for a in token if a.isalpha()])
+        tokens.append(token)
+    return tokens
 
 
+# получение стоп-слов
+def get_stop_words() -> list:
+    with open("stop_words.txt") as file:
+        stop_words = file.readlines()
+    return stop_words
+
+
+# удаление стоп-слов
 def remove_stop_words(tokens: list, stop_words: list) -> list:
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    stop_words = ['the', 'is']
-    --> ['weather', 'sunny', 'man', 'happy']
-    """
-    pass
+    tokens_clean = [token for token in tokens if token not in stop_words]
+    return tokens_clean
 
 
+# подсчет частотности
 def calculate_frequencies(tokens: list) -> dict:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens without stop words
-    :return: a dictionary with frequencies
-    e.g. tokens = ['weather', 'sunny', 'man', 'happy']
-    --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
-    """
-    pass
+    frequencies = {token: tokens.count(token) for token in tokens}
+    return frequencies
 
 
+freq_dict = calculate_frequencies(['weather', 'sunny', 'man', 'happy', 'and', 'dog', 'happy'])
+
+
+# получение top-n популярных слов
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
-    """
-    Returns the most common words
-    :param freq_dict: a dictionary with frequencies
-    :param top_n: a number of the most common words to return
-    :return: a list of the most common words
-    e.g. tokens = ['weather', 'sunny', 'man', 'happy', 'and', 'dog', 'happy']
-    top_n = 1
-    --> ['happy']
-    """
-    pass
+    freq = list(freq_dict.items())
+    freq_s = sorted(freq, key=lambda num: num[1], reverse=True)
 
+    top = [freq_s[i][0] for i in range(top_n)]
+    return top
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
