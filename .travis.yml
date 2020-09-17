@@ -22,7 +22,7 @@ jobs:
         - bash config/run-tests.sh
     - stage: test
       script:
-        - bash config/run-tests.sh
+        # - bash config/run-tests.sh
 
 notifications:
   email:
