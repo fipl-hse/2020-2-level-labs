@@ -12,17 +12,17 @@ install:
   - pip3 install -r requirements.txt
 
 stages:
-  - lint
   - test
+  - lint
 
 jobs:
   include:
-    - stage: lint
-      script:
-        - bash config/run-lint.sh
     - stage: test
       script:
         - bash config/run-tests.sh
+    - stage: lint
+      script:
+        - bash config/run-lint.sh
 
 notifications:
   email:
