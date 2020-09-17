@@ -5,14 +5,8 @@ A concordance extraction
 
 
 def tokenize(text: str) -> list:
-    """
-    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
-    :param text: the initial text
-    :return: a list of lowercased tokens without punctuation
-    e.g. text = 'The weather is sunny, the man is happy.'
-    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    """
-    pass
+    text = text.lower()
+    return text.split()
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
