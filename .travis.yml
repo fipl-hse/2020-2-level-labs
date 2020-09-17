@@ -22,7 +22,7 @@ jobs:
         - bash config/run-tests.sh
     - stage: lint
       script:
-        - bash config/run-lint.sh
+        - pylint ./**/*.py
 
 notifications:
   email:

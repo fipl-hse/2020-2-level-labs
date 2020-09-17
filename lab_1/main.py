@@ -97,6 +97,7 @@ def read_from_file(path_to_file: str) -> str:
     """
     with open(path_to_file, 'r', encoding='utf-8') as fs:
         data = fs.read()
+
     return data
 
 
