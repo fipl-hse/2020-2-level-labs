@@ -4,8 +4,9 @@ Checks the first lab adjacent words extraction
 """
 
 import unittest
-from main import get_concordance
 from main import get_adjacent_words
+from main import tokenize
+from main import read_from_file
 
 
 class GetAdjacentWordsTest(unittest.TestCase):
@@ -65,7 +66,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         that exceed the number of given tokens
         """
         expected = [['one']]
-        actual = get_concordance(['one', 'happy', 'man'], 'happy', 1000, 0)
+        actual = get_adjacent_words(['one', 'happy', 'man'], 'happy', 1000, 0)
         self.assertEqual(expected, actual)
 
     def test_get_adjacent_words_bad_inputs(self):
@@ -81,3 +82,27 @@ class GetAdjacentWordsTest(unittest.TestCase):
             self.assertEqual(expected, actual_1)
             self.assertEqual(expected, actual_2)
             self.assertEqual(expected, actual_3)
+
+    def test_big_text_get_adjacent_words_term(self):
+        """
+        Checks if adjacent words for a given term can be found properly
+        """
+        text = read_from_file('lab_1/data.txt')
+        tokens = tokenize(text)
+        expected = [['although', 'products']]
+        actual = get_adjacent_words(tokens, 'tex', 4, 31)
+        self.assertEqual(expected, actual)
+
+    def test_get_adjacent_words_several_contexts_big_text(self):
+        """
+        Checks if adjacent words for a given term can be found in real text properly
+        """
+        text = read_from_file('lab_1/data.txt')
+        tokens = tokenize(text)
+
+        expected = [['epithelial', 'channels'],
+                    ['means', 'aluminate'],
+                    ['by', 'bicarbonate'],
+                    ['the', 'salt']]
+        actual = get_adjacent_words(tokens, 'sodium', 1, 1)
+        self.assertEqual(expected, actual)

@@ -5,6 +5,8 @@ Checks the first lab dictionary functions
 
 import unittest
 from main import sort_concordance
+from main import tokenize
+from main import read_from_file
 
 
 class GetAndSortConcordanceTest(unittest.TestCase):
@@ -78,7 +80,17 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         Checks if function can handle incorrect numeric range inputs
         """
         expected = [['happy', 'man']]
+        actual = sort_concordance(['one', 'happy', 'man'], 'happy', -1, 1000, False)
+        self.assertEqual(expected, actual)
+
+    def test_get_and_sort_concordance_context_size_with_no_context(self):
+        """
+        Checks if function can handle left or right context without given context
+        """
+        expected = []
         actual = sort_concordance(['one', 'happy', 'man'], 'happy', -1, 1000, True)
+        self.assertEqual(expected, actual)
+        actual = sort_concordance(['one', 'happy', 'man'], 'happy', 1000, -1, False)
         self.assertEqual(expected, actual)
 
     def test_get_and_sort_concordance_bad_sorting_option_inputs(self):
@@ -91,3 +103,47 @@ class GetAndSortConcordanceTest(unittest.TestCase):
             actual = sort_concordance(['one', 'happy', 'man'],
                                       'happy', 2, 3, bad_input)
             self.assertEqual(expected, actual)
+
+    def test_big_text_get_and_sort_concordance_term(self):
+        """
+        Checks if a context sorts right for a given term and can be found properly
+        """
+        text = read_from_file('lab_1/data.txt')
+        tokens = tokenize(text)
+
+        expected = [['although', 'less', 'compact', 'than', 'tex', 'the',
+                     'xml', 'structuring', 'promises', 'to', 'make', 'it',
+                     'widely', 'usable', 'and', 'allows', 'for', 'instant',
+                     'display']]
+        actual = sort_concordance(tokens, 'tex', 4, 14, True)
+        self.assertEqual(expected, actual)
+
+    def test_get_concordance_several_contexts_big_text_left(self):
+        """
+        Checks if contexts for a given term can be found in real text properly
+        Taking into consideration left context
+        """
+        text = read_from_file('lab_1/data.txt')
+        tokens = tokenize(text)
+
+        expected = [['by', 'sodium', 'bicarbonate'],
+                    ['epithelial', 'sodium', 'channels'],
+                    ['means', 'sodium', 'aluminate'],
+                    ['the', 'sodium', 'salt']]
+        actual = sort_concordance(tokens, 'sodium', 1, 1, True)
+        self.assertEqual(expected, actual)
+
+    def test_get_concordance_several_contexts_big_text_right(self):
+        """
+        Checks if contexts for a given term can be found in real text properly
+        Taking into consideration right context
+        """
+        text = read_from_file('lab_1/data.txt')
+        tokens = tokenize(text)
+
+        expected = [['means', 'sodium', 'aluminate'],
+                    ['by', 'sodium', 'bicarbonate'],
+                    ['epithelial', 'sodium', 'channels'],
+                    ['the', 'sodium', 'salt']]
+        actual = sort_concordance(tokens, 'sodium', 1, 1, False)
+        self.assertEqual(expected, actual)

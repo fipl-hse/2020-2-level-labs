@@ -5,6 +5,8 @@ Checks the first lab concordance building function
 
 import unittest
 from main import get_concordance
+from main import tokenize
+from main import read_from_file
 
 
 class GetConcordanceTest(unittest.TestCase):
@@ -90,3 +92,33 @@ class GetConcordanceTest(unittest.TestCase):
             self.assertEqual(expected, actual_1)
             self.assertEqual(expected, actual_2)
             self.assertEqual(expected, actual_3)
+
+    def test_big_text_get_concordance_term(self):
+        """
+        Checks if a context for a given term can be found properly
+        """
+        text = read_from_file('lab_1/data.txt')
+        tokens = tokenize(text)
+
+        expected = [['although', 'less', 'compact', 'than', 'tex', 'the',
+                     'xml', 'structuring', 'promises', 'to', 'make', 'it',
+                     'widely', 'usable', 'and', 'allows', 'for', 'instant',
+                     'display', 'in', 'applications', 'such', 'as', 'web',
+                     'browsers', 'and', 'facilitates', 'an', 'interpretation',
+                     'of', 'its', 'meaning', 'in', 'mathematical', 'software', 'products']]
+        actual = get_concordance(tokens, 'tex', 4, 31)
+        self.assertEqual(expected, actual)
+
+    def test_get_concordance_several_contexts_big_text(self):
+        """
+        Checks if contexts for a given term can be found in real text properly
+        """
+        text = read_from_file('lab_1/data.txt')
+        tokens = tokenize(text)
+
+        expected = [['epithelial', 'sodium', 'channels'],
+                    ['means', 'sodium', 'aluminate'],
+                    ['by', 'sodium', 'bicarbonate'],
+                    ['the', 'sodium', 'salt']]
+        actual = get_concordance(tokens, 'sodium', 1, 1)
+        self.assertEqual(expected, actual)
