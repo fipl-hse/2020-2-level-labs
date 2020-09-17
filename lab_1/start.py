@@ -2,6 +2,8 @@
 Concordance implementation starter
 """
 
+# some changes there
+
 from main import read_from_file
 
 if __name__ == '__main__':

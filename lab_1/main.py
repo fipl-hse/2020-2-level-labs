@@ -3,6 +3,7 @@ Lab 1
 A concordance extraction
 """
 
+# some changes here
 
 def tokenize(text: str) -> list:
     """
