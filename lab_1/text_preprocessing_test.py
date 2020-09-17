@@ -72,8 +72,18 @@ class TokenizeTest(unittest.TestCase):
         """
         text = read_from_file('lab_1/data.txt')
 
-        expected = [re.findall('\w+', text.lower())]
+        expected = re.findall('\w+', text.lower())
         actual = tokenize(text)
+        self.assertEqual(expected, actual)
+
+    def test_tokenize_big_text_length_equal(self):
+        """
+        Tokenize big input text and assert equal
+        """
+        text = read_from_file('lab_1/data.txt')
+
+        expected = len(re.findall('\w+', text.lower()))
+        actual = len(tokenize(text))
         self.assertEqual(expected, actual)
 
 
