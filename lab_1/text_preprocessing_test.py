@@ -6,6 +6,7 @@ Checks the first lab text preprocessing functions
 import unittest
 from main import tokenize
 from main import remove_stop_words
+from main import read_from_file
 
 
 class TokenizeTest(unittest.TestCase):
@@ -63,6 +64,26 @@ class TokenizeTest(unittest.TestCase):
         for bad_input in bad_inputs:
             actual = tokenize(bad_input)
             self.assertEqual(expected, actual)
+
+    def test_tokenize_big_text_case(self):
+        """
+        Tokenize big input text scenario
+        """
+        text = read_from_file('lab_1/tokens.txt')
+
+        expected = text.split()
+        actual = tokenize(text)
+        self.assertEqual(expected, actual)
+
+    def test_tokenize_big_text_length_equal(self):
+        """
+        Tokenize big input text and assert equal
+        """
+        text = read_from_file('lab_1/tokens.txt')
+
+        expected = len(text.split())
+        actual = len(tokenize(text))
+        self.assertEqual(expected, actual)
 
 
 class RemoveStopWordsTest(unittest.TestCase):
