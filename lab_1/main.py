@@ -11,8 +11,9 @@ def tokenize(text: str) -> list:
     :return: a list of lowercased tokens without punctuation
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    """
-    pass
+
+    text = text.split()
+    return text
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
