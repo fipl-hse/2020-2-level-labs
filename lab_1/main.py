@@ -12,7 +12,7 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = 'Бла Бла Бла... здесь есть какой-то интересный текст'
+
     text = text.split()
     text = text.lower()
 
