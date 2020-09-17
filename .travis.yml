@@ -12,18 +12,17 @@ install:
   - pip3 install -r requirements.txt
 
 stages:
-  - test
+  # - test
   - lint
 
 jobs:
   include:
-    - stage: test
-      script:
-        - bash config/run-tests.sh
+    # - stage: test
+      # script:
+        # - bash config/run-tests.sh
     - stage: lint
       script:
-        - export PYTHONPATH=./lab_"${lab}"
-        - pylint ./**/*.py
+        - bash config/run-tests.sh
 
 notifications:
   email:
