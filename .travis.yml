@@ -19,10 +19,10 @@ jobs:
   include:
     - stage: lint
       script:
-        - bash config/run-tests.sh
+        - bash config/run-lint.sh
     - stage: test
       script:
-        # - bash config/run-tests.sh
+        - bash config/run-tests.sh
 
 notifications:
   email:
