@@ -86,7 +86,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         top_n_list = list(values_dict.keys())
         top_n_list.sort()
 
-        top_values = [values_dict[top_n_list[-i][0]] for i in range(1, top_n + 1)]
+        if len(values_dict) >= top_n:
+            top_values = [values_dict[top_n_list[-i][0]] for i in range(1, top_n + 1)]
+        else:
+            top_values = [values_dict[top_n_list[-i][0]] for i in range(len(values_dict))]
 
         return top_values
 
@@ -111,16 +114,18 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     tokens_copy = tokens.copy()
     inds = []
 
+    count = 0
     while word in tokens_copy:
-        inds.append(tokens_copy.index(word))
+        inds.append(tokens_copy.index(word)+count)
         tokens_copy.remove(word)
+        count += 1
 
     if int(left_context_size) > 0 and int(right_context_size) > 0:
-        return [tokens[i - left_context_size:i + right_context_size + 1] for i in inds]
-    elif left_context_size > 0:
-        return [tokens[i - left_context_size:i + 1] for i in inds]
-    elif right_context_size > 0:
-        return [tokens[i:i + right_context_size + 1] for i in inds]
+        return [tokens[i-int(left_context_size):i+int(right_context_size)+1] for i in inds]
+    elif int(left_context_size) > 0:
+        return [tokens[i-int(left_context_size):i+1] for i in inds]
+    elif int(right_context_size) > 0:
+        return [tokens[i:i+int(right_context_size)+1] for i in inds]
     else:
         return []
 
@@ -140,7 +145,29 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    if type(tokens) == list and type(word) == str:
+        if type(left_n) == int and type(right_n) == int and left_n >= 1 and right_n >= 1:
+            concordances = get_concordance(tokens, word, left_n, right_n)
+            adjacent_words = []
+            for c in concordances:
+                adjacent_words.append([c[0], c[-1]])
+        elif (type(left_n) != int or left_n < 1) and (type(right_n) == int and right_n >= 1):
+            concordances = get_concordance(tokens, word, left_n, right_n)
+            adjacent_words = []
+            for c in concordances:
+                adjacent_words.append([c[-1]])
+        elif (type(right_n) != int or right_n < 1) and (type(left_n) == int and left_n >= 1):
+            concordances = get_concordance(tokens, word, left_n, -1)
+            adjacent_words = []
+            for c in concordances:
+                adjacent_words.append([c[0]])
+        else:
+            return []
+
+        return adjacent_words
+
+    else:
+        return []
 
 
 def read_from_file(path_to_file: str) -> str:
