@@ -2,42 +2,38 @@
 Lab 1
 A concordance extraction
 """
+with open('data.txt', encoding='utf-8') as file:
+    text = file.read().lower()
 
+def tokenize(text):
+    text= text.replace('\n',' ')
+    new = ''
+    for i in text:  # i- symbol
+        if i.isalpha() == True or i == ' ':
+            new += i
+    list = new.split()
+    return list
+tokens= tokenize(text)
 
-def tokenize(text: str) -> list:
-    """
-    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
-    :param text: the initial text
-    :return: a list of lowercased tokens without punctuation
-    e.g. text = 'The weather is sunny, the man is happy.'
-    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    """
-    pass
+with open('stop_words.txt', encoding = 'utf-8') as file2:
+    stop_words= file2.read().split('\n')
 
+def remove_stop_words(tokens, stop_words):
+    for word in stop_words:
+        while word in tokens:
+            tokens.remove(word)
+    return tokens
+tokens= remove_stop_words(tokens, stop_words)
 
-def remove_stop_words(tokens: list, stop_words: list) -> list:
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    stop_words = ['the', 'is']
-    --> ['weather', 'sunny', 'man', 'happy']
-    """
-    pass
-
-
-def calculate_frequencies(tokens: list) -> dict:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens without stop words
-    :return: a dictionary with frequencies
-    e.g. tokens = ['weather', 'sunny', 'man', 'happy']
-    --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
-    """
-    pass
-
+def calculate_frequencies(tokens):
+    dict={}
+    for token in tokens:
+        frequency= tokens.count(token)
+        dict[token]=frequency
+        while token in tokens:
+            tokens.remove(token)
+    return dict
+dict= calculate_frequencies(tokens)
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
