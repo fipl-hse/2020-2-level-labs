@@ -32,7 +32,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     if isinstance(tokens, list) and tokens:
         for el in tokens:
-            if isinstance(el, str):
+            if not isinstance(el, str):
                 return []
 
         if isinstance(stop_words, list) and stop_words:
@@ -159,12 +159,12 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             adjacent_words = []
             for c in concordances:
                 adjacent_words.append([c[0], c[-1]])
-        elif (isinstance(left_n, int) or left_n < 1) and (isinstance(right_n, int) and right_n >= 1):
+        elif (not isinstance(left_n, int) or left_n < 1) and (isinstance(right_n, int) and right_n >= 1):
             concordances = get_concordance(tokens, word, left_n, right_n)
             adjacent_words = []
             for c in concordances:
                 adjacent_words.append([c[-1]])
-        elif (isinstance(right_n, int) or right_n < 1) and (isinstance(left_n, int) and left_n >= 1):
+        elif (not isinstance(right_n, int) or right_n < 1) and (isinstance(left_n, int) and left_n >= 1):
             concordances = get_concordance(tokens, word, left_n, -1)
             adjacent_words = []
             for c in concordances:
