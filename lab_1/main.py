@@ -12,7 +12,10 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    pass
+    if not type(text) == str:
+        return []
+    text_input = text.lower().split()
+    return text_input
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
