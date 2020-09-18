@@ -28,8 +28,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
-
+    if not type(tokens) == list:
+        return []
+    return []
 
 def calculate_frequencies(tokens: list) -> dict:
     """
