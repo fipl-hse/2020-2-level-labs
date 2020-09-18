@@ -4,7 +4,7 @@ A concordance extraction
 """
 
 
-def tokenize(text: str) -> list:
+def tokenize(text) :
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
