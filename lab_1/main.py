@@ -2,7 +2,7 @@
 Lab 1
 A concordance extraction
 """
-
+fyjvhmb,nkljkhjgn
 
 def tokenize(text: str) -> list:
     """
