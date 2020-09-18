@@ -14,7 +14,7 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     if type(text) == str and text:
-        prepared_text = re.sub('[^a-zA-Z ]', '', text).lower()
+        prepared_text = re.sub('[^a-zA-Z \n]', '', text).lower()
         return prepared_text.split()
 
     return []
@@ -31,6 +31,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
     if type(tokens) == list and tokens:
+        for el in tokens:
+            if type(el) != str:
+                return []
+
         if type(stop_words) == list and stop_words:
             clean_tokens = tokens[:]
             for word in tokens:
@@ -82,7 +86,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         top_n_list = list(values_dict.keys())
         top_n_list.sort()
 
-        top_values = [values_dict[top_n_list[-i]] for i in range(1, top_n + 1) if len(values_dict) >= top_n]
+        top_values = [values_dict[top_n_list[-i][0]] for i in range(1, top_n + 1)]
 
         return top_values
 
@@ -111,7 +115,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         inds.append(tokens_copy.index(word))
         tokens_copy.remove(word)
 
-    if left_context_size > 0 and right_context_size > 0:
+    if int(left_context_size) > 0 and int(right_context_size) > 0:
         return [tokens[i - left_context_size:i + right_context_size + 1] for i in inds]
     elif left_context_size > 0:
         return [tokens[i - left_context_size:i + 1] for i in inds]
