@@ -3,6 +3,8 @@ Lab 1
 A concordance extraction
 """
 
+import re
+
 
 def tokenize(text: str) -> list:
     """
@@ -12,7 +14,8 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    pass
+    return re.findall("\w+", text.lower())
+    
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
