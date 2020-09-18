@@ -2,6 +2,7 @@
 Lab 1
 A concordance extraction
 """
+import re
 
 
 def tokenize(text: str) -> list:
@@ -12,7 +13,11 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    pass
+    if type(text) == str and text:
+        prepared_text = re.sub('[^a-zA-Z ]', '', text).lower()
+        return prepared_text.split()
+
+    return []
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -25,7 +30,19 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+    if type(tokens) == list and tokens:
+        if type(stop_words) == list and stop_words:
+            clean_tokens = tokens[:]
+            for word in tokens:
+                if word in stop_words:
+                    clean_tokens.remove(word)
+            return clean_tokens
+
+        else:
+            return tokens
+
+    else:
+        return []
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -36,7 +53,10 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
+    if type(tokens) == list and tokens:
+        return {word: tokens.count(word) for word in tokens}
+
+    return {}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -49,7 +69,22 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+    if type(freq_dict) == dict and type(top_n) == int and freq_dict and top_n:
+        list_items = freq_dict.items()
+        values_dict = {}
+
+        for i in list_items:
+            if i[1] in values_dict.keys():
+                values_dict[i[1]].append(i[0])
+            else:
+                values_dict[int(i[1])] = [i[0]]
+
+        top_n_list = list(values_dict.keys())
+        top_n_list.sort()
+
+        top_values = [values_dict[top_n_list[-i]] for i in range(1, top_n + 1) if len(values_dict) >= top_n]
+
+        return top_values
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -69,7 +104,21 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    tokens_copy = tokens.copy()
+    inds = []
+
+    while word in tokens_copy:
+        inds.append(tokens_copy.index(word))
+        tokens_copy.remove(word)
+
+    if left_context_size > 0 and right_context_size > 0:
+        return [tokens[i - left_context_size:i + right_context_size + 1] for i in inds]
+    elif left_context_size > 0:
+        return [tokens[i - left_context_size:i + 1] for i in inds]
+    elif right_context_size > 0:
+        return [tokens[i:i + right_context_size + 1] for i in inds]
+    else:
+        return []
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
