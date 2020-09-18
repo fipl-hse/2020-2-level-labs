@@ -60,7 +60,7 @@ def calculate_frequencies(tokens: list) -> dict:
     if isinstance(tokens, list) and tokens:
         for word in tokens:
             if not isinstance(word, str):
-                return []
+                return {}
 
         return {word: tokens.count(word) for word in tokens}
 
@@ -77,7 +77,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    if isinstance(freq_dict, dict) and isinstance(top_n, int) and freq_dict and top_n:
+    if isinstance(freq_dict, dict) and isinstance(top_n, int) and freq_dict and top_n > 1:
         list_items = freq_dict.items()
         values_dict = {}
 
@@ -90,12 +90,12 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         top_n_list = list(values_dict.keys())
         top_n_list.sort()
 
-        if len(values_dict) >= top_n:
-            top_values = [values_dict[top_n_list[-i]][0] for i in range(1, top_n + 1)]
-        else:
-            top_values = [values_dict[top_n_list[-i]][0] for i in range(len(values_dict))]
+        output_top = []
+        for i in range(max(top_n_list)+1):
+            if i in top_n_list:
+                output_top.extend(values_dict[i])
+        return output_top.reverse()
 
-        return top_values
     return []
 
 
