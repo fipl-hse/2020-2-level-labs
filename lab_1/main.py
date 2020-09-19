@@ -42,7 +42,6 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     for word in tokens:
         if word in stop_words:
             list_words.remove(word)
-            print(list_words)
     return list_words
 
 
@@ -54,6 +53,9 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
+    if not isinstance(tokens, list):
+        return {}
+    #words = remove_stop_words(tokens, open('stop_words.txt').read().split('\n'))
     set_words = set(tokens.copy())
     dict_freq = {word: tokens.count(word) for word in set_words}
     return dict_freq
@@ -69,9 +71,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    s = [(k, freq_dict[k]) for k in sorted(freq_dict, key=freq_dict.get, reverse=True)]
-    list_res = [word[0] for word in s]
-    return list_res[:top_n]
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
+        return []
+    sorted_dict = [(k, freq_dict[k]) for k in sorted(freq_dict, key=freq_dict.get, reverse=True)]
+    list_output = [word[0] for word in sorted_dict]
+    return list_output[:top_n]
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
