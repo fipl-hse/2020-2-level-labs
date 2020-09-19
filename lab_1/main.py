@@ -14,7 +14,7 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     if isinstance(text, str) and text:
-        prepared_text = re.sub('[^a-zA-Z \n`]', '', text).lower()
+        prepared_text = re.sub('[^a-zA-Z \n]', '', text).lower()
         return prepared_text.split()
 
     return []
@@ -90,13 +90,14 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         top_n_list = list(values_dict.keys())
 
         output_top = []
-        for i in range(max(top_n_list)+1):
+        for i in range(max(top_n_list) + 1):
             if i in top_n_list:
                 output_top.extend(values_dict[i][::-1])
 
         return output_top[::-1][:top_n]
 
     return []
+
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
@@ -117,24 +118,26 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     if isinstance(right_context_size, bool) and isinstance(left_context_size, bool):
         return []
-    elif isinstance(tokens, list) and isinstance(word, str) and isinstance(right_context_size, int) and isinstance(left_context_size, int):
+
+    if isinstance(tokens, list) and isinstance(word, str) and isinstance(right_context_size, int) and isinstance(
+            left_context_size, int):
         tokens_copy = tokens.copy()
         inds = []
 
         count = 0
         while word in tokens_copy:
-            inds.append(tokens_copy.index(word)+count)
+            inds.append(tokens_copy.index(word) + count)
             tokens_copy.remove(word)
             count += 1
 
         if left_context_size > 0 and right_context_size > 0:
-            return [tokens[i-left_context_size:i+right_context_size+1] for i in inds]
+            return [tokens[i - left_context_size:i + right_context_size + 1] for i in inds]
         elif left_context_size > 0:
-            return [tokens[i-left_context_size:i+1] for i in inds]
+            return [tokens[i - left_context_size:i + 1] for i in inds]
         elif right_context_size > 0:
-            return [tokens[i:i+int(right_context_size)+1] for i in inds]
-        else:
-            return []
+            return [tokens[i:i + int(right_context_size) + 1] for i in inds]
+
+        return []
 
     return []
 
@@ -194,7 +197,19 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+
+    if isinstance(path_to_file, str) and isinstance(content, list):
+
+        content_full = [' '.join(lst) for lst in content]
+        content_output = '\n'.join(content_full)
+
+        with open(path_to_file, 'w') as f:
+            f.write(content_output)
+
+
+write_to_file("report.txt", get_concordance(['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
+                                  'the', 'dog', 'is', 'glad', 'but', 'the', 'cat', 'is', 'sad'],
+                                 'is', 2, 3))
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
