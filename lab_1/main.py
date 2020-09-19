@@ -92,12 +92,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         output_top = []
         for i in range(max(top_n_list)+1):
             if i in top_n_list:
-                output_top.extend(values_dict[i])
+                output_top.extend(values_dict[i][::-1])
 
         return output_top[::-1][:top_n]
 
     return []
-
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
