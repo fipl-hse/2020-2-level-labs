@@ -12,6 +12,7 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
+    # oh look at it i'm changing something in the main file, isn't it NUTS?
     pass
 
 

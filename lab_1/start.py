@@ -2,6 +2,8 @@
 Concordance implementation starter
 """
 
+# is it what i think it is?? is it a CHANGE IN THE START FILE? crazy...
+
 from main import read_from_file
 
 if __name__ == '__main__':
