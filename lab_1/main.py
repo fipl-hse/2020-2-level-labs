@@ -100,7 +100,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         return []
     if not type(left_context_size) == int or not type(right_context_size) == int:
         return []
-    if len(tokens) and not isinstance(tokens[0], str):
+    if len(tokens) > 0 and not isinstance(tokens[0], str):
         return []
     list_all_words = tokens.copy()
     indexes = []
@@ -137,7 +137,16 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    concordance = get_concordance(tokens, word, left_n, right_n)
+    if len(concordance) == 0:
+        return []
+    if left_n == 0:
+        output = [[concord[-1]] for concord in concordance]
+    elif right_n == 0:
+        output = [[concord[0]] for concord in concordance]
+    else:
+        output = [[context[0], context[-1]] for context in concordance]
+    return output
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -151,11 +160,13 @@ def read_from_file(path_to_file: str) -> str:
     return data
 
 
-def write_to_file(path_to_file: str, content: list):
+def write_to_file(content: list, path_to_file='report.txt'):
     """
     Writes the result in a file
     """
-    pass
+    list_strings = [' '.join(conc) for conc in content]
+    with open(path_to_file, 'w') as file:
+        file.write('\n'.join(list_strings))
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
