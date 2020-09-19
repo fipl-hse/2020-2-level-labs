@@ -1,4 +1,4 @@
-""" 
+"""
 Lab 1
 A concordance extraction
 """
@@ -71,6 +71,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     Gets a concordance of a word
     A concordance is a listing of each occurrence of a word in a text,
     presented with the words surrounding it
+    :rtype: object
     :param tokens: a list of tokens
     :param word: a word-base for a concordance
     :param left_context_size: the number of words in the left context
