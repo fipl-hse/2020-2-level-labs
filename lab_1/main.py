@@ -77,10 +77,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    if isinstance(freq_dict, dict) and isinstance(top_n, int) and freq_dict and top_n > 1:
-        list_items = freq_dict.items()
-        values_dict = {}
+    if isinstance(freq_dict, dict) and isinstance(top_n, int) and freq_dict and top_n >= 1:
+        list_items = list(freq_dict.items())
 
+        values_dict = {}
         for i in list_items:
             if i[1] in values_dict.keys():
                 values_dict[i[1]].append(i[0])
@@ -88,13 +88,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
                 values_dict[int(i[1])] = [i[0]]
 
         top_n_list = list(values_dict.keys())
-        top_n_list.sort()
 
-        output_top = []
-        for i in range(max(top_n_list)+1):
-            if i in top_n_list:
-                output_top.extend(values_dict[i])
-        return output_top.reverse()
+        output_top = [''.join(values_dict[i]) for i in range(max(top_n_list)+1) if i in top_n_list]
+        return output_top[::-1][:top_n]
 
     return []
 
@@ -116,7 +112,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if isinstance(tokens, list) and isinstance(word, str) and isinstance(right_context_size, int) and isinstance(left_context_size, int):
+    if isinstance(right_context_size, bool) and isinstance(left_context_size, bool):
+        return []
+    elif isinstance(tokens, list) and isinstance(word, str) and isinstance(right_context_size, int) and isinstance(left_context_size, int):
         tokens_copy = tokens.copy()
         inds = []
 
