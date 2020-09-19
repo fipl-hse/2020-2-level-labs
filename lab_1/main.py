@@ -55,7 +55,8 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     if not isinstance(tokens, list):
         return {}
-    #words = remove_stop_words(tokens, open('stop_words.txt').read().split('\n'))
+    if len(tokens) and not isinstance(tokens[0], str):
+        return {}
     set_words = set(tokens.copy())
     dict_freq = {word: tokens.count(word) for word in set_words}
     return dict_freq
@@ -95,7 +96,30 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    if not type(tokens) == list or not type(word) == str or not len(word):
+        return []
+    if not type(left_context_size) == int or not type(right_context_size) == int:
+        return []
+    if len(tokens) and not type(tokens[0]) == str:
+        return []
+    list_all_words = tokens.copy()
+    indexes = []
+    while word in list_all_words:
+        ind_word = list_all_words.index(word)
+        indexes.append(ind_word)
+        list_all_words[ind_word] = ''
+    if not len(indexes) or right_context_size < 0 or left_context_size < 0:
+        return []
+    if right_context_size == 0 and left_context_size == 0:
+        return []
+    if (indexes[-1] + right_context_size) > len(tokens):
+        right_context_size = len(tokens)
+
+    if (indexes[0] - left_context_size) < 0:
+        list_ouput = [tokens[0:ind + 1 + right_context_size] for ind in indexes]
+    else:
+        list_ouput = [tokens[ind - left_context_size:ind + 1 + right_context_size] for ind in indexes]
+    return list_ouput
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
