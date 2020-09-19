@@ -7,7 +7,7 @@ from main import read_from_file
 if __name__ == '__main__':
     #  use data.txt file to test your program
     data = read_from_file('data.txt')
-    stop_words = []
+    stop_words = read_from_file('stop_wordss.txt')
 
     #  here goes your logic: calling methods from concordance.py
 
