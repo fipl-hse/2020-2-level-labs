@@ -89,7 +89,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
 
         top_n_list = list(values_dict.keys())
 
-        output_top = [''.join(values_dict[i]) for i in range(max(top_n_list)+1) if i in top_n_list]
+        output_top = []
+        for i in range(max(top_n_list)+1):
+            if i in top_n_list:
+                output_top.extend(values_dict[i])
+
         return output_top[::-1][:top_n]
 
     return []
