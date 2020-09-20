@@ -2,19 +2,24 @@
 Lab 1
 A concordance extraction
 """
-with open('data.txt', encoding='utf-8') as file:
-    text = file.read().lower()
+text = open('data.txt', 'r', encoding= 'utf-8').read()
 
-def tokenize(text):
-    text= text.replace('\n',' ')
-    new = ''
-    for i in text:  # i- symbol
-        if i.isalpha() == True or i == ' ':
-            new += i
-    list = new.split()
+def tokenize (text):
+    if type(text)==str:
+        text= text.lower().replace('\n', ' ')
+        letters= ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+        new = ''
+        for i in text:
+            if i in letters or i == ' ':
+                new += i
+        text= new
+        list = text.split()
+    else:
+        list= []
     return list
 tokens= tokenize(text)
-
+print(tokens)
+'''
 with open('stop_words.txt', encoding = 'utf-8') as file2:
     stop_words= file2.read().split('\n')
 
@@ -34,7 +39,8 @@ def calculate_frequencies(tokens):
             tokens.remove(token)
     return dict
 dict= calculate_frequencies(tokens)
-
+print(dict)
+'''
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     Returns the most common words
