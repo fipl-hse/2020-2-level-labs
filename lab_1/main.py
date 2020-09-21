@@ -3,17 +3,22 @@ Lab 1
 A concordance extraction
 """
 
+import re
+def tokenize():
+    word = ''
+    f = open('data.txt', 'r')
+    for line in f:
+        for word in line.split():
+            for i in line:
+                if i.isalpha():
+                    word += i
+                else:
+                    if word:
+                        print(word.lower())
 
-def tokenize(text: str) -> list:
-    """
-    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
-    :param text: the initial text
-    :return: a list of lowercased tokens without punctuation
-    e.g. text = 'The weather is sunny, the man is happy.'
-    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    """
-    text= text.slit()
-    return text
+                        word = ''
+tokenize()
+pass
 
 
 
