@@ -98,7 +98,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     stop = False
     if not isinstance(tokens, list) or not isinstance(word, str) or len(word) == 0:
-        stop = True
+        return []
     if not isinstance(left_context_size, int) or isinstance(left_context_size, bool):
         stop = True
     if not isinstance(right_context_size, int) or isinstance(right_context_size, bool):
