@@ -16,7 +16,7 @@ def tokenize(text: str) -> list:
     if type(text) != str:
         return []
     text = text.lower()
-    text = re.sub(r'[^A-Za-z 0-9]', '', text)
+    text = re.sub(r'[^A-Za-z0-9\s`]', '', text)
     return text.split()
 
 
@@ -51,6 +51,9 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     if type(tokens) != list:
         return {}
+    for element in tokens:
+        if type(element) != str:
+            return {}
     freq_dict = {}
     for tok in tokens:
         if tok in freq_dict.keys():
@@ -76,7 +79,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     list_dict_items.sort(key=lambda k_v: k_v[1], reverse=True)
     top_words = []
     if top_n > len(list_dict_items):
-        return []
+        for i in range(len(list_dict_items)):
+            top_words.append(list_dict_items[i][0])
+        return top_words
     else:
         for i in range(top_n):
             top_words.append(list_dict_items[i][0])
@@ -106,6 +111,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     elif word not in tokens:
         return []
     elif (type(left_context_size) != int) and (type(right_context_size) != int):
+        return []
+    elif (left_context_size < 1) and (right_context_size < 1):
         return []
     for ind, w in enumerate(tokens):
         if w == word:
@@ -148,14 +155,20 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     for cont_list in list_concordance:
         for ind, w in enumerate(cont_list):
             if w == word:
-                if (type(left_n) != int) or (left_n < 0):
-                    adjacent_words += [[cont_list[ind + right_n]]]
-                elif (type(right_n) != int) or (right_n < 0):
-                    adjacent_words += [[cont_list[ind - left_n]]]
-                elif len(cont_list[:ind]) < left_n:
-                    adjacent_words += [[cont_list[0], cont_list[ind + right_n]]]
+                if len(cont_list[:ind]) < left_n:
+                    if right_n < 1:
+                        adjacent_words += [[cont_list[0]]]
+                    else:
+                        adjacent_words += [[cont_list[0], cont_list[ind + right_n]]]
                 elif len(cont_list[(ind + 1):]) < right_n:
-                    adjacent_words += [[cont_list[ind - left_n], cont_list[-1]]]
+                    if left_n < 1:
+                        adjacent_words += [[cont_list[-1]]]
+                    else:
+                        adjacent_words += [[cont_list[ind - left_n], cont_list[-1]]]
+                elif (type(left_n) != int) or (left_n < 1):
+                    adjacent_words += [[cont_list[ind + right_n]]]
+                elif (type(right_n) != int) or (right_n < 1):
+                    adjacent_words += [[cont_list[ind - left_n]]]
                 else:
                     adjacent_words += [[cont_list[ind - left_n], cont_list[ind + right_n]]]
     return adjacent_words
