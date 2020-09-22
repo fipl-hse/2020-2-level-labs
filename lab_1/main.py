@@ -32,14 +32,17 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    check = all(type(s) is str for s in tokens)
-    if type(tokens) is list and check:    # check tokens
-        check = all(type(s) is str for s in stop_words)
-        if type(stop_words) is list and check:    # check stop-words
-            return [word for word in tokens if word not in stop_words]
+    try:
+        check = all(type(s) is str for s in tokens)
+        if type(tokens) is list and check:    # check tokens
+            check = all(type(s) is str for s in stop_words)
+            if type(stop_words) is list and check:    # check stop-words
+                return [word for word in tokens if word not in stop_words]
+            else:
+                return tokens
         else:
-            return tokens
-    else:
+            return []
+    except TypeError:
         return []
 
 
@@ -52,12 +55,15 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
     d = {}
-    check = all(type(s) is str for s in tokens)
-    if type(tokens) is list and check:    # check tokens
-        for word in set(tokens):
-            d[word] = tokens.count(word)
-        d = dict(sorted(d.items(), key=lambda x: x[1], reverse=True))
-    return d
+    try:
+        check = all(type(s) is str for s in tokens)
+        if type(tokens) is list and check:    # check tokens
+            for word in set(tokens):
+                d[word] = tokens.count(word)
+            d = dict(sorted(d.items(), key=lambda x: x[1], reverse=True))
+        return d
+     except TypeError:
+        return []
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -70,11 +76,14 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    check_freq = all(type(s) is str for s in freq_dict)
-    check_n = type(top_n) is int
-    if type(freq_dict) is dict and check_freq and check_n:    # check freq_dict
-        return list(freq_dict.keys())[:top_n]
-    return []
+    try:
+        check_freq = all(type(s) is str for s in freq_dict)
+        check_n = type(top_n) is int
+        if type(freq_dict) is dict and check_freq and check_n:    # check freq_dict
+            return list(freq_dict.keys())[:top_n]
+        return []
+    except TypeError:
+        return []
 
 
 def get_concordance(tokens: list,
@@ -100,15 +109,18 @@ def get_concordance(tokens: list,
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'],
           ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    c = all(type(s) is str for s in tokens)
-    if type(tokens) is list and c and word in tokens:    # check tokens & word
-        if left_context_size >= 1 or right_context_size >= 1:
-            idx = [i for i, x in enumerate(tokens) if x == word]
-            conc = []
-            for i in idx:
-                conc.append(tokens[i-left_context_size:i+right_context_size+1])
-            return conc
-    return []
+    try:
+        c = all(type(s) is str for s in tokens)
+        if type(tokens) is list and c and word in tokens:    # check tokens & word
+            if left_context_size >= 1 or right_context_size >= 1:
+                idx = [i for i, x in enumerate(tokens) if x == word]
+                conc = []
+                for i in idx:
+                    conc.append(tokens[i-left_context_size:i+right_context_size+1])
+                return conc
+        return []
+    except TypeError:
+        return []
 
 
 def get_adjacent_words(tokens: list,
