@@ -99,8 +99,8 @@ def get_concordance(tokens: list,
           ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     if type(tokens) is list and word in tokens:    # check tokens & word
-        check_l = type(left_context_size) is int and left_context_size >= 1
-        check_r = type(right_context_size) is int and right_context_size >= 1
+        check_l = type(left_context_size) is int and left_context_size > 0
+        check_r = type(right_context_size) is int and right_context_size > 0
         conc = []
         idx = [i for i, x in enumerate(tokens) if x == word]
         if check_l and check_r:
@@ -177,13 +177,14 @@ def sort_concordance(tokens: list,
                                word,
                                left_context_size,
                                right_context_size)
-        if left_sort:
-            return sorted(conc, key=lambda x: x[0])
-        try:
-            return sorted(conc, key=lambda x: x[-right_context_size])
-        except IndexError:
-            rcs = len(tokens) - tokens.index(word) - 1
-            return sorted(conc, key=lambda x: x[-rcs])
+        if left_context_size > 0 and right_context_size > 0:
+            if left_sort:
+                return sorted(conc, key=lambda x: x[0])
+            try:
+                return sorted(conc, key=lambda x: x[-right_context_size])
+            except IndexError:
+                rcs = len(tokens) - tokens.index(word) - 1
+                return sorted(conc, key=lambda x: x[-rcs])
     return []
     """
     Gets a concordance of a word and sorts it by either left or right context
