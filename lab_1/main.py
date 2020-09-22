@@ -1,3 +1,9 @@
+"""
+Lab 1
+A concordance extraction
+"""
+
+
 import re
 import os
 
@@ -28,13 +34,11 @@ def calculate_frequencies(tokens: list) -> dict:
         for word in set(tokens):
             freqs[word] = tokens.count(word)
         freqs = dict(sorted(freqs.items(), key=lambda x: x[1], reverse=True))
-    else:
-        None
     return freqs
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
-    if isinstance(freq_dict, dict) and isinstance(top_n, int):
+    if isinstance(freq_dict, dict) and isinstance(top_n, int):s
         freq_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
         output = freq_dict[:top_n]
     else:
@@ -47,19 +51,21 @@ def get_concordance(tokens: list,
                     left_context_size: int,
                     right_context_size: int) -> list:
     if isinstance(tokens, list) and word in tokens:    # check tokens & word
-        check_l = not isinstance(left_context_size, bool) and isinstance(left_context_size, int) and left_context_size > 0
-        check_r = not  isinstance(right_context_size, bool) and isinstance(right_context_size, int) and right_context_size > 0
+        lcs = left_context_size
+        check_l = not isinstance(lcs, bool) and isinstance(lcs, int) and lcs > 0
+        rcs = right_context_size
+        check_r = not  isinstance(rcs, bool) and isinstance(rcs, int) and rcs > 0
         conc = []
         idx = [i for i, x in enumerate(tokens) if x == word]
         if check_l and check_r:
             for i in idx:
-                conc.append(tokens[i-left_context_size:i+right_context_size+1])
+                conc.append(tokens[i-lcs:i+rcs+1])
         elif not check_l and check_r:
             for i in idx:
-                conc.append(tokens[i:i+right_context_size+1])
+                conc.append(tokens[i:i+rcs+1])
         elif check_l and not check_r:
             for i in idx:
-                conc.append(tokens[i-left_context_size:i+1])
+                conc.append(tokens[i-rcs:i+1])
         output = conc
     else:
         output = []

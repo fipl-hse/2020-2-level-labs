@@ -24,10 +24,6 @@ if __name__ == '__main__':
     sorted_concordance = main.sort_concordance(tokens, 'dog', 2, 0, True)
     print('sort_concordance', sorted_concordance[:5])
     main.write_to_file('', sorted_concordance)
-    
-    if (isinstance(sorted_concordance) is list) and (all(isinstance(s) is list for s in sorted_concordance)):
-        RESULT = True
-    else:
-        RESULT = False
+    RESULT = (isinstance(sorted_concordance) is list) and (all(isinstance(s) is list for s in sorted_concordance))
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Concordance not working'
