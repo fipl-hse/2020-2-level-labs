@@ -106,14 +106,16 @@ def get_concordance(tokens: list,
         if check_left and check_right:
             for i in idx:
                 conc.append(tokens[i-left_context_size:i+right_context_size+1])
-        elif not check_left:
+        elif not check_left and check_right:
             for i in idx:
+                print(right_context_size)
                 conc.append(tokens[i:i+right_context_size+1])
-        elif not check_right:
+        elif check_left and not check_right:
             for i in idx:
                 conc.append(tokens[i-left_context_size:i+1])
         return conc
     return []
+
 
 
 
