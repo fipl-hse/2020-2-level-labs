@@ -15,7 +15,10 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     import re
-    return re.findall('\w+', text.lower())
+    try:
+        return re.findall('\w+', text.lower())
+    except AttributeError:
+        return []
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
