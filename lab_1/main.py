@@ -38,7 +38,7 @@ def calculate_frequencies(tokens: list) -> dict:
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
-    if isinstance(freq_dict, dict) and isinstance(top_n, int):s
+    if isinstance(freq_dict, dict) and isinstance(top_n, int):
         freq_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
         output = freq_dict[:top_n]
     else:
