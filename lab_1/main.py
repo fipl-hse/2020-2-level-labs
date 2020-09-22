@@ -65,7 +65,7 @@ def get_concordance(tokens: list,
                 conc.append(tokens[i:i+rcs+1])
         elif check_l and not check_r:
             for i in idx:
-                conc.append(tokens[i-rcs:i+1])
+                conc.append(tokens[i-lcs:i+1])
         output = conc
     else:
         output = []
