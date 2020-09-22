@@ -36,8 +36,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if isinstance(tokens) is list:    # check tokens
-        if isinstance(stop_words) is list:    # check stop-words
+    if isinstance(tokens, list):    # check tokens
+        if isinstance(stop_words, list):    # check stop-words
             return [word for word in tokens if word not in stop_words]
         else:
             return tokens
@@ -54,8 +54,8 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
     freqs = {}
-    check = isinstance(tokens) is list and len(tokens) > 0
-    if check and isinstance(tokens[0]) is str:    # check tokens
+    check = isinstance(tokens, list) and len(tokens) > 0
+    if check and isinstance(tokens[0], str):    # check tokens
         for word in set(tokens):
             freqs[word] = tokens.count(word)
         freqs = dict(sorted(freqs.items(), key=lambda x: x[1], reverse=True))
@@ -72,8 +72,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    if isinstance(freq_dict) is dict /
-    and isinstance(top_n) is int:    # check freq_dict
+    if isinstance(freq_dict, dict) and isinstance(top_n, int):
         freq_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
         return freq_dict[:top_n]
     return []
@@ -102,11 +101,9 @@ def get_concordance(tokens: list,
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'],
           ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if isinstance(tokens) is list and word in tokens:    # check tokens & word
-        check_l = isinstance(left_context_size) is int/
-        and left_context_size > 0
-        check_r = isinstance(right_context_size) is int/
-        and right_context_size > 0
+    if isinstance(tokens, list) and word in tokens:    # check tokens & word
+        check_l = isinstance(left_context_size, int) and left_context_size > 0
+        check_r = isinstance(right_context_size, int) and right_context_size > 0
         conc = []
         idx = [i for i, x in enumerate(tokens) if x == word]
         if check_l and check_r:
@@ -177,7 +174,7 @@ def sort_concordance(tokens: list,
                      left_context_size: int,
                      right_context_size: int,
                      left_sort: bool) -> list:
-    if isinstance(left_sort) == bool:
+    if isinstance(left_sort, bool):
         conc = get_concordance(tokens,
                                word,
                                left_context_size,
