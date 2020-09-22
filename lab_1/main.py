@@ -16,7 +16,7 @@ def tokenize(text: str) -> list:
     """
     import re
     try:
-        return re.findall('\w+', text.lower())
+        return re.sub('[^a-z0-9\s]+', '', text.lower()).split()
     except AttributeError:
         return []
 
