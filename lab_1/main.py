@@ -237,13 +237,16 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     """
     if isinstance(tokens, list) and isinstance(word, str):
         if isinstance(left_context_size, int) and isinstance(right_context_size, int):
-            if isinstance(left_sort, bool) and left_context_size > 0:
+            if isinstance(left_sort, bool):
                 concors = get_concordance(tokens, word, left_context_size, right_context_size)
-                if left_sort:
+                if left_sort and left_context_size > 0:
                     return sort_list(concors, -1)
-                else:
+                elif not left_sort and right_context_size > 0:
                     return sort_list(concors, left_context_size)
-
+                return []
             return []
         return []
     return []
+
+
+print(sort_concordance(['one', 'happy', 'man'], 'happy', 1000, -1, False))
