@@ -215,7 +215,7 @@ def sort_list(concors, ind):
                 sorted_list.append(c)
                 break
 
-    return sort_list()
+    return sorted_list
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -236,11 +236,10 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     if isinstance(tokens, list) and isinstance(word, str):
-        if isinstance(left_context_size, int) and isinstance(right_context_size,
-                                                             int) and left_context_size > 0 and right_context_size > 0:
+        if isinstance(left_context_size, int) and isinstance(right_context_size,int):
             if isinstance(left_sort, bool):
                 concors = get_concordance(tokens, word, left_context_size, right_context_size)
-                if left_sort:
+                if left_sort and left_context_size > 1 or right_context_size < 1:
                     return sort_list(concors, 0)
                 else:
                     return sort_list(concors, left_context_size)
