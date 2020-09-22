@@ -4,6 +4,10 @@ A concordance extraction
 """
 
 
+import re
+import os
+
+
 def tokenize(text: str) -> list:
     """
     Splits sentences into tokens,
@@ -14,9 +18,8 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    import re
     try:
-        return re.sub('[^a-z0-9\s]+', '', text.lower()).split()
+        return re.sub(r'[^a-z0-9\s]+', '', text.lower()).split()
         pass
     except AttributeError:
         return []
@@ -33,8 +36,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if type(tokens) is list:    # check tokens
-        if type(stop_words) is list:    # check stop-words
+    if isinstance(tokens) is list:    # check tokens
+        if isinstance(stop_words) is list:    # check stop-words
             return [word for word in tokens if word not in stop_words]
         else:
             return tokens
@@ -50,13 +53,13 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    d = {}
-    check = type(tokens) is list and len(tokens) > 0
-    if check and type(tokens[0]) is str:    # check tokens
+    freqs = {}
+    check = isinstance(tokens) is list and len(tokens) > 0
+    if check and isinstance(tokens[0]) is str:    # check tokens
         for word in set(tokens):
-            d[word] = tokens.count(word)
-        d = dict(sorted(d.items(), key=lambda x: x[1], reverse=True))
-    return d
+            freqs[word] = tokens.count(word)
+         = dict(sorted(freqs.items(), key=lambda x: x[1], reverse=True))
+    return freqs
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -69,7 +72,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    if type(freq_dict) is dict and type(top_n) is int:    # check freq_dict
+    if isinstance(freq_dict) is dict /
+    and isinstance(top_n) is int:    # check freq_dict
         freq_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
         return freq_dict[:top_n]
     return []
@@ -83,7 +87,7 @@ def get_concordance(tokens: list,
     Gets a concordance of a word
     A concordance is a listing of each occurrence of a word in a text,
     presented with the words surrounding it
-    :rtype: object
+    :risinstance: object
     :param tokens: a list of tokens
     :param word: a word-base for a concordance
     :param left_context_size: the number of words in the left context
@@ -98,9 +102,11 @@ def get_concordance(tokens: list,
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'],
           ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if type(tokens) is list and word in tokens:    # check tokens & word
-        check_l = type(left_context_size) is int and left_context_size > 0
-        check_r = type(right_context_size) is int and right_context_size > 0
+    if isinstance(tokens) is list and word in tokens:    # check tokens & word
+        check_l = isinstance(left_context_size) is int/
+        and left_context_size > 0
+        check_r = isinstance(right_context_size) is int/
+        and right_context_size > 0
         conc = []
         idx = [i for i, x in enumerate(tokens) if x == word]
         if check_l and check_r:
@@ -151,8 +157,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
 
@@ -161,10 +167,9 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result to a file
     """
-    import os
     with open(os.path.join(path_to_file, 'report.txt'),
-              'w', encoding='utf-8') as fs:
-        fs.write('\n'.join([' '.join(k) for k in content]))
+              'w', encoding='utf-8') as file:
+        file.write('\n'.join([' '.join(k) for k in content]))
 
 
 def sort_concordance(tokens: list,
@@ -172,7 +177,7 @@ def sort_concordance(tokens: list,
                      left_context_size: int,
                      right_context_size: int,
                      left_sort: bool) -> list:
-    if type(left_sort) == bool:
+    if isinstance(left_sort) == bool:
         conc = get_concordance(tokens,
                                word,
                                left_context_size,
@@ -183,11 +188,12 @@ def sort_concordance(tokens: list,
                     return sorted(conc, key=lambda x: x[0])
                 elif not left_sort and right_context_size > 0:
                     try:
-                        return sorted(conc, key=lambda x: x[-right_context_size])
+                        rcs = right_context_size
+                        return sorted(conc, key=lambda x: x[-rcs])
                     except IndexError:
                         rcs = len(tokens) - tokens.index(word) - 1
                         return sorted(conc, key=lambda x: x[-rcs])
-        except TypeError:
+        except isinstanceError:
             return []
     return []
     """
