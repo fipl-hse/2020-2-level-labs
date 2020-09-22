@@ -29,8 +29,7 @@ def calculate_frequencies(tokens: list) -> dict:
             freqs[word] = tokens.count(word)
         freqs = dict(sorted(freqs.items(), key=lambda x: x[1], reverse=True))
     else:
-        output = freqs
-    return output
+        return = freqs
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -98,6 +97,7 @@ def sort_concordance(tokens: list,
                      left_context_size: int,
                      right_context_size: int,
                      left_sort: bool) -> list:
+    output = []
     if isinstance(left_sort, bool):
         conc = get_concordance(tokens,
                                word,
