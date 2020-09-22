@@ -177,7 +177,8 @@ def sort_concordance(tokens: list,
                                word,
                                left_context_size,
                                right_context_size)
-        if left_context_size > 0 and right_context_size > 0:
+        try:
+            left_context_size > 0 and right_context_size > 0
             if left_sort:
                 return sorted(conc, key=lambda x: x[0])
             try:
@@ -185,6 +186,8 @@ def sort_concordance(tokens: list,
             except IndexError:
                 rcs = len(tokens) - tokens.index(word) - 1
                 return sorted(conc, key=lambda x: x[-rcs])
+        except TypeError:
+            return []
     return []
     """
     Gets a concordance of a word and sorts it by either left or right context
