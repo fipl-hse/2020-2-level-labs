@@ -40,10 +40,12 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
             for word in tokens:
                 if word in stop_words:
                     clean_tokens.remove(word)
-            return clean_tokens
+            output_list = clean_tokens
+        elif isinstance(stop_words, list) and not stop_words:
+            output_list = tokens
         else:
-            return tokens
-        return []
+            output_list = []
+        return output_list
     return[]
 
 
@@ -129,12 +131,14 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             count += 1
 
         if left_context_size > 0 and right_context_size > 0:
-            return [tokens[i - left_context_size:i + right_context_size + 1] for i in inds]
+            output_list = [tokens[i - left_context_size:i + right_context_size + 1] for i in inds]
         elif left_context_size > 0:
-            return [tokens[i - left_context_size:i + 1] for i in inds]
+            output_list = [tokens[i - left_context_size:i + 1] for i in inds]
         elif right_context_size > 0:
-            return [tokens[i:i + int(right_context_size) + 1] for i in inds]
-        return []
+            output_list = [tokens[i:i + int(right_context_size) + 1] for i in inds]
+        else:
+            output_list = []
+        return output_list
 
     return []
 
@@ -240,7 +244,8 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
                     output_list = sort_list(concors, -1)
                 elif not left_sort and right_context_size > 0:
                     output_list = sort_list(concors, left_context_size)
-                else: output_list = []
+                else:
+                    output_list = []
                 return output_list
             return []
         return []
