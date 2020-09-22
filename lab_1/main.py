@@ -189,7 +189,7 @@ def sort_concordance(tokens: list,
                     except IndexError:
                         rcs = len(tokens) - tokens.index(word) - 1
                         return sorted(conc, key=lambda x: x[-rcs])
-        except typeError:
+        except TypeError:
             return []
     return []
     """
