@@ -99,23 +99,21 @@ def get_concordance(tokens: list,
           ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     if type(tokens) is list and word in tokens:    # check tokens & word
-        check_left = type(left_context_size) is int and left_context_size >= 1
-        check_right = type(right_context_size) is int and right_context_size >= 1
+        check_l = type(left_context_size) is int and left_context_size >= 1
+        check_r = type(right_context_size) is int and right_context_size >= 1
         conc = []
         idx = [i for i, x in enumerate(tokens) if x == word]
-        if check_left and check_right:
+        if check_l and check_r:
             for i in idx:
                 conc.append(tokens[i-left_context_size:i+right_context_size+1])
-        elif not check_left and check_right:
+        elif not check_l and check_r:
             for i in idx:
                 conc.append(tokens[i:i+right_context_size+1])
-        elif check_left and not check_right:
+        elif check_l and not check_r:
             for i in idx:
                 conc.append(tokens[i-left_context_size:i+1])
         return conc
     return []
-
-
 
 
 def get_adjacent_words(tokens: list,
@@ -175,11 +173,17 @@ def sort_concordance(tokens: list,
                      right_context_size: int,
                      left_sort: bool) -> list:
     if type(left_sort) == bool:
-        conc = get_concordance(tokens, word, left_context_size, right_context_size)
+        conc = get_concordance(tokens,
+                               word,
+                               left_context_size,
+                               right_context_size)
         if left_sort:
             return sorted(conc, key=lambda x: x[0])
-        rcs = len(tokens) - tokens.index(word) -1
-        return sorted(conc, key=lambda x: x[-rcs])
+        try:
+            return sorted(conc, key=lambda x: x[-right_context_size])
+        except IndexError:
+            rcs = len(tokens) - tokens.index(word) - 1
+            return sorted(conc, key=lambda x: x[-rcs])
     return []
     """
     Gets a concordance of a word and sorts it by either left or right context
