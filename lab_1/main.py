@@ -102,8 +102,8 @@ def get_concordance(tokens: list,
           ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     if isinstance(tokens, list) and word in tokens:    # check tokens & word
-        check_l = isinstance(left_context_size, int) and left_context_size > 0
-        check_r = isinstance(right_context_size, int) and right_context_size > 0
+        check_l = not isinstance(left_context_size, bool) and isinstance(left_context_size, int) and left_context_size > 0
+        check_r = not  isinstance(right_context_size, bool) and isinstance(right_context_size, int) and right_context_size > 0
         conc = []
         idx = [i for i, x in enumerate(tokens) if x == word]
         if check_l and check_r:
@@ -117,7 +117,6 @@ def get_concordance(tokens: list,
                 conc.append(tokens[i-left_context_size:i+1])
         return conc
     return []
-
 
 def get_adjacent_words(tokens: list,
                        word: str,
@@ -190,7 +189,7 @@ def sort_concordance(tokens: list,
                     except IndexError:
                         rcs = len(tokens) - tokens.index(word) - 1
                         return sorted(conc, key=lambda x: x[-rcs])
-        except isinstanceError:
+        except typeError:
             return []
     return []
     """
