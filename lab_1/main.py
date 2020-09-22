@@ -2,8 +2,8 @@
 Lab 1
 A concordance extraction
 """
-sadsadsa
 
+#1
 def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
@@ -12,10 +12,25 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = text.split()
-    return text
+    with open(text, 'r', encoding='utf-8') as f:
+        text = f.read()
+    text = text.lower()
+    text.split()
+    symbols = ',:;-.?!\"()[]'
+    tokens = []
+    for i in text:
+        if i not in symbols:
+            tokens.append(i)
+    return tokens
 
 
+tokens = tokenize('data.txt')
+
+with open('stop_words.txt', 'r', encoding='utf-8') as f:
+    stop_words = f.read()
+    stop_words = stop_words.split()
+
+#2
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     Removes stop words
@@ -26,9 +41,16 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+    tokens_clean = []
+    for i in range(len(tokens)):
+        if tokens[i] not in stop_words:
+            tokens_clean.append(tokens[i])
+    return tokens_clean
 
 
+tokens = remove_stop_words(tokens, stop_words)
+
+#3
 def calculate_frequencies(tokens: list) -> dict:
     """
     Calculates frequencies of given tokens
@@ -37,9 +59,18 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
+    freq_dict = {}
+    for i in tokens:
+        if i in freq_dict:
+            freq_dict[i] += 1
+        else:
+            freq_dict[i] = 1
+    return freq_dict
 
 
+freq_dict = calculate_frequencies(tokens)
+
+#4
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     Returns the most common words
@@ -49,10 +80,22 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy', 'and', 'dog', 'happy']
     top_n = 1
     --> ['happy']
+    Здесь при неккорректных значениях должен возвращаться пустой список!
     """
-    pass
+    new_freq_dict = list(freq_dict.items())
+    new_freq_dict.sort(key=lambda i: (-i[1], i[0]))
+    new_freq_dict = dict(freq_dict.items())
+    top_freq_list = list(new_freq_dict.keys())
+    top_n = top_n - 1
+    top_n_words = top_freq_list[0:top_n]
+    print(top_n_words)
 
 
+#get_top_n_words(freq_dict, int(input('Введите число ')))
+
+tokens = tokenize('data.txt')
+
+#5
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
     Gets a concordance of a word
@@ -70,9 +113,29 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    concordance_list = []
+    left_context_list = []
+    right_context_list = []
+    operative_tokens = tokens.copy()
+    word = word.lower()
+    while word in operative_tokens:
+        index = operative_tokens.index(word)
+        left_index = index - left_context_size
+        right_index = index + right_context_size + 1
+        left_context_list.extend(operative_tokens[left_index:index])
+        right_context_list.extend(operative_tokens[index:right_index])
+        concordance_list.extend(left_context_list)
+        left_context_list.clear()
+        concordance_list.extend(right_context_list)
+        right_context_list.clear()
+        operative_tokens.remove(word)
+
+    print(concordance_list)
 
 
+#get_concordance(tokens, input('Введите слово '), int(input('Введите число для левого контекста ')), int(input('Введите число для правого контекста ')))
+
+#6
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
     Gets adjacent words from the left and right context
@@ -87,10 +150,11 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     left_n = 2
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
+    В данной функции ОБЯЗАТЕЛЬНО использовать функцию get_concordance (см. Шаг 5).
     """
     pass
 
-
+#7
 def read_from_file(path_to_file: str) -> str:
     """
     Opens the file and reads its content
