@@ -178,14 +178,15 @@ def sort_concordance(tokens: list,
                                left_context_size,
                                right_context_size)
         try:
-            if left_context_size > 0 and right_context_size > 0:
-                if left_sort:
+            if left_context_size > 0 or right_context_size > 0:
+                if left_sort and left_context_size > 0:
                     return sorted(conc, key=lambda x: x[0])
-                try:
-                    return sorted(conc, key=lambda x: x[-right_context_size])
-                except IndexError:
-                    rcs = len(tokens) - tokens.index(word) - 1
-                    return sorted(conc, key=lambda x: x[-rcs])
+                elif not left_sort and right_context_size > 0:
+                    try:
+                        return sorted(conc, key=lambda x: x[-right_context_size])
+                    except IndexError:
+                        rcs = len(tokens) - tokens.index(word) - 1
+                        return sorted(conc, key=lambda x: x[-rcs])
         except TypeError:
             return []
     return []
