@@ -29,7 +29,8 @@ def calculate_frequencies(tokens: list) -> dict:
             freqs[word] = tokens.count(word)
         freqs = dict(sorted(freqs.items(), key=lambda x: x[1], reverse=True))
     else:
-        return = freqs
+        None
+    return freqs
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
