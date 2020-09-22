@@ -58,7 +58,7 @@ def calculate_frequencies(tokens: list) -> dict:
     if check and isinstance(tokens[0]) is str:    # check tokens
         for word in set(tokens):
             freqs[word] = tokens.count(word)
-         = dict(sorted(freqs.items(), key=lambda x: x[1], reverse=True))
+        freqs = dict(sorted(freqs.items(), key=lambda x: x[1], reverse=True))
     return freqs
 
 
