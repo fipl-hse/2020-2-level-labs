@@ -108,7 +108,6 @@ def get_concordance(tokens: list,
                 conc.append(tokens[i-left_context_size:i+right_context_size+1])
         elif not check_left and check_right:
             for i in idx:
-                print(right_context_size)
                 conc.append(tokens[i:i+right_context_size+1])
         elif check_left and not check_right:
             for i in idx:
@@ -176,13 +175,11 @@ def sort_concordance(tokens: list,
                      right_context_size: int,
                      left_sort: bool) -> list:
     if type(left_sort) == bool:
-        conc = get_concordance(tokens,
-                               word,
-                               left_context_size,
-                               right_context_size)
+        conc = get_concordance(tokens, word, left_context_size, right_context_size)
         if left_sort:
             return sorted(conc, key=lambda x: x[0])
-        return sorted(conc, key=lambda x: x[-right_context_size])
+        rcs = len(tokens) - tokens.index(word) -1
+        return sorted(conc, key=lambda x: x[-rcs])
     return []
     """
     Gets a concordance of a word and sorts it by either left or right context
