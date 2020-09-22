@@ -14,7 +14,7 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     if isinstance(text, str) and text:
-        prepared_text = re.sub('[^a-zA-Z \n]`', '', text).lower()
+        prepared_text = re.sub('[^a-zA-Z \n`]', '', text).lower()
         return prepared_text.split()
 
     return []
