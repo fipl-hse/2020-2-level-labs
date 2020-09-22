@@ -44,6 +44,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
         else:
             return tokens
         return []
+    return[]
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -244,6 +245,3 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
             return []
         return []
     return []
-
-
-print(sort_concordance(['one', 'happy', 'man'], 'happy', 1000, -1, False))
