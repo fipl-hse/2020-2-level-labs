@@ -51,7 +51,7 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
     d = {}
-    if type(tokens) is list:    # check tokens
+    if type(tokens) is list and len(tokens) > 0:    # check tokens
         for word in set(tokens):
             d[word] = tokens.count(word)
         d = dict(sorted(d.items(), key=lambda x: x[1], reverse=True))
@@ -69,7 +69,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
     if type(freq_dict) is dict and type(top_n) is int:    # check freq_dict
-        return list(freq_dict.keys())[:top_n]
+        return list(freq_dict.keys())[:top_n + 1]
     return []
 
 
@@ -97,13 +97,22 @@ def get_concordance(tokens: list,
           ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     if type(tokens) is list and word in tokens:    # check tokens & word
-        if left_context_size >= 1 or right_context_size >= 1:
-            idx = [i for i, x in enumerate(tokens) if x == word]
-            conc = []
+        check_left = type(left_context_size) is int and left_context_size >= 1
+        check_right = type(right_context_size) is int and right_context_size >= 1
+        conc = []
+        idx = [i for i, x in enumerate(tokens) if x == word]
+        if check_left and check_right:
             for i in idx:
                 conc.append(tokens[i-left_context_size:i+right_context_size+1])
-            return conc
+        elif not check_left:
+            for i in idx:
+                conc.append(tokens[i:i+right_context_size+1])
+        elif not check_right:
+            for i in idx:
+                conc.append(tokens[i-left_context_size:i+1])
+        return conc
     return []
+
 
 
 def get_adjacent_words(tokens: list,
@@ -169,7 +178,6 @@ def sort_concordance(tokens: list,
                                right_context_size)
         if left_sort:
             return sorted(conc, key=lambda x: x[0])
-        print(conc[0][-right_context_size])
         return sorted(conc, key=lambda x: x[-right_context_size])
     return []
     """
