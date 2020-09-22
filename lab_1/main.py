@@ -31,8 +31,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
     if isinstance(tokens, list) and tokens:
-        for el in tokens:
-            if not isinstance(el, str):
+        for element in tokens:
+            if not isinstance(element, str):
                 return []
 
         if isinstance(stop_words, list) and stop_words:
@@ -41,11 +41,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
                 if word in stop_words:
                     clean_tokens.remove(word)
             return clean_tokens
-
         else:
             return tokens
-
-    else:
         return []
 
 
@@ -136,7 +133,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             return [tokens[i - left_context_size:i + 1] for i in inds]
         elif right_context_size > 0:
             return [tokens[i:i + int(right_context_size) + 1] for i in inds]
-
         return []
 
     return []
@@ -161,18 +157,18 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         if isinstance(left_n, int) and isinstance(right_n, int) and left_n >= 1 and right_n >= 1:
             concordances = get_concordance(tokens, word, left_n, right_n)
             adjacent_words = []
-            for c in concordances:
-                adjacent_words.append([c[0], c[-1]])
+            for context in concordances:
+                adjacent_words.append([context[0], context[-1]])
         elif (not isinstance(left_n, int) or left_n < 1) and (isinstance(right_n, int) and right_n >= 1):
             concordances = get_concordance(tokens, word, left_n, right_n)
             adjacent_words = []
-            for c in concordances:
-                adjacent_words.append([c[-1]])
+            for context in concordances:
+                adjacent_words.append([context[-1]])
         elif (not isinstance(right_n, int) or right_n < 1) and (isinstance(left_n, int) and left_n >= 1):
             concordances = get_concordance(tokens, word, left_n, -1)
             adjacent_words = []
-            for c in concordances:
-                adjacent_words.append([c[0]])
+            for context in concordances:
+                adjacent_words.append([context[0]])
         else:
             return []
 
@@ -186,8 +182,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
 
@@ -201,18 +197,18 @@ def write_to_file(path_to_file: str, content: list):
         content_full = [' '.join(lst) for lst in content]
         content_output = '\n'.join(content_full)
 
-        with open(path_to_file, 'w') as f:
-            f.write(content_output)
+        with open(path_to_file, 'w') as file:
+            file.write(content_output)
 
 
 def sort_list(concors, ind):
     sorted_list = []
-    first_letters = [concors[i][ind + 1] for i in range(len(concors))]
-    first_letters.sort()
-    for w in first_letters:
-        for c in concors:
-            if c[ind + 1] == w:
-                sorted_list.append(c)
+    first_words = [concors[i][ind + 1] for i in range(len(concors))]
+    first_words.sort()
+    for word in first_words:
+        for context in concors:
+            if context[ind + 1] == word:
+                sorted_list.append(context)
                 break
 
     return sorted_list
@@ -240,10 +236,11 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
             if isinstance(left_sort, bool):
                 concors = get_concordance(tokens, word, left_context_size, right_context_size)
                 if left_sort and left_context_size > 0:
-                    return sort_list(concors, -1)
+                    output_list = sort_list(concors, -1)
                 elif not left_sort and right_context_size > 0:
-                    return sort_list(concors, left_context_size)
-                return []
+                    output_list = sort_list(concors, left_context_size)
+                else: output_list = []
+                return output_list
             return []
         return []
     return []
