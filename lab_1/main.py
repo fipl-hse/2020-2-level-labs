@@ -51,7 +51,8 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
     d = {}
-    if type(tokens) is list and len(tokens) > 0:    # check tokens
+    check = type(tokens) is list and len(tokens) > 0
+    if check and type(tokens[0]) is str:    # check tokens
         for word in set(tokens):
             d[word] = tokens.count(word)
         d = dict(sorted(d.items(), key=lambda x: x[1], reverse=True))
@@ -69,7 +70,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
     if type(freq_dict) is dict and type(top_n) is int:    # check freq_dict
-        return list(freq_dict.keys())[:top_n + 1]
+        freq_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
+        return freq_dict[:top_n]
     return []
 
 
