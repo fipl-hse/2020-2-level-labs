@@ -178,8 +178,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
 
         return adjacent_words
 
-    else:
-        return []
+    return []
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -199,7 +198,6 @@ def write_to_file(path_to_file: str, content: list):
     """
 
     if isinstance(path_to_file, str) and isinstance(content, list):
-
         content_full = [' '.join(lst) for lst in content]
         content_output = '\n'.join(content_full)
 
@@ -207,9 +205,17 @@ def write_to_file(path_to_file: str, content: list):
             f.write(content_output)
 
 
-write_to_file("report.txt", get_concordance(['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
-                                  'the', 'dog', 'is', 'glad', 'but', 'the', 'cat', 'is', 'sad'],
-                                 'is', 2, 3))
+def sort_list(concors, ind):
+    sorted_list = []
+    first_letters = [concors[i][ind + 1] for i in range(len(concors))]
+    first_letters.sort()
+    for w in first_letters:
+        for c in concors:
+            if c[ind + 1] == w:
+                sorted_list.append(c)
+                break
+
+    return sort_list()
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -229,4 +235,15 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    pass
+    if isinstance(tokens, list) and isinstance(word, str):
+        if isinstance(left_context_size, int) and isinstance(right_context_size,
+                                                             int) and left_context_size > 0 and right_context_size > 0:
+            if isinstance(left_sort, bool):
+                concors = get_concordance(tokens, word, left_context_size, right_context_size)
+                if left_sort:
+                    return sort_list(concors, 0)
+                else:
+                    return sort_list(concors, left_context_size)
+            return []
+        return []
+    return []
