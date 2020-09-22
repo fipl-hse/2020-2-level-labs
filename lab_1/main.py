@@ -14,7 +14,7 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     if isinstance(text, str) and text:
-        prepared_text = re.sub('[^a-zA-Z \n]', '', text).lower()
+        prepared_text = re.sub('[^a-zA-Z \n]`', '', text).lower()
         return prepared_text.split()
 
     return []
@@ -236,13 +236,14 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     if isinstance(tokens, list) and isinstance(word, str):
-        if isinstance(left_context_size, int) and isinstance(right_context_size,int):
-            if isinstance(left_sort, bool):
+        if isinstance(left_context_size, int) and isinstance(right_context_size, int):
+            if isinstance(left_sort, bool) and left_context_size > 0:
                 concors = get_concordance(tokens, word, left_context_size, right_context_size)
-                if left_sort and left_context_size > 1 or right_context_size < 1:
-                    return sort_list(concors, 0)
+                if left_sort:
+                    return sort_list(concors, -1)
                 else:
                     return sort_list(concors, left_context_size)
+
             return []
         return []
     return []
