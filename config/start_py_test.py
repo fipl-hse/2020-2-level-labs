@@ -6,7 +6,6 @@ import sys
 
 
 def check_assert_is_in_file(content: str):
-    print(content)
     expected = 'assert RESULT == '
     actual = re.findall('assert RESULT', content)
     if expected == actual:
