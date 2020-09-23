@@ -7,7 +7,7 @@ import os
 
 if __name__ == '__main__':
     #  use data.txt file to test your program
-    data = read_from_file(os.getcwd()+'./data.txt')
+    data = read_from_file(os.getcwd()+'/./data.txt')
     stop_words = []
 
     #  here goes your logic: calling methods from concordance.py
