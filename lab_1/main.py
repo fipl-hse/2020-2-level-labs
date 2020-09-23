@@ -2,6 +2,8 @@
 Lab 1
 A concordance extraction
 """
+import re
+test = 'ARH 10 & &&& &&* % Years of Time Team llll presented a round-up of what llll has happened in Time llll Team over the llll past 10 years and what they expect to happen in the future. 13 October 1962 marked the initial working session of the Council.'
 
 #1
 def tokenize(text: str) -> list:
@@ -14,13 +16,9 @@ def tokenize(text: str) -> list:
     """
     with open(text, 'r', encoding='utf-8') as f:
         text = f.read()
+
     text = text.lower()
-    text.split()
-    symbols = ',:;-.?!\"()[]'
-    tokens = []
-    for i in text:
-        if i not in symbols:
-            tokens.append(i)
+    tokens = re.findall(r'(?:\w+\-?\w*)+', text)
     return tokens
 
 
@@ -42,13 +40,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
     tokens_clean = []
-    for i in range(len(tokens)):
-        if tokens[i] not in stop_words:
-            tokens_clean.append(tokens[i])
+    for i in tokens:
+        if i not in stop_words:
+            tokens_clean.append(i)
     return tokens_clean
 
 
 tokens = remove_stop_words(tokens, stop_words)
+
 
 #3
 def calculate_frequencies(tokens: list) -> dict:
@@ -70,6 +69,7 @@ def calculate_frequencies(tokens: list) -> dict:
 
 freq_dict = calculate_frequencies(tokens)
 
+
 #4
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
@@ -82,18 +82,27 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     Здесь при неккорректных значениях должен возвращаться пустой список!
     """
-    new_freq_dict = list(freq_dict.items())
-    new_freq_dict.sort(key=lambda i: (-i[1], i[0]))
-    new_freq_dict = dict(freq_dict.items())
-    top_freq_list = list(new_freq_dict.keys())
-    top_n = top_n - 1
-    top_n_words = top_freq_list[0:top_n]
-    print(top_n_words)
+    freq_list = list(freq_dict.items())
+    freq_list.sort(key=lambda x: -x[1])
+    new_freq_dict = dict(freq_list)
+    new_freq_list = list(new_freq_dict.keys())
+    ind = 0
+    top_n_words_list = []
+    top_n -= 1
+    for i in new_freq_list:
+        if ind <= top_n:
+            top_n_words_list.append(new_freq_list[ind])
+            ind += 1
+        else:
+            break
+    print(top_n_words_list)
+    return top_n_words_list
 
 
 #get_top_n_words(freq_dict, int(input('Введите число ')))
 
 tokens = tokenize('data.txt')
+
 
 #5
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -124,16 +133,20 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         right_index = index + right_context_size + 1
         left_context_list.extend(operative_tokens[left_index:index])
         right_context_list.extend(operative_tokens[index:right_index])
-        concordance_list.extend(left_context_list)
+
+        left_context_list.extend(right_context_list.copy())
+        concordance_list.append(left_context_list.copy())
         left_context_list.clear()
-        concordance_list.extend(right_context_list)
         right_context_list.clear()
+
         operative_tokens.remove(word)
 
     print(concordance_list)
+    return concordance_list
 
 
 #get_concordance(tokens, input('Введите слово '), int(input('Введите число для левого контекста ')), int(input('Введите число для правого контекста ')))
+
 
 #6
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -152,7 +165,19 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     В данной функции ОБЯЗАТЕЛЬНО использовать функцию get_concordance (см. Шаг 5).
     """
-    pass
+    word = word.lower()
+
+    operative_tokens = get_concordance(tokens, word, left_n, right_n)
+    adjacent_words_list = []
+    for i in operative_tokens:
+        adjacent_words_list.append(i[0])
+        adjacent_words_list.append(i[-1])
+
+    print(adjacent_words_list)
+    return adjacent_words_list
+
+#get_adjacent_words(tokens, input('Введите слово '), int(input('Какое по счету слово вывести из левого контекста? ')), int(input('Какое по счету слово вывести из правого контекста? ')))
+
 
 #7
 def read_from_file(path_to_file: str) -> str:
@@ -170,9 +195,11 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+    with open(path_to_file, 'w', encoding='utf-8') as fs:
+        fs.write(content)
 
 
+#8
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
     """
     Gets a concordance of a word and sorts it by either left or right context
@@ -189,5 +216,37 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     right_context_size = 3
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
+    В данной функции ОБЯЗАТЕЛЬНО использовать функцию get_concordance (см. Шаг 5).
     """
-    pass
+    word = word.lower()
+    operative_tokens = get_concordance(tokens, word, left_context_size, right_context_size)
+    concordance = []
+    sorted_concordance = []
+    #print(operative_tokens)
+
+    def left_sort (operative_tokens):
+        for i in operative_tokens:
+            for alfa in i[0]:
+                return alfa[0]
+
+    def right_sort(operative_tokens):
+        for i in operative_tokens:
+            index = len(i) - right_context_size
+            for alfa in i[index]:
+                return alfa[0]
+
+    if left_sort == True:
+        for i in operative_tokens:
+            concordance.append(i)
+        sorted_concordance = sorted(concordance, key=left_sort)
+
+    elif left_sort == False:
+        for i in operative_tokens:
+            concordance.append(i)
+        sorted_concordance = sorted(concordance, key=right_sort)
+
+    return sorted_concordance
+
+a = sort_concordance(tokens, 'what', 1, 1, True)
+b = sort_concordance(tokens, 'what', 1, 1, False)
+print(a, b)
