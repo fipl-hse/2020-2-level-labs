@@ -8,5 +8,4 @@ for lab in $LABS; do
 
   START_PY_FILE=$(cat lab_"${lab}"/start.py)
   python3 config/start_py_test.py --start_py_content "$START_PY_FILE"
-
 done
