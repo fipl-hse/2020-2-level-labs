@@ -6,7 +6,7 @@ import sys
 
 
 def check_assert_is_in_file(content: str):
-    expected = 'assert RESULT == '
+    expected = 'assert RESULT'
     actual = re.findall('assert RESULT', content)
     if expected == actual:
         return 0
@@ -19,7 +19,7 @@ if __name__ == "__main__":
     args: argparse.Namespace = parser.parse_args()
 
     result = check_assert_is_in_file(args.start_py_content)
-    if result == 1:
+    if not result:
         print('Make sure you made assert RESULT in start.py file')
         sys.exit(result)
     print('Checks for start.py file passed')
