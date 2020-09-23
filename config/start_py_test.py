@@ -19,9 +19,10 @@ if __name__ == "__main__":
     args: argparse.Namespace = parser.parse_args()
 
     result = check_assert_is_in_file(args.start_py_content)
-    if not result:
+    if result == 1:
         print('Make sure you made assert RESULT in start.py file')
         sys.exit(result)
+    print('Checks for start.py file passed')
     sys.exit(result)
 
 # Test: a) assert concordance_realize is in file
