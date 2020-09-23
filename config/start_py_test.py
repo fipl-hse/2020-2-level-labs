@@ -23,6 +23,7 @@ if __name__ == "__main__":
     if result == 1:
         print('Make sure you made assert RESULT in start.py file')
         sys.exit(result)
+    print('Passed')
     sys.exit(result)
 
 # Test: a) assert concordance_realize is in file
