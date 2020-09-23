@@ -12,17 +12,21 @@ install:
   - pip3 install -r requirements.txt
 
 stages:
-  - test
-  - lint
+  # - test
+  # - lint
+  - start_py
 
 jobs:
   include:
-    - stage: test
+    # - stage: test
+      # script:
+        # - bash config/run-tests.sh
+    # - stage: lint
+      # script:
+        # - bash config/run-lint.sh
+    - stage: start_py
       script:
-        - bash config/run-tests.sh
-    - stage: lint
-      script:
-        - bash config/run-lint.sh
+        - bash config/run-start.sh
 
 notifications:
   email:
