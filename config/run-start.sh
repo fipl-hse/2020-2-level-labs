@@ -17,6 +17,8 @@ for lab in $LABS; do
 	exit 1
   fi
 
+  echo "Check calling lab #${lab} passed"
+
   START_PY_FILE=$(cat lab_"${lab}"/start.py)
   python3 config/start_py_test.py --start_py_content "$START_PY_FILE"
 done
