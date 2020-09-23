@@ -6,9 +6,10 @@ import sys
 
 
 def check_assert_is_in_file(content: str):
+    print(content)
     expected = 'assert RESULT'
-    actual = re.findall('assert RESULT', content)
-    if expected == actual:
+    actual = re.findall(expected, content)
+    if expected == actual or expected in content:
         return 0
     return 1
 
@@ -22,7 +23,6 @@ if __name__ == "__main__":
     if result == 1:
         print('Make sure you made assert RESULT in start.py file')
         sys.exit(result)
-    print('Checks for start.py file passed')
     sys.exit(result)
 
 # Test: a) assert concordance_realize is in file
