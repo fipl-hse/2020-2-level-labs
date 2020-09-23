@@ -20,5 +20,5 @@ for lab in $LABS; do
   echo "Check calling lab #${lab} passed"
 
   START_PY_FILE=$(cat lab_"${lab}"/start.py)
-  python3 config/start_py_test.py --start_py_content "$START_PY_FILE"
+  python3 config/check_start_content.py --start_py_content "$START_PY_FILE"
 done
