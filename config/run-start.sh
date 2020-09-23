@@ -10,7 +10,7 @@ for lab in $LABS; do
 	if ! python3 lab_"${lab}"/start.py;  then
     	WAS_FAILED=1
 	  fi
-	  
+
 	if [[ $WAS_FAILED -eq 1 ]]; then
 	echo "start.py fails while running"
 	echo "Check for start.py file for lab #${lab} failed."
