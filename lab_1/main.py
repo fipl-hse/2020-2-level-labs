@@ -12,8 +12,21 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = text.split()
-    return text
+    f = open('data.txt', encoding='utf8')#unfinished
+    text = f.read()
+    symbols = "'-"
+    for symbol in symbols:
+        text = text.replace(symbol, "")
+    raw = text.split()
+    worldlist = []
+    for part in raw:
+        cleaned=[]
+        for element in part:
+            if element.isalpha():
+                cleaned.append(element.lower())
+        if cleaned != []:
+            worldlist.append(''.join(cleaned))
+    return worldlist
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -26,7 +39,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+    f1 = open('stop_words.txt', encoding='utf8')#unfinished
+    stop_words = f1.read()
+    word = worldlist.copy()
+    for el in worldlist:
+        if el in stop_words:
+            word.remove(el)
+    return word
 
 
 def calculate_frequencies(tokens: list) -> dict:
