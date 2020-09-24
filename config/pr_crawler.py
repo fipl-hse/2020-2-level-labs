@@ -40,7 +40,7 @@ def get_by_url(url: str):
     return content
 
 
-def download_file(from_url: str, to_url: str):
+def download_file(from_url: str, to_url: str) -> None:
     http = urllib3.PoolManager()
     req = http.request('GET', from_url, preload_content=False)
 
@@ -74,11 +74,9 @@ def main(lab_n: int):
                 continue
             source_hash = target_file_url.split('/')[-3]
 
-            print(source_hash, current_commit_hash)
             if source_hash == current_commit_hash:
                 print('Ignoring file: {}'.format(file_name))
                 continue
-            print(file_name)
             file_base_name = file_name.split('/')[1]  # expected: main.py
             to_url = os.path.join('tmp',
                                   '{}_{}.{}'.format(file_base_name.split('.')[0],

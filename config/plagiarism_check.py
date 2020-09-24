@@ -2,15 +2,16 @@
 """
 Module to check plagiarism rate compared to other files
 """
-import ast
 import os
 import sys
 
 import argparse
+from typing import List, Union
+
 import pycode_similar
 
 
-def get_cli_parser():
+def get_cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--source-file',
@@ -25,46 +26,43 @@ def get_cli_parser():
     return parser
 
 
-def get_python_files_from(path):
+def get_python_files_from(path: str) -> list:
     files_paths = []
     for root, _, files in os.walk(path):
-        path = root.split(os.sep)
         for f_name in files:
-            if f_name.endswith('.py') and f_name != '__init__.py' and not '_test' in f_name:
+            if f_name.endswith('.py') and f_name != '__init__.py' and '_test' not in f_name:
                 print(f_name)
                 files_paths.append(os.path.join(root, f_name))
     return files_paths
 
 
-def compare_file_to_others(ref_file, candidate_files):
+def compare_file_to_others(ref_file: str, candidate_files: List[str]) -> Union[int, float]:
     files = [ref_file, ]
     files.extend(candidate_files)
-    print(files)
-    payload = []
+    file_contents = []
     for name in files:
         try:
             content = read_file_content(name)
-            _ = ast.parse(content)
-            payload.append(content)
+            file_contents.append(content)
         except SyntaxError:
             pass
 
-    res = pycode_similar.detect(payload, diff_method=pycode_similar.UnifiedDiff)
+    res = pycode_similar.detect(file_contents, diff_method=pycode_similar.UnifiedDiff)
     per_function_reports = res[0][1]
     if not per_function_reports:
         return 0
     total = 0
-    for i in per_function_reports:
-        total += i.plagiarism_percent
+    for report in per_function_reports:
+        total += report.plagiarism_percent
     return total / len(per_function_reports)
 
 
-def read_file_content(path):
+def read_file_content(path: str) -> str:
     with open(path, 'r', encoding='utf-8') as opened_file:
         return opened_file.read()
 
 
-def main():
+def main() -> bool:
     argv = get_cli_parser().parse_args()
 
     source_file = argv.source_file
@@ -75,9 +73,9 @@ def main():
     print('Plagiarism ratio is: {}'.format(avg))
     if avg > 0.3:
         print('Too much. Write code yourself')
-        return 1
+        return True
     print('Well done!')
-    return 0
+    return False
 
 
 if __name__ == '__main__':
