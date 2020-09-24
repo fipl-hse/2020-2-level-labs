@@ -13,14 +13,13 @@ import pycode_similar
 def get_cli_parser():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--source-dir',
-                        help='Check this directory for duplications' +
-                             '\n For example, lab1_frequences_counter',
+    parser.add_argument('--source-file',
+                        help='File to run plagiarism against',
                         type=str,
                         required=True)
 
     parser.add_argument('--others-dir',
-                        help='PR data from others',
+                        help='Directory with files from other PRs',
                         type=str,
                         required=True)
     return parser
@@ -34,6 +33,7 @@ def get_python_files_from(path):
             if f_name.endswith('.py') and f_name != '__init__.py' and not '_test' in f_name:
                 print(f_name)
                 files_paths.append(os.path.join(root, f_name))
+    print(files_paths)
     return files_paths
 
 
@@ -61,7 +61,7 @@ def compare_file_to_others(ref_file, candidate_files):
 
 
 def read_file_content(path):
-    with open(path) as opened_file:
+    with open(path, 'r', encoding='utf-8') as opened_file:
         return opened_file.read()
 
 

@@ -23,9 +23,9 @@ env:
 
 jobs:
   include:
-#    - stage: plagiarism_check
-#      script:
-#        - python3 config/pr_crawler.py --lab 1
+    - stage: plagiarism_check
+      script:
+        - bash config/run_plagiarism_check.sh
     - stage: pr_name_check
       script:
         - python3 config/check_pr_title.py --pr-name $(echo ${PR_TITLE// /_})
