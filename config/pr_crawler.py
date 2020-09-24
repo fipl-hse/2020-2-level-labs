@@ -10,11 +10,11 @@ import argparse
 
 from requests import get
 
-TOKEN = '5819289b9c5f7969989a36ab7deb360deeca8ac2'
+TOKEN = os.environ.get('GITHUB_API_TOKEN')
 
 
 def get_by_url(url: str):
-    headers = {'Authorization': f'token {TOKEN}'}
+    headers = {'Authorization': f'token ff4e14388e69daed82ffdc7359bd8a7717501153'}
     response = get(url, headers=headers)
     content = response.json()
     return content
