@@ -10,7 +10,7 @@ import argparse
 
 from requests import get
 
-TOKEN = '0d501ca3dfc343488e3805a367d14d1bae208e6f'
+TOKEN = '5819289b9c5f7969989a36ab7deb360deeca8ac2'
 
 
 def get_by_url(url: str):
