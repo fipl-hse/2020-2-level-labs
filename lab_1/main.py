@@ -13,7 +13,7 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     text=text.lower()
-    litter = '!@#$%^&*()_+=-\;№:?[]{},<>~\'\"/|\\'
+    litter = '!@#$%^&*()_+=-\.;№:?[]{},<>~\'\"/|\\'
     tokens = ''
     for i in text:
         if i not in litter:
