@@ -12,12 +12,17 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-
-    text = text.split()
+    tokens = ""
     text = text.lower()
+    for i in text:
+        if i not in ".,!?^/:;-%@#$^&*()_+=><[]{}\"\'\\":
+            tokens = tokens + i
+    tokens = tokens.split()
+    print(tokens)
+    return tokens
 
-    return text
 
+# tokenize("The weather is sunny, the man is happy, happy man.")
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -30,8 +35,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+    for word in tokens:
+        if word in stop_words:
+            tokens.remove(word)
+    return tokens
 
+
+# remove_stop_words(['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy'], ['the', 'is'])
 
 def calculate_frequencies(tokens: list) -> dict:
     """
@@ -41,8 +51,18 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
+    freq_dict = {}
+    for key in tokens:
+        if key in freq_dict:
+            value = freq_dict[key]
+            freq_dict = freq_dict[key] + 1
+        else:
+            freq_dict[key] = 1
 
+    return freq_dict
+
+
+#calculate_frequencies(['weather', 'sunny', 'man', 'happy'])
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
@@ -54,7 +74,25 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+    common_words = []
+    n = 0
+
+    sorted_dict = dict(sorted(freq_dict.items(), key=lambda item: item[1], reverse=True))
+    sorted_dict = list(sorted_dict.keys())
+
+    if top_n > len(sorted_dict):
+        top_n = len(sorted_dict)
+    if top_n >= 0:
+        while n != top_n:
+            common_words.append(sorted_dict[n])
+            n = n + 1
+    else:
+        common_words = []
+
+    return common_words
+
+
+#get_top_n_words({'weather': 1, 'sunny': 2, 'man': 1, 'happy': 3}, 5)
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -74,7 +112,27 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    concordance = []
+    list_index = [i for i, x in enumerate(tokens) if x == word]
+
+    if type(tokens) != list or type(word) != str:
+        return concordance
+    else:
+        if left_context_size >= 0 and right_context_size >= 0:
+            for i in list_index:
+                concordance.append(tokens[i - left_context_size: i + right_context_size])
+        elif left_context_size > 0:
+            for i in list_index:
+                concordance.append(tokens[i - left_context_size: i])
+        elif right_context_size > 0:
+            for i in list_index:
+                concordance.append(tokens[i: i + right_context_size])
+        return concordance
+
+
+get_concordance(['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
+                 'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad'], 'happy', 2, 3)
+
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -92,7 +150,18 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    concordance = []
+
+    list_index = [i for i, x in enumerate(tokens) if x == word]
+    for i in list_index:
+        if left_n > 0 and right_n > 0:
+            concordance.append([tokens[i - left_n], tokens[i + right_n]])
+
+    return concordance
+
+
+get_adjacent_words(['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
+                    'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad'], 'happy', 2, 3)
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -110,7 +179,7 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
