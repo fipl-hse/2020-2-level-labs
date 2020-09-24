@@ -222,6 +222,6 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     if left_sort:
         list_concordance.sort(key=lambda w: w[0])
     else:
-        index_word = left_context_size + 1  # считаю индекс правого слова для сортировки
+        index_word = left_context_size + 1
         list_concordance.sort(key=lambda w: w[index_word])
     return list_concordance
