@@ -14,6 +14,7 @@ install:
 stages:
   - test
   - lint
+  - start_py
 
 jobs:
   include:
@@ -23,6 +24,9 @@ jobs:
     - stage: lint
       script:
         - bash config/run-lint.sh
+    - stage: start_py
+      script:
+        - bash config/run-start.sh
 
 notifications:
   email:
