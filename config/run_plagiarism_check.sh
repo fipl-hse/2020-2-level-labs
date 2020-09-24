@@ -3,6 +3,4 @@ echo "Running plagiarism check..."
 
 python3 config/pr_crawler.py --lab 1
 
-ls -la tmp
-
 python3 config/plagiarism_check.py --source-file lab_1/main.py --others-dir tmp

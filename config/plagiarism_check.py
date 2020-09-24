@@ -67,7 +67,7 @@ def read_file_content(path):
 def main():
     argv = get_cli_parser().parse_args()
 
-    source_file = get_python_files_from(argv.source_file)
+    source_file = argv.source_file
     other_files = get_python_files_from(argv.others_dir)
 
     avg = compare_file_to_others(source_file, other_files)
