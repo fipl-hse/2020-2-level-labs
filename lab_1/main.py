@@ -3,8 +3,13 @@ Lab 1
 A concordance extraction
 """
 
+import re
+
 
 def tokenize(text: str) -> list:
+    text = re.findall(r'[A-Za-z]+', text)
+    text = ' '.join(text)
+    text = text.lower()
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
@@ -13,10 +18,22 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     text = text.split()
+    print(text)
     return text
 
 
+tokenize('Compound words are those words that collectively form a new term with a different meaning.')
+with open('stop_words.txt', encoding='utf-8') as f:
+    stop_words = f.read()
+stop_words = stop_words.split()
+
+tokens = text
 def remove_stop_words(tokens: list, stop_words: list) -> list:
+    for token in text:
+        if token in stop_words:
+            text.remove()
+    print(text)
+    return text
     """
     Removes stop words
     :param tokens: a list of tokens
@@ -26,9 +43,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
 
-
+remove_stop_words(text, stop_words)
 def calculate_frequencies(tokens: list) -> dict:
     """
     Calculates frequencies of given tokens
