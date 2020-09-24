@@ -72,9 +72,9 @@ def main() -> bool:
 
     print('Plagiarism ratio is: {}'.format(avg))
     if avg > 0.3:
-        print('Too much. Write code yourself')
+        print('Plagiarism check is not passed!')
         return True
-    print('Well done!')
+    print('Plagiarism check is passed. Well done!')
     return False
 
 
