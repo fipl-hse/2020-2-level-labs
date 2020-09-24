@@ -93,8 +93,4 @@ if __name__ == '__main__':
     parser.add_argument('--lab', type=int, help='Lab to check')
     parser.add_argument('--current-pr', type=int, help='Current PR id')
     args: argparse.Namespace = parser.parse_args()
-    print(args.current_pr)
-    print(args.current_pr)
-    print(args.current_pr)
-    print(args.current_pr)
     main(args.lab, args.current_pr)
