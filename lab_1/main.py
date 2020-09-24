@@ -13,14 +13,16 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
 
-def tokenize(text):
-    punctuation = ['(', ')', '?', ':', ';', ',', '.', '!', '/', '"', "'"]
 
-    for i in punctuation:
-        text = text.replace(i, "")
+    def tokenize(text: str):
+        punctuation = ['(', ')', '?', ':', ';', ',', '.', '!', '/', '"', "'"]
+        for i in punctuation:
+            text = text.replace(i, "")
 
     text = text.lower()
     return text.split()
+    pass
+
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
@@ -32,6 +34,17 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
+
+    def remove_stop_words():
+        tokens = str(input('Введите предложение ')).split()
+
+        stop_words = str(input('Введите стоп-слова ')).split()
+
+        final_list = [word for word in tokens if word not in stop_words]
+
+        print(final_list)
+        return final_list
+
     pass
 
 
@@ -43,6 +56,16 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
+
+    def analysis():
+        tokens = str(input('Введите предложение ')).split()
+        dict = {}
+        for i in tokens:
+            if i in dict:
+                dict[i] += 1
+            else:
+                dict[i] = 1
+        print(dict)
     pass
 
 
