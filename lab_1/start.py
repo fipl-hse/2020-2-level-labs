@@ -1,14 +1,18 @@
+<<<<<<< HEAD
 """
 Concordance implementation starter
 """
 
-import main
+
+import os
+from main
 
 
 if __name__ == '__main__':
     #  use data.txt file to test your program
-    data = main.read_from_file('data.txt')
-    stop_words = main.read_from_file('stop_words.txt')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    data = main.read_from_file(os.path.join(current_dir, 'data.txt'))
+    stop_words = []
 
     #  here goes your logic: calling methods from concordance.py
     tokens = main.tokenize(data)
