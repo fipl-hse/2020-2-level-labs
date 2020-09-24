@@ -14,7 +14,7 @@ TOKEN = os.environ.get('GITHUB_API_TOKEN')
 
 
 def get_by_url(url: str):
-    headers = {'Authorization': f'token ff4e14388e69daed82ffdc7359bd8a7717501153'}
+    headers = {'Authorization': f'token {TOKEN}'}
     response = get(url, headers=headers)
     content = response.json()
     return content
