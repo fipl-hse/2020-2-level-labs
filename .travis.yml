@@ -25,7 +25,7 @@ jobs:
   include:
     - stage: plagiarism_check
       script:
-        - python3 config/pr_crawler.py
+        - python3 config/pr_crawler.py --lab 1
         - ls -la tmp
     - stage: pr_name_check
       script:
