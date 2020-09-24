@@ -49,6 +49,8 @@ def calculate_frequencies(tokens: list) -> dict:
     frequences = []
     for i in tokens:
         frequences += str(tokens.count(i))
+    for i,c in enumerate (frequences):
+        frequences[i]=int(c)
     freq_dict = {tokens[i]: frequences[i] for i in range(len(frequences))}
     return freq_dict
 
