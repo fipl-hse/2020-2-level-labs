@@ -12,8 +12,15 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = text.lower()
-    return text
+    import re
+    from string import punctuation
+
+    if type(text) is str:
+        text = re.sub(f'[{punctuation}]+', '', text.lower())
+        text = re.findall(r'\w+', text)
+        return text
+    else:
+        return []
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -26,7 +33,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+    return [x for x in tokens if x not in set(stop_words)] if type(tokens) is list else []
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -37,7 +44,7 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
+    return {token: tokens.count(token) for token in tokens} if (type(tokens) is list and all(tokens)) else {}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -50,7 +57,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+    if type(freq_dict) is dict:
+        sorted_dict = [k for k, _ in sorted(freq_dict.items(), key=lambda kv: kv[1], reverse=True)]
+        return sorted_dict[:top_n]
+    else:
+        return []
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -70,7 +81,32 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+
+    # В процессе разработки
+
+    checks = [
+        'type(tokens) is list',
+        'type(word) is str',
+        'type(left_context_size) is int',
+        'type(right_context_size) is int'
+    ]
+
+    if all(eval(x) for x in checks):
+        context = []
+        word_indices = [idx for idx, el in enumerate(tokens) if el == word]
+        window = (left_context_size, right_context_size)
+
+        for x in word_indices:
+            if window[0] > 0 and window[1] > 0:
+                context.append(tokens[x - window[0]:x + window[1] + 1])
+            elif window[0] < 1 and window[1] > 0:
+                context.append(tokens[x:x + window[1] + 1])
+            elif window[0] > 0 and window[1] < 1:
+                context.append(tokens[x - window[0]:x + 1])
+            else:
+                return []
+    else:
+        return []
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
