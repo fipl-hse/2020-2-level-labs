@@ -2,17 +2,28 @@
 Lab 1
 A concordance extraction
 """
-fyjvhmb,nkljkhjgn
+#fyjvhmb,nkljkhjgn
+
+import re
 
 def tokenize(text: str) -> list:
-    """
-    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
+    """Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
     :return: a list of lowercased tokens without punctuation
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    """
-    pass
+    """  # first func is ready, dont forget to make text as a param
+    #text = 'The weather is sunny, 2#%^the man is happy. I was 20 years old. so sunny?!'   dont forget to delete
+    bad_inputs = [[], {}, 'string', (), None, 9.34, True, [None]]
+    for word in text:
+        if word not in bad_inputs:
+            text = text.lower()
+            tokens = re.findall(r'\w+', text)
+        else:
+            tokens = []
+    return tokens
+
+
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -25,7 +36,17 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+    #stop_words = ['the', 'is']
+    bad_inputs = [[], {}, 'string', (), None, 9.34, True, [None]]
+    #tokens = []
+    for stw in stop_words:
+        if stw not in bad_inputs:
+            for word in tokens:
+                if word not in stop_words:
+                    tokens.append(word)
+        else:
+            tokens = []
+    return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -36,7 +57,16 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
+    freq_dict = {}
+    bad_inputs = [[], {}, 'string', (), None, 9.34, True, [None]]
+    for word in tokens:
+        if word in bad_inputs:
+            freq_dict = {}
+        elif word in freq_dict:
+            freq_dict[word] += 1
+        else:
+            freq_dict[word] = 1
+    return freq_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -49,7 +79,14 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+    tokens = []
+    sorted_dict = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
+    # print(sorted_dict)
+    for i in sorted_dict:
+        tokens.append(i[0])
+    #top_n = 2
+    return tokens[:top_n]  # return а не print || убрать top_n  - the end of a func
+
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -69,7 +106,26 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    concordance = []
+    bad_inputs = [[], {}, 'string', (), None, 9.34, True, [None]]
+    for index, token in enumerate(tokens):
+        if token not in bad_inputs:
+            if token == word:
+                if (left_context_size > 1) & (right_context_size > 1):
+                    context = tokens[index - left_context_size:index] + tokens[index: index + right_context_size + 1]
+                    concordance.append(context)
+                elif (left_context_size > 1) & (right_context_size < 1):
+                    context = tokens[index - left_context_size:index]
+                    concordance.append(context)
+                elif (left_context_size < 1) & (right_context_size > 1):
+                    context = tokens[index: index + right_context_size + 1]
+                    concordance.append(context)
+                else:
+                    concordance = []
+                # return concordance
+        else:
+            concordance = []
+    return concordance
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
