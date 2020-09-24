@@ -11,6 +11,7 @@ import argparse
 from requests import get
 
 TOKEN = os.environ.get('GITHUB_API_TOKEN')
+print(TOKEN)
 
 
 def get_by_url(url: str):
