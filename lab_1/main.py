@@ -2,9 +2,9 @@
 Lab 1
 A concordance extraction
 """
-
-
-def tokenize(text: str) -> list:
+import random
+text = open('data.txt', 'r', encoding= 'utf-8').read()
+def tokenize():
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
@@ -12,8 +12,17 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = text.split()
-    return text
+    raw = text.split()
+    wordlist = []
+    for part in raw:
+        cleaned = []
+        for el in part:
+            if el.isalpha():
+                cleaned.append(el.lower())
+        if cleaned != []:
+            wordlist.append(''.join(cleaned))
+    return wordlist
+tokenize()
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
