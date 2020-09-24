@@ -3,7 +3,8 @@ Lab 1
 A concordance extraction
 """
 
-# some changes here
+data = open('data.txt', encoding='utf-8').read()
+
 
 def tokenize(text: str) -> list:
     """
@@ -13,7 +14,25 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    pass
+    tokens_list = []
+    punctuation = '!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~.'
+    try:
+        for i in text.split():
+            i = i.lower().strip(punctuation)
+            if not i.isalpha():
+                for s in i:
+                    if not s.isalpha():
+                        i = i.replace(s, '')
+            if i.isalpha():
+                tokens_list.append(i)
+    except:
+        pass
+    return tokens_list
+
+
+tokens = tokenize(data)
+
+stop_words = open('stop_words.txt', encoding = 'utf-8').read().split()
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -26,7 +45,19 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+    tokens1 = []
+    if type(tokens) is not list:
+        tokens = []
+    elif (not stop_words and type(stop_words) is list) or type(stop_words) is not list:
+        tokens1 = tokens
+    else:
+        for i in tokens:
+            if i not in stop_words:
+                tokens1.append(i)
+    return tokens1
+
+
+tokens = remove_stop_words(tokens, stop_words)
 
 
 def calculate_frequencies(tokens: list) -> dict:

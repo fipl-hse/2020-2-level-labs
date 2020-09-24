@@ -59,7 +59,7 @@ class TokenizeTest(unittest.TestCase):
         """
         Tokenize big input text scenario
         """
-        text = read_from_file('lab_1/tokens.txt')
+        text = read_from_file('tokens.txt')
 
         expected = text.split()
         actual = tokenize(text)
@@ -69,7 +69,7 @@ class TokenizeTest(unittest.TestCase):
         """
         Tokenize big input text and assert equal
         """
-        text = read_from_file('lab_1/tokens.txt')
+        text = read_from_file('tokens.txt')
 
         expected = len(text.split())
         actual = len(tokenize(text))
