@@ -4,11 +4,11 @@ Module to check plagiarism rate compared to other files
 """
 import os
 import sys
-
+import ast
 import argparse
-from typing import List, Union
-
 import pycode_similar
+
+from typing import List, Union
 
 
 def get_cli_parser() -> argparse.ArgumentParser:
@@ -43,6 +43,7 @@ def compare_file_to_others(ref_file: str, candidate_files: List[str]) -> Union[i
     for name in files:
         try:
             content = read_file_content(name)
+            _ = ast.parse(content)
             file_contents.append(content)
         except SyntaxError:
             pass
