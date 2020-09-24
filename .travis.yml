@@ -12,13 +12,24 @@ install:
   - pip3 install -r requirements.txt
 
 stages:
+  - plagiarism_check
+  - pr_name_check
   - test
   - lint
+
+env:
+  global:
+    - PR_TITLE=$(curl https://github.com/${TRAVIS_REPO_SLUG}/pull/${TRAVIS_PULL_REQUEST} 2> /dev/null | grep "title" | head -1)
 
 jobs:
   include:
     - stage: plagiarism_check
-      - python3 config/pr_crawler.py
+      script:
+        - python3 config/pr_crawler.py
+        - ls -la tmp
+    - stage: pr_name_check
+      script:
+        - python3 config/check_pr_title.py --pr-name ${PR_TITLE}
     - stage: test
       script:
         - bash config/run-tests.sh
