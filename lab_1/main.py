@@ -3,7 +3,7 @@ Lab 1
 A concordance extraction
 """
 
-
+import re
 def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
@@ -12,8 +12,12 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = text.split()
-    return text
+    import re
+    def tokenize(text):
+        text = text.lower()
+        text = re.sub("[^A-Za-z ]", "", text)
+        tokens = text.split()
+        return (tokens)
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
