@@ -13,7 +13,8 @@ def is_matching_name(pr_name: str) -> bool:
     pr_name = re.search(template, pr_name)
     if not pr_name:
         print('Your Pull Request title does not confirm to the template.')
-        print('\nExample: Laboratory work #1, Name Surname - 19FPL1\n')
+        print(f'\nYour pull request: {pr_name}')
+        print('Template: Laboratory work #1, Name Surname - 19FPL1\n')
         return False
     print('Your Pull Request name confirm to provided template!')
     return True
