@@ -6,10 +6,9 @@ import argparse
 import sys
 
 
-def check_assert_is_in_file(content: str):
+def check_assert_line(content: str) -> bool:
     expected = 'assert RESULT'
-    if expected in content:
-        return True
+    return expected in content
 
 
 if __name__ == "__main__":
@@ -17,7 +16,7 @@ if __name__ == "__main__":
     parser.add_argument('--start_py_content', type=str, help='Content of start.py for each lab')
     args: argparse.Namespace = parser.parse_args()
 
-    if check_assert_is_in_file(args.start_py_content):
+    if check_assert_line(args.start_py_content):
         print('Passed')
         sys.exit(0)
     print('Make sure you made assert RESULT in start.py file')
