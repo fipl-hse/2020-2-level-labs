@@ -17,14 +17,14 @@ stages:
 
 jobs:
   include:
+    - stage: plagiarism_check
+      - python3 config/pr_crawler.py
     - stage: test
       script:
         - bash config/run-tests.sh
     - stage: lint
       script:
-        - python3 config/pr_crawler.py
-        - ls -la ./
-        - pylint ./**/*.py
+        - bash config/run-lint.sh
 
 notifications:
   email:
