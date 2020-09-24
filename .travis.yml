@@ -16,6 +16,7 @@ stages:
   - pr_name_check
   - test
   - lint
+  - start_py
 
 env:
   global:
@@ -35,6 +36,9 @@ jobs:
     - stage: lint
       script:
         - bash config/run-lint.sh
+    - stage: start_py
+      script:
+        - bash config/run-start.sh
 
 notifications:
   email:
