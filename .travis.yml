@@ -29,7 +29,8 @@ jobs:
     - stage: pr_name_check
       script:
         - echo ${PR_TITLE}
-        - python3 config/check_pr_title.py --pr-name ${PR_TITLE}
+        - echo ${PR_TITLE// /_}
+        - python3 config/check_pr_title.py --pr-name $(echo ${PR_TITLE// /_})
     - stage: test
       script:
         - bash config/run-tests.sh
