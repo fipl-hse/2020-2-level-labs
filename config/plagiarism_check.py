@@ -33,7 +33,6 @@ def get_python_files_from(path):
             if f_name.endswith('.py') and f_name != '__init__.py' and not '_test' in f_name:
                 print(f_name)
                 files_paths.append(os.path.join(root, f_name))
-    print(files_paths)
     return files_paths
 
 
@@ -68,13 +67,10 @@ def read_file_content(path):
 def main():
     argv = get_cli_parser().parse_args()
 
-    source_files = get_python_files_from(argv.source_file)
+    source_file = get_python_files_from(argv.source_file)
     other_files = get_python_files_from(argv.others_dir)
 
-    avg = 0
-    for source in source_files:
-        avg += compare_file_to_others(source, other_files)
-    avg /= len(source_files)
+    avg = compare_file_to_others(source_file, other_files)
 
     print('Plagiarism ratio is: {}'.format(avg))
     if avg > 0.3:
