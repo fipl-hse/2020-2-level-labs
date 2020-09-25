@@ -2,7 +2,7 @@
 Lab 1
 A concordance extraction
 """
-
+import re
 
 def tokenize(text: str) -> list:
     """
@@ -16,6 +16,7 @@ def tokenize(text: str) -> list:
         return []
     text_input = re.sub(r'[^a-zA-Z ]', '', text).lower().split()
     return text_input
+
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
