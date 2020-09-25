@@ -3,6 +3,8 @@ Lab 1
 A concordance extraction
 """
 import re
+import copy
+
 test = 'ARH 10 & &&& &&* % Years of Time Team llll presented a round-up of what llll has happened in Time llll Team over the llll past 10 years and what they expect to happen in the future. 13 October 1962 marked the initial working session of the Council.'
 
 #1
@@ -80,19 +82,18 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy', 'and', 'dog', 'happy']
     top_n = 1
     --> ['happy']
-    Здесь при неккорректных значениях должен возвращаться пустой список!
     """
     freq_list = list(freq_dict.items())
     freq_list.sort(key=lambda x: -x[1])
     new_freq_dict = dict(freq_list)
     new_freq_list = list(new_freq_dict.keys())
-    ind = 0
+    index = 0
     top_n_words_list = []
     top_n -= 1
     for i in new_freq_list:
-        if ind <= top_n:
-            top_n_words_list.append(new_freq_list[ind])
-            ind += 1
+        if index <= top_n:
+            top_n_words_list.append(new_freq_list[index])
+            index += 1
         else:
             break
     print(top_n_words_list)
@@ -125,7 +126,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     concordance_list = []
     left_context_list = []
     right_context_list = []
-    operative_tokens = tokens.copy()
+    operative_tokens = tokens[:]
     word = word.lower()
     while word in operative_tokens:
         index = operative_tokens.index(word)
@@ -134,8 +135,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         left_context_list.extend(operative_tokens[left_index:index])
         right_context_list.extend(operative_tokens[index:right_index])
 
-        left_context_list.extend(right_context_list.copy())
-        concordance_list.append(left_context_list.copy())
+        left_context_list.extend(right_context_list[:])
+        concordance_list.append(left_context_list[:])
         left_context_list.clear()
         right_context_list.clear()
 
@@ -145,7 +146,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     return concordance_list
 
 
-#get_concordance(tokens, input('Введите слово '), int(input('Введите число для левого контекста ')), int(input('Введите число для правого контекста ')))
+get_concordance(tokens, input('Введите слово '), int(input('Введите число для левого контекста ')), int(input('Введите число для правого контекста ')))
 
 
 #6
@@ -163,7 +164,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     left_n = 2
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
-    В данной функции ОБЯЗАТЕЛЬНО использовать функцию get_concordance (см. Шаг 5).
     """
     word = word.lower()
 
@@ -216,21 +216,19 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     right_context_size = 3
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
-    В данной функции ОБЯЗАТЕЛЬНО использовать функцию get_concordance (см. Шаг 5).
     """
     word = word.lower()
     operative_tokens = get_concordance(tokens, word, left_context_size, right_context_size)
     concordance = []
-    sorted_concordance = []
-    #print(operative_tokens)
+    #sorted_concordance = []
 
-    def left_sort (operative_tokens):
-        for i in operative_tokens:
+    def left_sort_alp(x):
+        for i in x:
             for alfa in i[0]:
                 return alfa[0]
 
-    def right_sort(operative_tokens):
-        for i in operative_tokens:
+    def right_sort_alp(x):
+        for i in x:
             index = len(i) - right_context_size
             for alfa in i[index]:
                 return alfa[0]
@@ -238,14 +236,14 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     if left_sort == True:
         for i in operative_tokens:
             concordance.append(i)
-        sorted_concordance = sorted(concordance, key=left_sort)
+        concordance = (sorted(concordance, key=left_sort_alp(i)))
 
     elif left_sort == False:
         for i in operative_tokens:
             concordance.append(i)
-        sorted_concordance = sorted(concordance, key=right_sort)
+        concordance = (sorted(concordance, key=right_sort_alp(i)))
 
-    return sorted_concordance
+    return concordance
 
 a = sort_concordance(tokens, 'what', 1, 1, True)
 b = sort_concordance(tokens, 'what', 1, 1, False)
