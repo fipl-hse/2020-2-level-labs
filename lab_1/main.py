@@ -14,7 +14,7 @@ def tokenize(text: str) -> list:
     """
     if not type(text) == str:
         return []
-    text_input = text.lower().split()
+    text_input = re.sub(r'[^a-zA-Z ]', '', text).lower().split()
     return text_input
 
 
@@ -130,3 +130,4 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     pass
+
