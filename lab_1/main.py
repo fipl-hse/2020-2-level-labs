@@ -55,7 +55,7 @@ def calculate_frequencies(tokens: list) -> dict:
             frequencies[tokens[i+1]] = frequencies.pop(i)
         else:
             frequencies[i] = 1
-    print(frequencies)
+    return frequencies
 pass
 #calculate_frequencies(tokens = ['weather', 'sunny', 'man', 'happy'])
 
@@ -69,7 +69,15 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+    tokens = []
+    n = 0
+    while n <= top_n:
+        tokens.append(max(freq_dict, key = freq_dict.get))
+        del freq_dict[max(freq_dict, key = freq_dict.get)]
+        n =+ 1
+    print(tokens)
+    #pass
+get_top_n_words({'weather': 3, 'sunny': 5, 'man': 4, 'happy': 1} , 3)
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
