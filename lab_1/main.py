@@ -12,8 +12,15 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = text.split()
-    return text
+    text = "It’s a pleasure to have a holiday. When the Browns have some leisure time, they take the car from their garage and go to the beach. On this occasion they usually buy bread, some cheese, fruit and juice. At the beach Father reads a newspaper, Mother knits. Paul and Peter play football. Shirley and Pearl lie in the sun."
+    t1 = text.lower()
+    for x in t1:
+        if x[-1] == '.' or x[-1] == ',':
+            t1 = t1.strip(x[-1])
+
+            return t1.split()
+
+tokenize()
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
