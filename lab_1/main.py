@@ -2,40 +2,62 @@
 Lab 1
 A concordance extraction
 """
+
 text = open('data.txt', encoding = 'utf-8').read()
 
-# ФУНКЦИЯ РАБОТАЕТ, НО ПОСМОТРЕТЬ, ПОЧЕМУ  ТЕСТЫ НЕ ВИДЯТ ФАЙЛ "TOKENS.TXT" + '`the'
-def tokenize(text):
+
+def tokenize(text: str) -> list:
+    """
+    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
+    :param text: the initial text
+    :return: a list of lowercased tokens without punctuation
+    e.g. text = 'The weather is sunny, the man is happy.'
+    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+    """
     import re
     if type(text) == str:
         new_text = ''
         for elem in text:
             if elem.isalpha() or re.fullmatch('[\s]', elem):
                 new_text += elem
-        new_text = new_text.lower()
-        new_text = new_text.split()
+        new_text = new_text.lower().split()
         return new_text
     else:
         return []
 
 list_of_tokens = tokenize(text)
 
-
 stop_words = open('stop_words.txt').read()
 stop_words = stop_words.split()
 
 
-# ФУНКЦИЯ РАБОТАЕТ ИДЕАЛЬНО!!!
-def remove_stop_words(token_list, stop_words):
+def remove_stop_words(tokens: list, stop_words: list) -> list:
+    """
+    Removes stop words
+    :param tokens: a list of tokens
+    :param stop_words: a list of stop words
+    :return: a list of tokens without stop words
+    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+    stop_words = ['the', 'is']
+    --> ['weather', 'sunny', 'man', 'happy']
+    """
     new_list = [token for token in token_list if token not in stop_words]
     return new_list
 
 token_list = remove_stop_words(list_of_tokens, stop_words)
 
 
-def calculate_frequencies(token_list):
+def calculate_frequencies(tokens: list) -> dict:
+    """
+    Calculates frequencies of given tokens
+    :param tokens: a list of tokens without stop words
+    :return: a dictionary with frequencies
+    e.g. tokens = ['weather', 'sunny', 'man', 'happy']
+    --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
+    """
     if type(token_list) == list:
         dic = {token: token_list.count(token) for token in token_list}
+        print(dic)
         return dic
     else:
         return {}
@@ -53,10 +75,26 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
+    list_of_values = []
+    for value in freq_dict.values():
+        if value not in list_of_values:
+            list_of_values += [value]
+    list_of_values = sorted(list_of_values, reverse=True)
+    top_words = []
 
+    for freq in list_of_values:
+        common_freq_words = []
 
-#common_words = get_top_n_words(freq_dict, top_n = int(input()))
+        for keys in freq_dict:
+            if freq_dict[keys] == freq:
+                common_freq_words += [keys]
+        top_words += [common_freq_words]
+    if top_n == len(top_words):
+        return top_words[:top_n]
+    else:
+        return []
 
+common_words = get_top_n_words(freq_dict, top_n = int(input()))
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
