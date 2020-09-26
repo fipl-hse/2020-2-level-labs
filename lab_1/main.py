@@ -2,45 +2,74 @@
 Lab 1
 A concordance extraction
 """
+
 text = open('data.txt', 'r', encoding= 'utf-8').read()
 
-def tokenize (text):
+def tokenize(text: str) -> list:
+    """
+    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
+    :param text: the initial text
+    :return: a list of lowercased tokens without punctuation
+    e.g. text = 'The weather is sunny, the man is happy.'
+    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+    """
     if type(text)==str:
-        text= text.lower().replace('\n', ' ')
+        text= text.lower()
+        text = text.replace('\n', ' ')
         letters= ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-        new = ''
+        new_text = ''
         for i in text:
             if i in letters or i == ' ':
-                new += i
-        text= new
-        list = text.split()
+                new_text += i
+        tokens = new_text.split()
     else:
-        list= []
-    return list
+        tokens= []
+    return tokens
 tokens= tokenize(text)
-print(tokens)
-'''
-with open('stop_words.txt', encoding = 'utf-8') as file2:
-    stop_words= file2.read().split('\n')
 
-def remove_stop_words(tokens, stop_words):
-    for word in stop_words:
-        while word in tokens:
-            tokens.remove(word)
+stop_words= open('stop_words.txt', encoding = 'utf-8').read()
+stop_words= stop_words.split('\n')
+
+def remove_stop_words(tokens: list, stop_words: list) -> list:
+    """
+    Removes stop words
+    :param tokens: a list of tokens
+    :param stop_words: a list of stop words
+    :return: a list of tokens without stop words
+    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+    stop_words = ['the', 'is']
+    --> ['weather', 'sunny', 'man', 'happy']
+    """
+    if type(tokens)==list:
+        if type(stop_words)==list:
+            for word in stop_words:
+                while word in tokens:
+                    tokens.remove(word)
+    else:
+        tokens=[]
     return tokens
 tokens= remove_stop_words(tokens, stop_words)
 
-def calculate_frequencies(tokens):
-    dict={}
-    for token in tokens:
-        frequency= tokens.count(token)
-        dict[token]=frequency
-        while token in tokens:
-            tokens.remove(token)
-    return dict
-dict= calculate_frequencies(tokens)
-print(dict)
-'''
+def calculate_frequencies(tokens: list) -> dict:
+    """
+    Calculates frequencies of given tokens
+    :param tokens: a list of tokens without stop words
+    :return: a dictionary with frequencies
+    e.g. tokens = ['weather', 'sunny', 'man', 'happy']
+    --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
+    """
+    if type(tokens)==list:
+        freq_dict={}
+        for token in tokens:
+            if type(token)==str:
+                frequency= tokens.count(token)
+                freq_dict[token]=frequency
+    else:
+        freq_dict={}
+    return freq_dict
+freq_dict= calculate_frequencies(tokens)
+
+top_n=4
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     Returns the most common words
@@ -51,7 +80,32 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+    if type(freq_dict)== dict and type(top_n)==int:
+        #the number of words (from the most popular)
+        values_of_words=[]
+        for x in freq_dict.values():
+            if x in values_of_words:
+                continue
+            values_of_words.append(x)
+        values_of_words.sort()
+        values_of_words=values_of_words[::-1]
+
+        #top_values
+        top= values_of_words[:top_n]
+        #
+        top_words=[] #can be words with the same frequency
+        for i in top:
+            for word, frequency in freq_dict.items():
+                if i==frequency:
+                    top_words.append(word)
+        top_words = top_words [: top_n] # unique
+    else:
+        top_words=[]
+    return top_words
+
+get_top_n_words(freq_dict, top_n)
+
+
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
