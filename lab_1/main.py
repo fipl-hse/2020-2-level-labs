@@ -2,30 +2,24 @@
 Lab 1
 A concordance extraction
 """
-#some words just for practise 
 
-def tokenize(text: str) -> list:
-    """
-    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
-    :param text: the initial text
-    :return: a list of lowercased tokens without punctuation
-    e.g. text = 'The weather is sunny, the man is happy.'
-    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    """
-    pass
+def tokenize(text):
+    if type(text) == str: #проверяем, дана ли на вход строка
+        text = text.lower() #приводим к нижнему регистру
+        for symbol in text:
+            if symbol.isalpha() == False and symbol != ' ': #убираем все небуквенные символы, кроме пробелов
+                text = text.replace(symbol, '')
+        tokens_list = text.split() #делаем список из токенов
+        return(tokens_list)
+    else: return []
 
-
-def remove_stop_words(tokens: list, stop_words: list) -> list:
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    stop_words = ['the', 'is']
-    --> ['weather', 'sunny', 'man', 'happy']
-    """
-    pass
+def remove_stop_words(tokens_list,stop_words):
+    if type(tokens_list) == list and type(stop_words) == list: #проверяем, даны ли на вход списки
+        for word in stop_words: #удаляем стоп-слова из списка токенов
+            while word in tokens_list:
+                tokens_list.remove(word)
+        return tokens_list
+    else: return []
 
 
 def calculate_frequencies(tokens: list) -> dict:
