@@ -30,23 +30,23 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if isinstance(tokens, list) and tokens:
+    if isinstance(tokens, list) and tokens and isinstance(stop_words, list) and stop_words:
         for element in tokens:
             if not isinstance(element, str):
                 return []
 
-        if isinstance(stop_words, list) and stop_words:
-            clean_tokens = tokens[:]
-            for word in tokens:
-                if word in stop_words:
-                    clean_tokens.remove(word)
-            output_list = clean_tokens
-        elif isinstance(stop_words, list) and not stop_words:
-            output_list = tokens
-        else:
-            output_list = []
+        output_list = tokens[:]
+
+        for word in tokens:
+            if word in stop_words:
+                output_list.remove(word)
+
         return output_list
-    return[]
+
+    elif (isinstance(tokens, list) and tokens) and not (isinstance(stop_words, list) and stop_words):
+        return tokens
+
+    return []
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -78,23 +78,23 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
     if isinstance(freq_dict, dict) and isinstance(top_n, int) and freq_dict and top_n >= 1:
-        list_items = list(freq_dict.items())
+        items_list = list(freq_dict.items())
 
         values_dict = {}
-        for i in list_items:
-            if i[1] in values_dict.keys():
-                values_dict[i[1]].append(i[0])
+        for pair in items_list:
+            if pair[1] in values_dict.keys():
+                values_dict[pair[1]].append(pair[0])
             else:
-                values_dict[int(i[1])] = [i[0]]
+                values_dict[int(pair[1])] = [pair[0]]
 
         top_n_list = list(values_dict.keys())
+        top_n_list.sort()
 
         output_top = []
-        for i in range(max(top_n_list) + 1):
-            if i in top_n_list:
-                output_top.extend(values_dict[i][::-1])
+        for ind in top_n_list:
+            output_top.extend(values_dict[ind][::-1])
 
-        return output_top[::-1][:top_n]
+        return output_top[top_n:]
 
     return []
 
@@ -118,26 +118,23 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     if isinstance(right_context_size, bool) and isinstance(left_context_size, bool):
         return []
-
-    if isinstance(tokens, list) and isinstance(word, str) and isinstance(right_context_size, int) and isinstance(
+    elif isinstance(tokens, list) and isinstance(word, str) and isinstance(right_context_size, int) and isinstance(
             left_context_size, int):
-        tokens_copy = tokens.copy()
-        inds = []
 
-        count = 0
-        while word in tokens_copy:
-            inds.append(tokens_copy.index(word) + count)
-            tokens_copy.remove(word)
-            count += 1
+        inds = [ind for ind, w in enumerate(tokens) if w == word]
 
         if left_context_size > 0 and right_context_size > 0:
             output_list = [tokens[i - left_context_size:i + right_context_size + 1] for i in inds]
+
         elif left_context_size > 0:
             output_list = [tokens[i - left_context_size:i + 1] for i in inds]
+
         elif right_context_size > 0:
             output_list = [tokens[i:i + int(right_context_size) + 1] for i in inds]
+
         else:
             output_list = []
+
         return output_list
 
     return []
@@ -159,21 +156,25 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     if isinstance(tokens, list) and isinstance(word, str):
+
         if isinstance(left_n, int) and isinstance(right_n, int) and left_n >= 1 and right_n >= 1:
             concordances = get_concordance(tokens, word, left_n, right_n)
             adjacent_words = []
             for context in concordances:
                 adjacent_words.append([context[0], context[-1]])
+
         elif (not isinstance(left_n, int) or left_n < 1) and (isinstance(right_n, int) and right_n >= 1):
             concordances = get_concordance(tokens, word, left_n, right_n)
             adjacent_words = []
             for context in concordances:
                 adjacent_words.append([context[-1]])
+
         elif (not isinstance(right_n, int) or right_n < 1) and (isinstance(left_n, int) and left_n >= 1):
             concordances = get_concordance(tokens, word, left_n, -1)
             adjacent_words = []
             for context in concordances:
                 adjacent_words.append([context[0]])
+
         else:
             return []
 
@@ -236,17 +237,20 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    if isinstance(tokens, list) and isinstance(word, str):
-        if isinstance(left_context_size, int) and isinstance(right_context_size, int):
-            if isinstance(left_sort, bool):
-                concors = get_concordance(tokens, word, left_context_size, right_context_size)
-                if left_sort and left_context_size > 0:
-                    output_list = sort_list(concors, -1)
-                elif not left_sort and right_context_size > 0:
-                    output_list = sort_list(concors, left_context_size)
-                else:
-                    output_list = []
-                return output_list
-            return []
-        return []
+    if (isinstance(tokens, list) and isinstance(word, str) or isinstance(left_context_size, int) and
+            isinstance(right_context_size, int) or isinstance(left_sort, bool)):
+
+        concors = get_concordance(tokens, word, left_context_size, right_context_size)
+
+        if left_sort and left_context_size > 0:
+            output_list = sort_list(concors, -1)
+
+        elif not left_sort and right_context_size > 0:
+            output_list = sort_list(concors, left_context_size)
+
+        else:
+            output_list = []
+
+        return output_list
+
     return []
