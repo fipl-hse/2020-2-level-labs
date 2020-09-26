@@ -31,10 +31,6 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
     if isinstance(tokens, list) and tokens and isinstance(stop_words, list) and stop_words:
-        for element in tokens:
-            if not isinstance(element, str):
-                return []
-
         output_list = tokens[:]
 
         for word in tokens:
@@ -92,9 +88,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
 
         output_top = []
         for ind in top_n_list:
-            output_top.extend(values_dict[ind][::-1])
+            output_top.extend(values_dict[ind])
 
-        return output_top[top_n:]
+        output_top.reverse()
+        return output_top[:top_n]
 
     return []
 
