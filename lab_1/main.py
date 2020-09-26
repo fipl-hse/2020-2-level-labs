@@ -3,7 +3,6 @@ Lab 1
 A concordance extraction
 """
 
-
 def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
@@ -12,9 +11,12 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text=text.split()
-    return text
-
+    text = text.lower()
+    for i in text:
+        if  i.isalnum() == false:
+            text = text.replace(i,'')
+    tokens = text.split()
+    return tokens
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
@@ -26,7 +28,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+
+    for i in tokens:
+        if i in stop_words:
+            tokens.remove(i)
+    return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -37,7 +43,10 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
+    freq_dict = {}
+    for i in tokens:
+        freq_dict[i] = tokens.count(i)
+    return freq_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -50,6 +59,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
+
     pass
 
 
