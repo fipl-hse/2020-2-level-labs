@@ -3,6 +3,9 @@ Lab 1
 A concordance extraction
 """
 
+import re
+from string import punctuation
+
 
 def tokenize(text: str) -> list:
     """
@@ -13,15 +16,11 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
 
-    import re
-    from string import punctuation
-
-    if type(text) is str:
+    if isinstance(text, str):
         text = re.sub(f'[{punctuation}]+', '', text.lower())
         text = re.findall(r'\w+', text)
         return text
-    else:
-        return []
+    return []
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -35,10 +34,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
 
-    if type(tokens) is list:
+    if isinstance(tokens, list):
         return [x for x in tokens if x not in set(stop_words)]
-    else:
-        return []
+    return []
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -50,10 +48,9 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
 
-    if type(tokens) is list and all(tokens):
+    if isinstance(tokens, list) and all(tokens):
         return {token: tokens.count(token) for token in tokens}
-    else:
-        return {}
+    return {}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -67,11 +64,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
 
-    if type(freq_dict) is dict:
+    if isinstance(freq_dict, dict):
         sorted_dict = [k for k, _ in sorted(freq_dict.items(), key=lambda kv: kv[1], reverse=True)]
         return sorted_dict[:top_n]
-    else:
-        return []
+    return []
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -93,9 +89,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
 
     checks = [
-        type(tokens) is list,
-        type(word) is str,
-        type(left_context_size) is int,
+        isinstance(tokens, list),
+        isinstance(word, str),
+        isinstance(left_context_size, int),
         type(right_context_size) is int
     ]
 
@@ -114,9 +110,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             else:
                 return []
         return context
-
-    else:
-        return []
+    return []
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -136,10 +130,10 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
 
     checks = [
-        type(tokens) is list,
-        type(word) is str,
-        type(left_n) is int,
-        type(right_n) is int
+        isinstance(tokens, list),
+        isinstance(word, str),
+        isinstance(left_n, int),
+        isinstance(right_n, int)
     ]
 
     if all(checks):
@@ -152,11 +146,8 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             return [[token[-1]] for token in concordance]
         elif window[0] > 0:
             return [[token[0]] for token in concordance]
-        else:
-            return []
-
-    else:
         return []
+    return []
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -165,8 +156,8 @@ def read_from_file(path_to_file: str) -> str:
     :return: the initial text in string format
     """
 
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
 
@@ -200,11 +191,11 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     """
 
     checks = [
-        type(tokens) is list,
-        type(word) is str,
-        type(left_context_size) is int,
-        type(right_context_size) is int,
-        type(left_sort) is bool
+        isinstance(tokens, list),
+        isinstance(word, str),
+        isinstance(left_context_size, int),
+        isinstance(right_context_size, int),
+        isinstance(left_sort, bool)
     ]
 
     if all(checks):
@@ -215,7 +206,5 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
             return sorted(concordance)
         elif not left_sort and window[1] > 0:
             return sorted(concordance, key=lambda x: x[x.index(word) + 1])
-        else:
-            return []
-    else:
         return []
+    return []
