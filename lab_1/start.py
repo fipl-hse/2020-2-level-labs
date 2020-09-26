@@ -16,18 +16,28 @@ if __name__ == '__main__':
     tokenized_data = main.tokenize(data)
     clean_data = main.remove_stop_words(tokenized_data, stop_words)
 
-    # Let`s get top 7 words """
-    top_7 = main.get_top_n_words(main.calculate_frequencies(clean_data), 7)
-    print(top_7)
+    top_13 = main.get_top_n_words(main.calculate_frequencies(clean_data), 14)
+    print(top_13[-1])
 
-    # Now let`s finally get a concordance for word 'people' """
-    concordance = main.get_concordance(clean_data, 'people', 3, 1)
-    print(concordance[:5])
+    closest_words = main.get_adjacent_words(clean_data, top_13[-1], 3, 2)
+    if len(closest_words) > 0:
+        print(f"Third words from the left and second words from the right for "
+              f"the word {top_13[-1]} (first 5 cases) are")
+        for adjacent_words in closest_words[:5]:
+            print('\t', adjacent_words)
 
-    # Let`s see 1st on the left and 2nd on the right words around our target word """
-    closest_words = main.get_adjacent_words(clean_data, 'people', 1, 2)
-    print(closest_words[:5])
+    sorted_concordance_left = main.sort_concordance(clean_data, top_13[-1], 2, 2, True)
+    if len(sorted_concordance_left) > 0:
+        print('Concordance sorted by the first left word (first 5 cases):')
+        for concordance in sorted_concordance_left[:5]:
+            print('\t', concordance)
 
-    RESULT = concordance
+    sorted_concordance_right = main.sort_concordance(clean_data, top_13[-1], 2, 2, False)
+    if len(sorted_concordance_right) > 0:
+        print('Concordance sorted by the first right word (first 5 cases):')
+        for concordance in sorted_concordance_right[:5]:
+            print('\t', concordance)
+
+    RESULT = sorted_concordance_left
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Concordance not working'
+    assert RESULT != [], 'Concordance not working'
