@@ -53,6 +53,7 @@ def calculate_frequencies(tokens: list) -> dict:
         return frequencies
     pass
 
+
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     Returns the most common words
@@ -68,7 +69,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         sorted_dict = [k for k, _ in sorted(freq_dict.items(), key=lambda kv: kv[1], reverse=True)]
         return sorted_dict[:top_n]
     pass
-
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -109,8 +109,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                 context.append(tokens[x - surrounding[0]:x + 1])
             else:
                 return []
-        return (context)
+        return context
     pass
+
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
