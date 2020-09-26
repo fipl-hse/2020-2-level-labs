@@ -4,6 +4,9 @@ A concordance extraction
 """
 
 
+import re
+
+
 def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
@@ -14,15 +17,7 @@ def tokenize(text: str) -> list:
     """
     if not isinstance(text, str):
         return []
-    text_list = text.lower().split()
-    text_output = []
-    for word in text_list:
-        word_out = ''
-        for letter in word:
-            if letter.isalpha():
-                word_out += letter
-        if word_out != '':
-            text_output.append(word_out)
+    text_output = re.sub('[^a-z \n]', '', text.lower()).split()
     return text_output
 
 
@@ -121,10 +116,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         right_context_size = len(tokens)
 
     if (indexes[0] - left_context_size) < 0:
-        list_ouput = [tokens[0:ind + 1 + right_context_size] for ind in indexes]
+        list_output = [tokens[0:ind + 1 + right_context_size] for ind in indexes]
     else:
-        list_ouput = [tokens[ind - left_context_size:ind + 1 + right_context_size] for ind in indexes]
-    return list_ouput
+        list_output = [tokens[ind - left_context_size:ind + 1 + right_context_size] for ind in indexes]
+    return list_output
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -169,7 +164,7 @@ def write_to_file(content: list, path_to_file='report.txt'):
     """
     Writes the result in a file
     """
-    list_strings = [' '.join(conc) for conc in content]
+    list_strings = [' '.join(concordance) for concordance in content]
     with open(path_to_file, 'w') as file:
         file.write('\n'.join(list_strings))
 
@@ -201,8 +196,8 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     if len(concordance) == 0:
         return []
     if left_sort:
-        dict_raw = {conc[0]: conc for conc in concordance}
+        dict_raw = {context[0]: context for context in concordance}
     else:
-        dict_raw = {conc[conc.index(word)+1]: conc for conc in concordance}
+        dict_raw = {context[context.index(word)+1]: context for context in concordance}
     list_output = [dict_raw[key] for key in sorted(dict_raw)]
     return list_output
