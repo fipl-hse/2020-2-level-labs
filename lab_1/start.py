@@ -11,6 +11,6 @@ if __name__ == '__main__':
 
     #  here goes your logic: calling methods from concordance.py
 
-    RESULT = None
+    RESULT = tokenize(text)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [(), ()], 'Concordance not working'
