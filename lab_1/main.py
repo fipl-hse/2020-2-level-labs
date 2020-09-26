@@ -50,26 +50,20 @@ def get_concordance(tokens: list,
                     word: str,
                     left_context_size: int,
                     right_context_size: int) -> list:
+    conc = []
     if isinstance(tokens, list) and word in tokens:    # check tokens & word
         lcs = left_context_size
         check_l = not isinstance(lcs, bool) and isinstance(lcs, int) and lcs > 0
         rcs = right_context_size
         check_r = not  isinstance(rcs, bool) and isinstance(rcs, int) and rcs > 0
-        conc = []
         idx = [i for i, x in enumerate(tokens) if x == word]
         if check_l and check_r:
-            for i in idx:
-                conc.append(tokens[i-lcs:i+rcs+1])
+            conc = [tokens[i-lcs:i+rcs+1] for i in idx]
         elif not check_l and check_r:
-            for i in idx:
-                conc.append(tokens[i:i+rcs+1])
+            conc = [tokens[i:i+rcs+1] for i in idx]
         elif check_l and not check_r:
-            for i in idx:
-                conc.append(tokens[i-lcs:i+1])
-        output = conc
-    else:
-        output = []
-    return output
+            conc = [tokens[i-lcs:i+1] for i in idx]
+    return conc
 
 
 def get_adjacent_words(tokens: list,
@@ -77,9 +71,9 @@ def get_adjacent_words(tokens: list,
                        left_n: int,
                        right_n: int) -> list:
     conc = get_concordance(tokens, word, left_n, right_n)
-    if left_n == 0:
+    if not left_n:
         output = [[elem[-1]] for elem in conc]
-    elif right_n == 0:
+    elif not right_n:
         output = [[elem[0]] for elem in conc]
     else:
         output = [[elem[0], elem[-1]] for elem in conc]
@@ -89,8 +83,7 @@ def get_adjacent_words(tokens: list,
 def read_from_file(path_to_file: str) -> str:
     with open(path_to_file, 'r', encoding='utf-8') as file:
         data = file.read()
-    output = data
-    return output
+    return data
 
 
 def write_to_file(path_to_file: str, content: list):
@@ -106,23 +99,20 @@ def sort_concordance(tokens: list,
                      left_sort: bool) -> list:
     output = []
     if isinstance(left_sort, bool):
-        conc = get_concordance(tokens,
-                               word,
-                               left_context_size,
-                               right_context_size)
+        lcs = left_context_size
+        rcs = right_context_size
+        conc = get_concordance(tokens, word, lcs, rcs)
         try:
-            if left_context_size > 0 or right_context_size > 0:
-                if left_sort and left_context_size > 0:
+            if lcs > 0 or rcs > 0:
+                if left_sort and lcs > 0:
                     output = sorted(conc, key=lambda x: x[0])
-                elif not left_sort and right_context_size > 0:
+                elif not left_sort and rcs > 0:
                     try:
-                        rcs = right_context_size
                         output = sorted(conc, key=lambda x: x[-rcs])
                     except IndexError:
                         rcs = len(tokens) - tokens.index(word) - 1
                         output = sorted(conc, key=lambda x: x[-rcs])
         except TypeError:
             output = []
-    else:
-        output = []
     return output
+
