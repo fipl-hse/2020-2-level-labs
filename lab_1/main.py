@@ -93,9 +93,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     conditions = [
-        isinstance(tokens, list),
-        isinstance(word, str),
-        isinstance(left_context_size, int),
+        type(tokens) is list,
+        type(word) is str,
+        type(left_context_size) is int,
         type(right_context_size) is int
     ]
 
