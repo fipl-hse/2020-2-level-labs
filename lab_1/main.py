@@ -12,7 +12,7 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    trash = set("!.,?;:!#$%&()*+/<=>@^_{|}~")
+    trash = set("!.,?;:!#$%&()*+/<=>@^_{|}~-[]{}")
     c = ''
     if isinstance(text, str):
         for i in text:
@@ -21,6 +21,7 @@ def tokenize(text: str) -> list:
         text = text.lower()
         tokens = text.split()
         return tokens
+    return []
     pass
 
 
@@ -37,6 +38,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     if isinstance(tokens, list):
         tokens = [i for i in tokens if i not in stop_words]
         return tokens
+    return []
     pass
 
 
@@ -51,6 +53,7 @@ def calculate_frequencies(tokens: list) -> dict:
     if isinstance(tokens, list) and all(tokens):
         frequencies = {i: tokens.count(i) for i in tokens}
         return frequencies
+    return {}
     pass
 
 
@@ -68,6 +71,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     if isinstance(freq_dict, dict):
         sorted_dict = [k for k, _ in sorted(freq_dict.items(), key=lambda kv: kv[1], reverse=True)]
         return sorted_dict[:top_n]
+    return []
     pass
 
 
@@ -92,7 +96,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         isinstance(tokens, list),
         isinstance(word, str),
         isinstance(left_context_size, int),
-        isinstance(right_context_size, int)
+        type(right_context_size) is int
     ]
 
     if all(conditions):
@@ -110,6 +114,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             else:
                 return []
         return context
+    return []
     pass
 
 
@@ -146,6 +151,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         elif surrounding[0] > 0:
             return [[i[0]] for i in concordance]
         return []
+    return []
     pass
 
 
