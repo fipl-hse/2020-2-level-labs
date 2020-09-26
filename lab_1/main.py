@@ -3,18 +3,33 @@ Lab 1
 A concordance extraction
 """
 
-
-def tokenize(text: str) -> list:
-    """
-    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
-    :param text: the initial text
-    :return: a list of lowercased tokens without punctuation
-    e.g. text = 'The weather is sunny, the man is happy.'
-    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    """
-    text = text.split()
-    return text
-
+text = open('data.txt', encoding='utf-8').read()
+if type(text) is str:
+    def tokenize(text):
+        """
+        Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
+        :param text: the initial text
+        :return: a list of lowercased tokens without punctuation
+        e.g. text = 'The weather is sunny, the man is happy.'
+        --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+        """
+        tokens = ''
+        text = text.lower()
+        if '\n' in text:
+            text = text.replace('\n', ' ')
+        if '\t' in text:
+            text = text.replace('\t', ' ')
+        for i in text:
+            if i.isalpha() or i == ' ':
+                tokens += i
+        tokens = tokens.split(' ')
+        while '' in tokens:
+            tokens.remove('')
+        print(tokens)
+        return tokens
+    tokenize(text)
+else:
+    print('[]')
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
