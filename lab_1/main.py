@@ -88,7 +88,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
 
         output_top = []
         for ind in top_n_list:
-            output_top.extend(values_dict[ind])
+            output_top.extend(values_dict[ind][::-1])
 
         output_top.reverse()
         return output_top[:top_n]
@@ -206,7 +206,7 @@ def write_to_file(path_to_file: str, content: list):
 
 def sort_list(concors, ind):
     sorted_list = []
-    first_words = [concors[i][ind + 1] for i in range(len(concors))]
+    first_words = [concors[i][ind + 1] for i in range(len(concors)+1)]
     first_words.sort()
     for word in first_words:
         for context in concors:
@@ -234,8 +234,8 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    if (isinstance(tokens, list) and isinstance(word, str) or isinstance(left_context_size, int) and
-            isinstance(right_context_size, int) or isinstance(left_sort, bool)):
+    if (isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int) and
+            isinstance(right_context_size, int) and isinstance(left_sort, bool)):
 
         concors = get_concordance(tokens, word, left_context_size, right_context_size)
 
