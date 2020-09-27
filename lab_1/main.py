@@ -21,7 +21,7 @@ def tokenize(text):
             if c not in litter:
                 tokens+=c
         tokens= tokens.split()
-    return tokens
+        return tokens
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
