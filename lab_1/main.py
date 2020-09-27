@@ -206,11 +206,11 @@ def write_to_file(path_to_file: str, content: list):
 
 def sort_list(concors, ind):
     sorted_list = []
-    first_words = [concors[i][ind + 1] for i in range(len(concors)+1)]
+    first_words = [context[ind+1] for context in concors]
     first_words.sort()
     for word in first_words:
         for context in concors:
-            if context[ind + 1] == word:
+            if context[ind+1] == word:
                 sorted_list.append(context)
                 break
 
