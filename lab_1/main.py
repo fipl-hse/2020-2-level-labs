@@ -306,7 +306,14 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     concordance = get_concordance(tokens, word, left_context_size, right_context_size)
-    if (left_sort == True) or (left_sort == False):
+    if type(left_context_size) != int and type(right_context_size) != int:
+        return []
+    elif left_context_size < 1 and left_sort:
+        return []
+    elif right_context_size < 1 and not left_sort:
+        return []
+
+    if type(left_sort) == bool:
         if left_sort == True:
             concordance.sort()
             return concordance
