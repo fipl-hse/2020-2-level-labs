@@ -90,9 +90,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             word_index=tokens.index(word)
             left_context=tokens[word_index-left_context_size:word_index]
             right_context=tokens[word_index+1:word_index+1+right_context_size]
-            concordance.extend(left_context)
-            concordance.append(word)
-            concordance.extend(right_context)
+            word_with_context=left_context+[word]+right_context
+            concordance.append(word_with_context)
     return (concordance)
 
 
