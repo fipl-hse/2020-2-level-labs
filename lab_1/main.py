@@ -35,7 +35,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     for i in tokens:
         if i in stop_words:
-            tokens.pop(tokens.index(i))
+            del tokens[(tokens.index(i))]
     return tokens
 
 
@@ -49,9 +49,9 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     frequences = []
     for i in tokens:
-        frequences += str(tokens.count(i))
+        frequences.extend([(tokens.count(i) )])
     freq_dict = {tokens[i]: frequences[i] for i in range(len(frequences))}
-    return (freq_dict)
+    return freq_dict
 
 
 
@@ -65,7 +65,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
