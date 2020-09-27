@@ -115,4 +115,3 @@ def sort_concordance(tokens: list,
         except TypeError:
             output = []
     return output
-
