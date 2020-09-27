@@ -16,7 +16,7 @@ if __name__ == '__main__':
             func()
             end = time.time()
             print('Finish running programm')
-            print('[*] Running time: {} secunds.'.format(end-start))
+            print('Running time: {0:.2f} secunds.'.format(end-start))
         return wrapper
 
     @decorator
@@ -46,9 +46,7 @@ if __name__ == '__main__':
         print('sort_concordance', sorted_concordance[:5])
 
         main.write_to_file('', sorted_concordance)
-        check = (all(isinstance(s, list) for s in sorted_concordance))
-        result = isinstance(sorted_concordance, list) and check
         #  DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-        assert result, 'Concordance not working'
+        assert isinstance(sorted_concordance, list), 'Concordance not working'
 
     made_concordance()
