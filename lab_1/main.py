@@ -242,19 +242,4 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     return operative_tokens
 
 
-a = sort_concordance(tokens, 'what', 1, 2, True)
-b = sort_concordance(tokens, 'what', 1, 2, False)
-#print(a, b)
-
-print('не знаю, но нужно почекать')
-sortList = ['a', 'сс', 'bbb']
-t = [['c', ' bbb'], ['a', 'a']]
-
-
-def sortByAlphabet(inputStr):
-    word = inputStr[0]
-    return word[0]
-
-
-t.sort(key=sortByAlphabet)
-print('Отсортировано в алфавитном порядке: ', t)
+#sort_concordance(tokens, 'what', 1, 2, True)
