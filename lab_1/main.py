@@ -123,9 +123,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             elif ind < left_context_size:
                 concordance += [tokens[:(ind + right_context_size + 1)]]
             else:
-                left_cont = ind - left_context_size
-                right_cont = ind + right_context_size + 1
-                concordance += [tokens[left_cont:right_cont]]
+                left_context = ind - left_context_size
+                right_context = ind + right_context_size + 1
+                concordance += [tokens[left_context:right_context]]
     return concordance
 
 
@@ -152,25 +152,25 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         return []
     list_concordance = get_concordance(tokens, word, left_n, right_n)
     adjacent_words = []
-    for cont_list in list_concordance:
-        for ind, w in enumerate(cont_list):
+    for context_list in list_concordance:
+        for ind, w in enumerate(context_list):
             if w == word:
-                if len(cont_list[:ind]) < left_n:
+                if len(context_list[:ind]) < left_n:
                     if right_n < 1:
-                        adjacent_words += [[cont_list[0]]]
+                        adjacent_words += [[context_list[0]]]
                     else:
-                        adjacent_words += [[cont_list[0], cont_list[ind + right_n]]]
-                elif len(cont_list[(ind + 1):]) < right_n:
+                        adjacent_words += [[context_list[0], context_list[ind + right_n]]]
+                elif len(context_list[(ind + 1):]) < right_n:
                     if left_n < 1:
-                        adjacent_words += [[cont_list[-1]]]
+                        adjacent_words += [[context_list[-1]]]
                     else:
-                        adjacent_words += [[cont_list[ind - left_n], cont_list[-1]]]
+                        adjacent_words += [[context_list[ind - left_n], context_list[-1]]]
                 elif (type(left_n) != int) or (left_n < 1):
-                    adjacent_words += [[cont_list[ind + right_n]]]
+                    adjacent_words += [[context_list[ind + right_n]]]
                 elif (type(right_n) != int) or (right_n < 1):
-                    adjacent_words += [[cont_list[ind - left_n]]]
+                    adjacent_words += [[context_list[ind - left_n]]]
                 else:
-                    adjacent_words += [[cont_list[ind - left_n], cont_list[ind + right_n]]]
+                    adjacent_words += [[context_list[ind - left_n], context_list[ind + right_n]]]
     return adjacent_words
 
 
