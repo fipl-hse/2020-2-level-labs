@@ -78,11 +78,11 @@ def calculate_frequencies(tokens: list) -> dict:
         for word in tokens:
             if type(word) != str:
                 return {}
-        dict_freq = {}
+        freq_dict = {}
         for word in tokens:
-            freq = tokens.count(word)
-            dict_freq[word] = freq
-        return dict_freq
+            frequency = tokens.count(word)
+            freq_dict[word] = frequency
+        return freq_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -140,11 +140,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if type(tokens) != list:
-        return []
-    elif type(word) != str:
-        return []
-    elif word not in tokens:
+    if type(tokens) != list or type(word) != str or word not in tokens:
         return []
     elif type(left_context_size) != int or type(right_context_size) != int:
         if type(left_context_size) != int and type(right_context_size) != int:
@@ -155,11 +151,11 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             right_context_size = 0
 
     if left_context_size < 0 or right_context_size < 0:
-        if left_context_size < 0 and right_context_size < 0:
+        if left_context_size <= 0 and right_context_size <= 0:
             return []
-        elif left_context_size < 0:
+        elif left_context_size <= 0:
             left_context_size = 0
-        elif right_context_size < 0:
+        elif right_context_size <= 0:
             right_context_size = 0
 
     if left_context_size == 0 and right_context_size == 0:
@@ -170,15 +166,21 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     for i, c in enumerate(tokens):
         if c == word:
             max_left_words = len(tokens[:i])
-            if max_left_words < left_context_size:
-                context = tokens[:(i + right_context_size + 1)]
-            else:
+            max_right_words = len(tokens[(i + 1):])
+            print(max_left_words, max_left_words)
+            if left_context_size <= max_left_words and right_context_size <= max_right_words:
                 context = tokens[(i - left_context_size):(i + right_context_size + 1)]
+            else:
+                if left_context_size > max_left_words and right_context_size > max_right_words:
+                    context = tokens[:(i + max_right_words + 1)]
+                elif left_context_size > max_left_words and right_context_size <= max_right_words:
+                    context = tokens[:(i + right_context_size + 1)]
+                elif left_context_size <= max_left_words and right_context_size > max_right_words:
+                    context = tokens[(i - left_context_size):(i + max_right_words + 1)]
             concordance.append(context)
         else:
             continue
     return concordance
-
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
@@ -195,11 +197,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    if type(tokens) != list:
-        return []
-    elif type(word) != str:
-        return []
-    elif word not in tokens:
+    if type(tokens) != list or type(word) != str or word not in tokens:
         return []
     elif type(left_n) != int or type(right_n) != int:
         if type(left_n) != int and type(right_n) != int:
@@ -322,10 +320,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
                     d[context[right_word_index]] = []
                     d[context[right_word_index]].append(context)
 
-            right_word_list = []
-            for k in d:
-                right_word_list += [k]
-
+            right_word_list = list(d.keys())
             right_word_list.sort()
 
             final_list = []
