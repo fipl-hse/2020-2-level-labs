@@ -13,7 +13,7 @@ def tokenize(text):
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
 
-    text= text.lower
+    text= text.lower()
     litter= '!@#$%^&*()_+=-\;№:?[]{},<>~\'\"/|\\'
     tokens =''
     for c in text:
