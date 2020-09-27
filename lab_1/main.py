@@ -89,7 +89,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         if i==word:
             word_index=tokens.index(word)
             left_context=tokens[word_index-left_context_size:word_index]
-            right_context=tokens[word_index+1:word_index+2+right_context_size]
+            right_context=tokens[word_index+1:word_index+1+right_context_size]
             concordance.extend(left_context)
             concordance.append(word)
             concordance.extend(right_context)
