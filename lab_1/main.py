@@ -92,7 +92,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         isinstance(tokens, list),
         isinstance(word, str),
         isinstance(left_context_size, int),
-        type(right_context_size) is int
+        isinstance(right_context_size, int),
+        not isinstance(left_context_size, bool),
+        not isinstance(right_context_size, bool)
     ]
 
     if all(checks):
@@ -100,13 +102,13 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         word_indices = [idx for idx, el in enumerate(tokens) if el == word]
         window = (left_context_size, right_context_size)
 
-        for x in word_indices:
+        for idx in word_indices:
             if window[0] > 0 and window[1] > 0:
-                context.append(tokens[x - window[0]:x + window[1] + 1])
+                context.append(tokens[idx - window[0]:idx + window[1] + 1])
             elif window[1] > 0:
-                context.append(tokens[x:x + window[1] + 1])
+                context.append(tokens[idx:idx + window[1] + 1])
             elif window[0] > 0:
-                context.append(tokens[x - window[0]:x + 1])
+                context.append(tokens[idx - window[0]:idx + 1])
             else:
                 return []
         return context
@@ -133,7 +135,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         isinstance(tokens, list),
         isinstance(word, str),
         isinstance(left_n, int),
-        isinstance(right_n, int)
+        isinstance(right_n, int),
+        not isinstance(left_n, bool),
+        not isinstance(right_n, bool)
     ]
 
     if all(checks):
@@ -142,9 +146,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
 
         if window[0] > 0 and window[1] > 0:
             return [[token[0], token[-1]] for token in concordance]
-        elif window[1] > 0:
+        if window[1] > 0:
             return [[token[-1]] for token in concordance]
-        elif window[0] > 0:
+        if window[0] > 0:
             return [[token[0]] for token in concordance]
         return []
     return []
@@ -195,6 +199,8 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
         isinstance(word, str),
         isinstance(left_context_size, int),
         isinstance(right_context_size, int),
+        not isinstance(left_context_size, bool),
+        not isinstance(right_context_size, bool),
         isinstance(left_sort, bool)
     ]
 
@@ -204,7 +210,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
 
         if left_sort and window[0] > 0:
             return sorted(concordance)
-        elif not left_sort and window[1] > 0:
+        if not left_sort and window[1] > 0:
             return sorted(concordance, key=lambda x: x[x.index(word) + 1])
         return []
     return []
