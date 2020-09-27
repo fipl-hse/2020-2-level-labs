@@ -12,17 +12,16 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
+    text = ''
+    punctuation = set('!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~.')
 
-
-    def tokenize(text: str):
-        punctuation = ['(', ')', '?', ':', ';', ',', '.', '!', '/', '"', "'"]
-        for i in punctuation:
-            text = text.replace(i, "")
+    for i in text:
+        if i in punctuation:
+            text = text.replace(i, '')
 
     text = text.lower()
-    return text.split()
-    pass
-
+    text = text.split()
+    return text
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
@@ -34,18 +33,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-
-    def remove_stop_words():
-        tokens = str(input('Введите предложение ')).split()
-
-        stop_words = str(input('Введите стоп-слова ')).split()
-
-        final_list = [word for word in tokens if word not in stop_words]
-
-        print(final_list)
-        return final_list
-
     pass
+
+    with open("stop_words.txt") as file:  # конструкция with...as позволяет не закрывать файл вручную
+        stop_words = file.readlines()  # readlines() - считывает строки файла и создает список из строк
+
+    text1 = [word for word in text if word not in stop_words]
+    return text1
+
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -56,17 +51,16 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-
-    def analysis():
-        tokens = str(input('Введите предложение ')).split()
-        dict = {}
-        for i in tokens:
-            if i in dict:
-                dict[i] += 1
-            else:
-                dict[i] = 1
-        print(dict)
     pass
+
+    freq_dict = {}
+
+    for i in text1:
+        if i in freq_dict:
+            freq_dict[i] += 1
+        else:
+            freq_dict[i] = 1
+    return (freq_dict)
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -81,6 +75,16 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     pass
 
+    sorted_dict = dict(sorted(freq_dict.items(), key=lambda item: item[1], reverse=True)) # упорядочим элементы словаря по значениям
+    sorted_dict = list(sorted_dict.keys())
+
+    if top_n >= 0:
+        common_words = sorted_dict[:top_n]
+    else:
+        common_words = []
+    return common_words
+
+get_top_n_words(freq_dict, int(input('Введите число ')))
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
