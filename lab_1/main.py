@@ -30,6 +30,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
+    output_list = []
     if isinstance(tokens, list) and tokens and isinstance(stop_words, list) and stop_words:
         output_list = tokens[:]
 
@@ -37,12 +38,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
             if word in stop_words:
                 output_list.remove(word)
 
-        return output_list
-
     elif (isinstance(tokens, list) and tokens) and not (isinstance(stop_words, list) and stop_words):
-        return tokens
+        output_list =  tokens
 
-    return []
+    return output_list
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -114,7 +113,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     if isinstance(right_context_size, bool) and isinstance(left_context_size, bool):
-        return []
+        output_list = []
     elif isinstance(tokens, list) and isinstance(word, str) and isinstance(right_context_size, int) and isinstance(
             left_context_size, int):
 
