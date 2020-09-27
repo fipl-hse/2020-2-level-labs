@@ -17,7 +17,7 @@ def tokenize(text: str) -> list:
     slices = list(text1)
     l = [".", ",", "!", "?", ";", ":", "*", "’", "$", "@", "*", "/", "-", "_", "+", "=", "(", ")", "1", "2", "3",
              "4", "5", "6", "7", "8", "9", "0"]
-    for x in slices:
+    for y in slices:
         for y in l:
             if y in slices:
                 slices.remove(y)
