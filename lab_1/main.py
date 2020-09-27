@@ -2,7 +2,7 @@
 Lab 1
 A concordance extraction
 """
-import re
+from re import sub
 
 
 def tokenize(text: str) -> list:
@@ -16,8 +16,10 @@ def tokenize(text: str) -> list:
     if type(text) != str:
         return []
     text = text.lower()
-    text = re.sub(r'[^A-Za-z0-9\s]', '', text)
-    return text.split()
+    text = sub(r'[^A-Za-z0-9\s]', '', text)
+    text = text.split()
+
+    return text
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -35,9 +37,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     elif type(stop_words) != list:
         return tokens
     tokens_required = []
-    for tok in tokens:
-        if tok not in stop_words:
-            tokens_required.append(tok)
+    for token in tokens:
+        if token not in stop_words:
+            tokens_required.append(token)
+
     return tokens_required
 
 
@@ -54,13 +57,14 @@ def calculate_frequencies(tokens: list) -> dict:
     for element in tokens:
         if type(element) != str:
             return {}
-    freq_dict = {}
-    for tok in tokens:
-        if tok in freq_dict.keys():
-            freq_dict[tok] += 1
+    frequency_dictionary = {}
+    for token in tokens:
+        if token in frequency_dictionary.keys():
+            frequency_dictionary[token] += 1
         else:
-            freq_dict[tok] = 1
-    return freq_dict
+            frequency_dictionary[token] = 1
+
+    return frequency_dictionary
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -75,17 +79,17 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     if (type(freq_dict) != dict) or (type(top_n) != int):
         return []
-    list_dict_items = list(freq_dict.items())
-    list_dict_items.sort(key=lambda k_v: k_v[1], reverse=True)
-    top_words = []
-    if top_n > len(list_dict_items):
-        for i in range(len(list_dict_items)):
-            top_words.append(list_dict_items[i][0])
-        return top_words
+    list_dictionary_items = list(freq_dict.items())
+    list_dictionary_items.sort(key=lambda k_v: k_v[1], reverse=True)
+    top_n_words = []
+    if top_n > len(list_dictionary_items):
+        for index in range(len(list_dictionary_items)):
+            top_n_words.append(list_dictionary_items[index][0])
     else:
-        for i in range(top_n):
-            top_words.append(list_dict_items[i][0])
-        return top_words
+        for index in range(top_n):
+            top_n_words.append(list_dictionary_items[index][0])
+
+    return top_n_words
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -114,18 +118,19 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         return []
     elif (left_context_size < 1) and (right_context_size < 1):
         return []
-    for ind, w in enumerate(tokens):
-        if w == word:
+    for index, token in enumerate(tokens):
+        if token == word:
             if (type(left_context_size) != int) or (left_context_size < 1):
-                concordance += [tokens[ind:(ind + right_context_size + 1)]]
+                concordance += [tokens[index:(index + right_context_size + 1)]]
             elif (type(right_context_size) != int) or (right_context_size < 1):
-                concordance += [tokens[(ind - left_context_size):(ind + 1)]]
-            elif ind < left_context_size:
-                concordance += [tokens[:(ind + right_context_size + 1)]]
+                concordance += [tokens[(index - left_context_size):(index + 1)]]
+            elif index < left_context_size:
+                concordance += [tokens[:(index + right_context_size + 1)]]
             else:
-                left_context = ind - left_context_size
-                right_context = ind + right_context_size + 1
+                left_context = index - left_context_size
+                right_context = index + right_context_size + 1
                 concordance += [tokens[left_context:right_context]]
+
     return concordance
 
 
@@ -153,24 +158,25 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     list_concordance = get_concordance(tokens, word, left_n, right_n)
     adjacent_words = []
     for context_list in list_concordance:
-        for ind, w in enumerate(context_list):
-            if w == word:
-                if len(context_list[:ind]) < left_n:
+        for index, token in enumerate(context_list):
+            if token == word:
+                if len(context_list[:index]) < left_n:
                     if right_n < 1:
                         adjacent_words += [[context_list[0]]]
                     else:
-                        adjacent_words += [[context_list[0], context_list[ind + right_n]]]
-                elif len(context_list[(ind + 1):]) < right_n:
+                        adjacent_words += [[context_list[0], context_list[index + right_n]]]
+                elif len(context_list[(index + 1):]) < right_n:
                     if left_n < 1:
                         adjacent_words += [[context_list[-1]]]
                     else:
-                        adjacent_words += [[context_list[ind - left_n], context_list[-1]]]
+                        adjacent_words += [[context_list[index - left_n], context_list[-1]]]
                 elif (type(left_n) != int) or (left_n < 1):
-                    adjacent_words += [[context_list[ind + right_n]]]
+                    adjacent_words += [[context_list[index + right_n]]]
                 elif (type(right_n) != int) or (right_n < 1):
-                    adjacent_words += [[context_list[ind - left_n]]]
+                    adjacent_words += [[context_list[index - left_n]]]
                 else:
-                    adjacent_words += [[context_list[ind - left_n], context_list[ind + right_n]]]
+                    adjacent_words += [[context_list[index - left_n], context_list[index + right_n]]]
+
     return adjacent_words
 
 
@@ -179,8 +185,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
 
