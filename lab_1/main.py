@@ -12,9 +12,9 @@ def tokenize(text):
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
+
     text=text.lower
     litter= '!@#$%^&*()_+=-\;№:?[]{},<>~\'\"/|\\'
-    text = text.split ()
     tokens=''
     for i in text:
         if i not in litter:
@@ -84,7 +84,16 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    concordance=[]
+    for i in tokens:
+        if i==word:
+            word_index=tokens.index(word)
+            left_context=tokens[word_index-left_context_size:word_index]
+            right_context=tokens[word_index+1:word_index+2+right_context_size]
+            concordance.extend(left_context)
+            concordance.append(word)
+            concordance.extend(right_context)
+    return (concordance)
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
