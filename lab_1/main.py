@@ -65,7 +65,15 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-
+    words = list(freq_dict.values())
+    words.sort()
+    num = words[-top_n:]
+    dict_freq = {v: k for k, v in freq_dict.items()}
+    top_words = []
+    for k, v in dict_freq.items():
+        if k in num:
+            top_words.append(dict_freq.get(k))
+    return (top_words)
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
