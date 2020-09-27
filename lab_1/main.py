@@ -12,14 +12,15 @@ def tokenize(text):
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-
-    text= text.lower()
-    litter= '!@#$%^&*()_+=-\;№:?[]{},.<>~\'\"/|\\'
-    tokens =''
-    for c in text:
-        if c not in litter:
-            tokens+=c
-    tokens= tokens.split()
+    input=type(text)==str
+    if input:
+        text= text.lower()
+        litter= '!@#$%^&*()_+=-\;№:?[]{},.<>~\'\"/|\\'
+        tokens =''
+        for c in text:
+            if c not in litter:
+                tokens+=c
+        tokens= tokens.split()
     return tokens
 
 
