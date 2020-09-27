@@ -96,7 +96,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
             index += 1
         else:
             break
-    print(top_n_words_list)
     return top_n_words_list
 
 
@@ -141,12 +140,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         right_context_list.clear()
 
         operative_tokens.remove(word)
-
-    print(concordance_list)
     return concordance_list
 
 
-get_concordance(tokens, input('Введите слово '), int(input('Введите число для левого контекста ')), int(input('Введите число для правого контекста ')))
+#get_concordance(tokens, input('Введите слово '), int(input('Введите число для левого контекста ')), int(input('Введите число для правого контекста ')))
 
 
 #6
@@ -196,7 +193,12 @@ def write_to_file(path_to_file: str, content: list):
     Writes the result in a file
     """
     with open(path_to_file, 'w', encoding='utf-8') as fs:
-        fs.write(content)
+        for i in content:
+            fs.write(' '.join(i))
+            fs.write('\n')
+
+
+#write_to_file('report.txt', get_concordance(tokens, input('Введите слово '), int(input('Введите число для левого контекста ')), int(input('Введите число для правого контекста '))))
 
 
 #8
@@ -219,32 +221,40 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     """
     word = word.lower()
     operative_tokens = get_concordance(tokens, word, left_context_size, right_context_size)
-    concordance = []
+    #concordance = []
     #sorted_concordance = []
 
-    def left_sort_alp(x):
-        for i in x:
-            for alfa in i[0]:
-                return alfa[0]
+    def left_sort_alp(l):
+        word = l[0]
+        return word[0]
 
-    def right_sort_alp(x):
-        for i in x:
-            index = len(i) - right_context_size
-            for alfa in i[index]:
-                return alfa[0]
+    def right_sort_alp(l):
+        index = len(l) - 1
+        word = l[index]
+        return word[0]
 
-    if left_sort == True:
-        for i in operative_tokens:
-            concordance.append(i)
-        concordance = (sorted(concordance, key=left_sort_alp(i)))
+    if left_sort:
+        operative_tokens.sort(key=left_sort_alp)
 
-    elif left_sort == False:
-        for i in operative_tokens:
-            concordance.append(i)
-        concordance = (sorted(concordance, key=right_sort_alp(i)))
+    elif not left_sort:
+        operative_tokens.sort(key=right_sort_alp)
 
-    return concordance
+    return operative_tokens
 
-a = sort_concordance(tokens, 'what', 1, 1, True)
-b = sort_concordance(tokens, 'what', 1, 1, False)
-print(a, b)
+
+a = sort_concordance(tokens, 'what', 1, 2, True)
+b = sort_concordance(tokens, 'what', 1, 2, False)
+#print(a, b)
+
+print('не знаю, но нужно почекать')
+sortList = ['a', 'сс', 'bbb']
+t = [['c', ' bbb'], ['a', 'a']]
+
+
+def sortByAlphabet(inputStr):
+    word = inputStr[0]
+    return word[0]
+
+
+t.sort(key=sortByAlphabet)
+print('Отсортировано в алфавитном порядке: ', t)
