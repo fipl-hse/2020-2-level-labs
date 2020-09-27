@@ -32,7 +32,7 @@ if __name__ == '__main__':
     print(f'SORT CONCORDANCE >> {sorted_concordance[:2]}')
 
     main.write_to_file('report.txt', sorted_concordance)
-    print(f'WRITE TO FILE >> SUCCESSFUL')
+    print('WRITE TO FILE >> SUCCESSFUL')
 
     RESULT = sorted_concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST

@@ -3,7 +3,6 @@ Lab 1
 A concordance extraction
 """
 
-import os
 import re
 from string import punctuation
 
