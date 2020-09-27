@@ -12,6 +12,7 @@ def tokenize(text):
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
+<<<<<<< HEAD
     text=text.lower
     litter= '!@#$%^&*()_+=-\;№:?[]{},<>~\'\"/|\\'
     text = text.split ()
@@ -20,6 +21,15 @@ def tokenize(text):
         if i not in litter:
             tokens+=i
     tokens= tokens.split()
+=======
+    text=text.lower()
+    litter = '!@#$%^&*()_+=-\.;№:?[]{},<>~\'\"/|\\'
+    tokens = ''
+    for i in text:
+        if i not in litter:
+            tokens += i
+    tokens = tokens.split()
+>>>>>>> dd39d6266e551fb9d7550fa45d15fabfa4ed19ba
     return tokens
 
 
@@ -35,7 +45,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     for i in tokens:
         if i in stop_words:
+<<<<<<< HEAD
             del tokens[(tokens.index(i))]
+=======
+            tokens.pop(tokens.index(i))
+>>>>>>> dd39d6266e551fb9d7550fa45d15fabfa4ed19ba
     return tokens
 
 
@@ -49,10 +63,18 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     frequences = []
     for i in tokens:
+<<<<<<< HEAD
         frequences.extend([(tokens.count(i) )])
     freq_dict = {tokens[i]: frequences[i] for i in range(len(frequences))}
     return freq_dict
 
+=======
+        frequences += str(tokens.count(i))
+    for i,c in enumerate (frequences):
+        frequences[i]=int(c)
+    freq_dict = {tokens[i]: frequences[i] for i in range(len(frequences))}
+    return freq_dict
+>>>>>>> dd39d6266e551fb9d7550fa45d15fabfa4ed19ba
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
