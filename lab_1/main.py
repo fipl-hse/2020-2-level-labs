@@ -13,7 +13,6 @@ def tokenize(text: str) -> list:
     """
 
     sentences = ''
-    text = str(input('Your text: ', ))
     text1 = text.lower()
     slices = list(text1)
     l = [".", ",", "!", "?", ";", ":", "*", "’", "$", "@", "*", "/", "-", "_", "+", "=", "(", ")", "1", "2", "3",
@@ -25,8 +24,6 @@ def tokenize(text: str) -> list:
     sentences = ''.join(slices)
     result = sentences.split()
     print(result)
-
-tokenize('text')
 
 
 
