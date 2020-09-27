@@ -3,8 +3,6 @@ Lab 1
 A concordance extraction
 """
 
-data = open('data.txt', encoding='utf-8').read()
-
 
 def tokenize(text: str) -> list:
     """
@@ -29,11 +27,6 @@ def tokenize(text: str) -> list:
     return token_list
 
 
-tokens = tokenize(data)
-
-stop_words = open('stop_words.txt', encoding = 'utf-8').read().split()
-
-
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     Removes stop words
@@ -54,9 +47,6 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
             if i not in stop_words:
                 tokens1.append(i)
     return tokens1
-
-
-tokens = remove_stop_words(tokens, stop_words)
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -124,7 +114,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     concordance = []
     if (not isinstance(tokens, list) or not isinstance(word, str) or not word.isalpha() or
-            type(left_context_size) is not int or not type(right_context_size) is not int or
+            type(left_context_size) is not int or type(right_context_size) is not int or
             (left_context_size < 1 and right_context_size < 1)):
         pass
     else:
