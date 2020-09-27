@@ -35,7 +35,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     tokens_without_stop=[]
     for i in tokens:
-        if i in stop_words:
+        if i not in stop_words:
             tokens_without_stop.append(i)
     return tokens_without_stop
 
