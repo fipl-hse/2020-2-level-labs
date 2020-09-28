@@ -2,8 +2,9 @@
 Concordance implementation starter
 """
 
-from main import read_from_file
 import os
+
+from lab_1.main import read_from_file
 
 if __name__ == '__main__':
     #  use data.txt file to test your program
@@ -15,4 +16,4 @@ if __name__ == '__main__':
 
     RESULT = None
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [(), ()], 'Concordance not working'
+    assert RESULT == [(), ()], 'Concordance not working'  # result == то, что ожидаем от функции?

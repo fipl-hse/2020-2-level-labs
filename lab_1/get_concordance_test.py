@@ -4,9 +4,10 @@ Checks the first lab concordance building function
 """
 
 import unittest
+
 from main import get_concordance
-from main import tokenize
 from main import read_from_file
+from main import tokenize
 
 
 class GetConcordanceTest(unittest.TestCase):
@@ -97,7 +98,7 @@ class GetConcordanceTest(unittest.TestCase):
         """
         Checks if a context for a given term can be found properly
         """
-        text = read_from_file('lab_1/data.txt')
+        text = read_from_file('data.txt')
         tokens = tokenize(text)
 
         expected = [['although', 'less', 'compact', 'than', 'tex', 'the',
@@ -113,7 +114,7 @@ class GetConcordanceTest(unittest.TestCase):
         """
         Checks if contexts for a given term can be found in real text properly
         """
-        text = read_from_file('lab_1/data.txt')
+        text = read_from_file('data.txt')
         tokens = tokenize(text)
 
         expected = [['epithelial', 'sodium', 'channels'],
