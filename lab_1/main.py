@@ -187,11 +187,11 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
                     right_n = len(context_list[(index + 1):])
 
                 if (right_n < 1) or (not int_right_n):
-                    adjacent_words += [[context_list[index - left_n]]]
+                    adjacent_words.extend([[context_list[index - left_n]]])
                 elif (left_n < 1) or (not int_left_n):
-                    adjacent_words += [[context_list[index + right_n]]]
+                    adjacent_words.extend([[context_list[index + right_n]]])
                 else:
-                    adjacent_words += [[context_list[index - left_n], context_list[index + right_n]]]
+                    adjacent_words.extend([[context_list[index - left_n], context_list[index + right_n]]])
 
     return adjacent_words
 
