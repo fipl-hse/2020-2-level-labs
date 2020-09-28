@@ -33,10 +33,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     if not isinstance(tokens, list):
         return []
-    list_words = tokens.copy()
-    for word in tokens:
-        if word in stop_words:
-            list_words.remove(word)
+    list_words = [word for word in tokens if word not in stop_words]
     return list_words
 
 
@@ -69,8 +66,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return []
-    sorted_dict = [(k, freq_dict[k]) for k in sorted(freq_dict, key=freq_dict.get, reverse=True)]
-    list_output = [word[0] for word in sorted_dict]
+    list_output = [k for k in sorted(freq_dict, key=freq_dict.get, reverse=True)]
     return list_output[:top_n]
 
 
@@ -102,12 +98,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         stop = True
     if stop:
         return []
+
     list_all_words = tokens.copy()
-    indexes = []
-    while word in list_all_words:
-        ind_word = list_all_words.index(word)
-        indexes.append(ind_word)
-        list_all_words[ind_word] = ''
+    indexes = [ind for ind, char in enumerate(list_all_words) if char == word]
+
     if len(indexes) == 0 or right_context_size < 0 or left_context_size < 0:
         return []
     if right_context_size == 0 and left_context_size == 0:
