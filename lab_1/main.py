@@ -103,18 +103,19 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     concordance = []
 
-    if not isinstance(left_context_size, int) and not isinstance(right_context_size, int):
+    if isinstance(left_context_size, bool) and isinstance(right_context_size, bool):
         return []
 
-    elif isinstance(tokens, list) and isinstance(word, str):
+    elif isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int) and isinstance(
+            right_context_size, int):
         list_index = [i for i, x in enumerate(tokens) if x == word]
-        for i in list_index:
-            if left_context_size > 0 and right_context_size > 0:
-                concordance.append(tokens[i - left_context_size: i + right_context_size + 1])
-            elif left_context_size > 0:
-                concordance.append(tokens[i - left_context_size: i + 1])
-            elif right_context_size > 0:
-                concordance.append(tokens[i: i + right_context_size + 1])
+
+        if left_context_size > 0 and right_context_size > 0:
+            [concordance.append(tokens[i - left_context_size: i + right_context_size + 1]) for i in list_index]
+        elif left_context_size > 0:
+            [concordance.append(tokens[i - left_context_size: i + 1]) for i in list_index]
+        elif right_context_size > 0:
+            [concordance.append(tokens[i: i + right_context_size + 1]) for i in list_index]
 
         return concordance
     else:
@@ -136,11 +137,21 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     concordance = []
-    for i in get_concordance(tokens, word, left_n, right_n):
-        print(i)
-        concordance.append([i[0], i[-1]])
 
-    return concordance
+    if isinstance(left_n, bool) and isinstance(right_n, bool):
+        return []
+
+    elif isinstance(tokens, list) and isinstance(word, str):
+        for i in get_concordance(tokens, word, left_n, right_n):
+            if isinstance(left_n, int) and isinstance(right_n, int) and left_n > 0 and right_n > 0:
+                concordance.append([i[0], i[-1]])
+            elif isinstance(left_n, int) and left_n > 0 and (not isinstance(right_n, int) or right_n <= 0):
+                concordance.append(i[0])
+            elif isinstance(right_n, int) and right_n > 0 and (not isinstance(left_n, int) or left_n <= 0):
+                concordance.append(i[-1])
+        return concordance
+    else:
+        return []
 
 
 def read_from_file(path_to_file: str) -> str:
