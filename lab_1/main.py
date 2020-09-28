@@ -189,13 +189,13 @@ def write_to_file(path_to_file: str, content: list):
 
 def left_sort_alph(x):
     word = x[0]
-    return word[0]
+    return word
 
 
 def right_sort_alph(x):
     index = len(x) - 1
     word = x[index]
-    return word[0]
+    return word
 
 
 #8
@@ -227,5 +227,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
 
     return operative_tokens
 
-
-#sort_concordance(tokens, 'text', 1, 2, True)
+tokens = read_from_file('data.txt')
+tokens = tokenize(tokens)
+a = sort_concordance(tokens, 'text', 1, 2, True)
+print(a)
