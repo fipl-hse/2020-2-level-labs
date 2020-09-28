@@ -12,7 +12,7 @@ def tokenize(text):
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    if type(text)==str:
+    if isinstance(text,str):
         text= text.lower()
         litter= '!@#$%^&*()_+=-\;№:?[]{},.<>~\'\"/|\\'
         tokens =''
