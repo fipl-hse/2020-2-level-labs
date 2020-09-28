@@ -18,19 +18,18 @@ def tokenize(text: str) -> list:
     if not isinstance(text, str):
         return []
 
-    if isinstance(text, str):
-        text = text.lower()
-        text = text.split()
-        tokens = []
-        for word in text:
-            for element in word:
-                if element in punctuation:
-                    word = word.replace(element, '')
-                if word.isalpha():
-                    tokens.append(word)
-                    break
+    text = text.lower()
+    text = text.split()
+    tokens = []
+    for word in text:
+        for element in word:
+            if element in punctuation:
+                word = word.replace(element, '')
+            if word.isalpha():
+                tokens.append(word)
+                break
 
-        return tokens
+    return tokens
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -118,8 +117,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     sorted_list = list(sorted_dict_reverse.values())
 
     top = []
-    for index in range(len(sorted_list)):
-        top.extend(sorted_list[index])
+    for element in sorted_list:
+        top.extend(element)
 
     return top[:top_n]
 
@@ -209,6 +208,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         return []
 
     concordance = get_concordance(tokens, word, left_n, right_n)
+
     adjacent_words = []
     for context in concordance:
         n_from_context = []
@@ -216,23 +216,30 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             if element == word:
                 left_n_max = len(context[:index])
                 right_n_max = len(context[(index + 1):])
+
                 if not left_n:
                     if right_n <= right_n_max:
                         n_from_context.append(context[index + right_n])
-                    elif right_n > right_n_max:
-                        n_from_context.append(context[index + right_n_max])
+                        break
+                    n_from_context.append(context[index + right_n_max])
+                    break
                 elif not right_n:
                     if left_n <= left_n_max:
                         n_from_context.append(context[index - left_n])
-                    elif left_n > left_n_max:
-                        n_from_context.append(context[index - left_n_max])
-                else:
-                    if left_n <= left_n_max and right_n <= right_n_max:
-                        n_from_context.extend([context[index - left_n], context[index + right_n]])
-                    elif left_n <= left_n_max and right_n > right_n_max:
-                        n_from_context.extend([context[index - left_n], context[index + right_n_max]])
-                    elif left_n > left_n_max and right_n <= right_n_max:
-                        n_from_context.extend([context[index - left_n_max], context[index + right_n]])
+                        break
+                    n_from_context.append(context[index - left_n_max])
+                    break
+
+                if left_n > left_n_max and right_n > right_n_max:
+                    n_from_context.extend([context[index - left_n_max], context[index + right_n_max]])
+                    break
+                elif right_n > right_n_max:
+                    n_from_context.extend([context[index - left_n], context[index + right_n_max]])
+                    break
+                elif left_n > left_n_max:
+                    n_from_context.extend([context[index - left_n_max], context[index + right_n]])
+                    break
+                n_from_context.extend([context[index - left_n], context[index + right_n]])
 
         adjacent_words.append(n_from_context)
 
@@ -254,9 +261,6 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    if (not isinstance(path_to_file, str)) and (not isinstance(content, list)):
-        return []
-
     with open(path_to_file, 'w', encoding='utf-8') as concordance_to_file:
         for context in content:
             context = ' '.join(context)
@@ -309,9 +313,8 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     right_word_list.sort()
 
     sorted_concordance = []
-    for word in right_word_list:
-        sorted_concordance.append(dict_right_words[word])
-    print(sorted_concordance)
+    for right_word in right_word_list:
+        sorted_concordance.append(dict_right_words[right_word])
 
     for index, contexts in enumerate(sorted_concordance):
         sorted_concordance[index] = contexts[0]
