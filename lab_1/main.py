@@ -150,7 +150,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             return [[token[-1]] for token in concordance]
         if window[0] > 0:
             return [[token[0]] for token in concordance]
-        return []
     return []
 
 
@@ -172,8 +171,8 @@ def write_to_file(path_to_file: str, content: list):
     """
 
     with open(path_to_file, 'w', encoding='utf-8') as data:
-        for i in content:
-            data.write(f'{repr(i)}\n')
+        content = [' '.join(x) for x in content]
+        data.write('\n'.join(content))
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -212,5 +211,4 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
             return sorted(concordance)
         if not left_sort and window[1] > 0:
             return sorted(concordance, key=lambda x: x[x.index(word) + 1])
-        return []
     return []

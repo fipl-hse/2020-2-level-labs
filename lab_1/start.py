@@ -22,13 +22,13 @@ if __name__ == '__main__':
     freqs = main.calculate_frequencies(tokens[:5000])
     print(f'CALCULATE FREQUENCIES >> {freqs[tokens[2]]} TIMES')
 
-    concordance = main.get_concordance(tokens, 'people', 2, 3)
+    concordance = main.get_concordance(tokens, '195', 2, 3)
     print(f'GET CONCORDANCE >> {concordance[:2]}')
 
-    adjacent_words = main.get_adjacent_words(tokens, 'people', 2, 3)
+    adjacent_words = main.get_adjacent_words(tokens, '195', 2, 3)
     print(f'GET ADJACENT WORDS >> {adjacent_words[:2]}')
 
-    sorted_concordance = main.sort_concordance(tokens, 'people', 2, 3, False)
+    sorted_concordance = main.sort_concordance(tokens, '195', 2, 3, False)
     print(f'SORT CONCORDANCE >> {sorted_concordance[:2]}')
 
     main.write_to_file('report.txt', sorted_concordance)
@@ -36,4 +36,5 @@ if __name__ == '__main__':
 
     RESULT = sorted_concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Concordance not working'
+    assert RESULT == [['art', 'pp', '195', '216', 'stained', 'glass'],
+                      ['existing', 'ones', '195', 'after', 'he', 'became']], 'Concordance not working'
