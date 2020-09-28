@@ -9,8 +9,10 @@ import os
 
 
 def tokenize(text: str) -> list:
+    #  table = str.maketrans({p: None for p in string.punctuation})
+    #  output = text.translate(table)
     if isinstance(text, str):
-        output = ''.join([char for char in text
+        output = ''.join([char for char in text.lower()
             if char.isalnum() or char.isspace()]).split()
     else:
         output = []
