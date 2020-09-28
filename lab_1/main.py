@@ -193,21 +193,15 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    word_check = (not isinstance(word, str)) or ((isinstance(tokens, list)) and (word not in tokens))
-    int_type_check = (not isinstance(left_n, int) and not isinstance(right_n, int)) \
-                     or (isinstance(left_n, bool) and isinstance(right_n, bool))
-
-    if not isinstance(tokens, list) or word_check or int_type_check:
-        return []
-
-    if ((not isinstance(left_n, int)) or (left_n < 1)) and ((isinstance(right_n, int)) or (right_n >= 1)):
-        left_n = 0
-    elif ((isinstance(left_n, int)) or (left_n >= 1)) and (not isinstance(right_n, int)) or (right_n < 1):
-        right_n = 0
-    elif ((not isinstance(left_n, int)) or (left_n < 1)) and ((not isinstance(right_n, int)) or (right_n < 1)):
-        return []
-
     concordance = get_concordance(tokens, word, left_n, right_n)
+
+    if not concordance:
+        return []
+
+    if (left_n < 1) and (right_n >= 1):
+        left_n = 0
+    elif (left_n >= 1) and (right_n < 1):
+        right_n = 0
 
     adjacent_words = []
     for context in concordance:
@@ -217,33 +211,24 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
                 left_n_max = len(context[:index])
                 right_n_max = len(context[(index + 1):])
 
-                if not left_n:
-                    if right_n <= right_n_max:
-                        n_from_context.append(context[index + right_n])
-                        break
-                    n_from_context.append(context[index + right_n_max])
-                    break
-                elif not right_n:
-                    if left_n <= left_n_max:
-                        n_from_context.append(context[index - left_n])
-                        break
-                    n_from_context.append(context[index - left_n_max])
-                    break
-
-                if left_n > left_n_max and right_n > right_n_max:
-                    n_from_context.extend([context[index - left_n_max], context[index + right_n_max]])
-                    break
-                elif right_n > right_n_max:
+                if left_n <= left_n_max and right_n <= right_n_max:
+                    n_from_context.extend([context[index - left_n], context[index + right_n]])
+                elif left_n <= left_n_max and right_n > right_n_max:
                     n_from_context.extend([context[index - left_n], context[index + right_n_max]])
-                    break
-                elif left_n > left_n_max:
+                elif left_n > left_n_max and right_n <= right_n_max:
                     n_from_context.extend([context[index - left_n_max], context[index + right_n]])
-                    break
-                n_from_context.extend([context[index - left_n], context[index + right_n]])
+                elif left_n > left_n_max and right_n > right_n_max:
+                    n_from_context.extend([context[index - left_n_max], context[index + right_n_max]])
+
+                if word in n_from_context:
+                    n_from_context.remove(word)
 
         adjacent_words.append(n_from_context)
 
     return adjacent_words
+
+
+print(get_adjacent_words(['happy', 'man'], 'happy', 0, 1))
 
 
 def read_from_file(path_to_file: str) -> str:
