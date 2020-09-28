@@ -11,10 +11,9 @@ if __name__ == '__main__':
     data = main.read_from_file(os.path.join(current_dir, 'data.txt'))
     tokens = main.tokenize(data)
 
-    sorted_concordance = main.sort_concordance(tokens, 'happy', 7, 3, True)
-
     #  here goes your logic: calling methods from concordance.py
+    sorted_concordance = main.sort_concordance(tokens, 'fitness', 1, 1, True)
 
     RESULT = sorted_concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [(), ()], 'Concordance not working'
+    assert RESULT, 'Concordance not working'
