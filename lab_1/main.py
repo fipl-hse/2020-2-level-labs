@@ -119,8 +119,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
 
-    if isinstance(right_context_size, bool) or isinstance(left_context_size, bool)\
-            or not isinstance(tokens, list) or not isinstance(word, str)\
+    if isinstance(right_context_size, bool) or isinstance(left_context_size, bool):
+        return []
+    elif not isinstance(tokens, list) or not isinstance(word, str) \
             or not isinstance(right_context_size, int) or not isinstance(left_context_size, int):
         return []
 
@@ -205,11 +206,11 @@ def write_to_file(path_to_file: str, content: list):
 
 def sort_list(concors, ind):
     sorted_list = []
-    first_words = [context[ind+1] for context in concors]
+    first_words = [context[ind + 1] for context in concors]
     first_words.sort()
     for word in first_words:
         for context in concors:
-            if context[ind+1] == word:
+            if context[ind + 1] == word:
                 sorted_list.append(context)
                 break
 
@@ -234,7 +235,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
 
-    if not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_context_size, int)\
+    if not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_context_size, int) \
             or not isinstance(right_context_size, int) or not isinstance(left_sort, bool):
         return []
 
