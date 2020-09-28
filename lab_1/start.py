@@ -40,4 +40,4 @@ if __name__ == '__main__':
 
     RESULT = sorted_concordance_left
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT != [], 'Concordance not working'
+    assert RESULT, 'Concordance not working'

@@ -134,6 +134,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     concordance = get_concordance(tokens, word, left_n, right_n)
     if len(concordance) == 0:
         return []
+
     if left_n == 0:
         output = [[concord[-1]] for concord in concordance]
     elif right_n == 0:
@@ -186,9 +187,11 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
         left_context_size = 0
     if isinstance(right_context_size, int) and right_context_size < 0 and left_sort:
         right_context_size = 0
+
     concordance = get_concordance(tokens, word, left_context_size, right_context_size)
     if len(concordance) == 0:
         return []
+
     if left_sort:
         dict_raw = {context[0]: context for context in concordance}
     else:
