@@ -9,9 +9,10 @@ import os
 
 
 def tokenize(text: str) -> list:
-    try:
-        output = re.sub(r'[^a-z0-9\s]+', '', text.lower()).split()
-    except AttributeError:
+    if isinstance(text, str):
+        output = ''.join([char for char in text
+            if char.isalnum() or char.isspace()]).split()
+    else:
         output = []
     return output
 
@@ -25,6 +26,20 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     else:
         output = []
     return output
+    
+    '''
+    if not good_tokens:
+        output = []
+    elif not good_stops:
+        output = tokens
+    else:
+        output = [...]
+    return output
+    '''
+        
+        
+    
+        
 
 
 def calculate_frequencies(tokens: list) -> dict:
