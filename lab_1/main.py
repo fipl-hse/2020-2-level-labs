@@ -53,11 +53,14 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    frequences = []
-    for i in tokens:
-        frequences.extend([tokens.count(i) ])
-    freq_dict = {tokens[i]: frequences[i] for i in range(len(frequences))}
-    return freq_dict
+    if isinstance(tokens,list):
+        frequences = []
+        for i in tokens:
+            frequences.extend([tokens.count(i) ])
+        freq_dict = {tokens[i]: frequences[i] for i in range(len(frequences))}
+        return freq_dict
+    else:
+        return {}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
