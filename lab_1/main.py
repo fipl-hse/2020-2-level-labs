@@ -4,7 +4,16 @@ A concordance extraction
 """
 
 
-def tokenize(text: str) -> list:
+def tokenize(text):
+    text = text.lower()
+    tokens = ''
+    signs = set ('.,!?@$:\/;%^&*[]{}+=-<>')
+    for i in text:
+        if i not in signs:
+            tokens += i
+    tokens = tokens.split()
+    print (tokens)
+tokenize(text)
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
@@ -12,13 +21,14 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = text.split()
-    return text
-
-
-
 def remove_stop_words(tokens: list, stop_words: list) -> list:
-    """
+    for i in tokens:
+        if i in stop_words:
+            del tokens[tokens.index(i)]
+            print (tokens)
+remove_stop_words([tokens], [stop_words])
+
+            """
     Removes stop words
     :param tokens: a list of tokens
     :param stop_words: a list of stop words
@@ -29,8 +39,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     pass
 
-
 def calculate_frequencies(tokens: list) -> dict:
+    frequencies = []
+    for i in tokens:
+        frequencies += [tokens.count(i)]
+        print(frequencies)
+        dictionary = {tokens[i]: frequencies}
+calculate_frequencies(['ljl', 'lol', 'kek', 'is', 'are', 'is', 'is'])
+    
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens without stop words
