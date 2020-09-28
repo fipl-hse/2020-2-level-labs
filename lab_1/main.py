@@ -34,6 +34,7 @@ tokens = tokenize('Some awesome text. This text is short. The text is awesome...
 stop_words = read_from_file('stop_words.txt')
 stop_words = tokenize(stop_words)
 
+
 #2
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
@@ -95,7 +96,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     for i, word in enumerate(new_freq_dict):
         top_n_words.append(word)
 
-    return top_n_words
+    return top_n_words[:top_n]
 
 
 #get_top_n_words(freq_dict, int(input('Введите число ')))
