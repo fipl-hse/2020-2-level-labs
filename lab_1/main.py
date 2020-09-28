@@ -12,16 +12,16 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = ''
+    tokens = ''
     punctuation = set('!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~.')
 
-    for i in text:
+    for i in tokens:
         if i in punctuation:
-            text = text.replace(i, '')
+            tokens = tokens.replace(i, '')
+    tokens = tokens.lower()
+    tokens = tokens.split()
 
-    text = text.lower()
-    text = text.split()
-    return text
+    return tokens
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
@@ -33,14 +33,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
 
-    with open("stop_words.txt") as file:  # конструкция with...as позволяет не закрывать файл вручную
-        stop_words = file.readlines()  # readlines() - считывает строки файла и создает список из строк
+    tokens = [word for word in tokens if word not in stop_words] # добавляет соответствующее слово в список
 
-    text1 = [word for word in text if word not in stop_words]
-    return text1
-
+    return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -51,16 +47,16 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
 
     freq_dict = {}
 
-    for i in text1:
+    for i in tokens:
         if i in freq_dict:
             freq_dict[i] += 1
         else:
             freq_dict[i] = 1
-    return (freq_dict)
+
+    return freq_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -73,7 +69,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
 
     sorted_dict = dict(sorted(freq_dict.items(), key=lambda item: item[1], reverse=True)) # упорядочим элементы словаря по значениям
     sorted_dict = list(sorted_dict.keys())
@@ -82,9 +77,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         common_words = sorted_dict[:top_n]
     else:
         common_words = []
-    return common_words
 
-get_top_n_words(freq_dict, int(input('Введите число ')))
+    return common_words
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
@@ -103,7 +97,23 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    concordance = []
+    if type(tokens) != list or type(word) != str:
+        return []
+    elif type(left_context_size) != int or type(right_context_size) != int:
+        return []
+    elif left_context_size < 1 and right_context_size < 1:
+        return []
+
+    indexes = [i for i, x in enumerate(tokens) if x == word]
+    if left_context_size > 0 and right_context_size > 0:
+        [concordance.append(tokens[i - left_context_size: i + right_context_size + 1]) for i in indexes]
+    elif left_context_size > 0:
+        [concordance.append(tokens[i - left_context_size: i + 1]) for i in indexes]
+    elif right_context_size > 0:
+        [concordance.append(tokens[i: i + right_context_size + 1]) for i in indexes]
+
+    return concordance
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -121,7 +131,17 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    func_tokens = get_adjacent_words(tokens, word, left_n, right_n)
+    adj_words_list = []
+    for i in func_tokens:
+        if left_n == 0:
+            adj_words_list.append(i[-1])
+        elif right_n == 0:
+            adj_words_list.append(i[0])
+        else:
+            adj_words_list.append([word[0], word[-1]])
+
+    return adj_words_list
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -139,7 +159,11 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+    with open(path_to_file, 'w', encoding='utf-8') as file:
+        for context in content:
+            context = ' '.join(context)
+            context += '\n'
+            file.write(context)
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
