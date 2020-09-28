@@ -53,7 +53,7 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    if isinstance(tokens,list):
+    if isinstance(tokens,list) and all (tokens):
         frequences = []
         for i in tokens:
             frequences.extend([tokens.count(i) ])
