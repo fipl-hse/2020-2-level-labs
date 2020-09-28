@@ -36,12 +36,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
     if isinstance(tokens,list) and isinstance(stop_words,list):
-        if type(tokens)==[] and type(stop_words)==[]:
-            tokens_without_stop=[]
-            for i in tokens:
-                if i not in stop_words:
-                    tokens_without_stop.append(i)
-            return tokens_without_stop
+        tokens_without_stop=[]
+        for i in tokens:
+            if i not in stop_words:
+                tokens_without_stop.append(i)
+        return tokens_without_stop
     else:
         return []
 
