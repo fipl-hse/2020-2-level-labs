@@ -38,7 +38,6 @@ if __name__ == '__main__':
 
     main.write_to_file('report.txt', family_sorted_concordance)
 
-
     RESULT = family_sorted_concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Concordance not working'
