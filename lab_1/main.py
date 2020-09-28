@@ -2,117 +2,108 @@
 Lab 1
 A concordance extraction
 """
+
 import re
 
 def tokenize(text: str) -> list:
-    try:
+    tokens = []
+    if type(text) == str:
         text = text.lower()
-        match = re.findall(r"\w+-\w+", text)
-        match_new = []
-
-        for i in match:
-            new = i.replace('-', '')
-            text = text.replace(i, new)
-
-        match2 = re.findall(r"\w+'\w", text)
-
-        for i in match2:
-            new2 = i.replace("'", '')
-            text = text.replace(i, new2)
-
-        text_clean = re.findall(r'\w+', text)
-        tokens = []
-
-        for i in text_clean:
-            if i.isalpha():
-                tokens.append(i)
-    except AttributeError:
-        tokens = []
-
+        tokens = re.findall(r"[a-z]+", text)
     return tokens
 
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    stop_words = ['the', 'is']
-    --> ['weather', 'sunny', 'man', 'happy']
-    """
-    tokens2 = []
-    if type(tokens) == list:
-        if type(stop_words) == list:
-            for i in stop_words:
-                if i in tokens:
-                    tokens.remove(i)
+    clean_tokens = []
+
+    if type(tokens) == list and type(stop_words) == list:
+            for i in tokens:
+                if i not in stop_words:
+                    clean_tokens.append(i)
+
     else:
-        tokens = []
-    return tokens
+        clean_tokens = []
+    return clean_tokens
 
 
 
 def calculate_frequencies(tokens: list) -> dict:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens without stop words
-    :return: a dictionary with frequencies
-    e.g. tokens = ['weather', 'sunny', 'man', 'happy']
-    --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
-    """
     freq_dict = {}
     if type(tokens) == list and len(tokens) > 0:
-        for i in tokens:
-            if i in freq_dict:
-                freq_dict[i] += 1
-            else:
-                freq_dict[i] = 1
+        if type(tokens[0]) == str:
+            for i in tokens:
+                if i in freq_dict:
+                    freq_dict[i] += 1
+                else:
+                    freq_dict[i] = 1
+
     return freq_dict
 
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
-    """
-    Returns the most common words
-    :param freq_dict: a dictionary with frequencies
-    :param top_n: a number of the most common words to return
-    :return: a list of the most common words
-    e.g. tokens = ['weather', 'sunny', 'man', 'happy', 'and', 'dog', 'happy']
-    top_n = 1
-    --> ['happy']
-    """
-    popular = []
-    control = 0
-    sorted_dic = sorted(freq_dict, key=freq_dict.get, reverse=True)
 
+    sorted_dict = []
     if type(freq_dict) == dict and top_n > 0:
-        for i in freq_dict:
-            if control < top_n:
-                popular.append(i)
-                control += 1
-    return popular
+        sorted_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
+        sorted_dict = sorted_dict[:top_n]
+
+    return sorted_dict
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
-    """
-    Gets a concordance of a word
-    A concordance is a listing of each occurrence of a word in a text,
-    presented with the words surrounding it
-    :param tokens: a list of tokens
-    :param word: a word-base for a concordance
-    :param left_context_size: the number of words in the left context
-    :param right_context_size: the number of words in the right context
-    :return: a concordance
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
-                    'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
-    word = 'happy'
-    left_context_size = 2
-    right_context_size = 3
-    --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
-    """
+
+    check_left = type(left_context_size) == int and left_context_size > 0 and not type(left_context_size) == bool
+    check_right = type(right_context_size) == int and right_context_size > 0 and not type(right_context_size) == bool
+    check_tokens = type(tokens) == list
+    word_check = type(word) == str
+
+    if check_tokens and word_check:
+        check = word in tokens
+    else:
+        return []
+
+    all_context = []
+
+    for i, m in enumerate(tokens):
+        if m == word:
+            if check_left and check_right and check:
+                all_context.append(tokens[i-left_context_size:i+right_context_size+1])
+            elif check_left and check:
+                all_context.append(tokens[i-left_context_size:i+1])
+            elif check_right and check:
+                all_context.append(tokens[i:i+right_context_size+1])
+
+
+    return all_context
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
