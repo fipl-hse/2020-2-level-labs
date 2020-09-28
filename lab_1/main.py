@@ -227,7 +227,5 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
 
     return operative_tokens
 
-tokens = read_from_file('data.txt')
-tokens = tokenize(tokens)
-a = sort_concordance(tokens, 'text', 1, 2, True)
-print(a)
+
+#sort_concordance(tokens, 'text', 1, 2, True)
