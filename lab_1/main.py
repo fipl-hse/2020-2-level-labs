@@ -12,8 +12,7 @@ def tokenize(text):
         if i not in signs:
             tokens += i
     tokens = tokens.split()
-    print (tokens)
-tokenize(text)
+    return tokens
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
@@ -25,8 +24,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     for i in tokens:
         if i in stop_words:
             del tokens[tokens.index(i)]
-            print (tokens)
-remove_stop_words([tokens], [stop_words])
+    return tokens
+
+
 
             """
     Removes stop words
@@ -38,15 +38,16 @@ remove_stop_words([tokens], [stop_words])
     --> ['weather', 'sunny', 'man', 'happy']
     """
     pass
-
 def calculate_frequencies(tokens: list) -> dict:
-    frequencies = []
+    frequencies = {}
     for i in tokens:
-        frequencies += [tokens.count(i)]
-        print(frequencies)
-        dictionary = {tokens[i]: frequencies}
-calculate_frequencies(['ljl', 'lol', 'kek', 'is', 'are', 'is', 'is'])
-    
+        if i in frequencies:
+            frequencies [i] += 1
+        else:
+            frequencies[i] = 1
+        return frequencies
+freq_dict = calculate_frequencies(tokens)
+
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens without stop words
