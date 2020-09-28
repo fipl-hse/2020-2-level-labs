@@ -33,7 +33,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if type(tokens)==list() and type(stop_words)==list():
+    if type(tokens)==[] and type(stop_words)==[]:
         tokens_without_stop=[]
         for i in tokens:
             if i not in stop_words:
