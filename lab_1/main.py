@@ -31,7 +31,8 @@ def tokenize(text: str) -> list:
 
 
 tokens = tokenize('Some awesome text. This text is short. The text is awesome...')
-
+stop_words = read_from_file('stop_words.txt')
+stop_words = tokenize(stop_words)
 
 #2
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -44,15 +45,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    stop_w = read_from_file(stop_words)
     tokens_clean = []
     for i in tokens:
-        if i not in stop_w:
+        if i not in stop_words:
             tokens_clean.append(i)
     return tokens_clean
 
 
-tokens = remove_stop_words(tokens, 'stop_words.txt')
+tokens = remove_stop_words(tokens, stop_words)
 
 
 #3
