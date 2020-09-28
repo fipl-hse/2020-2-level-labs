@@ -37,4 +37,4 @@ if __name__ == '__main__':
 
     RESULT = sorted_concordance_cat
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT != [], 'Concordance not working'
+    assert RESUL, 'Concordance not working'
