@@ -5,6 +5,17 @@ A concordance extraction
 import re
 
 
+def read_from_file(path_to_file: str) -> str:
+    """
+    Opens the file and reads its content
+    :return: the initial text in string format
+    """
+    with open(path_to_file, 'r', encoding='utf-8') as fs:
+        data = fs.read()
+
+    return data
+
+
 #1
 def tokenize(text: str) -> list:
     """
@@ -14,7 +25,6 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-
     text = text.lower()
     tokens = re.findall(r'(?:\w+\-?\w*)+', text)
     return tokens
@@ -22,9 +32,6 @@ def tokenize(text: str) -> list:
 
 tokens = tokenize('Some awesome text. This text is short. The text is awesome...')
 
-with open('stop_words.txt', 'r', encoding='utf-8') as f:
-    stop_words = f.read()
-    stop_words = stop_words.split()
 
 #2
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -37,14 +44,15 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
+    stop_w = read_from_file(stop_words)
     tokens_clean = []
     for i in tokens:
-        if i not in stop_words:
+        if i not in stop_w:
             tokens_clean.append(i)
     return tokens_clean
 
 
-tokens = remove_stop_words(tokens, stop_words)
+tokens = remove_stop_words(tokens, 'stop_words.txt')
 
 
 #3
@@ -160,24 +168,12 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         adjacent_words.append(i[0])
         adjacent_words.append(i[-1])
 
-    print(adjacent_words)
     return adjacent_words
 
 #get_adjacent_words(tokens, input('Введите слово '), int(input('Какое по счету слово вывести из левого контекста? ')), int(input('Какое по счету слово вывести из правого контекста? ')))
 
 
 #7
-def read_from_file(path_to_file: str) -> str:
-    """
-    Opens the file and reads its content
-    :return: the initial text in string format
-    """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
-
-    return data
-
-
 def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
