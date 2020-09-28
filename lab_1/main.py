@@ -7,7 +7,7 @@ import re
 
 def tokenize(text: str) -> list:
     tokens = []
-    if type(text) == str:
+    if isinstance(text, str):
         tokens = text.lower()
         tokens = re.sub(r'[^a-z\s\n]', '', tokens).split()
     return tokens
@@ -27,8 +27,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
 
 def calculate_frequencies(tokens: list) -> dict:
     freq_dict = {}
-    if isinstance(tokens, list)  and len(tokens) > 0:
-        if type(tokens[0]) == str:
+    if isinstance(tokens, list) and len(tokens) > 0:
+        if isinstance(tokens[0], str):
             for i in tokens:
                 if i in freq_dict:
                     freq_dict[i] += 1
@@ -46,8 +46,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
-    check_left = isinstance(left_context_size, int) and left_context_size > 0 and not isinstance(left_context_size, bool)
-    check_right = isinstance(right_context_size, int) and right_context_size > 0 and not isinstance(right_context_size, bool)
+    check_left = isinstance(left_context_size, int)\
+        and left_context_size > 0 and not isinstance(left_context_size, bool)
+    check_right = isinstance(right_context_size, int)\
+        and right_context_size > 0 and not isinstance(right_context_size, bool)
     check_tokens = isinstance(tokens, list)
     word_check = isinstance(word, str)
     all_context = []
@@ -57,7 +59,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     else:
         return all_context
 
-    for ind, token  in enumerate(tokens):
+    for ind, token in enumerate(tokens):
         if token == word:
             if check_left and check_right and check:
                 all_context.append(tokens[ind-left_context_size:ind+right_context_size+1])
