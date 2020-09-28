@@ -8,8 +8,8 @@ import re
 def tokenize(text: str) -> list:
     tokens = []
     if type(text) == str:
-        text = text.lower()
-        tokens = re.findall(r"[a-z]+", text)
+        tokens = text.lower()
+        tokens = re.sub('[^a-z\s\n]', '',tokens).split()
     return tokens
 
 
@@ -58,13 +58,12 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     check_right = type(right_context_size) == int and right_context_size > 0 and not type(right_context_size) == bool
     check_tokens = type(tokens) == list
     word_check = type(word) == str
+    all_context = []
 
     if check_tokens and word_check:
         check = word in tokens
     else:
-        return []
-
-    all_context = []
+        return all_context
 
     for i, m in enumerate(tokens):
         if m == word:
@@ -73,57 +72,33 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             elif check_left and check:
                 all_context.append(tokens[i-left_context_size:i+1])
             elif check_right and check:
-                all_context.append(tokens[i:i+right_context_size+1])
+                    all_context.append(tokens[i:i+right_context_size+1])
 
 
     return all_context
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
-    """
-    Gets adjacent words from the left and right context
-    :param tokens: a list of tokens
-    :param word: a word-base for the search
-    :param left_n: the distance between a word and an adjacent one in the left context
-    :param right_n: the distance between a word and an adjacent one in the right context
-    :return: a list of adjacent words
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
-                    'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
-    word = 'happy'
-    left_n = 2
-    right_n = 3
-    --> [['man', 'is'], ['dog, 'cat']]
-    """
-    pass
+    concordance = get_concordance(tokens, word, left_n, right_n)
+    concordance_n = []
+    if type(tokens) == list and type(word) == str:
+        for word in concordance:
+            if left_n == 0:
+                concordance_n.append([word[-1]])
+            elif right_n == 0:
+                concordance_n.append([word[0]])
+            else:
+                concordance_n.append([word[0],word[-1]])
+    return concordance_n
+
+
+
+
+
+
+
+
 
 
 def read_from_file(path_to_file: str) -> str:
