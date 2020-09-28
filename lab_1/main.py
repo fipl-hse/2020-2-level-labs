@@ -170,25 +170,26 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     if (bool_left_n and bool_right_n) or (not int_left_n and not int_right_n):
         return []
 
+    if (not int_left_n) or (left_n < 1):
+        left_n = 0
+    elif (not int_right_n) or (right_n < 1):
+        right_n = 0
+
     list_concordance = get_concordance(tokens, word, left_n, right_n)
     adjacent_words = []
+
     for context_list in list_concordance:
         for index, token in enumerate(context_list):
             if token == word:
                 if len(context_list[:index]) < left_n:
-                    if right_n < 1:
-                        adjacent_words += [[context_list[0]]]
-                    else:
-                        adjacent_words += [[context_list[0], context_list[index + right_n]]]
-                elif len(context_list[(index + 1):]) < right_n:
-                    if left_n < 1:
-                        adjacent_words += [[context_list[-1]]]
-                    else:
-                        adjacent_words += [[context_list[index - left_n], context_list[-1]]]
-                elif (not isinstance(left_n, int)) or (left_n < 1):
-                    adjacent_words += [[context_list[index + right_n]]]
-                elif (not isinstance(right_n, int)) or (right_n < 1):
+                    left_n = len(context_list[:index])
+                if len(context_list[(index + 1):]) < right_n:
+                    right_n = len(context_list[(index + 1):])
+
+                if (right_n < 1) or (not int_right_n):
                     adjacent_words += [[context_list[index - left_n]]]
+                elif (left_n < 1) or (not int_left_n):
+                    adjacent_words += [[context_list[index + right_n]]]
                 else:
                     adjacent_words += [[context_list[index - left_n], context_list[index + right_n]]]
 
