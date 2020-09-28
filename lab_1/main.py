@@ -4,28 +4,45 @@ A concordance extraction
 """
 
 
+def read_from_file(path_to_file: str) -> str:
+    with open(path_to_file, 'r', encoding='utf-8') as fs:
+        data = fs.read()
+
+    return data
+
+
+# 1
 def tokenize(text: str) -> list:
-    """
-    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
-    :param text: the initial text
-    :return: a list of lowercased tokens without punctuation
-    e.g. text = 'The weather is sunny, the man is happy.'
-    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    """
-    pass
+    tokens = []
+    blank = []
+    if type(text) == str:
+        text = text.lower()
+        for smb in text:
+            if smb in '1234567890-=!@#$%^&*()_+`~[]\\{}|;\':",./<>?':
+                text = text.replace(smb, '')
+        text = text.split()
+        tokens.extend(text)
+        print(tokens)
+    else:
+        print(blank)
 
 
+tokenize('How are you, man?')
+
+
+# 2
 def remove_stop_words(tokens: list, stop_words: list) -> list:
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    stop_words = ['the', 'is']
-    --> ['weather', 'sunny', 'man', 'happy']
-    """
-    pass
+    clean_tokens = []
+    stop_words = ['the', 'is', 'are']
+    if type(tokens) == list:
+        for i in tokens:
+            if i in stop_words:
+                tokens.remove(i)
+                clean_tokens.extend(tokens)
+        print(clean_tokens)
+
+
+remove_stop_words('How are you, man', stop_words=['are'])
 
 
 def calculate_frequencies(tokens: list) -> dict:
