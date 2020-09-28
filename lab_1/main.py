@@ -200,7 +200,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
 
     if (left_n < 1) and (right_n >= 1):
         left_n = 0
-    elif (left_n >= 1) and (right_n < 1):
+    else:
         right_n = 0
 
     adjacent_words = []
@@ -226,9 +226,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         adjacent_words.append(n_from_context)
 
     return adjacent_words
-
-
-print(get_adjacent_words(['happy', 'man'], 'happy', 0, 1))
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -272,10 +269,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     """
     concordance = get_concordance(tokens, word, left_context_size, right_context_size)
 
-    int_check = not (isinstance(left_context_size, int) and isinstance(right_context_size, int))
-    bool_check = not isinstance(left_sort, bool)
-
-    if int_check or bool_check:
+    if not concordance or (not isinstance(left_sort, bool)):
         return []
 
     if (left_context_size < 1 and left_sort) or (right_context_size < 1 and not left_sort):
