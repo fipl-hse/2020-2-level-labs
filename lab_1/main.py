@@ -26,7 +26,7 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     text = text.lower()
-    tokens = re.findall(r'(?:\w+\-?\w*)+', text)
+    tokens = re.findall(r'(?:\w+-?\w*)+', text)
     return tokens
 
 
