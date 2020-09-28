@@ -2,9 +2,7 @@
 Lab 1
 A concordance extraction
 """
-text = open('data.txt', 'r', encoding= 'utf-8').read()
 
-# noinspection PyTypeChecker
 def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
@@ -13,15 +11,18 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    if type(text) == str:
-        text = text.lower()
-        new_text = ''
-        for i in text:
-            if i.isalpha() or i == ' ':
-                new_text += i
-        token_list = new_text.split()
+    if not type(text) == str:
+        return []
+
+    text = text.lower()
+    new_text = ' '
+    for token in text:
+        if token.isalpha() or token == ' ':
+            new_text += token
+    token_list = new_text.split()
     else:
-        token_list = []
+    token_list = []
+
     return token_list
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -34,8 +35,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if type(tokens) == list:
-        if type(stop_words) == list:
+    if type(tokens) == list and type(stop_words) == list:
             for words in stop_words:
                 while words in tokens:
                     tokens.remove(words)
