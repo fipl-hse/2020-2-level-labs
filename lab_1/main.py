@@ -198,9 +198,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     if not concordance:
         return []
 
-    if (left_n < 1) and (right_n >= 1):
+    if left_n < 1 <= right_n >= 1:
         left_n = 0
-    elif (left_n >= 1) and (right_n < 1):
+    elif right_n < 1 <= left_n:
         right_n = 0
 
     adjacent_words = []
