@@ -33,7 +33,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if type(tokens)==list and type(stop_words)==list:
+    if type(tokens)==list() and type(stop_words)==list():
         tokens_without_stop=[]
         for i in tokens:
             if i not in stop_words:
@@ -68,7 +68,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     words = list(freq_dict.values())
     words.sort()
-    num = words[-top_n:]
+    num = words[-1:-top_n:-1]
     dict_freq = {v: k for k, v in freq_dict.items()}
     top_words = []
     for k, v in dict_freq.items():
