@@ -32,7 +32,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
 
-    if not isinstance(tokens, list) or not tokens or not isinstance(stop_words, list) or not stop_words:
+    if not isinstance(tokens, list) or not tokens or not isinstance(stop_words, list):
         return []
 
     if (isinstance(tokens, list) and tokens) and not (isinstance(stop_words, list) and stop_words):
@@ -234,8 +234,8 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
 
-    if not (isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_context_size, int) or not
-            isinstance(right_context_size, int) or not isinstance(left_sort, bool)):
+    if not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_context_size, int)\
+            or not isinstance(right_context_size, int) or not isinstance(left_sort, bool):
         return []
 
     concors = get_concordance(tokens, word, left_context_size, right_context_size)
