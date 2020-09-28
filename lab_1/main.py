@@ -14,13 +14,15 @@ def tokenize(text):
     """
     if isinstance(text,str):
         text= text.lower()
-        litter= '!@#$%^&*()_+=-\;№:?[]{},.<>~\'\"/|\\'
+        litter= '!@#$%^&*()_+=-\;№:?[]{},.<>~\'\"/|\\1234567890'
         tokens =''
         for c in text:
             if c not in litter:
                 tokens+=c
         tokens= tokens.split()
         return tokens
+    else:
+        return []
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
