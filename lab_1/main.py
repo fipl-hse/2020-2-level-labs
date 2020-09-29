@@ -219,5 +219,6 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
                     if len(usage) == number + 1:
                         pass
                     else:
-                        sorted_concordance = sorted(concordance, key=lambda item_after: item_after[number+1])
+                        sorted_concordance = sorted(concordance,
+                                                    key=lambda item_after: item_after[(concordance[0].index(word))+1])
     return sorted_concordance
