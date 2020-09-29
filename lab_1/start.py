@@ -9,8 +9,8 @@ import main
 if __name__ == '__main__':
     #  use data.txt file to test your program
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    data = main.read_from_file(os.path.join(current_dir, 'data.txt'))
-    stop_words = main.read_from_file(os.path.join(current_dir, 'stop_words.txt')).split('\n')
+    data = main.read_from_file(os.path.join(current_dir, 'lab_1/data.txt'))
+    stop_words = main.read_from_file(os.path.join(current_dir, 'lab_1/stop_words.txt')).split('\n')
 
     #  here goes your logic: calling methods from concordance.py
 
