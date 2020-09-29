@@ -124,10 +124,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                 if item == word:
                     subconcor = []
                     if lcs_checked:
-                        shift = 1
+                        shift = 0
                         for _ in range(left_context_size):
                             try:
-                                subconcor.append(tokens[index - shift])
+                                subconcor.append(tokens[index - left_context_size + shift])
                                 shift += 1
                             except IndexError:
                                 break
