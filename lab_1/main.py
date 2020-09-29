@@ -140,7 +140,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                                 shift += 1
                             except IndexError:
                                 break
-                concordance.append(subconcor)
+                    concordance.append(subconcor)
     return concordance
 
 
