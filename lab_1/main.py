@@ -46,11 +46,11 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    d = {}
+    freq_dict = {}
     for token in tokens:
-        d[token] = tokens.count(token)
+        freq_dict[token] = tokens.count(token)
         tokens.remove(token)
-    return d
+    return freq_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -63,6 +63,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
+    tokens_rate = []
+    for k,v in freq_dict.items():
+
 
 
 
