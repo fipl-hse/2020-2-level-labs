@@ -107,7 +107,7 @@ def get_concordance(tokens: list,
 
     idx = [i for i, x in enumerate(tokens) if x == word]
 
-    elif check_l and check_r:
+    if check_l and check_r:
         return [tokens[i-lcs:i+rcs+1] for i in idx]
 
     elif not check_l and check_r:
