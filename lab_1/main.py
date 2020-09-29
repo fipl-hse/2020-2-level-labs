@@ -3,6 +3,7 @@ Lab 1
 A concordance extraction
 """
 
+
 def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
@@ -40,12 +41,12 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     if not isinstance(tokens, list):
         return []
-    elif not isinstance(stop_words, list):
+    if not isinstance(stop_words, list):
         return tokens
     for stop_word in stop_words:
         while stop_word in tokens:
             tokens.remove(stop_word)
-    return tokens         
+    return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -101,8 +102,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     concordance = []
     if not isinstance(tokens, list) or not isinstance(word, str) or \
-            not isinstance(left_context_size, int) or not isinstance(right_context_size, int) or \
-            isinstance(left_context_size, bool) or isinstance(right_context_size, bool) or \
+            not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
+        return []
+    if isinstance(left_context_size, bool) or isinstance(right_context_size, bool) or \
             (left_context_size < 1 and right_context_size < 1):
         return []
     for number, token in enumerate(tokens):
@@ -211,10 +213,10 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
                     if token == usage[0] and usage.count(token) == 1:
                         return []
                     sorted_concordance = sorted(concordance, key=lambda item: item[0])
-                elif not left_sort:
+                if not left_sort:
                     if token == usage[-1] and usage.count(token) == 1:
                         return []
-                    elif len(usage) == number + 1:
+                    if len(usage) == number + 1:
                         pass
                     else:
                         sorted_concordance = sorted(concordance, key=lambda item_after: item_after[number+1])
