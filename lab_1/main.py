@@ -20,7 +20,7 @@ def tokenize(text: str) -> list:
             for symbol in word:
                 if symbol.isalpha():
                     token.append(symbol)
-                elif symbol.isdigit() or symbol in '%$#№@*&^':
+                elif symbol.isdigit():
                     return []
             if len(token):
                 tokens.append("".join(token))
@@ -180,7 +180,9 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+    with open('report.txt', 'w', encoding='utf8') as file:
+        for example in content:
+            file.writelines([i + '\n' for i in example])
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
