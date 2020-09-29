@@ -15,13 +15,12 @@ def tokenize(text: str) -> list:
     tokens = ''
     punctuation = set('!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~.')
 
-    for i in tokens:
+    for i in text.lower().split():
         if i in punctuation:
             tokens = tokens.replace(i, '')
-    tokens = tokens.lower()
-    tokens = tokens.split()
 
     return tokens
+
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
@@ -34,7 +33,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
 
-    tokens = [word for word in tokens if word not in stop_words] # добавляет соответствующее слово в список
+    tokens = [word for word in tokens if word not in stop_words]  # добавляет соответствующее слово в список
 
     return tokens
 
@@ -48,13 +47,7 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
 
-    freq_dict = {}
-
-    for i in tokens:
-        if i in freq_dict:
-            freq_dict[i] += 1
-        else:
-            freq_dict[i] = 1
+    freq_dict = {word: tokens.count(word) for word in tokens}
 
     return freq_dict
 
@@ -70,7 +63,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
 
-    sorted_dict = dict(sorted(freq_dict.items(), key=lambda item: item[1], reverse=True)) # упорядочим элементы словаря по значениям
+    sorted_dict = dict(
+        sorted(freq_dict.items(), key=lambda item: item[1], reverse=True))  # упорядочим элементы словаря по значениям
     sorted_dict = list(sorted_dict.keys())
 
     if top_n >= 0:
@@ -79,6 +73,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         common_words = []
 
     return common_words
+
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
@@ -112,7 +107,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         [concordance.append(tokens[i - left_context_size: i + 1]) for i in indexes]
     elif right_context_size > 0:
         [concordance.append(tokens[i: i + right_context_size + 1]) for i in indexes]
-
+# can i not change these lines? it works anyway.
     return concordance
 
 
@@ -149,8 +144,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
 
@@ -159,12 +154,10 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    with open(path_to_file, 'w', encoding='utf-8') as file:
-        for context in content:
-            context = ' '.join(context)
-            context += '\n'
-            file.write(context)
+    output_file = [' '.join(i) for i in content]
 
+    with open(path_to_file, 'w', encoding='utf-8') as file:
+        file.write('\n'.join(output_file))
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
     """
