@@ -16,8 +16,7 @@ def tokenize(text: str) -> list:
     if text and isinstance(text, str):
         tokens = re.sub('[^a-zA-Z \n]', '', text).lower()
         return tokens.split()
-    else:
-        return []
+    return []
 
 
 
@@ -37,11 +36,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
                 return []
 
         if stop_words and isinstance(stop_words, list):
-            tokens = [i for i in tokens if i not in stop_words and i.isalpha]
-
+            tokens = [word for word in tokens if word not in stop_words]
         return tokens
-    else:
-        return []
+    return []
+
 
 def calculate_frequencies(tokens: list) -> dict:
     """
@@ -76,7 +74,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
 
     common_words = []
 
-    if isinstance(freq_dict, dict) and isinstance(top_n, int) and freq_dict and top_n >= 0:
+    if isinstance(freq_dict, dict) and isinstance(top_n, int) and freq_dict and top_n > 0:
         sorted_dict = dict(sorted(freq_dict.items(), key=lambda item: item[1], reverse=True))
         sorted_dict = list(sorted_dict.keys())
         common_words = sorted_dict[:top_n]
@@ -103,11 +101,12 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     concordance = []
 
-    if isinstance(left_context_size, bool) and isinstance(right_context_size, bool):
-        return []
+    #    if isinstance(left_context_size, bool) and isinstance(right_context_size, bool):
+    #        return []
 
-    elif isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int) and isinstance(
-            right_context_size, int):
+    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int) and isinstance(
+            right_context_size, int) and not isinstance(left_context_size, bool) and not isinstance(right_context_size,
+                                                                                                    bool):
         list_index = [i for i, x in enumerate(tokens) if x == word]
 
         if left_context_size > 0 and right_context_size > 0:
@@ -118,8 +117,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             [concordance.append(tokens[i: i + right_context_size + 1]) for i in list_index]
 
         return concordance
-    else:
-        return []
+    return []
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
@@ -138,21 +136,19 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
     concordance = []
 
-    if isinstance(left_n, bool) and isinstance(right_n, bool):
-        return []
-
-    elif isinstance(tokens, list) and isinstance(word, str):
+    if isinstance(tokens, list) and isinstance(word, str) and not isinstance(left_n, bool) and not isinstance(right_n,
+                                                                                                              bool) and (
+            isinstance(left_n, int) or isinstance(right_n, int)):
         for i in get_concordance(tokens, word, left_n, right_n):
-            if isinstance(left_n, int) and isinstance(right_n, int) and left_n > 0 and right_n > 0:
+            if left_n > 0 and right_n > 0:
                 concordance.append([i[0], i[-1]])
-            elif isinstance(left_n, int) and left_n > 0 and (not isinstance(right_n, int) or right_n <= 0):
+            elif left_n > 0:
                 concordance.append([i[0]])
-            elif isinstance(right_n, int) and right_n > 0 and (not isinstance(left_n, int) or left_n <= 0):
+            elif right_n > 0:
                 concordance.append([i[-1]])
 
-        return concordance
-    else:
-        return []
+    return concordance
+
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -204,8 +200,4 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
                                  key=lambda words: words[left_context_size + 1])
         elif right_context_size <= 0 and not left_sort:
             return []
-        return concordance
-
-    else:
-        return []
-
+    return concordance
