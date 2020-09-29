@@ -29,20 +29,20 @@ stop_words = stop_words.split()
 
 tokens = text
 def remove_stop_words(tokens: list, stop_words: list) -> list:
+    """
+        Removes stop words
+        :param tokens: a list of tokens
+        :param stop_words: a list of stop words
+        :return: a list of tokens without stop words
+        e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+        stop_words = ['the', 'is']
+        --> ['weather', 'sunny', 'man', 'happy']
+        """
     for token in text:
         if token in stop_words:
             text.remove()
-    print(text)
     return text
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    stop_words = ['the', 'is']
-    --> ['weather', 'sunny', 'man', 'happy']
-    """
+
 
 remove_stop_words(text, stop_words)
 def calculate_frequencies(tokens: list) -> dict:
