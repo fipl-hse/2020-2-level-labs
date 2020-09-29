@@ -1,38 +1,27 @@
-"""
-Lab 1
-A concordance extraction
-"""
-
+num = "1 2 3 4 5 6 7 8 9 0"
+punc = " ',:@.-()/"
 import re
-def tokenize():
-    word = ''
-    f = open('data.txt', 'r')
-    for line in f:
-        for word in line.split():
-            for i in line:
-                if i.isalpha():
-                    word += i
-                else:
-                    if word:
-                        print(word.lower())
+def tokenize(text: str) -> list:
+    if type(text) != str: #проверяем, строка ли это
+        return []
+ for i in punc:
+    text = text.replace(i, ' ') #убираем знаки препинания
+    text = text.lower() #переводим текст в нижний регистр
+    for i in num:
+        text = text.replace(i, ' ') #убираем числительные
+        tokenize_list = text.split()
+return tokenize_list
 
-                        word = ''
-tokenize()
-pass
 
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    stop_words = ['the', 'is']
-    --> ['weather', 'sunny', 'man', 'happy']
-    """
-    pass
+    if isinstance(tokenize_list, list) and isinstance(stop_words, list): #проверяем, списки ли это
+        for i in stop_words:
+            if i not in stop_words: #проверяем входит ли слово в список стоп-слов
+                tokenize_list.append(i)
+            return tokenize_list
+pass
 
 
 def calculate_frequencies(tokens: list) -> dict:
