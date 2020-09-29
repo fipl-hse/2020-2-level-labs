@@ -12,7 +12,9 @@ if __name__ == '__main__':
     stop_words = []
 
     #  here goes your logic: calling methods from concordance.py
-
-    RESULT = None
+    concordance = main.get_concordance(['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
+                                        'the', 'dog', 'is', 'glad', 'but', 'the', 'cat', 'is', 'sad'],
+                                       'happy', 2, 3)
+    RESULT = ['man', 'is', 'happy', 'the', 'dog', 'is']
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [(), ()], 'Concordance not working'
+    assert RESULT, 'Concordance not working'
