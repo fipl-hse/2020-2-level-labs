@@ -132,14 +132,14 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                             except IndexError:
                                 break
                     subconcor.append(word)
-                if rcs_checked:
-                    shift = 1
-                    for _ in range(right_context_size):
-                        try:
-                            subconcor.append(tokens[index + shift])
-                            shift += 1
-                        except IndexError:
-                            break
+                    if rcs_checked:
+                        shift = 1
+                        for _ in range(right_context_size):
+                            try:
+                                subconcor.append(tokens[index + shift])
+                                shift += 1
+                            except IndexError:
+                                break
                 concordance.append(subconcor)
     return concordance
 
