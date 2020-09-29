@@ -1,38 +1,35 @@
-num = "1 2 3 4 5 6 7 8 9 0"
-punc = " ',:@.-()/"
 import re
 def tokenize(text: str) -> list:
-    if type(text) != str: #проверяем, строка ли это
+    if isinstance(text,str): #проверяем, строка ли это
         return []
- for i in punc:
-    text = text.replace(i, ' ') #убираем знаки препинания
-    text = text.lower() #переводим текст в нижний регистр
-    for i in num:
-        text = text.replace(i, ' ') #убираем числительные
-        tokenize_list = text.split()
-return tokenize_list
+    text = re.sub(r'[^A-Za-z 0-9]', '', text) # с помощью рег. выраж. убираю знаки препинания и числительные
+    tokenize_list = text.split().lower()
+    return tokenize_list
+pass
 
 
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     if isinstance(tokenize_list, list) and isinstance(stop_words, list): #проверяем, списки ли это
-        for i in stop_words:
-            if i not in stop_words: #проверяем входит ли слово в список стоп-слов
-                tokenize_list.append(i)
+        for token in stop_words:
+            if token not in stop_words: #проверяем входит ли слово в список стоп-слов
+                tokenize_list.append(token)
             return tokenize_list
 pass
 
 
 def calculate_frequencies(tokens: list) -> dict:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens without stop words
-    :return: a dictionary with frequencies
-    e.g. tokens = ['weather', 'sunny', 'man', 'happy']
-    --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
-    """
-    pass
+    if isinstance(tokenize_list, list):
+        return {}
+    dict = {}
+    for token in tokenize_list:
+        if token in dict:
+            dict[token] += 1
+        else:
+            dict[token] = 1
+    return dict
+pass
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
