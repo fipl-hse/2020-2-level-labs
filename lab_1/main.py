@@ -82,6 +82,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
     top = []
+
     if isinstance(freq_dict, dict):
         freq = list(freq_dict.items())
         freq_s = sorted(freq, key=lambda num: num[1], reverse=True)
@@ -153,7 +154,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             and left_n >= 0 and right_n >= 0:
 
         for i in range(tokens.count(word)):
-            if tokens.index(word) == 0:
+            if not tokens.index(word):
                 concordance = [tokens[right_n]]
             else:
                 index_word = tokens.index(word, index_word + 1, len(tokens))
@@ -186,6 +187,9 @@ def read_from_file(path_to_file: str) -> str:
 
 
 def write_to_file(path_to_file: str, content: list):
+    """
+    Writes the result in a file
+    """
     with open(path_to_file, "w", encoding="utf-8") as fs:
         fs.write(" ".join(content))
 
