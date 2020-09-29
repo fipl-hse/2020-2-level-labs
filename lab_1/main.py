@@ -174,7 +174,14 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+    concordance_text = []
+    for concordance in content:
+        concordance_str = ' '.join(concordance)
+        concordance_text.append(concordance_str)
+    concordance_text = '\n'.join(concordance_text)
+    fail_concordance = open(path_to_file, 'w')
+    fail_concordance.write(concordance_text)
+    fail_concordance.close()
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
