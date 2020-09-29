@@ -63,10 +63,11 @@ def calculate_frequencies(tokens: list) -> dict:
         pass
     else:
         for token in tokens:
-            if token not in frequencies:
-                frequencies[token] = 1
-            else:
-                frequencies[token] += 1
+            if type(token) == str:
+                if token not in frequencies:
+                    frequencies[token] = 1
+                else:
+                    frequencies[token] += 1
     return frequencies
 
 
