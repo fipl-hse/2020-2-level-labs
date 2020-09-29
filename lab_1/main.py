@@ -3,26 +3,29 @@ Lab 1
 A concordance extraction
 """
 
+
 def tokenize(text):
     if type(text) == str:
         text = text.lower()
         for symbol in text:
-            if symbol.isalpha() == False and symbol != ' ' and symbol != '\n':
+            if symbol.isalpha() is False and symbol != ' ' and symbol != '\n':
                 text = text.replace(symbol, '')
             elif symbol == '\n':
                 text = text.replace(symbol, ' ')
         tokens_list = text.split()
-        return (tokens_list)
-    else: return []
+        return tokens_list
+    else:
+        return []
 
 
-def remove_stop_words(tokens_list,stop_words):
+def remove_stop_words(tokens_list, stop_words):
     if type(tokens_list) == list and type(stop_words) == list:
         for word in stop_words:
             while word in tokens_list:
                 tokens_list.remove(word)
         return tokens_list
-    else: return []
+    else:
+        return []
 
 
 def calculate_frequencies(tokens_list):
@@ -31,9 +34,11 @@ def calculate_frequencies(tokens_list):
         for token in tokens_list:
             if token in frequency_dictionary:
                 frequency_dictionary[token] += 1
-            else: frequency_dictionary[token] = 1
-        return(frequency_dictionary)
-    else: return {}
+            else:
+                frequency_dictionary[token] = 1
+        return frequency_dictionary
+    else:
+        return {}
 
 
 def get_top_n_words(frequency_dictionary, top_n):
@@ -47,26 +52,31 @@ def get_top_n_words(frequency_dictionary, top_n):
                 top_tokens.insert(0, key)
             elif value == check_value:
                 top_tokens.insert(1, key)
-            else: top_tokens.append(key)
+            else:
+                top_tokens.append(key)
         if top_n > len(top_tokens):
-            return (top_tokens)
+            return top_tokens
         else:
             for index in range(top_n):
                 top_n_tokens.append(top_tokens[index])
-            return (top_n_tokens)
-    else: return []
+            return top_n_tokens
+    else:
+        return []
 
 
-def get_concordance(tokens_list,word,left_context_size,right_context_size):
+def get_concordance(tokens_list, word, left_context_size, right_context_size):
     concordance = []
-    correct_circumstance = (word != '') and (type(word) == str) and (tokens_list != []) and (type(tokens_list) == list) and (None not in tokens_list)\
-                               and (type(left_context_size) == int) and (type(right_context_size) == int) and (left_context_size >= 1 or right_context_size >= 1)
+    correct_circumstance = word != '' and type(word) == str and tokens_list != [] \
+     and type(tokens_list) == list and None not in tokens_list \
+     and type(left_context_size) == int and type(right_context_size) == int \
+     and (left_context_size >= 1 or right_context_size >= 1)
     if correct_circumstance:
-        for index,token in enumerate(tokens_list):
+        for index, token in enumerate(tokens_list):
             if token == word:
                 concordance.extend([tokens_list[index - left_context_size:index + right_context_size + 1:1]])
-        return (concordance)
-    else: return []
+        return concordance
+    else:
+        return []
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
