@@ -100,13 +100,11 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     concordance = []
+    statements = [isinstance(tokens, list), isinstance(word, str), isinstance(left_context_size, int),
+                  isinstance(right_context_size, int), not isinstance(left_context_size, bool),
+                  not isinstance(right_context_size, bool)]
 
-    #    if isinstance(left_context_size, bool) and isinstance(right_context_size, bool):
-    #        return []
-
-    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int) and isinstance(
-            right_context_size, int) and not isinstance(left_context_size, bool) and not isinstance(right_context_size,
-                                                                                                    bool):
+    if all(statements):
         list_index = [i for i, x in enumerate(tokens) if x == word]
 
         if left_context_size > 0 and right_context_size > 0:
@@ -135,10 +133,10 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     concordance = []
+    statements = [isinstance(tokens, list), isinstance(word, str), not isinstance(left_n, bool),
+                  not isinstance(right_n, bool)]
 
-    if isinstance(tokens, list) and isinstance(word, str) and not isinstance(left_n, bool) and not isinstance(right_n,
-                                                                                                              bool) and (
-            isinstance(left_n, int) or isinstance(right_n, int)):
+    if all(statements) and (isinstance(left_n, int) or isinstance(right_n, int)):
         for i in get_concordance(tokens, word, left_n, right_n):
             if left_n > 0 and right_n > 0:
                 concordance.append([i[0], i[-1]])
