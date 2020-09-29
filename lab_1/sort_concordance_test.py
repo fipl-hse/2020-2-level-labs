@@ -139,7 +139,7 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         Checks if contexts for a given term can be found in real text properly
         Taking into consideration right context
         """
-        text = read_from_file('data.txt')
+        text = read_from_file('lab_1/data.txt')
         tokens = tokenize(text)
 
         expected = [['means', 'sodium', 'aluminate'],
