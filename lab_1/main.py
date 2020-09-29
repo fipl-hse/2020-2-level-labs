@@ -130,6 +130,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                                 subconcor.append(tokens[index - left_context_size + shift])
                                 shift += 1
                             except IndexError:
+                                for _ in range(index):
+                                    subconcor.append(tokens[shift])
+                                    shift += 1
                                 break
                     subconcor.append(word)
                     if rcs_checked:
@@ -142,7 +145,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                                 break
                     concordance.append(subconcor)
     return concordance
-
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
