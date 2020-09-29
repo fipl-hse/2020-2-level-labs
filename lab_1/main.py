@@ -13,15 +13,15 @@ def tokenize():
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     raw = text.split()
-    wordlist = []
+    tokens = []
     for part in raw:
         cleaned = []
         for el in part:
             if el.isalpha():
                 cleaned.append(el.lower())
         if cleaned != []:
-            wordlist.append(''.join(cleaned))
-    return wordlist
+            tokens.append(''.join(cleaned))
+    return tokens
 tokenize()
 
 
@@ -35,8 +35,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
-
+    clean_tokens = []
+    if isinstance(tokens, list) and isinstance(stop_words, list):
+        for i in tokens:
+            if i not in stop_words:
+                clean_tokens.append(i)
+    else:
+        clean_tokens = []
+    return clean_tokens
 
 def calculate_frequencies(tokens: list) -> dict:
     """
@@ -46,7 +52,16 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
+    if not isinstance(tokens, list) or None in tokens:
+        return {}
+    freq_dict = {}
+    for token in tokens:
+        if token in freq_dict:
+            freq_dict[token] += 1
+        else:
+            freq_dict[token] = 1
+    return freq_dict
+
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -59,8 +74,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
-
+    sort_dict = []
+    if isinstance(freq_dict, dict) and top_n > 0:
+        sort_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
+        sort_dict = sort_dict[:top_n]
+    return sort_dict
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
