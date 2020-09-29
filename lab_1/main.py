@@ -15,10 +15,11 @@ def tokenize(text: str) -> list:
     if not isinstance(text, str):
         return []
     token_list = []
+    punctuation = """!"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~."""
     for i in text.split():
         if not i.isalpha():
             for s in i:
-                if not s.isalpha():
+                if s in punctuation:
                     i = i.replace(s, '')
         if i.isalpha():
             token_list.append(i.lower())
@@ -39,8 +40,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
         return []
     elif not isinstance(stop_words, list) or not stop_words:
         return tokens
-    tokens1 = [i for i in tokens if i not in stop_words]
-    return tokens1
+    return [i for i in tokens if i not in stop_words]
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -192,7 +192,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     if left_sort:
         word_index = 0
     else:
-        word_index = -1
+        word_index = - right_context_size
     sorted_concordance = []
     words_list = [i[word_index] for i in concordance]
     for i in sorted(words_list):
