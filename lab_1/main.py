@@ -3,16 +3,15 @@ Lab 1
 A concordance extraction
 """
 
-text = open('data.txt', encoding='utf-8').read()
-if type(text) is str:
-    def tokenize(text):
-        """
-        Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
-        :param text: the initial text
-        :return: a list of lowercased tokens without punctuation
-        e.g. text = 'The weather is sunny, the man is happy.'
-        --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-        """
+def tokenize(text):
+    """
+    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
+    :param text: the initial text
+    :return: a list of lowercased tokens without punctuation
+    e.g. text = 'The weather is sunny, the man is happy.'
+    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+    """
+    if type(text) is str:
         tokens = ''
         text = text.lower()
         if '\n' in text:
@@ -25,13 +24,11 @@ if type(text) is str:
         tokens = tokens.split(' ')
         while '' in tokens:
             tokens.remove('')
-        print(tokens)
         return tokens
-    tokenize(text)
-else:
-    print('[]')
+    else:
+        return []
 
-def remove_stop_words(tokens: list, stop_words: list) -> list:
+def remove_stop_words(tokens, stop_words):
     """
     Removes stop words
     :param tokens: a list of tokens
@@ -41,10 +38,21 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+    without_stop_words = []
+    stop_words2 = ''
+    if isinstance(tokens, list) and len(tokens) != 0 and len(stop_words) != 0 and isinstance(stop_words, list):
+        for n in tokens:
+            if n not in stop_words:
+                without_stop_words.append(n)
+        return without_stop_words
+    elif type(tokens) != list or len(tokens) == 0:
+        return []
+    elif type(stop_words) != list or len(stop_words) == 0:
+        return tokens
 
 
-def calculate_frequencies(tokens: list) -> dict:
+
+def calculate_frequencies(without_stop_words):
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens without stop words
@@ -52,10 +60,19 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
+    freq = {}
+    if isinstance(without_stop_words, list) and len(without_stop_words) > 1:
+        for i in without_stop_words:
+            num = without_stop_words.count(i)
+            element = {i : num}
+            freq.update(element)
+        return freq
+    else:
+        return {}
 
 
-def get_top_n_words(freq_dict: dict, top_n: int) -> list:
+
+def get_top_n_words(freq_dict, top_n):
     """
     Returns the most common words
     :param freq_dict: a dictionary with frequencies
@@ -65,10 +82,19 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+    top_n_words = []
+    if isinstance(freq_dict, dict) and isinstance(top_n, int):
+        freq_dict = list(freq_dict.items())
+        freq_dict.sort(reverse=True)
+        for i in freq_dict[:top_n]:
+            top_n_words.append(i[0])
+        return top_n_words
+    else:
+        return []
 
 
-def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
+
+def get_concordance(tokens, word, left_context_size, right_context_size):
     """
     Gets a concordance of a word
     A concordance is a listing of each occurrence of a word in a text,
@@ -82,10 +108,36 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                     'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
     word = 'happy'
     left_context_size = 2
-    right_context_size = 3
+    right_context_size = 3;
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    concordance1 = []
+    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int) \
+            and isinstance(right_context_size, int) and len(word) != 0 and len(tokens) > 1 and word in tokens:
+        num = tokens.index(word)
+        words = tokens.count(word)
+        if left_context_size > 1 and right_context_size > 1:
+            concordance = tokens[num - left_context_size:num] + tokens[num:num + right_context_size + 1]
+            concordance1.append(concordance)
+            if words > 1:
+                new_token = tokens[num + 1:]
+                new_num = new_token.index(word) + num + 1
+                new_concordance = tokens[new_num - left_context_size:new_num] + tokens[new_num:new_num + right_context_size + 1]
+                concordance1.append(new_concordance)
+            return concordance1
+        elif left_context_size < 1 and right_context_size >= 1:
+            concordance = tokens[num:num + right_context_size + 1]
+            concordance1.append(concordance)
+            return concordance1
+        elif right_context_size < 1 and left_context_size >= 1:
+            concordance = tokens[num - left_context_size:num + 1]
+            concordance1.append(concordance)
+            return concordance1
+        else:
+            return []
+    else:
+        return []
+
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
