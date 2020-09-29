@@ -17,9 +17,9 @@ def tokenize(text: str) -> list:
     symbols = "'-"
     for symbol in symbols:
         text = text.replace(symbol, "")
-    raw = text.split()
+    text = text.split()
     wordlist = []
-    for element in raw:
+    for element in text:
         if element.isalpha():
             wordlist.append(element.lower())
     return wordlist
@@ -76,7 +76,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         freq_and_word.append([v, k])
     freq_and_word.sort(reverse=True)
     if top_n <= len(freq_and_word):
-        for index, element in enumerate(freq_and_word):
+        for element in freq_and_word:
             if counter < top_n:
                 top_words.append(element[1])
                 counter += 1
@@ -112,9 +112,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     for index in word_index:
         if left_context_size > 0 and right_context_size > 0:
             concordance.append(tokens[index - left_context_size: index + right_context_size + 1])
-        elif left_context_size > 0 and not right_context_size > 0:
+        elif left_context_size > 0:
             concordance.append(tokens[index-left_context_size:index])
-        elif not left_context_size > 0 and right_context_size > 0:
+        elif right_context_size > 0:
             concordance.append(tokens[index: index + right_context_size + 1])
     return concordance
 
