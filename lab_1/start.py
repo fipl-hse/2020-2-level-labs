@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     main.write_to_file('report.txt', sorted_concordance)
 
-    RESULT = sorted_concordance
+    RESULT = sorted_concordance[:3]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [['corresponds', 'assigning', 'book', 'a', 'unique', 'identifier'],
                       ['book', 'refer', 'book', 'a', 'relative', 'victim'],
