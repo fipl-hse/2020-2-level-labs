@@ -19,7 +19,7 @@ def tokenize(text: str) -> list:
         return []
     #  table = str.maketrans({p: None for p in string.punctuation})
     #  output = text.translate(table)
-    return = ''.join([char for char in text.lower()
+    return ''.join([char for char in text.lower()
         if char.isalnum() or char.isspace()]).split()
 
 
