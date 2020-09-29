@@ -201,4 +201,29 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    pass
+    wrong_circumstance = word == '' or not type(word) == str or tokens == [] \
+                         or not type(tokens) == list or None in tokens \
+                         or not type(left_context_size) == int or not type(right_context_size) == int \
+                         or (left_context_size < 1 and right_context_size < 1) or not type(left_sort) == bool \
+                         or (left_sort is True and left_context_size == -1) \
+                         or (left_sort is False and right_context_size == -1)
+    if wrong_circumstance: return []
+    concordance_list = get_concordance(tokens, word, left_context_size, right_context_size)
+    sorted_concordance_list = []
+    first_letter = 'a'
+    for concordance in concordance_list:
+        if left_sort is True:
+            lexema = concordance[0]
+            letter = lexema[0]
+            if letter > first_letter:
+                sorted_concordance_list.insert(0, concordance)
+                first_letter = letter
+            else: sorted_concordance_list.insert(-1, concordance)
+        else:
+            lexema = concordance[left_context_size + 1]
+            letter = lexema[0]
+            if letter > first_letter:
+                sorted_concordance_list.insert(0, concordance)
+                first_letter = letter
+            else: sorted_concordance_list.insert(-1, concordance)
+    return sorted_concordance_list
