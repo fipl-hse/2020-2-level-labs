@@ -43,7 +43,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     if type(tokens) != list:
         scraped = []
     else:
-        if stop_words != list:
+        if type(stop_words) != list:
             return tokens
         else:
             scraped = [token for token in tokens if token not in stop_words]
