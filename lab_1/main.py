@@ -94,11 +94,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     tokens = []
     if isinstance(freq_dict, dict):
-        sorted_dict = sorted(freq_dict.items(), key=lambda x: x[1], reverse=True)
-        # print(sorted_dict)
-        for i in sorted_dict:
-            tokens.append(i[0])
-    return tokens[:top_n]
+        # sorted_dict = sorted(d.items(), key=lambda x: x[1], reverse=True)
+        st = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
+        return st
+    else:
+        return []
 
 #tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
                     #'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']

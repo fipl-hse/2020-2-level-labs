@@ -17,13 +17,13 @@ if __name__ == '__main__':
 
     token_stw = main.remove_stop_words(tokens, stop_words)
 
-    freq = main.calculate_frequencies(tokens[:20])
+    freq = main.calculate_frequencies(token_stw[:20])
 
     top_words = main.get_top_n_words(freq, 2)
 
     concordance = main.get_concordance(token_stw[:20], 'team', 1, 1)
 
-    adj_words = main.get_adjacent_words(tokens, 'team', 2, 2)
+    adj_words = main.get_adjacent_words(token_stw, 'team', 2, 2)
 
     file = main.read_from_file('report.txt', concordance)
 
@@ -32,4 +32,5 @@ if __name__ == '__main__':
 
     RESULT = tokens
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == ['years', 'of', 'time', 'team', 'presented', 'a', 'roundup', 'of', 'what', 'has'],'Concordance not working'
+    assert RESULT == ['years', 'of', 'time', 'team', 'presented', 'a', 'roundup', 'of', 'what', 'has'],\
+        'Concordance not working'
