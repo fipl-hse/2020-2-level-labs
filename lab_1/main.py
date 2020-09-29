@@ -20,8 +20,6 @@ def tokenize(text: str) -> list:
             for symbol in word:
                 if symbol.isalpha():
                     token.append(symbol)
-                elif symbol.isdigit():
-                    return []
             if len(token):
                 tokens.append("".join(token))
         tokens = [token.lower() for token in tokens]
