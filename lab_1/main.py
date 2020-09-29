@@ -22,7 +22,8 @@ def tokenize(text: str) -> list:
                     token.append(symbol)
                 elif symbol.isdigit() or symbol in '%$#№@*&^':
                     return []
-            tokens.append("".join(token))
+            if len(token):
+                tokens.append("".join(token))
         tokens = [token.lower() for token in tokens]
     else:
         tokens = []
