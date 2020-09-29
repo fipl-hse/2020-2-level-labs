@@ -17,7 +17,7 @@ def tokenize(text: str) -> list:
         return []
 
     modified_text = text.lower()
-    modified_text = sub(r'[^A-Za-z0-9\s]', '', modified_text)
+    modified_text = sub(r'[^A-Za-z\s]', '', modified_text)
     modified_text = modified_text.split()
 
     return modified_text
