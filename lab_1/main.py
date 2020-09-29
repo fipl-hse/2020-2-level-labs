@@ -106,22 +106,33 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     concordance = []
+    lcs_checked = False
+    rcs_checked = False
     if type(tokens) != list or type(word) != str:
         pass
     else:
-        for index, item in enumerate(tokens):
-            if item == word:
-                subconcor = []
-                if type(left_context_size) == int:
-                    shift = 1
-                    for _ in range(left_context_size):
-                        try:
-                            subconcor.append(tokens[index - shift])
-                            shift += 1
-                        except IndexError:
-                            break
-                subconcor.append(word)
-                if type(right_context_size) == int:
+        if type(left_context_size) == int:
+            if left_context_size >= 1:
+                lcs_checked = True
+        if type(right_context_size) == int:
+            if right_context_size >= 1:
+                rcs_checked = True
+        if not rcs_checked and not lcs_checked:
+            pass
+        else:
+            for index, item in enumerate(tokens):
+                if item == word:
+                    subconcor = []
+                    if lcs_checked:
+                        shift = 1
+                        for _ in range(left_context_size):
+                            try:
+                                subconcor.append(tokens[index - shift])
+                                shift += 1
+                            except IndexError:
+                                break
+                    subconcor.append(word)
+                if rcs_checked:
                     shift = 1
                     for _ in range(right_context_size):
                         try:
