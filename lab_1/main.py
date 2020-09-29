@@ -111,7 +111,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if not isinstance(tokens, list) or not isinstance(word, str)\
             or None in tokens:
         return []
-    if left_context_size is True or right_context_size is True\
+    if left_context_size or right_context_size\
             or not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
         return []
 
@@ -149,9 +149,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     contexts = get_concordance(tokens, word, left_n, right_n)
     adjacent_words = []
     for context in contexts:
-        if left_n == 0:
+        if not left_n:
             adjacent_words.append([context[-1]])
-        elif right_n == 0:
+        elif not right_n:
             adjacent_words.append([context[0]])
         else:
             adjacent_words.append([context[0], context[-1]])
