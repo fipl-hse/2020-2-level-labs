@@ -12,18 +12,17 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    if isinstance(text, str):
-        token_list = []
-        for i in text.split():
-            if not i.isalpha():
-                for s in i:
-                    if not s.isalpha():
-                        i = i.replace(s, '')
-            if i.isalpha():
-                token_list.append(i.lower())
-        return token_list
-    else:
+    if not isinstance(text, str):
         return []
+    token_list = []
+    for i in text.split():
+        if not i.isalpha():
+            for s in i:
+                if not s.isalpha():
+                    i = i.replace(s, '')
+        if i.isalpha():
+            token_list.append(i.lower())
+    return token_list
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -40,9 +39,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
         return []
     elif not isinstance(stop_words, list) or not stop_words:
         return tokens
-    else:
-        tokens1 = [i for i in tokens if i not in stop_words]
-        return tokens1
+    tokens1 = [i for i in tokens if i not in stop_words]
+    return tokens1
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -55,12 +53,11 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     if not isinstance(tokens, list) or not all(isinstance(i, str) for i in tokens):
         return {}
-    else:
-        freq_dict = {}
-        for i in tokens:
-            if i not in freq_dict:
-                freq_dict[i] = tokens.count(i)
-        return freq_dict
+    freq_dict = {}
+    for i in tokens:
+        if i not in freq_dict:
+            freq_dict[i] = tokens.count(i)
+    return freq_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -73,22 +70,21 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    if isinstance(freq_dict, dict) and isinstance(top_n, int) and top_n >= 0:
-        word_list = []
-        freq_list = []
-        top_n_words_list = []
-        for k, v in freq_dict.items():
-            word_list.append(k)
-            freq_list.append(v)
-        if top_n > len(word_list):
-            top_n = len(word_list)
-        for i in range(top_n):
-            max_num_index = freq_list.index(max(freq_list))
-            freq_list[max_num_index] = 0
-            top_n_words_list.append(word_list[max_num_index])
-        return top_n_words_list
-    else:
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or top_n < 0:
         return []
+    word_list = []
+    freq_list = []
+    top_n_words_list = []
+    for k, v in freq_dict.items():
+        word_list.append(k)
+        freq_list.append(v)
+    if top_n > len(word_list):
+        top_n = len(word_list)
+    for i in range(top_n):
+        max_num_index = freq_list.index(max(freq_list))
+        freq_list[max_num_index] = 0
+        top_n_words_list.append(word_list[max_num_index])
+    return top_n_words_list
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -112,18 +108,17 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             type(left_context_size) is not int or type(right_context_size) is not int or
             (left_context_size < 1 and right_context_size < 1)):
         return []
-    else:
-        concordance = []
-        if left_context_size < 0:
-            left_context_size = 0
-        elif right_context_size < 0:
-            right_context_size = 0
-        for i in tokens:
-            if i == word:
-                word_index = tokens.index(i)
-                concordance.append(tokens[word_index - left_context_size: word_index + right_context_size + 1])
-                tokens.remove(i)
-        return concordance
+    concordance = []
+    if left_context_size < 0:
+        left_context_size = 0
+    elif right_context_size < 0:
+        right_context_size = 0
+    for i in tokens:
+        if i == word:
+            word_index = tokens.index(i)
+            concordance.append(tokens[word_index - left_context_size: word_index + right_context_size + 1])
+            tokens.remove(i)
+    return concordance
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -194,17 +189,16 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     concordance = get_concordance(tokens, word, left_context_size, right_context_size)
     if type(left_sort) is not bool:
         return []
+    if left_sort:
+        word_index = 0
     else:
-        if left_sort:
-            word_index = 0
-        else:
-            word_index = -1
-        sorted_concordance = []
-        words_list = [i[word_index] for i in concordance]
-        for i in sorted(words_list):
-            for l in concordance:
-                if i == l[word_index]:
-                    sorted_concordance.append(l)
-                    concordance.remove(l)
-                    break
-        return sorted_concordance
+        word_index = -1
+    sorted_concordance = []
+    words_list = [i[word_index] for i in concordance]
+    for i in sorted(words_list):
+        for l in concordance:
+            if i == l[word_index]:
+                sorted_concordance.append(l)
+                concordance.remove(l)
+                break
+    return sorted_concordance
