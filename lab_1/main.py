@@ -35,7 +35,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     if not isinstance(tokens, list):
         return []
-    elif not isinstance(stop_words, list):
+    if not isinstance(stop_words, list):
         return tokens
     return [word for word in tokens if word not in stop_words]
 
@@ -70,8 +70,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return []
-    else:
-        return sorted(freq_dict, key=freq_dict.get,
+
+    return sorted(freq_dict, key=freq_dict.get,
             reverse=True)[:top_n]
 
 
@@ -97,11 +97,12 @@ def get_concordance(tokens: list,
     """
     lcs = left_context_size
     rcs = right_context_size
-    if (not isinstance(tokens, list) or
-        word not in tokens or 
-        not (isinstance(lcs, int) and isinstance(rcs, int)) or
-        (isinstance(lcs, bool) and isinstance(rcs, bool)) or
-        (lcs < 1 and rcs < 1)):
+    checks = (not isinstance(tokens, list) or
+              word not in tokens or
+              not (isinstance(lcs, int) and isinstance(rcs, int)) or
+              (isinstance(lcs, bool) and isinstance(rcs, bool)) or
+              (lcs < 1 and rcs < 1))
+    if checks:
         return []
 
     idx = [i for i, x in enumerate(tokens) if x == word]
@@ -109,10 +110,10 @@ def get_concordance(tokens: list,
     if lcs > 0 and rcs > 0:
         return [tokens[i-lcs:i+rcs+1] for i in idx]
 
-    elif not lcs > 0 and rcs > 0:
+    if not lcs > 0 and rcs > 0:
         return [tokens[i:i+rcs+1] for i in idx]
 
-    elif lcs > 0 and not rcs > 0:
+    if lcs > 0 and not rcs > 0:
         return [tokens[i-lcs:i+1] for i in idx]
 
 
@@ -136,11 +137,11 @@ def get_adjacent_words(tokens: list,
     """
     if not left_n and not right_n:
         return []
-    
+
     conc = get_concordance(tokens, word, left_n, right_n)
     if not left_n:
         return [[elem[-1]] for elem in conc]
-    elif not right_n:
+    if not right_n:
         return [[elem[0]] for elem in conc]
     return [[elem[0], elem[-1]] for elem in conc]
 
@@ -189,15 +190,16 @@ def sort_concordance(tokens: list,
     rcs = right_context_size
 
     # validate inputs
-    if (not isinstance(left_sort, bool) or
-        not (isinstance(lcs, int) or isinstance(rcs, int)) or
-        (left_sort and lcs < 1) or
-        (not left_sort and rcs < 1)):
+    checks = (not isinstance(left_sort, bool) or
+              not (isinstance(lcs, int) or isinstance(rcs, int)) or
+              (left_sort and lcs < 1) or
+              (not left_sort and rcs < 1))
+    if checks:
         return []
 
     # logic starts here
     conc = get_concordance(tokens, word, lcs, rcs)  # list of lists of strs
     if left_sort and lcs > 0:
         return sorted(conc)
-    elif not left_sort and rcs > 0:
+    if not left_sort and rcs > 0:
         return sorted(conc, key=lambda x: x[conc[0].index(word) + 1])
