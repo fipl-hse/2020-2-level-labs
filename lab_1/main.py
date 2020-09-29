@@ -63,8 +63,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    tokens_rate = []
-    for k,v in freq_dict.items():
+    pass
 
 
 
