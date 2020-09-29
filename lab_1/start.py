@@ -42,4 +42,4 @@ if __name__ == '__main__':
     assert RESULT == [['corresponds', 'assigning', 'book', 'a', 'unique', 'identifier'],
                       ['book', 'refer', 'book', 'a', 'relative', 'victim'],
                       ['aerospace', 'source', 'book', 'a', 'village',
-                       'voice']], 'Concordance not working'  # result == то, что ожидаем от функции?
+                       'voice']], 'Concordance not working'
