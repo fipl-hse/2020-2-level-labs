@@ -190,7 +190,9 @@ def sort_concordance(tokens: list,
 
     # validate inputs
     if (not isinstance(left_sort, bool) or
-        not (isinstance(lcs, int) or isinstance(rcs, int))):
+        not (isinstance(lcs, int) or isinstance(rcs, int)) or
+        (left_sort and lcs < 1) or
+        (not left_sort and rcs < 1)):
         return []
 
     # logic starts here
@@ -198,4 +200,4 @@ def sort_concordance(tokens: list,
     if left_sort and lcs > 0:
         return sorted(conc)
     elif not left_sort and rcs > 0:
-        return sorted(conc, key=lambda x: x[tokens.index(word) + 1])
+        return sorted(conc, key=lambda x: x[conc[0].index(word) + 1])
