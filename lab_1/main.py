@@ -115,6 +115,7 @@ def get_concordance(tokens: list,
 
     if lcs > 0 and not rcs > 0:
         return [tokens[i-lcs:i+1] for i in idx]
+    return []
 
 
 def get_adjacent_words(tokens: list,
@@ -203,3 +204,4 @@ def sort_concordance(tokens: list,
         return sorted(conc)
     if not left_sort and rcs > 0:
         return sorted(conc, key=lambda x: x[conc[0].index(word) + 1])
+    return []
