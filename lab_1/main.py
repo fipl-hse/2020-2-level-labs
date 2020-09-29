@@ -73,10 +73,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    word_list = []
-    freq_list = []
-    top_n_words_list = []
     if isinstance(freq_dict, dict) and isinstance(top_n, int) and top_n >= 0:
+        word_list = []
+        freq_list = []
+        top_n_words_list = []
         for k, v in freq_dict.items():
             word_list.append(k)
             freq_list.append(v)
@@ -120,8 +120,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             right_context_size = 0
         for i in tokens:
             if i == word:
-                w_ind = tokens.index(i)
-                concordance.append(tokens[w_ind - left_context_size: w_ind + right_context_size + 1])
+                word_index = tokens.index(i)
+                concordance.append(tokens[word_index - left_context_size: word_index + right_context_size + 1])
                 tokens.remove(i)
         return concordance
 
@@ -192,23 +192,18 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     concordance = get_concordance(tokens, word, left_context_size, right_context_size)
-    sorted_concordance = []
     if type(left_sort) is not bool:
         return []
-    elif left_sort:
-        left_words_list = [i[0] for i in concordance]
-        for i in sorted(left_words_list):
-            for l in concordance:
-                if i == l[0]:
-                    sorted_concordance.append(l)
-                    concordance.remove(l)
-                    break
-        return sorted_concordance
     else:
-        right_words_list = [i[-1] for i in concordance]
-        for i in sorted(right_words_list):
+        if left_sort:
+            word_index = 0
+        else:
+            word_index = -1
+        sorted_concordance = []
+        words_list = [i[word_index] for i in concordance]
+        for i in sorted(words_list):
             for l in concordance:
-                if i == l[-1]:
+                if i == l[word_index]:
                     sorted_concordance.append(l)
                     concordance.remove(l)
                     break
