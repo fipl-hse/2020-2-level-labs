@@ -139,7 +139,7 @@ def get_adjacent_words(tokens: list,
         return []
     
     conc = get_concordance(tokens, word, left_n, right_n)
-    elif not left_n:
+    if not left_n:
         return [[elem[-1]] for elem in conc]
     elif not right_n:
         return [[elem[0]] for elem in conc]
