@@ -100,22 +100,19 @@ def get_concordance(tokens: list,
     if (not isinstance(tokens, list) or
         word not in tokens or 
         not (isinstance(lcs, int) and isinstance(rcs, int)) or
-        (isinstance(lcs, bool) and isinstance(rcs, bool))):
+        (isinstance(lcs, bool) and isinstance(rcs, bool)) or
+        (lcs < 1 and rcs < 1)):
         return []
-
-    check_l = lcs > 0
-
-    check_r = rcs > 0
 
     idx = [i for i, x in enumerate(tokens) if x == word]
 
-    if check_l and check_r:
+    if lcs > 0 and rcs > 0:
         return [tokens[i-lcs:i+rcs+1] for i in idx]
 
-    elif not check_l and check_r:
+    elif not lcs > 0 and rcs > 0:
         return [tokens[i:i+rcs+1] for i in idx]
 
-    elif check_l and not check_r:
+    elif lcs > 0 and not rcs > 0:
         return [tokens[i-lcs:i+1] for i in idx]
 
 
