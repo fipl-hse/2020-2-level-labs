@@ -65,7 +65,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
        top_n = 1
        --> ['happy']
        """
-    if (isinstance(freq_dict, dict) and isinstance(top_n, int)):
+    if isinstance(freq_dict, dict) and isinstance(top_n, int):
         list_of_items = list(freq_dict.items())
         list_of_items.sort(key=lambda x: x[1], reverse=True)
         top_n_words = []
