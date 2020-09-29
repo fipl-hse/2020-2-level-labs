@@ -4,20 +4,6 @@ A concordance extraction
 """
 
 
-def read_from_file(path_to_file: str) -> str:
-    """
-    Opens the file and reads its content
-    :return: the initial text in string format
-    """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
-
-    return data
-
-
-text = read_from_file('data.txt')
-
-
 def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
@@ -40,13 +26,6 @@ def tokenize(text: str) -> list:
             new_text += symbol
     tokens = new_text.split()
     return tokens
-
-
-tokens = tokenize(text)
-
-
-stop_words = read_from_file('stop_words.txt')
-stop_words = stop_words.split('\n')
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -72,9 +51,6 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     return tokens
 
 
-tokens = remove_stop_words(tokens, stop_words)
-
-
 def calculate_frequencies(tokens: list) -> dict:
     """
     Calculates frequencies of given tokens
@@ -94,10 +70,6 @@ def calculate_frequencies(tokens: list) -> dict:
             frequency = tokens.count(token)
             freq_dict[token] = frequency
     return freq_dict
-
-
-freq_dict = calculate_frequencies(tokens)
-top_n = 3
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -127,19 +99,12 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top = values_of_words[:top_n]
     #
     top_words = []  # can be words with the same frequency
-    for i in top:
+    for element in top:
         for word, frequency in freq_dict.items():
-            if i == frequency:
+            if element == frequency:
                 top_words.append(word)
     top_words = top_words[: top_n]  # unique
     return top_words
-
-
-top_words = get_top_n_words(freq_dict, top_n)
-
-left_context_size = 2
-right_context_size = 3
-word = 'happy'
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -187,9 +152,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     return concordance
 
 
-get_concordance(tokens, word, left_context_size, right_context_size)
-
-
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
     Gets adjacent words from the left and right context
@@ -206,6 +168,17 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     pass
+
+
+def read_from_file(path_to_file: str) -> str:
+    """
+    Opens the file and reads its content
+    :return: the initial text in string format
+    """
+    with open(path_to_file, 'r', encoding='utf-8') as fs:
+        data = fs.read()
+
+    return data
 
 
 def write_to_file(path_to_file: str, content: list):
