@@ -28,9 +28,8 @@ def tokenize(text: str) -> list:
       --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
       """
     tokens = []
-
     for token in text.lower().split():
-        token = "".join([_ for _ in token if _.isalpha()])
+        token = "".join([letter for letter in token if letter.isalpha()])
         tokens.append(token)
     return tokens
 
@@ -113,34 +112,21 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
 
     if checker(tokens, list) and checker(word, str) \
             and checker(left_context_size, int) and checker(right_context_size, int):
-        normal_concordance = left_context_size >= 0 and right_context_size >= 0
 
-        if "".join(tokens) != word and word in tokens and normal_concordance:
+        if right_context_size != 0:
+            right_context_size += 1
+
+        if "".join(tokens) != word and word in tokens:
             index_word = tokens.index(word, index_word, len(tokens))
 
-            for i in range(tokens.count(word)):
-                try:
-                    concordance = tokens[index_word - left_context_size: index_word] \
-                                  + tokens[index_word: index_word + right_context_size + 1]
-                except IndexError:
-                    left = index_word - left_context_size < index_word
-                    right = index_word + right_context_size < len(tokens)
+            for word_number in range(tokens.count(word)):
+                concordance_left = tokens[index_word - left_context_size: index_word]
+                concordance_right = tokens[index_word + 1: index_word + right_context_size]
 
-                    if left and right:
-                        # когда шаг влево негативный
-                        concordance = tokens[index_word - left_context_size: index_word] \
-                                      + tokens[index_word: right_context_size + 1]
-                    elif not left and right:
-                        concordance = tokens[index_word: right_context_size + 1]
-                    elif left and not right:
-                        concordance = tokens[index_word - left_context_size:]
-                    elif not (left and right):
-                        concordance = tokens[index_word:]
+                if concordance_left or concordance_right:
+                    conco_all.append(concordance_left + tokens[index_word].split() + concordance_right)
 
-                if concordance:
-                    conco_all.append(concordance)
-
-                if i != tokens.count(word) - 1:
+                if word_number != tokens.count(word) - 1:
                     index_word = tokens.index(word, index_word + 1, len(tokens))
     return conco_all
 
@@ -204,9 +190,61 @@ def write_to_file(path_to_file: str, content: list):
         fs.write(" ".join(content))
 
 
-#it's not done right now
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
-    concordance = get_concordance(tokens, word, left_context_size, right_context_size)
-    if left_sort:
-        concordance = sorted(concordance)
-    return concordance
+    """
+    Gets a concordance of a word and sorts it by either left or right context
+    :param tokens: a list of tokens
+    :param word: a word-base for a concordance
+    :param left_context_size: the number of words in the left context
+    :param right_context_size: the number of words in the right context
+    :param left_sort: if True, sort by the left context, False – by the right context
+    :return: a concordance
+    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
+                    'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
+    word = 'happy'
+    left_context_size = 2
+    right_context_size = 3
+    left_sort = True
+    --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
+    """
+    conco_all = []
+    index_word = 0
+    left_context_bool, right_context_bool = False, False
+    if isinstance(left_sort, bool):
+        if checker(tokens, list) and checker(word, str) \
+                and checker(left_context_size, int) and checker(right_context_size, int):
+
+            condition_to_sort = (left_context_size < 0 and left_sort is True) or \
+                                (right_context_size < 0 and left_sort is False)
+            if right_context_size != 0:
+                right_context_size += 1
+
+            if "".join(tokens) != word and word in tokens and not condition_to_sort:
+                index_word = tokens.index(word, index_word, len(tokens))
+
+                for word_number in range(tokens.count(word)):
+                    concordance_left = tokens[index_word - left_context_size: index_word]
+                    concordance_right = tokens[index_word + 1: index_word + right_context_size]
+
+                    # показатель, возможно ли сортировка
+                    if concordance_left:
+                        left_context_bool = True
+                    if concordance_right:
+                        right_context_bool = True
+
+                    conco_all.append(concordance_left + tokens[index_word].split() + concordance_right)
+                    if word_number != tokens.count(word) - 1:
+                        index_word = tokens.index(word, index_word + 1, len(tokens))
+            # сортировка по левой стороне
+            if left_sort and left_context_bool:
+                conco_all = sorted(conco_all)
+            # сортировка по правой стороне
+            if not left_sort and right_context_bool:
+                conco_all.sort(key=lambda concord: concord[-left_context_size])
+
+            if left_sort and not left_context_bool:
+                return []
+    return conco_all
+
+
+
