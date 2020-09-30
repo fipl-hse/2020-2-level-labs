@@ -104,6 +104,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if not isinstance(tokens, list) or not isinstance(word, str)\
             or not isinstance(right_context_size, int) or not (left_context_size, int):
         return []
+    elif isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
+        return []
     concordance = []
     word_index = []
     for index, element in enumerate(tokens):
