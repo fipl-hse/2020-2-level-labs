@@ -21,32 +21,21 @@ def remove_stop_words(f, stop_words_way):
         except TypeError:
                 print(tokens)
 
-def calculate_frequencies(tokens, text, stop_words_way):
-        dictionary = {}
-        #print(text)
-        for i in tokens:
-                #print(i)
-                dictionary[i] = text.count(i)
-        print(dictionary)
-        return dictionary
-                
-        
-        
-        
-        
+def most_popular(dictionary, n):
+    ans = []
+    cnt = 0
+    for w in sorted(dictionary, key=dictionary.get, reverse=True):
+        ans.append(w)
+        cnt += 1
+        # print(cnt)
+        if (cnt == n):
+            # print(ans)
+            return ans
 
-        
 
-        
-            
 with open('data.txt', 'r') as f:
-        with open('stop_words.txt', 'r') as stop_words:
-
-                tokens_with_out_stop_words = remove_stop_words(f, stop_words)
-                text = tokenize(f)
-                calculate_frequencies(tokens_with_out_stop_words, text, stop_words)
-
-
-
-
-
+    with open('stop_words.txt', 'r') as stop_words:
+        tokenize_text = tokenize(f)
+        tokens_with_out_stop_words = remove_stop_words(tokenize_text, stop_words)
+        dictionary = calculate_frequencies(tokenize_text, tokens_with_out_stop_words)
+        most_popular(dictionary, 10)
