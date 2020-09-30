@@ -101,15 +101,19 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    concordance=[]
-    for i in tokens:
-        if i==word:
-            word_index=tokens.index(word)
-            left_context=tokens[word_index-left_context_size:word_index]
-            right_context=tokens[word_index+1:word_index+1+right_context_size]
-            word_with_context=left_context+[word]+right_context
-            concordance.append(word_with_context)
-    return concordance
+    requirments=[isinstance(tokens,list),isinstance(word,str),isinstance(left_context_size,int),isinstance(right_context_size,int)]
+    if all (requirments):
+        concordance=[]
+        for i in tokens:
+            if i==word:
+                word_index=tokens.index(word)
+                left_context=tokens[word_index-left_context_size:word_index]
+                right_context=tokens[word_index+1:word_index+1+right_context_size]
+                word_with_context=left_context+[word]+right_context
+                concordance.append(word_with_context)
+        return concordance
+    else:
+        return []
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
