@@ -56,7 +56,7 @@ def calculate_frequencies(tokens: list) -> dict:
     if isinstance(tokens,list) and all (tokens):
         frequences = []
         for i in tokens:
-            frequences.extend([tokens.count(i) ])
+            frequences.append ([tokens.count(i) ])
         freq_dict = {tokens[i]: frequences[i] for i in range(len(frequences))}
         return freq_dict
     else:
@@ -116,8 +116,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                 elif right_context_size > 0:
                     concordance.append(tokens[word_index:word_index + right_context_size + 1])
                     return concordance
-                else:
-                    return []
     else:
         return []
 
