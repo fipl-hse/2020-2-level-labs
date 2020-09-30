@@ -105,8 +105,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if all (requirments):
         concordance = []
         for i, c in enumerate(tokens):
-            if i == word:
-                word_index = c
+            if c == word:
+                word_index = i
                 if left_context_size > 0 and right_context_size > 0:
                     concordance.append(tokens[word_index - left_context_size:word_index + 1 + right_context_size])
                 elif left_context_size > 0:
