@@ -15,11 +15,10 @@ def tokenize(text: str) -> list:
     if not isinstance(text, str):
         return []
     token_list = []
-    punctuation = """!"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~."""
     for i in text.split():
         if not i.isalpha():
             for s in i:
-                if s in punctuation:
+                if not s.isalpha():
                     i = i.replace(s, '')
         if i.isalpha():
             token_list.append(i.lower())

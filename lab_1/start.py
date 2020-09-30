@@ -25,17 +25,19 @@ if __name__ == '__main__':
     top_10_words = main.get_top_n_words(frequency_dictionary, 10)
     print('the most frequent 10 words:', top_10_words)
 
-    concordance = main.get_concordance(tokens, 'moon', 2, 3)
-    print('contexts for "moon":', concordance[:3], '...')
+    concordance = main.get_concordance(tokens, 'rocket', 2, 3)
+    print('contexts for "rocket":', concordance)
 
-    adjacent_words = main.get_adjacent_words(tokens, 'moon', 2, 3)
-    print('adjacent words for "moon":', adjacent_words [:3], '...')
+    adjacent_words = main.get_adjacent_words(tokens, 'rocket', 2, 3)
+    print('adjacent words for "rocket":', adjacent_words)
 
-    sorted_concordance = main.sort_concordance('tokens', 'moon', 2, 3, False)
-    print('sorted concordance for "moon":', sorted_concordance[:3], '...')
+    sorted_concordance = main.sort_concordance(tokens, 'rocket', 2, 3, False)
+    print('sorted concordance for "rocket":', sorted_concordance)
 
     main.write_to_file('report.txt', sorted_concordance)
 
     RESULT = sorted_concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [(), ()], 'Concordance not working'
+    assert RESULT == [['estimated', 'executed', 'rocket', 'arena', 'ability', 'players'],
+                      ['limits', 'speed', 'rocket', 'maximum', 'exhaust', 'speed'],
+                      ['zenitsl', 'carrier', 'rocket', 'pizza', 'restaurants', 'pizza']], 'Concordance not working'
