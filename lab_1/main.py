@@ -103,8 +103,11 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if (not isinstance(tokens, list) or not isinstance(word, str) or not word.isalpha() or
-            type(left_context_size) is not int or type(right_context_size) is not int or
+    check1 = isinstance(left_context_size, int) and not isinstance(left_context_size, bool)
+    check2 = isinstance(right_context_size, int) and not isinstance(right_context_size, bool)
+    if not isinstance(tokens, list):
+        return []
+    if (not isinstance(word, str) or not word.isalpha() or not check1 or not check2 or
             (left_context_size < 1 and right_context_size < 1)):
         return []
     concordance = []
@@ -186,7 +189,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     concordance = get_concordance(tokens, word, left_context_size, right_context_size)
-    if type(left_sort) is not bool or concordance == []:
+    if not isinstance(left_sort, bool) or concordance == []:
         return []
     if left_sort:
         if left_context_size <= 0:
