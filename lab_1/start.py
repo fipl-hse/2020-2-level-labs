@@ -17,8 +17,8 @@ if __name__ == '__main__':
     tokens = main.tokenize(data)
     print(tokens[:10])
 
-    tokens = main.remove_stop_words(tokens, stop_words)
-    print(tokens[:5])
+    tokens = main.remove_stop_words(tokens[:5], stop_words)
+    print(tokens)
 
     freq = main.calculate_frequencies(tokens[:40])
     print(freq[tokens[0]])
@@ -32,6 +32,6 @@ if __name__ == '__main__':
     # file = main.read_from_file('report.txt', concordance)
     main.write_to_file('report.txt', concordance)
 
-    RESULT = freq
+    RESULT = tokens
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT,'Concordance not working'
+    assert RESULT == ['years', 'of', 'time', 'team', 'presented'],'Concordance not working'
