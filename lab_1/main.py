@@ -74,14 +74,12 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return []
     top_words = []
-    freq_and_word = []
     counter = 0
-    for k, v in freq_dict.items():
-        freq_and_word.append([v, k])
-    freq_and_word.sort(reverse=True)
+    freq_and_word = list(freq_dict.items())
+    freq_and_word.sort(key=lambda x: x[1], reverse=True)
     for element in freq_and_word:
         if counter < top_n:
-            top_words.append(element[1])
+            top_words.append(element[0])
             counter += 1
     return top_words
 
@@ -137,7 +135,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     if not isinstance(tokens, list) or not isinstance(word, str) \
-            or not isinstance(left_n, int) and not (right_n, int):
+            or not isinstance(left_n, int) or not isinstance(right_n, int):
         return []
     concord = get_concordance(tokens, word, left_n, right_n)
     adj_words = []
@@ -190,7 +188,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     if not isinstance(left_sort, bool) or not isinstance(tokens, list) or not isinstance(word, str)\
-        or not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
+            or not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
         return []
     concord = get_concordance(tokens, word, left_context_size, right_context_size)
     if left_sort and left_context_size > 0:
