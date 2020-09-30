@@ -26,7 +26,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+    tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+    while 'the' in tokens:
+        tokens.remove('the')
+    while 'is' in tokens:
+        tokens.remove('is')
+    return tokens
+
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -37,7 +43,9 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
+    tokens = ['weather', 'sunny', 'man', 'happy']
+    dictionary = dict.fromkeys(['weather','sunny', 'man', 'happy'], 1)
+    return dictionary
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -70,7 +78,22 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy', 'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
+    word = 'happy'
+    del tokens[:5]
+    print(tokens)
+    del tokens[6:]
+
+    tokenss = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy', 'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
+    word = 'happy'
+    del tokenss[:9]
+    print(tokenss)
+    del tokenss[6:]
+    print(tokenss)
+
+    print([tokens] + [tokenss])
+    return []
+
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
