@@ -4,7 +4,6 @@ Concordance implementation starter
 
 import os
 import main
-
 if __name__ == '__main__':
     #  use data.txt file to test your program
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -33,8 +32,7 @@ if __name__ == '__main__':
     sorts_concordance = main.sort_concordance(tokens, 'time', 2, 3, True)
     print("Sorted concordance for word 'time':", sorts_concordance[:7])
 
-    file = main.write_to_file('report.txt', sorts_concordance)
-    print('Successful')
+    main.write_to_file('report.txt', sorts_concordance)
 
 
     RESULT = sorts_concordance
