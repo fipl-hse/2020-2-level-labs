@@ -91,7 +91,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    #tokens = []
+    # tokens = []
     if isinstance(freq_dict, dict):
         sorted_d = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
         return sorted_d
@@ -121,13 +121,11 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     # bad_inputs = ['string', (), None, 9, 9.34, True, [None], []]
     concordance = []
 
-    if_bool_l = isinstance(left_context_size, bool)
-    if_bool_r = isinstance(right_context_size, bool)
-    if_int_l = isinstance(left_context_size, int)
-    if_int_r = isinstance(right_context_size, int)
+    if_bool = isinstance(left_context_size, bool) or isinstance(right_context_size, bool)
+    if_int = isinstance(left_context_size, int) or isinstance(right_context_size, int)
 
-    if (not isinstance(tokens, list) or not if_int_l or not if_int_r
-            or not isinstance(word, str) or if_bool_l or if_bool_r):
+    if (not isinstance(tokens, list) or not if_int
+            or not isinstance(word, str) or if_bool):
         return []
     for i, token in enumerate(tokens):
         if isinstance(token, str) and token == word:
@@ -141,7 +139,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                 context = left_w + right_w
                 concordance.append(context)
 
-            elif (1 <= left_context_size <= len_l) and (right_context_size < 1):
+            elif right_context_size < 1 <= left_context_size <= len_l:
                 context = left_w
                 concordance.append(context)
 
@@ -149,7 +147,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                 context = right_w
                 concordance.append(context)
 
-            elif ((left_context_size > len_l) and (1 <= right_context_size <= len_r)):
+            elif (left_context_size > len_l) and (1 <= right_context_size <= len_r):
                 context = tokens[0:i] + right_w
                 concordance.append(context)
 
@@ -181,22 +179,20 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     adj_w = []
-    if_list = isinstance(tokens, list)
-    if_str_w = isinstance(word, str)
-    if_int_left = isinstance(left_n, int)
-    if_int_right = isinstance(right_n, int)
+    if_list_str = isinstance(tokens, list) and isinstance(word, str)
+    if_int = isinstance(left_n, int) and isinstance(right_n, int)
 
-    if (not if_list and not if_str_w and not if_int_left and not if_int_right
-            and (right_n < 1) and (left_n < 1)): 
+    if (not if_list_str and not if_int
+            and (right_n < 1) and (left_n < 1)):
         return []
 
     concordance = get_concordance(tokens, word, left_n, right_n)
     # print(concordance)
     for cont in concordance:
-        if left_n < 1 <= right_n:  # simplify (left_n < 1) and (right_n >= 1)
+        if left_n < 1 <= right_n:
             adj_w.append([cont[-1]])
 
-        elif right_n < 1 <= left_n: # (right_n < 1) and (left_n >= 1)
+        elif right_n < 1 <= left_n:
             adj_w.append([cont[0]])
 
         elif (right_n >= 1) and (left_n >= 1):
@@ -213,8 +209,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
 
@@ -229,7 +225,9 @@ def write_to_file(path_to_file: str, content: list):
             value = ' '.join(item)
             text += value + '\n'
         file.write(text)
-#write_to_file('report.txt', content)
+
+
+# write_to_file('report.txt', content)
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
