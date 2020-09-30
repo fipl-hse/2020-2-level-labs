@@ -2,7 +2,7 @@
 Lab 1
 A concordance extraction
 """
-
+import re
 
 def tokenize(text: str) -> list:
     """
@@ -12,14 +12,13 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    import re
     new_text = ''
 
     if not isinstance(text, str):
         return []
 
     for elem in text:
-        if elem.isalpha() or re.fullmatch('[\s]', elem):
+        if elem.isalpha() or re.fullmatch(r'\s', elem):
             new_text += elem
     new_text = new_text.lower().split()
 
@@ -90,8 +89,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
 
     if top_n <= len(top_words):
         return top_words[:top_n]
-    else:
-        return top_words
+
+    return top_words
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -115,7 +114,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         return []
 
     if (not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_context_size, int)
-            or not isinstance(right_context_size, int) or (left_context_size < 1 and right_context_size < 1)):
+            or not isinstance(right_context_size, int)):
+        return []
+
+    if left_context_size < 1 and right_context_size < 1:
         return []
 
     main_indexes = []
@@ -174,8 +176,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
 
