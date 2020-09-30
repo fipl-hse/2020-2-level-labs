@@ -4,6 +4,7 @@ Some simple checks for start.py lab files
 
 import argparse
 import sys
+import os
 
 
 def check_assert_line(content: str) -> bool:
@@ -33,6 +34,11 @@ def check_start_file_called_functions(text: str, functions: list) -> bool:
     return True
 
 
+def get_target_functions(path: str) -> list:
+    with open(path, 'r', encoding='utf-8') as functions:
+        return functions.read().split('\n')
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Checks start.py files and tests them')
     parser.add_argument('--start_py_content', type=str, help='Content of start.py for each lab')
@@ -47,7 +53,7 @@ if __name__ == "__main__":
         print('Make sure you made assert RESULT in start.py file')
         sys.exit(1)
 
-    if check_start_file_called_functions(args.functions, args.target.split()):
+    if check_start_file_called_functions(args.functions, get_target_functions(args.target)):
         print('Passed calling functions check')
         sys.exit(0)
     print('Make sure you called all implemented functions in start.py file')
