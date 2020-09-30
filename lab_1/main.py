@@ -4,7 +4,6 @@ Lab 1
 A concordance extraction
 """
 
-
 def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
@@ -14,15 +13,20 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     if type (text) == str:
-        clean_text = ''
-        for sign in text:
-            if sign.lower() in 'abcdefghijklmnopqrstuvwxyz ':
-                clean_text += sign.lower()
-        tokens = clean_text.split()
-        return (tokens)
-    else:
-        return ([])
-#tokenize (['big big hippo jumps over a baloon'])
+        clean_text_list = []
+        raw_text_list = text.split()
+        for word in raw_text_list:
+            new_word = ''
+            for sign in word:
+                if sign.lower() in 'abcdefghijklmnopqrstuvwxyz ':
+                    new_word += sign.lower()
+            clean_text_list.append(new_word)
+        for element in clean_text_list:
+            if len(element) == 0:
+                clean_text_list.pop(clean_text_list.index(element))
+        return clean_text_list
+    return []
+
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -35,27 +39,19 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
+    new_tokens = []
     if type (tokens) == list:
-        for token in tokens:
-            for sign in token:
-                if sign not in 'abcdefghijklmnopqrstuvwxyz':
-                    tokens.clear()
-                    break
         if type (stop_words) == list:
-            for word in stop_words:
-                for token in tokens:
-                    if word == token:
-                        tokens.remove(token)
-            return(tokens)
-        else:
-            return (tokens)
-    else:
-        return ([])
-#remove_stop_words ()
+            for token in tokens:
+                if token not in stop_words:
+                    new_tokens.append(token)
+        return new_tokens
+    return []
+
 
 def calculate_frequencies(tokens: list) -> dict:
     """
-    Calculates frequencies of given tokens{'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
+    Calculates frequencies of given tokens
     :param tokens: a list of tokens without stop words
     :return: a dictionary with frequencies
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
@@ -63,16 +59,12 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     if type (tokens) == list:
         for token in tokens:
-            for sign in token:
-                if sign not in 'abcdefghijklmnopqrstuvwxyz':
-                    tokens.clear()
-                    break
+            if type (token) != str:
+                return {}
         token_frequency = {token: tokens.count(token) for token in tokens}
-        print (token_frequency)
-        return(token_frequency)
-    else:
-        return ([])
-#calculate_frequencies ('weather')
+        return token_frequency
+    return {}
+
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
@@ -85,37 +77,33 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
     if type (freq_dict) == dict and type (top_n) == int:
-        for key in freq_dict.keys():
-            for sign in key:
-                if sign not in 'abcdefghijklmnopqrstuvwxyz':
-                    return ([])
-        for value in freq_dict.values():
-            if type (value) != int:
-                return ([])
-        spisok_values = []
-        spisok_index = []
-        spisok_range_values = []
-        spisok_keys = []
-        spisok_range_keys = []
-        for v in freq_dict.values():
-            spisok_values.append(v)
-        maximum = max(spisok_values)
-        for v in range(0, maximum):
-            for v in spisok_values:
-                if v == maximum:
-                    spisok_range_values.append(v)
-                    spisok_index.append(spisok_values.index(v))
-                    spisok_values[spisok_values.index(v)] = maximum + 1
-            maximum -= 1
-        for k in freq_dict:
-            spisok_keys.append(k)
-        for index in spisok_index:
-            spisok_range_keys.append(spisok_keys[index])
-        key_output = spisok_range_keys[0:top_n]
-        return (key_output)
-    else:
-        return ([])
-#get_top_n_words ()
+        if len(freq_dict) != 0:
+            for value in freq_dict.values():
+                if type (value) != int:
+                    return []
+            list_of_values = []
+            list_of_index = []
+            list_of_ranged_values = []
+            list_of_keys = []
+            list_of_ranged_keys = []
+            for v in freq_dict.values():
+                list_of_values.append(v)
+            maximum = max(list_of_values)
+            for v in range(0, maximum):
+                for v in list_of_values:
+                    if v == maximum:
+                        list_of_ranged_values.append(v)
+                        list_of_index.append(list_of_values.index(v))
+                        list_of_values[list_of_values.index(v)] = maximum + 1
+                maximum -= 1
+            for k in freq_dict:
+                list_of_keys.append(k)
+            for index in list_of_index:
+                list_of_ranged_keys.append(list_of_keys[index])
+            key_output = list_of_ranged_keys[0:top_n]
+            return key_output
+    return []
+
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
@@ -134,42 +122,37 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if type (tokens) == list and type (word) == str:
+    if type(left_context_size) == int and type(right_context_size) == int and type(tokens) == list and type(word) == str:
         for token in tokens:
-            for sign in token:
+            if type(token) == str:
+                for sign in token:
+                    if sign not in 'abcdefghijklmnopqrstuvwxyz':
+                        tokens.clear()
+                        return []
+            for sign in word:
                 if sign not in 'abcdefghijklmnopqrstuvwxyz':
-                    tokens.clear()
-                    return ([])
-        for sign in word:
-            if sign not in 'abcdefghijklmnopqrstuvwxyz':
-                return ([])
-        if type (left_context_size) == int and type (right_context_size) == int:
-            concordance = []
-            for token in tokens:
-                if token == word:
-                    if left_context_size > 0:
-                        left_context = tokens[tokens.index(token) - left_context_size: tokens.index(token)]
-                    else:
-                        left_context = []
-                    if right_context_size > 0:
-                        right_context = tokens[tokens.index(token) + 1: tokens.index(token) + right_context_size + 1]
-                    else:
-                        right_context = []
-                    if left_context_size < 1 and right_context_size < 1:
-                        return ([])
-                    current_context_list = left_context
-                    current_context_list.append(token)
-                    current_context_list.extend (right_context)
-                    concordance.append(current_context_list)
-                    tokens.insert(tokens.index(token), 'буферный элемент')
-                    tokens.remove(token)
-            return (concordance)
-        else:
-            return ([])
-    else:
-        return ([])
-#get_concordance (['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy', 'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad'], 'the', 1, 1)
-
+                    return []
+        concordance = []
+        for token in tokens:
+            if token == word:
+                if left_context_size > 0:
+                    left_context = tokens[tokens.index(token) - left_context_size: tokens.index(token)]
+                else:
+                    left_context = []
+                if right_context_size > 0:
+                    right_context = tokens[tokens.index(token) + 1: tokens.index(token) + right_context_size + 1]
+                else:
+                    right_context = []
+                if left_context_size < 1 and right_context_size < 1:
+                    return []
+                current_context_list = left_context
+                current_context_list.append(token)
+                current_context_list.extend (right_context)
+                concordance.append(current_context_list)
+                tokens.insert(tokens.index(token), 'буферный элемент')
+                tokens.remove(token)
+        return concordance
+    return []
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -189,25 +172,39 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
     adjacent_words = []
     concordance = get_concordance (tokens, word, left_n, right_n)
-    if type(left_n) == int and type(right_n) == int:
-        for spisok in concordance:
-            for token in spisok:
+    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_n, int) and isinstance(right_n, int):
+        for small_list in concordance:
+            for token in small_list:
                 if token == word:
-                    if left_n > 0:
-                        left_word = spisok[spisok.index(token) - left_n]
-                    else:
-                        left_word = ''
-                    if right_n > 0:
-                        right_word = spisok[spisok.index(token) + right_n]
-                    else:
-                        right_word = ''
-                    if left_n < 1 and left_n < 1:
+                    if right_n > (len(small_list) - small_list.index(token)):
+                        right_n = len(small_list) - small_list.index(token)
+                    if left_n > (len(small_list[0:small_list.index(token)])):
+                        left_n = len(small_list[0:small_list.index(token)])
+                    if left_n > 0 and right_n > 0:
+                        if 0 <= small_list.index(token) - left_n <= (len(small_list)):
+                            left_word = small_list[small_list.index(token) - left_n]
+                            print (small_list.index(token) - left_n)
+                        if 0 <= small_list.index(token) + right_n <= len(small_list):
+                            right_word = small_list[small_list.index(token) + right_n]
+                            print(small_list.index(token) + right_n)
+                        current_words = [left_word, right_word]
+                    if left_n < 1 and right_n > 0:
+                        if 0 <= small_list.index(token) + right_n <= len(small_list):
+                            print(small_list)
+                            print (small_list.index(token) + right_n)
+                            current_words = [small_list[small_list.index(token) + right_n - 1]]
+                        else:
+                            current_words = ''
+                    if right_n < 1 and left_n > 0:
+                        if 0 <= small_list.index(token) - left_n <= len(small_list):
+                            current_words = [small_list[small_list.index(token) - left_n]]
+                        else:
+                            current_words = ''
+                    if left_n < 1 and right_n < 1:
                         return ([])
-                    current_words = [left_word, right_word]
                     adjacent_words.append(current_words)
-    else:
-        return ([])
-#get_adjacent_words(['yesterday', 'the', 'weather', 'was', 'sunny', 'and', 'windy', 'today', 'it', 'is', 'sunny', 'and', 'windy', 'too'], 'sunny', 3, 1)
+        return adjacent_words
+    return []
 
 
 
@@ -227,12 +224,14 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
+    text = ''
     file = open (path_to_file, 'w')
-    for spisok in content:
-        text = str(spisok) + '\n'
+    for small_list in content:
+        for word in small_list:
+            text += word + ' '
+        text += '\n'
         file.write (text)
-#write_to_file(r'C:\Users\user\2020-2-level-labs\lab_1\report.txt', [['the', 'weather'], ['sunny', 'the', 'man'], ['happy', 'the', 'dog'], ['but', 'the', 'cat']])
-
+        text = ''
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -252,4 +251,19 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    pass
+    if (isinstance (tokens, list) and isinstance (word, str)
+            and isinstance (left_context_size, int) and isinstance (right_context_size, int) and isinstance (left_sort, bool)):
+        concordance = get_concordance(tokens, word, left_context_size, right_context_size)
+        if left_sort == True and left_context_size > 0:
+            return sorted (concordance)
+        if left_sort == False and right_context_size > 0:
+            return sorted(concordance, key = lambda list_of_words: list_of_words[list_of_words.index (word) + 1])
+    return []
+
+
+
+
+
+
+
+
