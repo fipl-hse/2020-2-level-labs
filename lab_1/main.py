@@ -102,18 +102,18 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     requirments=[isinstance(tokens,list),isinstance(word,str),isinstance(left_context_size,int),isinstance(right_context_size,int)]
-    if all (requirments) :
+    if all (requirments):
         concordance = []
-        for i in tokens:
+        for i, c in enumerate(tokens):
             if i == word:
-                word_index = tokens.index(word)
+                word_index = c
                 if left_context_size > 0 and right_context_size > 0:
                     concordance.append(tokens[word_index - left_context_size:word_index + 1 + right_context_size])
                 elif left_context_size > 0:
                     concordance.append(tokens[word_index - left_context_size:word_index+1])
                 elif right_context_size > 0:
                     concordance.append(tokens[word_index:word_index + right_context_size + 1])
-        return (concordance)
+        return concordance
     else:
         return []
 
