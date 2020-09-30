@@ -4,7 +4,7 @@ Some simple checks for start.py lab files
 
 import argparse
 import sys
-import os
+# import os
 
 
 def check_assert_line(content: str) -> bool:
