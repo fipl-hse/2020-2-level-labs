@@ -37,6 +37,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
         return [word for word in tokens if word not in stop_words]
 
 
+import collections
+
 def calculate_frequencies(tokens: list) -> dict:
     """
     Calculates frequencies of given tokens
@@ -46,7 +48,12 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
     pass
-    frequency = {}
+    def calculate_frequencies(tokens: list):
+        if not isinstance(tokens, list) == True:
+            return []
+
+        frequency = collections.Counter(tokens)
+        return frequency
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
