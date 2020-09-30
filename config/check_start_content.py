@@ -27,7 +27,7 @@ def parse_main_file_functions(text: str) -> list:
 def check_start_file_called_functions(text: str, functions: list) -> bool:
     print(text)
     print(functions)
-    for function in functions:
+    for function in functions[:-1]:
         print(f'checking {function}')
         if function[:-8] not in text:
             return False
@@ -56,8 +56,9 @@ if __name__ == "__main__":
     if check_start_file_called_functions(args.functions, get_target_functions(args.target)):
         print('Passed calling functions check')
         sys.exit(0)
-    print('Make sure you called all implemented functions in start.py file')
-    sys.exit(1)
+    else:
+        print('Make sure you called all implemented functions in start.py file')
+        sys.exit(1)
 
 # Test: a) assert concordance_realize is in file
 # Test: b) call start.py, expect it does not throw Error
