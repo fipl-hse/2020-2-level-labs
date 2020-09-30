@@ -4,7 +4,7 @@ A concordance extraction
 """
 
 
-def tokenize(text: str) -> list:
+def tokenize(text = open(data.txt).read()):
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
@@ -12,11 +12,18 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = text.split()
+    lower_text = text.lower()
+    punctuation = ['.', ',', '!', '?', '-', '"', '1', '2', '3', '4', '5', '6','7', '8', '9', '0']
+    for element in lower_text:
+        if element in punctuation:
+            index_of_element = lower_text.index(element)
+            next_index = index_of_element + 1
+            no_punct_text = lower_text[:index_of_element] + lower_text[next_index:]
+    text = no_punct_text.split()
     return text
 
 
-def remove_stop_words(tokens: list, stop_words: list) -> list:
+def remove_stop_words(tokens = tokenize(), stop_words = open(stop_words.txt).read()):
     """
     Removes stop words
     :param tokens: a list of tokens
@@ -26,10 +33,16 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
+    stop_words = stop_words.split()
+    for word in tokens:
+        if word in stop_words:
+            index_of_word = tokens.index (word)
+            tokens.pop (index_of_word)
+    return tokens
     pass
 
 
-def calculate_frequencies(tokens: list) -> dict:
+def calculate_frequencies(tokens = remove_stop_words()):
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens without stop words
@@ -37,10 +50,17 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
+    freq_dict = {}
+    for word in tokens:
+        if word in freq_dict:
+            freq_dict[word] += 1
+        else:
+            freq_dict[word] = 1
+    return freq_dict
     pass
 
 
-def get_top_n_words(freq_dict: dict, top_n: int) -> list:
+def get_top_n_words(freq_dict = calculate_frequencies(), top_n = 1):
     """
     Returns the most common words
     :param freq_dict: a dictionary with frequencies
@@ -50,6 +70,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
+    top_words = []
+    top1 = max(freq_dict, key = d.get)
+    top_words = top1.split()
+    return top_words
     pass
 
 
@@ -70,6 +94,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
+
+
     pass
 
 
