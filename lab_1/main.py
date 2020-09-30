@@ -14,7 +14,7 @@ def tokenize(text: str) -> list:
     """
     if not isinstance(text, str):
         return []
-    symbols = "'-"
+    symbols = "'-.,!?:"
     for symbol in symbols:
         text = text.replace(symbol, "")
     text = text.split()
