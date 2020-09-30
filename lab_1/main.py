@@ -194,9 +194,8 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
         return []
     concord = get_concordance(tokens, word, left_context_size, right_context_size)
     if left_sort and left_context_size > 0:
-        concord.sort()
+        return sorted(concord)
     if not left_sort and right_context_size > 0:
-        concord.sort(key=lambda element: element[element.index(word)+1])
+        return sorted(concord, key=lambda element: element[element.index(word)+1])
     else:
-        concord = []
-    return concord
+        return []
