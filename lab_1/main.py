@@ -2,13 +2,8 @@
 Lab 1
 A concordance extraction
 """
-# fyjvhmb,nkljkhjgn
 
 import re
-
-
-# text = open("data.txt", "r")
-# c = text.read()
 
 
 def tokenize(text: str) -> list:
@@ -23,14 +18,9 @@ def tokenize(text: str) -> list:
     if isinstance(text, str):
         text = text.lower()
         tokens = re.sub('[\'\",.!0-9+=@#$%^&*()-_]+', '', text).split()
-        # print(tokens[:10])
         return tokens
 
     return []
-
-
-# tokenize()
-# tokens = tokenize(c)
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -91,7 +81,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    # tokens = []
+
     if isinstance(freq_dict, dict):
         sorted_d = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
         return sorted_d
@@ -99,8 +89,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     return []
 
 
-# tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
-# 'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
     Gets a concordance of a word
@@ -118,7 +106,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    # bad_inputs = ['string', (), None, 9, 9.34, True, [None], []]
+
     concordance = []
 
     if_bool = isinstance(left_context_size, bool) or isinstance(right_context_size, bool)
@@ -154,13 +142,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             elif (left_context_size > len_l) and (right_context_size < 1):
                 context = tokens[0:i + 1]
                 concordance.append(context)
-        # print(concordance)
     return concordance
-
-
-# get_concordance(tokens, 'happy', 2, 3)
-# content = [['man', 'is', 'happy', 'the', 'dog', 'is'],
-# ['dog', 'is', 'happy', 'but', 'the', 'cat']]
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -187,7 +169,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         return []
 
     concordance = get_concordance(tokens, word, left_n, right_n)
-    # print(concordance)
     for cont in concordance:
         if left_n < 1 <= right_n:
             adj_w.append([cont[-1]])
@@ -199,9 +180,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             adj_w.append([cont[0], cont[-1]])
 
     return adj_w
-
-
-# get_adjacent_words(['the', 'weather', 'is', 'sunny', 'the', 'man', 'sunny', 'ygh'] , 'sunny', 0, 1)
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -220,14 +198,11 @@ def write_to_file(path_to_file: str, content: list):
     Writes the result in a file
     """
     text = ''
-    with open(path_to_file, "w") as file:
-        for item in content:
-            value = ' '.join(item)
-            text += value + '\n'
+    for item in content:
+        value = ' '.join(item)
+        text += value + '\n'
+    with open(path_to_file, 'w') as file:
         file.write(text)
-
-
-# write_to_file('report.txt', content)
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
