@@ -16,8 +16,6 @@ def read_from_file(path_to_file: str) -> str:
     return data
 
 
-text = read_from_file('data.txt')
-
 
 def tokenize(text:str) -> list:
     """
@@ -38,8 +36,6 @@ def tokenize(text:str) -> list:
     return tokens
 
 
-stop_words = read_from_file('stop_words.txt')
-stop_words = stop_words.split()
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
