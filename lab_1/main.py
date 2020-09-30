@@ -14,7 +14,7 @@ def tokenize(text: str) -> list:
     """
     if not isinstance(text, str):
         return []
-    symbols = "'-.,!?:"
+    symbols = "'-.,!?:%&<>*#@"
     for symbol in symbols:
         text = text.replace(symbol, "")
     text = text.split()
@@ -113,7 +113,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         if left_context_size > 0 and right_context_size > 0:
             concordance.append(tokens[index - left_context_size: index + right_context_size + 1])
         elif left_context_size > 0:
-            concordance.append(tokens[index-left_context_size:index])
+            concordance.append(tokens[index-left_context_size:index+1])
         elif right_context_size > 0:
             concordance.append(tokens[index: index + right_context_size + 1])
     return concordance
@@ -134,9 +134,8 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    if not isinstance(tokens, list) or not isinstance(word, str):
-        return []
-    elif not isinstance(left_n, int) and not (right_n, int):
+    if not isinstance(tokens, list) or not isinstance(word, str) \
+            or not isinstance(left_n, int) and not (right_n, int):
         return []
     concord = get_concordance(tokens, word, left_n, right_n)
     adj_words = []
@@ -188,7 +187,8 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    if not isinstance(left_sort, bool):
+    if not isinstance(left_sort, bool) or not isinstance(tokens, list) or not isinstance(word, str)\
+        or not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
         return []
     concord = get_concordance(tokens, word, left_context_size, right_context_size)
     if left_sort and left_context_size > 0:
