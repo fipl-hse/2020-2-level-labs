@@ -24,7 +24,10 @@ def parse_main_file_functions(text: str) -> list:
 
 
 def check_start_file_called_functions(text: str, functions: list) -> bool:
+    print(text)
+    print(functions)
     for function in functions:
+        print(f'checking {function}')
         if function[:-8] not in text:
             return False
     return True
