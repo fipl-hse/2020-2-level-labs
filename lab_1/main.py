@@ -209,7 +209,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     sorted_concordance = []
     concordance = get_concordance(tokens, word, left_context_size, right_context_size)
     for usage in concordance:
-        for number, token in enumerate(usage):
+        for token in usage:
             if token == word:
                 if left_sort:
                     if token == usage[0] and usage.count(token) == 1:
