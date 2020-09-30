@@ -114,8 +114,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                 elif right_context_size > 0:
                     concordance.append(tokens[word_index:word_index + right_context_size + 1])
         return concordance
-    else:
-        return []
+    return []
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
