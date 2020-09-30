@@ -3,6 +3,8 @@ Lab 1
 A concordance extraction
 """
 
+from os import path
+separators = '.,-!?:"@#<>&*%\n'
 
 def tokenize(text: str) -> list:
     """
@@ -12,8 +14,19 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = text.split()
-    return text
+
+    if type(text) is not str:
+        return []
+
+    raw_tokens, trimmed_tokens = text.split(), []
+    for token in raw_tokens:
+        trimmed_tokens.append(''.join([l for l in token if l not in separators]).lower())
+
+    for token in trimmed_tokens:
+        if token == '':
+            trimmed_tokens.remove(token)
+
+    return trimmed_tokens
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -26,7 +39,19 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+    if type(tokens) is not list:
+        return []
+    if type(stop_words) is not list:
+        return tokens
+
+    if tokens == stop_words:
+        return []
+
+    for token in tokens:
+        if token in stop_words:
+            tokens.remove(token)
+
+    return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
