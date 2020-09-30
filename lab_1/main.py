@@ -57,10 +57,10 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    if not isinstance(tokens, list) or \
-            None in tokens or tokens == []:
+    if not isinstance(tokens, list):
         return {}
-    freq_dict = {token: tokens.count(token) for token in tokens}
+    freq_dict = {token: tokens.count(token)
+                 for token in tokens if isinstance(token, str)}
     return freq_dict
 
 
@@ -180,9 +180,11 @@ def write_to_file(path_to_file: str, content: list):
     Writes the result in a file
     """
     if isinstance(path_to_file, str) and isinstance(content, list):
+        lines = ''
+        for line in content:
+            lines += ' '.join(line)+'\n'
         with open(path_to_file, 'w', encoding='utf-8') as file:
-            for line in content:
-                file.write(' '.join(line)+'\n')
+            file.write(lines)
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -216,9 +218,6 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
                 if not left_sort:
                     if token == usage[-1] and usage.count(token) == 1:
                         return []
-                    if len(usage) == number + 1:
-                        pass
-                    else:
-                        sorted_concordance = sorted(concordance,
-                                                    key=lambda item_after: item_after[(concordance[0].index(word))+1])
+                    sorted_concordance = sorted(concordance,
+                                                key=lambda item_after: item_after[(concordance[0].index(word))+1])
     return sorted_concordance
