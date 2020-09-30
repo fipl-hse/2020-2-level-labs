@@ -227,9 +227,7 @@ def write_to_file(path_to_file: str, content: list):
             value = ' '.join(item)
             text += value + '\n'
         f.write(text)
-
-
-# write_to_file('report.txt', content)
+#write_to_file('report.txt', content)
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
