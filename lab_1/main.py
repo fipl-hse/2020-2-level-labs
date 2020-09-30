@@ -37,7 +37,32 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+    words = open('C:\\Users\\Acer\\2020-2-level-labs\\lab_1\\stop_words.txt', "r", encoding='utf-8')
+    stop_words = words.read().split()
+    sentence = ' '.join(stop_words)
+    slices = list(sentence)
+    l = ["'", ",", ".", "`", "`", "”", "“"]
+    bad_inputs_first = [{}, (), None, 9, 9.34, True, False]
+    bad_inputs_second = [{}, (), None, 9, 9.34, True, False]
+    empty = []
+    for x in slices:
+        for x in l:
+            if x in slices:
+                slices.remove(x)
+    line = ''.join(slices)
+    stop_words = line.split()
+    for z in tokens:
+        for z in stop_words:
+            if z in tokens:
+                tokens.remove(z)
+    for z in tokens:
+        if z in bad_inputs_first:
+            return empty
+        else:
+            return tokens
+    for a in stop_words:
+        if a in bad_inputs_second:
+            return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
