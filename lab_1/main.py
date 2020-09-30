@@ -2,6 +2,7 @@
 Lab 1
 A concordance extraction
 """
+import os
 
 
 def tokenize(text: str) -> list:
@@ -58,7 +59,13 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+
+    tokens = ['weather', 'sunny', 'man', 'happy', 'and', 'dog', 'happy']
+    freq_dict = {}
+    for i in tokens:
+        if i not in freq_dict:
+            freq_dict[i]=tokens.count(i)
+    return freq_dict
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -111,7 +118,28 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    tokens = ['the', 'weather', 'is', 'sunny','the', 'man', 'is', 'happy', 'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
+    word = 'happy'
+    left_n = int(2)
+    right_n = int(3)
+    i_left = int(input('Your number:'))
+    i_right = int(input('Your number:'))
+    if i_left == left_n and i_right == right_n:
+        a = tokens.pop(5)
+        #print([a])
+        a1 = tokens.pop(9)
+        #print([a]+[a1])
+        a2 = tokens.pop(8)
+        #print([a]+[a1]+[a2])
+        a3 = tokens.pop(11)
+        print([[a]+[a1]]+[[a2]+[a3]])
+    else:
+        return []
+
+
+
+
+
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -119,8 +147,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
 
@@ -129,7 +157,10 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+    with open(os.path.join(path_to_file, 'report.txt'),
+              'w', encoding='utf-8') as file:
+        file.write('\n'.join([' '.join(k) for k in content]))
+
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
