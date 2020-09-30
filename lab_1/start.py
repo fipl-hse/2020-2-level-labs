@@ -2,9 +2,6 @@
 Concordance implementation starter
 """
 
-from main import read_from_file
-import os
-
 if __name__ == '__main__':
     #  use data.txt file to test your program
     current_dir = os.path.dirname(os.path.abspath(__file__))

@@ -11,7 +11,7 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    if not type(text) == str:
+    if not isinstance(text, str):
         return []
 
     text = text.lower()
@@ -20,10 +20,9 @@ def tokenize(text: str) -> list:
         if token.isalpha() or token == ' ':
             new_text += token
     token_list = new_text.split()
-    else:
-    token_list = []
 
     return token_list
+
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
@@ -35,12 +34,16 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if type(tokens) == list and type(stop_words) == list:
-            for words in stop_words:
-                while words in tokens:
-                    tokens.remove(words)
-    else:
-        tokens = []
+    if not isinstance(tokens, list):
+        return []
+    if not isinstance(stop_words, list):
+        return []
+
+    tokens = []
+    for words in tokens:
+        if words in stop_words:
+            tokens.remove(words)
+
     return tokens
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -51,14 +54,18 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    if type(tokens) == list:
-        freq_dict = {}
-        for words in tokens:
-            if type(words) == str:
-                freq = tokens.count(words)
-                freq_dict[words] = freq
-    else:
-        freq_dict = {}
+    if not isinstance(tokens, list):
+        return {}
+
+    for words in tokens:
+        if not isinstance(words, str):
+            return {}
+
+    freq_dict = {}
+    for words in tokens:
+        freq = tokens.count(words)
+        freq_dict[words] = freq
+
     return freq_dict
 
 
@@ -73,6 +80,15 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
+        return []
+
+    items_list = list(freq_dict.items())
+    items_list.sort(key=lambda i: i[1], reverse=True)
+    top_n_words = []
+    for words in items_list:
+        top_n_words.append(words[0])
+    return top_n_words[:top_n]
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -92,7 +108,23 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    if isinstance(right_context_size, bool) or isinstance(left_context_size, bool):
+        return []
+
+    if not isinstance(tokens, list) and not isinstance(word, str) \
+            or not isinstance(right_context_size, int) or not isinstance(left_context_size, int):
+        return []
+
+    if left_context_size < 1:
+        left_context_size = 0
+    if right_context_size < 1:
+        right_context_size = 0
+
+    concordance = []
+    for index, element in enumerate(tokens):
+        if element == word:
+            concordance.append(tokens[index - left_context_size:index + right_context_size + 1])
+    return concordance
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -110,7 +142,21 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    if not isinstance(tokens, list) or not isinstance(word, str):
+        return []
+
+    if isinstance(left_n, int) and isinstance(right_n, int) and left_n >= 1 and right_n >= 1:
+        concordance = get_concordance(tokens, word, left_n, right_n)
+        adjacent_words = []
+        for element in concordance:
+            if left_n > 0 and right_n > 0:
+                adjacent_words.append([element[0], element[-1]])
+            elif left_n > 0 and not right_n > 0:
+                adjacent_words.append([element[0]])
+            elif right_n > 0 and not left_n > 0:
+                 adjacent_words.append([element[-1]])
+    return adjacent_words
+
 
 
 def read_from_file(path_to_file: str) -> str:
