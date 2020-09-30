@@ -6,7 +6,8 @@ A concordance extraction
 
 def tokenize(text: str) -> list:
     """
-    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
+    Splits sentences into tokens, converts
+    the tokens into lowercase, removes punctuation
     :param text: the initial text
     :return: a list of lowercased tokens without punctuation
     e.g. text = 'The weather is sunny, the man is happy.'
@@ -33,7 +34,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     Removes stop words
     :param tokens: a list of tokens
     :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
+    :return: list of tokens without stop words
     e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
@@ -144,6 +145,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                     concordance.append(subconcor)
     return concordance
 
+
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
     Gets adjacent words from the left and right context
@@ -192,9 +194,12 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    with open('report.txt', 'w', encoding='utf8') as file:
-        for example in content:
-            file.writelines([i + '\n' for i in example])
+    path = path_to_file + r'\report.txt'
+    with open(path, 'w', encoding='utf8') as file:
+        for context in content:
+            for word in context:
+                file.write(word + '\n')
+            file.write('\n')
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -222,14 +227,17 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
         contexts = []
         for context in concordance:
             if left_sort:
-                if context[0] != 'word' and concordance.count(word) != 1:
+                if context[0] == word and context.count(word) == 1:
+                    pass
+                else:
                     contexts.append(context)
             else:
-                if context[-1] != 'word' and concordance.count(word) != 1:
+                if context[-1] == word and context.count(word) == 1:
+                    pass
+                else:
                     contexts.append(context)
         if left_sort:
-            ordered = sorted(contexts, key= lambda x: x[0])
+            ordered = sorted(contexts, key=lambda x: x[0])
         else:
-            ordered = sorted(contexts, key=lambda x: x[left_context_size])
+            ordered = sorted(contexts, key=lambda x: x[left_context_size + 1])
     return ordered
-
