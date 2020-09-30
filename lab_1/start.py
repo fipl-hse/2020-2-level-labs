@@ -2,9 +2,10 @@
 Concordance implementation starter
 """
 
-from main import read_from_file
+#from main import read_from_file
 import os
-import main
+from lab_1 import main
+from lab_1.main import read_from_file
 
 if __name__ == '__main__':
     #  use data.txt file to test your program
@@ -13,19 +14,23 @@ if __name__ == '__main__':
     stop_words = ['the', 'is']
 
     #  here goes your logic: calling methods from concordance.py
-    tokens = main.tokenize(data[:40])
+    tokens = main.tokenize(data)
+    print(tokens[:10])
 
-    token_stw = main.remove_stop_words(tokens, stop_words)
+    tokens = main.remove_stop_words(tokens, stop_words)
+    print(tokens[:5])
 
-    freq = main.calculate_frequencies(token_stw[:20])
+    freq = main.calculate_frequencies(tokens[:40])
+    print(freq[tokens[1]])
 
-    top_words = main.get_top_n_words(freq, 2)
+    concordance = main.get_concordance(tokens, 'team', 1, 1)
+    print(concordance[:2])
 
-    concordance = main.get_concordance(token_stw[:20], 'team', 1, 1)
+    adj_words = main.get_adjacent_words(tokens, 'team', 2, 2)
+    print(adj_words[:2])
 
-    adj_words = main.get_adjacent_words(token_stw, 'team', 2, 2)
-
-    file = main.read_from_file('report.txt', concordance)
+    #file = main.read_from_file('report.txt', concordance)
+    main.write_to_file('', concordance)
 
 
 
