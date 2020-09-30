@@ -42,7 +42,15 @@ if __name__ == '__main__':
         pairs.append(pair)
     pairs = "\n".join(pairs)
     print(f'We can also get adjacted words! Here are some of them for "year":\n{pairs}')
-    RESULT = sort_concordance(tokens, 'end', 3, 5, True)
-    print(RESULT)
+    RESULT = sort_concordance(tokens, 'end', 3, 5, True)[:10]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [(), ()], 'Concordance not working'
+    assert RESULT == [['an', 'unusually', 'early', 'end', 'to', 'his', 'career', 'in', 'the'],
+                      ['and', 'sometimes', 'they', 'end', 'them', 'literally', 'with', 'carved', 'wisps'],
+                      ['and', 'towards', 'the', 'end', 'of', 'that', 'century', 'a', 'number'],
+                      ['army', 'at', 'the', 'end', 'of', 'the', 'season', 'the', 'vfl'],
+                      ['at', 'the', 'northwestern', 'end', 'of', 'the', 'island', 'although', 'the'],
+                      ['at', 'the', 'other', 'end', 'the', 'two', 'men', 'were', 'arrested'],
+                      ['atoms', 'at', 'the', 'end', 'of', 'guerrilla', 'forces', 'numbered', 'no'],
+                      ['babylonians', 'at', 'the', 'end', 'of', 'the', 'reading', 'his', 'friends'],
+                      ['beach', 'at', 'the', 'end', 'of', 'la', 'dolce', 'vita', 'has'],
+                      ['birthday', 'to', 'the', 'end', 'of', 'the', 'year', 'its', 'one']], 'Concordance not working'
