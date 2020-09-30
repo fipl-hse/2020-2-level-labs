@@ -20,5 +20,8 @@ for lab in $LABS; do
   echo "Check calling lab #${lab} passed"
 
   START_PY_FILE=$(cat lab_"${lab}"/start.py)
-  python3 config/check_start_content.py --start_py_content "$START_PY_FILE"
+  CALLED_FUNCTIONS=$(python3 -m trace --count -C . -t lab_"${lab}"/start.py)
+  TARGET_SCORE=$(cat lab_"${lab}"/target_score.txt)
+  TARGET_TESTS=config/lab_"${lab}"/target_tests_"${TARGET_SCORE}".txt
+  python3 config/check_start_content.py --start_py_content "$START_PY_FILE" --functions "$CALLED_FUNCTIONS" --target "$TARGET_TESTS"
 done
