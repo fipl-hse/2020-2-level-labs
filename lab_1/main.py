@@ -55,8 +55,8 @@ def calculate_frequencies(tokens: list) -> dict:
     if not isinstance(tokens, list):
         return {}
     if isinstance(tokens, list) and tokens:
-        for el in tokens:
-            if not isinstance(el, str):
+        for element in tokens:
+            if not isinstance(element, str):
                 return {}
     return {element: tokens.count(element) for element in tokens}
 
@@ -194,8 +194,9 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
         return []
     concord = get_concordance(tokens, word, left_context_size, right_context_size)
     if left_sort and left_context_size > 0:
-        return sorted(concord)
+        concord.sort()
     if not left_sort and right_context_size > 0:
-        return sorted(concord, key=lambda element: element[element.index(word)+1])
+        concord.sort(key=lambda element: element[element.index(word)+1])
     else:
         return []
+    return concord
