@@ -14,14 +14,15 @@ def tokenize(text: str) -> list:
     """
     trash = set("!.,?;:!#$%&()*+/<=>@^_{|}~-[]{}")
     c = ''
-    if isinstance(text, str):
+    tokens = []
+    if type(text) is str:
+        text = text.lower()
         for i in text:
             if i in trash:
                 text = text.replace(i, c)
-        text = text.lower()
-        tokens = text.split()
-        return tokens
-    return []
+        text = text.split()
+        tokens.extend(text)
+    return tokens
     pass
 
 
@@ -35,10 +36,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if isinstance(tokens, list):
-        tokens = [i for i in tokens if i not in stop_words]
-        return tokens
-    return []
+    without_st_wrds = []
+    if type(tokens) is list:
+        for i in tokens:
+            if i not in stop_words:
+                without_st_wrds.append(i)
+
+    return without_st_wrds
     pass
 
 
@@ -50,11 +54,17 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    if isinstance(tokens, list) and all(tokens):
-        frequencies = {i: tokens.count(i) for i in tokens}
-        return frequencies
-    return {}
+    freq = {}
+    if type(tokens) is list and all(tokens):
+        for i in tokens:
+            frequencies = {i: tokens.count(i)}
+            freq.update(frequencies)
+
+    return freq
     pass
+
+
+calculate_frequencies(['weather', 'sunny', 'man', 'happy'])
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -67,11 +77,16 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
+    top_n_words = []
 
-    if isinstance(freq_dict, dict):
-        sorted_dict = [k for k, _ in sorted(freq_dict.items(), key=lambda kv: kv[1], reverse=True)]
-        return sorted_dict[:top_n]
-    return []
+    if type(freq_dict) is dict and type(top_n) is int:
+        listed_dict = list(freq_dict.items())
+        listed_dict.sort(key=lambda x: -x[1])
+        sorted_dict = dict(listed_dict)
+        for i, wrd in enumerate(sorted_dict):
+            top_n_words.append(wrd)
+
+    return top_n_words[:top_n]
     pass
 
 
@@ -101,16 +116,18 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
 
     if all(conditions):
         context = []
-        word_numb = [idx for idx, el in enumerate(tokens) if el == word]
-        surrounding = (left_context_size, right_context_size)
+        word_numb = []
+        for index, element in enumerate(tokens):
+            if element == word:
+                word_numb.append(index)
 
-        for x in word_numb:
-            if surrounding[0] > 0 and surrounding[1] > 0:
-                context.append(tokens[x - surrounding[0]:x + surrounding[1] + 1])
-            elif surrounding[1] > 0:
-                context.append(tokens[x:x + surrounding[1] + 1])
-            elif surrounding[0] > 0:
-                context.append(tokens[x - surrounding[0]:x + 1])
+        for i in word_numb:
+            if left_context_size > 0 and right_context_size > 0:
+                context.append(tokens[i - left_context_size:i + right_context_size + 1])
+            elif right_context_size > 0:
+                context.append(tokens[i:i + right_context_size + 1])
+            elif left_context_size > 0:
+                context.append(tokens[i - left_context_size:i + 1])
             else:
                 return []
         return context
@@ -134,23 +151,32 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     conditions = [
-        isinstance(tokens, list),
-        isinstance(word, str),
-        isinstance(left_n, int),
-        isinstance(right_n, int)
+        type(tokens) is list,
+        type(word) is str,
+        type(left_n) is int,
+        type(right_n) is int
     ]
 
     if all(conditions):
-        surrounding = (left_n, right_n)
         concordance = get_concordance(tokens, word, left_n, right_n)
+        adj_words = []
 
-        if surrounding[0] > 0 and surrounding[1] > 0:
-            return [[i[0], i[-1]] for i in concordance]
-        elif surrounding[1] > 0:
-            return [[i[-1]] for i in concordance]
-        elif surrounding[0] > 0:
-            return [[i[0]] for i in concordance]
-        return []
+        if left_n > 0 and right_n > 0:
+            for i in concordance:
+                wrds = [[i[0], i[-1]]]
+                adj_words.extend(wrds)
+            return adj_words
+        elif right_n > 0:
+            for i in concordance:
+                wrds = [[i[-1]]]
+                adj_words.extend(wrds)
+            return adj_words
+        elif left_n > 0:
+            for i in concordance:
+                wrds = [[i[0]]]
+                adj_words.extend(wrds)
+            return adj_words
+        return adj_words
     return []
     pass
 
@@ -160,21 +186,23 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as file:
-        data = file.read()
+    if type(path_to_file) is str:
+        with open(path_to_file, 'r', encoding='utf-8') as fs:
+            data = fs.read()
 
-    return data
+        return data
 
 
 def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    with open(path_to_file, 'w', encoding='utf-8') as data:
-        for i in content:
-            data.write(f'{repr(i)}\n')
+    if type(path_to_file) is str and type(content) is list:
+        with open(path_to_file, 'w', encoding='utf-8') as file:
+            for i in content:
+                file.write(" ".join(i))
+                file.write("\n")
     pass
-
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
     """
@@ -193,4 +221,20 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
+    conditions = [
+        type(tokens) is list,
+        type(word) is str,
+        type(left_context_size) is int,
+        type(right_context_size) is int,
+        type(left_sort) is bool
+    ]
+    concordance = get_concordance(tokens, word, left_context_size, right_context_size)
+
+    if all(conditions):
+        if left_sort and left_context_size > 0:
+            return sorted(concordance)
+        if not left_sort and right_context_size > 0:
+            return sorted(concordance, key=lambda x: x[left_context_size + 1])
+
+    return []
     pass
