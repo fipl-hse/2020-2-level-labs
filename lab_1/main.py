@@ -12,12 +12,11 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
+    if not isinstance(text, str):
+        return []
     import re
-    text = re.findall(r'[A-Za-z]+\'?-?[A-Za-z]*-?\'?[A-Za-z]*', text)
-    text = ' '.join(text)
+    text = re.sub(r'[^A-Za-z \n]', '', text, count=0)
     text = text.lower()
-    text = text.replace('-', '')
-    text = text.replace('\'', '')
     text = text.split()
     return text
 
@@ -32,6 +31,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
+    if not isinstance(tokens, list) or not isinstance(stop_words, list):
+        return []
     for token in tokens:
         if token in stop_words:
             tokens.remove(token)
@@ -46,10 +47,11 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
+    if not isinstance(tokens, list):
+        return {}
     freq_dict = {}
     for token in tokens:
         freq_dict[token] = tokens.count(token)
-        tokens.remove(token)
     return freq_dict
 
 
@@ -63,9 +65,21 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
-
-
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or top_n <= 0:
+        return []
+    freq_lst = []
+    for v in freq_dict.values():
+        if v not in freq_lst:
+            freq_lst.append(v)
+    freq_lst.sort(reverse=True)
+    top_n_lst = []
+    while freq_lst:
+        for k, v in freq_dict.items():
+            if v == freq_lst[0]:
+                top_n_lst.append(k)
+        freq_lst.remove(freq_lst[0])
+    top_n_output = top_n_lst[:top_n]
+    return top_n_output
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
