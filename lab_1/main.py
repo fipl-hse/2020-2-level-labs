@@ -54,6 +54,10 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     if not isinstance(tokens, list):
         return {}
+    if isinstance(tokens, list) and tokens:
+        for el in tokens:
+            if not isinstance(el, str):
+                return {}
     return {element: tokens.count(element) for element in tokens}
 
 
@@ -75,12 +79,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     for k, v in freq_dict.items():
         freq_and_word.append([v, k])
     freq_and_word.sort(reverse=True)
-    if top_n <= len(freq_and_word):
-        for element in freq_and_word:
-            if counter < top_n:
-                top_words.append(element[1])
-                counter += 1
-        return top_words
+    for element in freq_and_word:
+        if counter < top_n:
+            top_words.append(element[1])
+            counter += 1
+    return top_words
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -100,9 +103,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if not isinstance(tokens, list) or not isinstance(word, str):
-        return []
-    elif not isinstance(right_context_size, int) and not (left_context_size, int):
+    if not isinstance(tokens, list) or not isinstance(word, str)\
+            or not isinstance(right_context_size, int) or not (left_context_size, int):
         return []
     concordance = []
     word_index = []
