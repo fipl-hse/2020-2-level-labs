@@ -105,10 +105,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     check1 = isinstance(left_context_size, int) and not isinstance(left_context_size, bool)
     check2 = isinstance(right_context_size, int) and not isinstance(right_context_size, bool)
-    if not isinstance(tokens, list):
+    if not isinstance(tokens, list) or not isinstance(word, str) or not word.isalpha():
         return []
-    if (not isinstance(word, str) or not word.isalpha() or not check1 or not check2 or
-            (left_context_size < 1 and right_context_size < 1)):
+    if not check1 or not check2 or (left_context_size < 1 and right_context_size < 1):
         return []
     concordance = []
     if left_context_size < 0:
