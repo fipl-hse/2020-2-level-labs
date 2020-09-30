@@ -17,9 +17,9 @@ def tokenize(text: str) -> list:
     token_list = []
     for i in text.split():
         if not i.isalpha():
-            for s in i:
-                if not s.isalpha():
-                    i = i.replace(s, '')
+            for symbol in i:
+                if not symbol.isalpha():
+                    i = i.replace(symbol, '')
         if i.isalpha():
             token_list.append(i.lower())
     return token_list
@@ -37,7 +37,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     if not isinstance(tokens, list):
         return []
-    elif not isinstance(stop_words, list) or stop_words == []:
+    if not isinstance(stop_words, list) or stop_words == []:
         return tokens
     return [i for i in tokens if i not in stop_words]
 
@@ -74,12 +74,12 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     word_list = []
     freq_list = []
     top_n_words_list = []
-    for k, v in freq_dict.items():
-        word_list.append(k)
-        freq_list.append(v)
+    for key, value in freq_dict.items():
+        word_list.append(key)
+        freq_list.append(value)
     if top_n > len(word_list):
         top_n = len(word_list)
-    for i in range(top_n):
+    for _ in range(top_n):
         max_num_index = freq_list.index(max(freq_list))
         freq_list[max_num_index] = 0
         top_n_words_list.append(word_list[max_num_index])
@@ -152,8 +152,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
 
@@ -199,9 +199,9 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     sorted_concordance = []
     words_list = [i[word_index] for i in concordance]
     for i in sorted(words_list):
-        for l in concordance:
-            if i == l[word_index]:
-                sorted_concordance.append(l)
-                concordance.remove(l)
+        for context in concordance:
+            if i == context[word_index]:
+                sorted_concordance.append(context)
+                concordance.remove(context)
                 break
     return sorted_concordance
