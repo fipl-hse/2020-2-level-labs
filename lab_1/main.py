@@ -30,13 +30,12 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if tokens and isinstance(tokens, list):
+    if isinstance(tokens, list) and isinstance(stop_words, list):
         for word in tokens:
             if not isinstance(word, str):
                 return []
 
-        if stop_words and isinstance(stop_words, list):
-            tokens = [word for word in tokens if word not in stop_words]
+        tokens = [word for word in tokens if word not in stop_words]
         return tokens
     return []
 
@@ -134,9 +133,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
     concordance = []
     statements = [isinstance(tokens, list), isinstance(word, str), not isinstance(left_n, bool),
-                  not isinstance(right_n, bool)]
+                  not isinstance(right_n, bool), isinstance(left_n, int) + isinstance(right_n, int)]
 
-    if all(statements) and (isinstance(left_n, int) or isinstance(right_n, int)):
+    if all(statements):
         for i in get_concordance(tokens, word, left_n, right_n):
             if left_n > 0 and right_n > 0:
                 concordance.append([i[0], i[-1]])
