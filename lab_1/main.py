@@ -111,6 +111,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
      or not type(left_context_size) == int or not type(right_context_size) == int \
      or (left_context_size < 1 and right_context_size < 1)
     if wrong_circumstance: return []
+    if left_context_size == -1:
+        left_context_size = 0
+    elif right_context_size == -1:
+        right_context_size = 0
     for index, token in enumerate(tokens):
         if token == word:
             concordance.extend([tokens[index - left_context_size:index + right_context_size + 1:1]])
@@ -204,26 +208,22 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     wrong_circumstance = word == '' or not type(word) == str or tokens == [] \
                          or not type(tokens) == list or None in tokens \
                          or not type(left_context_size) == int or not type(right_context_size) == int \
-                         or (left_context_size < 1 and right_context_size < 1) or not type(left_sort) == bool \
-                         or (left_sort is True and left_context_size == -1) \
-                         or (left_sort is False and right_context_size == -1)
+                         or (left_context_size < 1 and right_context_size < 1) \
+                         or (right_context_size < 0 and left_sort == False) \
+                         or (left_context_size < 0 and left_sort == True) or not type(left_sort) == bool
     if wrong_circumstance: return []
-    concordance_list = get_concordance(tokens, word, left_context_size, right_context_size)
-    sorted_concordance_list = []
-    first_letter = 'a'
-    for concordance in concordance_list:
-        if left_sort is True:
-            lexema = concordance[0]
-            letter = lexema[0]
-            if letter > first_letter:
-                sorted_concordance_list.insert(0, concordance)
-                first_letter = letter
-            else: sorted_concordance_list.insert(-1, concordance)
-        else:
-            lexema = concordance[left_context_size + 1]
-            letter = lexema[0]
-            if letter > first_letter:
-                sorted_concordance_list.insert(0, concordance)
-                first_letter = letter
-            else: sorted_concordance_list.insert(-1, concordance)
+    sorted_concordance_list = get_concordance(tokens, word, left_context_size, right_context_size)
+    number = len(sorted_concordance_list)
+    while number != 0:
+        for index in range(1, len(sorted_concordance_list)):
+            if left_sort is True:
+                if sorted_concordance_list[index][0][0] < sorted_concordance_list[index - 1][0][0]:
+                    sorted_concordance_list[index - 1], sorted_concordance_list[index] = sorted_concordance_list[index], \
+                                                                                         sorted_concordance_list[index - 1]
+            if left_sort is False:
+                if sorted_concordance_list[index][left_context_size + 1][0] < \
+                        sorted_concordance_list[index - 1][left_context_size + 1][0]:
+                    sorted_concordance_list[index - 1], sorted_concordance_list[index] = sorted_concordance_list[index], \
+                                                                                         sorted_concordance_list[index - 1]
+        number = number - 1
     return sorted_concordance_list

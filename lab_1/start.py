@@ -19,7 +19,7 @@ if __name__ == '__main__':
     concordance = main.get_concordance(tokens, 'seriously', 1, 1)
     adjacent_words = main.get_adjacent_words(tokens, 'seriously', 1, 1)
     main.write_to_file('report.txt', adjacent_words)
-
-    RESULT = adjacent_words
+    sorted_concordance_list = main.sort_concordance(tokens, 'seriously', 1, 1, True)
+    RESULT = sorted_concordance_list
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Concordance not working'
