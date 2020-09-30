@@ -44,7 +44,7 @@ if __name__ == "__main__":
         print('Make sure you made assert RESULT in start.py file')
         sys.exit(1)
 
-    if check_start_file_called_functions(args.called_functions, args.target.split()):
+    if check_start_file_called_functions(args.functions, args.target.split()):
         print('Passed calling functions check')
         sys.exit(0)
     print('Make sure you called all implemented functions in start.py file')
