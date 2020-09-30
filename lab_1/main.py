@@ -15,7 +15,9 @@ def tokenize(text: str) -> list:
     pass
     if isinstance(text, str):
         signs = '!@#$%^&*()_+=-\;№:?[]{},.<>~/|1234567890'
-        text = ''.join(t.lower() for t in text if t not in signs)
+        for i in text:
+            if i not in signs:
+        text = ''.join(i.lower())
         return (text.split())
     else:
         return []
@@ -31,11 +33,17 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
        --> ['weather', 'sunny', 'man', 'happy']
        """
     pass
-    if not isinstance(tokens, list):
-        return []
+
+    if isinstance(tokens, list):
+        tokens_without_stop = []
+        for i in tokens:
+            if i not in stop_words:
+                tokens_without_stop.append(i)
+        return tokens_without_stop
     else:
-        tokens = [i for i in tokens if i not in stop_words]
-        return tokens
+        return []
+
+
 
 
 
@@ -94,7 +102,26 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     pass
+    requirments = [type(tokens) is list, type(word) is str, type(left_context_size) is int,
+                   type(right_context_size) is int]
 
+    if all(requirments):
+        concordance = []
+        numb = []
+        for index, element in enumerate(tokens):
+            if element == word:
+                numb += [index]
+        for index in numb:
+            if left_context_size > 0 and right_context_size > 0:
+                concordance.append(tokens[index - left_context_size: index + right_context_size + 1])
+            elif right_context_size > 0:
+                concordance.append(tokens[index: index + right_context_size + 1])
+            elif left_context_size > 0:
+                concordance.append(tokens[index - left_context_size: index + 1])
+            else:
+                return []
+        return concordance
+    return []
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
@@ -112,6 +139,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     pass
+
 
 
 def read_from_file(path_to_file: str) -> str:
