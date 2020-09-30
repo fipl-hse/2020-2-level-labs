@@ -12,11 +12,11 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    if not type(text) == str:
+    pass
+    if not isinstance(text, str) == True:
         return []
     text_input = re.sub(r'[^a-zA-Z ]', '', text).lower().split()
     return text_input
-
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -29,9 +29,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if not type(tokens) == list:
+    pass
+    if isinstance(tokens, list) != True or isinstance(stop_words, list) != True:
         return []
-    return []
+
+    else:
+        return [word for word in tokens if word not in stop_words]
+
 
 def calculate_frequencies(tokens: list) -> dict:
     """
@@ -42,6 +46,7 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
     pass
+    frequency = {}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
