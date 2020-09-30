@@ -11,13 +11,13 @@ if __name__ == '__main__':
     #  use data.txt file to test your program
     current_dir = os.path.dirname(os.path.abspath(__file__))
     data = read_from_file(os.path.join(current_dir, 'data.txt'))
-    stop_words = ['the', 'is']
+    stop_words = read_from_file(os.path.join(current_dir, 'stop_words.txt'))
 
     #  here goes your logic: calling methods from concordance.py
     tokens = main.tokenize(data)
     print(tokens[:10])
 
-    tokens = main.remove_stop_words(tokens[:5], stop_words)
+    tokens = main.remove_stop_words(tokens[:6], stop_words)
     print(tokens)
 
     freq = main.calculate_frequencies(tokens[:40])
@@ -32,6 +32,6 @@ if __name__ == '__main__':
     # file = main.read_from_file('report.txt', concordance)
     main.write_to_file('report.txt', concordance)
 
-    RESULT = tokens
+    RESULT = adj_words[:2]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == ['years', 'of', 'time', 'team', 'presented'],'Concordance not working'
+    assert RESULT == [['of', 'a']], 'Concordance not working'
