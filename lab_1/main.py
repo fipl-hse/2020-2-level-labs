@@ -25,8 +25,8 @@ def tokenize(text: str) -> list:
         tokens = re.sub('[\'\",.!0-9+=\!@#$%^&*()-_]+', '', text).split()
         # print(tokens[:10])
         return tokens
-    else:
-        return []
+
+    return []
 
 
 # tokenize()
@@ -54,8 +54,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     elif isinstance(tokens, list) and not isinstance(stop_words, list):
         return tokens
 
-    else:
-        return []
+    return []
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -79,8 +78,7 @@ def calculate_frequencies(tokens: list) -> dict:
                 freq_dict[word] = 1
 
         return freq_dict
-    else:
-        return {}
+    return {}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -97,8 +95,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     if isinstance(freq_dict, dict):
         st = sorted(freq_dict, key=freq_dict.get, reverse=True)[:top_n]
         return st
-    else:
-        return []
+
+    return []
 
 
 # tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
@@ -127,39 +125,38 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             not isinstance(right_context_size, int) or not isinstance(word, str)
             or isinstance(right_context_size, bool) or isinstance(left_context_size, bool)):
         return []
-    else:
-        for i, token in enumerate(tokens):
-            if isinstance(token, str) and token == word:
-                len_l = len(tokens[i - left_context_size:i])
-                len_r = len(tokens[i: i + right_context_size + 1])
-                left_w = tokens[i - left_context_size:i]
-                right_w = tokens[i: i + right_context_size + 1]
+    for i, token in enumerate(tokens):
+        if isinstance(token, str) and token == word:
+            len_l = len(tokens[i - left_context_size:i])
+            len_r = len(tokens[i: i + right_context_size + 1])
+            left_w = tokens[i - left_context_size:i]
+            right_w = tokens[i: i + right_context_size + 1]
 
-                if ((left_context_size >= 1) and (left_context_size <= len_l)
-                        and (right_context_size >= 1)
-                        and (right_context_size <= len_r)):
-                    context = left_w + right_w
-                    concordance.append(context)
+            if ((left_context_size >= 1) and (left_context_size <= len_l)
+                    and (right_context_size >= 1)
+                    and (right_context_size <= len_r)):
+                context = left_w + right_w
+                concordance.append(context)
 
-                elif ((left_context_size >= 1) and
-                      (left_context_size <= len_l) and (right_context_size < 1)):
-                    context = left_w
-                    concordance.append(context)
+            elif ((left_context_size >= 1) and
+                  (left_context_size <= len_l) and (right_context_size < 1)):
+                context = left_w
+                concordance.append(context)
 
-                elif (left_context_size < 1) and (right_context_size >= 1):
-                    context = right_w
-                    concordance.append(context)
+            elif (left_context_size < 1) and (right_context_size >= 1):
+                context = right_w
+                concordance.append(context)
 
-                elif ((left_context_size > len_l) and (right_context_size >= 1)
-                      and (right_context_size <= len_r)):
-                    context = tokens[0:i] + right_w
-                    concordance.append(context)
+            elif ((left_context_size > len_l) and (right_context_size >= 1)
+                  and (right_context_size <= len_r)):
+                context = tokens[0:i] + right_w
+                concordance.append(context)
 
-                elif (left_context_size > len_l) and (right_context_size < 1):
-                    context = tokens[0:i + 1]
-                    concordance.append(context)
+            elif (left_context_size > len_l) and (right_context_size < 1):
+                context = tokens[0:i + 1]
+                concordance.append(context)
         # print(concordance)
-        return concordance
+    return concordance
 
 
 # get_concordance(tokens, 'happy', 2, 3)
@@ -187,20 +184,20 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             and not isinstance(left_n, int) and not isinstance(right_n, int)
             and (right_n < 1) and (left_n < 1)):
         return []
-    else:
-        concordance = get_concordance(tokens, word, left_n, right_n)
-        # print(concordance)
-        for cont in concordance:
-            if (left_n < 1) and (right_n >= 1):
-                adj_w.append([cont[-1]])
 
-            elif (right_n < 1) and (left_n >= 1):
-                adj_w.append([cont[0]])
+    concordance = get_concordance(tokens, word, left_n, right_n)
+    # print(concordance)
+    for cont in concordance:
+        if (left_n < 1) and (right_n >= 1):
+            adj_w.append([cont[-1]])
 
-            elif (right_n >= 1) and (left_n >= 1):
-                adj_w.append([cont[0], cont[-1]])
+        elif (right_n < 1) and (left_n >= 1):
+            adj_w.append([cont[0]])
 
-        return adj_w
+        elif (right_n >= 1) and (left_n >= 1):
+            adj_w.append([cont[0], cont[-1]])
+
+    return adj_w
 
 
 # get_adjacent_words(['the', 'weather', 'is', 'sunny', 'the', 'man', 'sunny', 'ygh'] , 'sunny', 0, 1)
