@@ -69,14 +69,14 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or top_n <= 0:
         return []
     freq_lst = []
-    for v in freq_dict.values():
-        if v not in freq_lst:
-            freq_lst.append(v)
+    for val in freq_dict.values():
+        if val not in freq_lst:
+            freq_lst.append(val)
     freq_lst.sort(reverse=True)
     top_n_lst = []
     while freq_lst:
-        for k, v in freq_dict.items():
-            if v == freq_lst[0]:
+        for k, val in freq_dict.items():
+            if val == freq_lst[0]:
                 top_n_lst.append(k)
         freq_lst.remove(freq_lst[0])
     top_n_output = top_n_lst[:top_n]
@@ -167,8 +167,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
 
@@ -209,9 +209,8 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     if left_sort and left_context_size > 0:
         sorted_concordance = sorted(concordances)
         return sorted_concordance
-    elif not left_sort and right_context_size > 0:
-        sorted_concordance = sorted(concordances, key=lambda x: x[left_context_size+1])
+    if not left_sort and right_context_size > 0:
+        sorted_concordance = sorted(concordances, key=lambda x: x[left_context_size + 1])
         return sorted_concordance
     else:
         return []
-
