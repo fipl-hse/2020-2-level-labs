@@ -34,4 +34,4 @@ if __name__ == '__main__':
 
     RESULT = adjacent_words
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Concordance not working'
+    assert RESULT == [['services', 'to'], ['starvation', 'desirable'], ['the', 'record']], 'Concordance not working'
