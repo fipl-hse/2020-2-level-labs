@@ -12,9 +12,8 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-
     if isinstance(text, str):
-        signs = '!@#$%^&*()_+=-\;№:?[]{},.<>~/|1234567890'
+        signs = '!@#$%^&*;()_+=-\№:?[]{},.<>~/|1234567890'
         text = text.lower()
         tokens = ''
         for i in text:
@@ -33,8 +32,6 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
        stop_words = ['the', 'is']
        --> ['weather', 'sunny', 'man', 'happy']
        """
-
-
     if isinstance(tokens, list):
         tokens_without_stop = []
         for i in tokens:
@@ -55,7 +52,6 @@ def calculate_frequencies(tokens: list) -> dict:
        e.g. tokens = ['weather', 'sunny', 'man', 'happy']
        --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
        """
-
     if isinstance(tokens, list) and all(tokens):
         dict_freq = {}
         for i in tokens:
@@ -103,11 +99,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-
     requirments = [isinstance(tokens, list), isinstance(word, str), isinstance(left_context_size, int),
                    isinstance(right_context_size, int), not isinstance(left_context_size, bool),
                    not isinstance(right_context_size, bool)]
-
     if all(requirments):
         concordance = []
         numb = []
@@ -141,7 +135,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-
     requirments = [isinstance(tokens, list), isinstance(word, str), not isinstance(left_n, bool),
                   not isinstance(right_n, bool), isinstance(left_n, int), isinstance(right_n, int)]
     if all(requirments):
