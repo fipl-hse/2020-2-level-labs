@@ -16,9 +16,9 @@ def tokenize(text):
         text = text.lower()
         litter = '!@#$%^&*()_+=-\;№:?[]{},.<>~\'\"/|\\1234567890'
         tokens = ''
-        for c in text:
-            if c not in litter:
-                tokens += c
+        for i in text:
+            if i not in litter:
+                tokens += i
         tokens = tokens.split()
         return tokens
     return []
@@ -102,9 +102,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                   not isinstance(left_context_size,bool),not isinstance(right_context_size,bool)]
     if all (requirements):
         concordance = []
-        for i, el in enumerate(tokens):
-            if el == word:
-                word_index = i
+        for index, element in enumerate(tokens):
+            if element == word:
+                word_index = index
                 if left_context_size > 0 and right_context_size > 0:
                     concordance.append(tokens[word_index - left_context_size:word_index + 1 + right_context_size])
                 elif left_context_size > 0:
