@@ -16,13 +16,15 @@ def tokenize(text: str) -> list:
     """
 
 
-    if not isinstance(text, str) or not text:
+     if not isinstance(text, str) or not text:
         return []
 
-    prepared_text = re.sub('[^a-zA-Z \n`]', '', text).lower()
-    return prepared_text.split()
-
-
+    text = text.lower()
+    punctuation = ['.', ',', ':', ';']
+    for symb in punctuation:
+        text = text.replace(symb, '')
+    text = list(text.split())
+    return text
 
 
 
@@ -38,13 +40,15 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
 
 
+    if not isinstance(tokens, list) or not tokens or not isinstance(stop_words, list):
+        return []
+
     result = []
     for word in tokens:
         if word not in stop_words:
             result.append(word)
-
+            
     return result
-
 
 def calculate_frequencies(tokens: list) -> dict:
     """
@@ -54,6 +58,11 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
+
+    if isinstance(tokens, list) and tokens:
+        for word in tokens:
+            if not isinstance(word, str):
+                return {}
 
     result = {}
     tokens_set = set(tokens)
@@ -73,6 +82,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
 
+   if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or not freq_dict or not top_n >= 1:
+        return []
     freq_array = []
     for key, val in freq_dict.items():
         freq_array.append([val, key])
@@ -80,7 +91,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
 
     result = []
     for i in range(top_n):
-        result.append(freq_array[i][1])
+    	try:
+            result.append(freq_array[i][1])
+        except IndexError:
+            break
 
     return result
 
@@ -103,14 +117,17 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
 
-    freq_array = []
-    for key, val in freq_dict.items():
-        freq_array.append([val, key])
-    freq_array.sort(reverse = True)
+    if isinstance(right_context_size, bool) or isinstance(left_context_size, bool):
+        return []
 
     result = []
-    for i in range(top_n):
-        result.append(freq_array[i][1])
+    for i in range(len(tokens)):
+        if tokens[i] == word:
+            A = []
+            for j in range(i - left_context_size,
+                           i + right_context_size + 1):
+                A.append(tokens[j])
+            result.append(A)
 
     return result
 
@@ -133,13 +150,15 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
 
 
+   if not isinstance(tokens, list) or not isinstance(word, str):
+        return []
+
     result = []
     for i in range(len(tokens)):
         if tokens[i] == word:
             A = []
-            for j in range(i - left_context_size,
-                           i + right_context_size + 1):
-                A.append(tokens[j])
+            A.append(tokens[i - left_context_size])
+            A.append(tokens[i + right_context_size])
             result.append(A)
 
     return result
