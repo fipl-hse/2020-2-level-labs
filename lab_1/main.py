@@ -47,11 +47,11 @@ def calculate_frequencies(tokens: list) -> dict:
     if not isinstance(tokens, list):
         return {}
     for word in tokens:
-        if isinstance(word, str):
+        if not isinstance(word, str):
+            return {}
+        else:
             freq_dic = {word: tokens.count(word) for word in tokens}
             return freq_dic
-        else:
-            return {}
 
 
 
@@ -65,15 +65,15 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
        top_n = 1
        --> ['happy']
        """
-    if isinstance(freq_dict, dict) and isinstance(top_n, int):
+    if not isinstance(freq_dict, dict) and isinstance(top_n, int):
+       return []
+    else:
         list_of_items = list(freq_dict.items())
         list_of_items.sort(key=lambda x: x[1], reverse=True)
         top_n_words = []
         for pair_el in list_of_items:
             top_n_words.append(pair_el[0])
         return top_n_words[:top_n]
-    else:
-        return []
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -194,10 +194,10 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
         return []
     sort_contexts = get_concordance(tokens, word, left_context_size, right_context_size)
     if left_sort and left_context_size > 0:
-        sort_contexts.sort(key=lambda w: w[0])
+        sort_contexts.sort(key=lambda word: word[0])
     elif not left_sort and right_context_size > 0:
         index_w = left_context_size + 1
-        sort_contexts.sort(key=lambda w: w[index_w])
+        sort_contexts.sort(key=lambda word: word[index_w])
     else:
         return []
     return sort_contexts
