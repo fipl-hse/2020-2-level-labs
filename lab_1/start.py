@@ -3,16 +3,35 @@ Concordance implementation starter
 """
 
 from main import read_from_file
+from main import tokenize
+from main import remove_stop_words
+from main import calculate_frequencies
+from main import get_top_n_words
+from main import get_concordance
 import os
 
 if __name__ == '__main__':
     #  use data.txt file to test your program
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    data = read_from_file(os.path.join(current_dir, 'data.txt'))
-    stop_words = []
+    text = read_from_file(os.path.join(current_dir, 'data.txt'))
+    stop_words = read_from_file((os.path.join(current_dir, 'stop_words.txt')))
+    stop_words = stop_words.split('\n')
+    tokens = tokenize(text)
 
-    #  here goes your logic: calling methods from concordance.py
+    tokens = remove_stop_words(tokens, stop_words)
+    print('Tokens without stopwords: {}'.format(tokens))
 
-    RESULT = tokenize(text)
+    freq_dict = calculate_frequencies(tokens)
+    print('Frequencies of tokenize words: {}'.format(freq_dict))
+
+    top_words = get_top_n_words(freq_dict, 5)
+    print('5 most popular words: {}'.format(top_words))
+
+    concordance = get_concordance(tokens, 'sodium', 1, 1)
+    print('Getting concordance for the token "sodium": {}'.format(concordance))
+
+    RESULT = concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [(), ()], 'Concordance not working'
+    assert RESULT, 'Concordance not working'
+
+

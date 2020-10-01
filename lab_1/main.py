@@ -3,7 +3,7 @@ Lab 1
 A concordance extraction
 """
 
-def tokenize(text):
+def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
@@ -11,7 +11,7 @@ def tokenize(text):
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    if type(text) is str:
+    if isinstance(text, str):
         tokens = ''
         text = text.lower()
         if '\n' in text:
@@ -28,7 +28,7 @@ def tokenize(text):
     else:
         return []
 
-def remove_stop_words(tokens, stop_words):
+def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     Removes stop words
     :param tokens: a list of tokens
@@ -39,20 +39,19 @@ def remove_stop_words(tokens, stop_words):
     --> ['weather', 'sunny', 'man', 'happy']
     """
     without_stop_words = []
-    stop_words2 = ''
-    if isinstance(tokens, list) and len(tokens) != 0 and len(stop_words) != 0 and isinstance(stop_words, list):
+    if type(tokens) != list or len(tokens) == 0:
+        return []
+    elif type(stop_words) != list or len(stop_words) == 0:
+        return tokens
+    elif isinstance(tokens, list) and len(tokens) != 0 and len(stop_words) != 0 and isinstance(stop_words, list):
         for n in tokens:
             if n not in stop_words:
                 without_stop_words.append(n)
         return without_stop_words
-    elif type(tokens) != list or len(tokens) == 0:
-        return []
-    elif type(stop_words) != list or len(stop_words) == 0:
-        return tokens
 
 
 
-def calculate_frequencies(without_stop_words):
+def calculate_frequencies(without_stop_words: list) -> dict:
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens without stop words
@@ -72,7 +71,7 @@ def calculate_frequencies(without_stop_words):
 
 
 
-def get_top_n_words(freq_dict, top_n):
+def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     Returns the most common words
     :param freq_dict: a dictionary with frequencies
@@ -84,17 +83,21 @@ def get_top_n_words(freq_dict, top_n):
     """
     top_n_words = []
     if isinstance(freq_dict, dict) and isinstance(top_n, int):
-        freq_dict = list(freq_dict.items())
-        freq_dict.sort(reverse=True)
-        for i in freq_dict[:top_n]:
-            top_n_words.append(i[0])
+        freq_k = list(freq_dict.keys())
+        freq_v = list(freq_dict.values())
+        freq_s = freq_v.copy()
+        freq_v.sort(reverse=True)
+        for i in freq_v[:top_n]:
+            num = freq_s.index(i)
+            top_n_words.append(freq_k[num])
+            freq_k.remove(freq_k[num])
         return top_n_words
     else:
         return []
 
 
 
-def get_concordance(tokens, word, left_context_size, right_context_size):
+def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
     Gets a concordance of a word
     A concordance is a listing of each occurrence of a word in a text,
@@ -112,18 +115,25 @@ def get_concordance(tokens, word, left_context_size, right_context_size):
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     concordance1 = []
-    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int) \
-            and isinstance(right_context_size, int) and len(word) != 0 and len(tokens) > 1 and word in tokens:
-        num = tokens.index(word)
+    test1 = isinstance(tokens, list)
+    test2 = isinstance(word, str)
+    test3 = isinstance(left_context_size, int)
+    test4 = isinstance(right_context_size, int)
+    if test1 and test2 and test3 and test4 and len(word) != 0 and len(tokens) > 1 and (word in tokens):
         words = tokens.count(word)
-        if left_context_size > 1 and right_context_size > 1:
+        num = tokens.index(word)
+        if left_context_size >= 1 and right_context_size >= 1:
             concordance = tokens[num - left_context_size:num] + tokens[num:num + right_context_size + 1]
             concordance1.append(concordance)
+            tokens.remove(word)
             if words > 1:
-                new_token = tokens[num + 1:]
-                new_num = new_token.index(word) + num + 1
-                new_concordance = tokens[new_num - left_context_size:new_num] + tokens[new_num:new_num + right_context_size + 1]
-                concordance1.append(new_concordance)
+                while words != 1:
+                    new_num = tokens.index(word)
+                    new_concordance = tokens[new_num - left_context_size:new_num] + \
+                                        tokens[new_num:new_num + right_context_size + 1]
+                    concordance1.append(new_concordance)
+                    words -= 1
+                    tokens.remove(word)
             return concordance1
         elif left_context_size < 1 and right_context_size >= 1:
             concordance = tokens[num:num + right_context_size + 1]
