@@ -41,7 +41,6 @@ def get_stop_words() -> list:
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
-    tokens_clean = []
     """
        Removes stop words
        :param tokens: a list of tokens
@@ -51,9 +50,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
        stop_words = ['the', 'is']
        --> ['weather', 'sunny', 'man', 'happy']
     """
-    if checker(tokens, list):
-        tokens_clean = [token for token in tokens if token not in stop_words]
-    return tokens_clean
+    if not checker(tokens, list):
+        return []
+
+    return [token for token in tokens if token not in stop_words]
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -64,11 +64,11 @@ def calculate_frequencies(tokens: list) -> dict:
         e.g. tokens = ['weather', 'sunny', 'man', 'happy']
         --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    frequencies = {}
 
-    if checker(tokens, list):
-        frequencies = {token: tokens.count(token) for token in tokens}
-    return frequencies
+    if not checker(tokens, list):
+        return {}
+
+    return {token: tokens.count(token) for token in tokens}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -81,13 +81,13 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    top = []
+    if not isinstance(freq_dict, dict):
+        return []
 
-    if isinstance(freq_dict, dict):
-        freq = list(freq_dict.items())
-        freq_s = sorted(freq, key=lambda num: num[1], reverse=True)
+    freq = list(freq_dict.items())
+    freq_s = sorted(freq, key=lambda num: num[1], reverse=True)
+    top = [freq_s[i][0] for i in range(min(top_n, len(freq_s)))]
 
-        top = [freq_s[i][0] for i in range(min(top_n, len(freq_s)))]
     return top
 
 
