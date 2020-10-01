@@ -83,12 +83,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return []
 
-    items_list = list(freq_dict.items())
-    items_list.sort(key=lambda i: i[1], reverse=True)
     top_n_words = []
-    for words in items_list:
-        top_n_words.append(words[0])
-    return top_n_words[:top_n]
+    if isinstance(freq_dict, dict) and top_n > 0:
+        top_n_words = sorted(freq_dict, key=freq_dict.get, reverse=True)
+        top_n_words = top_n_words[:top_n]
+    return top_n_words
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -165,17 +164,21 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as read_file:
+        text = read_file.read()
+    return text
 
-    return data
 
 
 def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+    if isinstance(path_to_file, str) and isinstance(content, list):
+        with open(path_to_file, 'w', encoding='utf-8') as file:
+            for i in content:
+                file.write(" ".join(i))
+                file.write("\n")
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
