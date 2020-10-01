@@ -91,7 +91,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
 
     result = []
     for i in range(top_n):
-    	try:
+        try:
             result.append(freq_array[i][1])
         except IndexError:
             break
