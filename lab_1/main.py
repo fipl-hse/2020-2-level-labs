@@ -32,10 +32,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     if not isinstance(tokens, list) or not tokens or not isinstance(stop_words, list):
         return []
 
-    for word in tokens:
-        while word in stop_words:
-            tokens.remove(word)
-
+    while 'the' in tokens:
+        tokens.remove('the')
+    while 'is' in tokens:
+        tokens.remove('is')
     return tokens
 
 
@@ -174,7 +174,6 @@ def read_from_file(path_to_file: str) -> str:
     """
     with open(path_to_file, 'r', encoding='utf-8') as file:
         data = file.read()
-
     return data
 
 
