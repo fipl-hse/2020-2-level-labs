@@ -188,10 +188,10 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
                             print(small_list.index(token) + right_n)
                         current_words = [left_word, right_word]
                     if left_n < 1 and right_n > 0:
-                        if 0 <= small_list.index(token) + right_n <= len(small_list):
+                        if 0 <= small_list.index(token) + right_n < len(small_list):
                             current_words = [small_list[small_list.index(token) + right_n]]
                         else:
-                            current_words = ''
+                            current_words = [small_list[small_list.index(token) + right_n - 1]]
                     if right_n < 1 and left_n > 0:
                         if 0 <= small_list.index(token) - left_n <= len(small_list):
                             current_words = [small_list[small_list.index(token) - left_n]]
@@ -200,9 +200,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
                     if left_n < 1 and right_n < 1:
                         return ([])
                     adjacent_words.append(current_words)
+        print (adjacent_words)
         return adjacent_words
     return []
-
 
 
 
