@@ -12,6 +12,16 @@ if __name__ == '__main__':
     stop_words = []
 
     #  here goes your logic: calling methods from concordance.py
+    test_text = read_from_file('text.txt')
+    my_freq_dict = calculate_frequencies(tokenize(test_text))
+    top = get_top_n_words(my_freq_dict, 1)
+    print(top)
+    print(tokenize(test_text))
+    print(get_concordance(tokenize(test_text), 'amet', 3, 2))
+    print(get_adjacent_words(tokenize(test_text), 'ipsum', 1, 5))
+
+    write_to_file('result1.txt', get_concordance(tokenize(test_text), 'ex', 3, 2))
+
 
     RESULT = None
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST

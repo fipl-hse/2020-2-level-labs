@@ -191,14 +191,3 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     pass
-
-
-# #test_text = read_from_file('text.txt')
-# my_freq_dict = calculate_frequencies(tokenize(test_text))
-# top = get_top_n_words(my_freq_dict, 1)
-# print(top)
-# print(tokenize(test_text))
-# print(get_concordance(tokenize(test_text), 'amet', 3, 2))
-# print(get_adjacent_words(tokenize(test_text), 'ipsum', 1, 5))
-#
-# write_to_file('result1.txt', get_concordance(tokenize(test_text), 'ex', 3, 2))
