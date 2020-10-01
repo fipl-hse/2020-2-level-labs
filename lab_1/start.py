@@ -14,25 +14,25 @@ if __name__ == '__main__':
 
     #  here goes your logic: calling methods from concordance.py
     tokens = main.tokenize(data)
-    print('tokens:', tokens[:10], '...')
+    # print('tokens:', tokens[:10], '...')
 
     tokens = main.remove_stop_words(tokens, stop_words)
-    print('tokens without stop words:', tokens[:10], '...')
+    # print('tokens without stop words:', tokens[:10], '...')
 
-    frequency_dictionary = main.calculate_frequencies(tokens)
-    print('frequency of "time":', frequency_dictionary['time'])
+    # frequency_dictionary = main.calculate_frequencies(tokens)
+    # print('frequency of "time":', frequency_dictionary['time'])
 
-    top_10_words = main.get_top_n_words(frequency_dictionary, 10)
-    print('the most frequent 10 words:', top_10_words)
+    # top_10_words = main.get_top_n_words(frequency_dictionary, 10)
+    # print('the most frequent 10 words:', top_10_words)
 
-    concordance = main.get_concordance(tokens, 'rocket', 2, 3)
-    print('contexts for "rocket":', concordance)
+    # concordance = main.get_concordance(tokens, 'rocket', 2, 3)
+    # print('contexts for "rocket":', concordance)
 
-    adjacent_words = main.get_adjacent_words(tokens, 'rocket', 2, 3)
-    print('adjacent words for "rocket":', adjacent_words)
+    # adjacent_words = main.get_adjacent_words(tokens, 'rocket', 2, 3)
+    # print('adjacent words for "rocket":', adjacent_words)
 
     sorted_concordance = main.sort_concordance(tokens, 'rocket', 2, 3, False)
-    print('sorted concordance for "rocket":', sorted_concordance)
+    # print('sorted concordance for "rocket":', sorted_concordance)
 
     main.write_to_file('report.txt', sorted_concordance)
 

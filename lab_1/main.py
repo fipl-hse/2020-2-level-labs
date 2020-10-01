@@ -2,6 +2,7 @@
 Lab 1
 A concordance extraction
 """
+import copy
 
 
 def tokenize(text: str) -> list:
@@ -162,10 +163,11 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    for i in content:
-        content[content.index(i)] = ' '.join(i)
+    content1 = copy.deepcopy(content)
+    for i in content1:
+        content1[content1.index(i)] = ' '.join(i)
     with open(path_to_file, 'w', encoding='utf-8') as file:
-        file.write('\n'.join(content))
+        file.write('\n'.join(content1))
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
