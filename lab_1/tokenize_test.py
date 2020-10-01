@@ -5,6 +5,7 @@ Checks the first lab text preprocessing functions
 
 import unittest
 from main import tokenize
+from main import read_from_file
 
 
 class TokenizeTest(unittest.TestCase):
