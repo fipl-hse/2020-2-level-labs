@@ -13,7 +13,7 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
 
- text = text.lower()
+    text = text.lower()
     punctuation = ['.', ',', ':', ';']
     for symb in punctuation:
         text = text.replace(symb, '')
@@ -52,7 +52,7 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
 
-     result = {}
+    result = {}
     tokens_set = set(tokens)
     for word in tokens_set:
         result[word] = tokens.count(word)
@@ -70,7 +70,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
 
-     freq_array = []
+    freq_array = []
     for key, val in freq_dict.items():
         freq_array.append([val, key])
     freq_array.sort(reverse = True)
