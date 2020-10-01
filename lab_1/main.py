@@ -17,12 +17,11 @@ def tokenize(text: str) -> list:
         signs = '!@#$%^&*()_+=-\;№:?[]{},.<>~/|1234567890'
         text = text.lower()
         tokens = ''
-        for t in text:
-            if t not in signs:
-                tokens += t
+        for i in text:
+            if i not in signs:
+                tokens += i
         return tokens.split()
-    else:
-        return []
+    return []
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
@@ -42,8 +41,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
             if i not in stop_words:
                 tokens_without_stop.append(i)
         return tokens_without_stop
-    else:
-        return []
+    return []
 
 
 
@@ -85,8 +83,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         for i in list_dict:
             top_words.append(i[0])
         return top_words[:top_n]
-    else:
-        return []
+    return []
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -158,8 +155,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             elif right_n > 0 and not left_n > 0:
                 adj_words.append([element[-1]])
         return adj_words
-    else:
-        return []
+    return []
 
 def read_from_file(path_to_file: str) -> str:
     """
@@ -180,7 +176,7 @@ def write_to_file(path_to_file: str, content: list):
     if isinstance(path_to_file, str) and isinstance(content, list):
         with open(path_to_file, 'w', encoding='utf-8') as file:
             for i in content:
-                file.write(" ".join(i) + "\n")
+                file.write("\n".join(i))
 
 
 
