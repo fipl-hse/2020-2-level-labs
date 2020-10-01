@@ -101,14 +101,15 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     concordance = []
 
-    if not isinstance(tokens, list) or not isinstance(word, str)\
-            or not isinstance(right_context_size, int) or not (left_context_size, int):
+    if not isinstance(tokens, list) or not isinstance(word, str) or not word.isalpha():
+        return []
+    if isinstance(left_context_size, int) or isinstance(right_context_size, int):
         return []
     if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
         return []
-    if left_context_size < 1:
+    if left_context_size < 0:
         left_context_size = 0
-    elif right_context_size < 1:
+    elif right_context_size < 0:
         right_context_size = 0
     for index, token in enumerate(tokens):
         if token == word:
