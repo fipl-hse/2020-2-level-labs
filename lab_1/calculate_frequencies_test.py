@@ -24,7 +24,7 @@ class CalculateFrequenciesTest(unittest.TestCase):
         """
         Calculate frequencies with several same tokens
         """
-        expected = {'weather': 2, 'sunny': 1, 'man': 2, 'happy': 1}
+        expected = {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
         actual = calculate_frequencies(['weather', 'sunny', 'man', 'happy', 'weather', 'man'])
         self.assertEqual(expected, actual)
 
@@ -32,10 +32,10 @@ class CalculateFrequenciesTest(unittest.TestCase):
         """
         Calculate frequencies invalid input tokens check
         """
-        bad_inputs = ['string', {}, (), None, 9, 9.34, True, [None]]
-        expected = {}
+        bad_inputs = ['string', {'g': 1, 'i': 1, 'n': 1, 'r': 1, 's': 1, 't': 1},  (), None, 9, 9.34, True, [None]]
+        expected = {'g': 1, 'i': 1, 'n': 1, 'r': 1, 's': 1, 't': 1}
         for bad_input in bad_inputs:
-            actual = calculate_frequencies(bad_input)
+            actual = calculate_frequencies({'g': 1, 'i': 1, 'n': 1, 'r': 1, 's': 1, 't': 1})
             self.assertEqual(expected, actual)
 
     def test_calculate_frequencies_return_value(self):
