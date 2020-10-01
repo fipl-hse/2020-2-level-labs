@@ -133,7 +133,23 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    requirements = [isinstance(tokens, list), isinstance(word, str), isinstance(left_n, int),
+                    isinstance(right_n, int),
+                    not isinstance(left_n, bool), not isinstance(right_n, bool)]
+    if all(requirements):
+        adjacent_words=[]
+        conc=get_concordance(tokens,word,left_n,right_n)
+        for i in conc:
+            if left_n>0 and right_n>0:
+                adjacent_words.append([i[0],i[-1]])
+            elif right_n>0:
+                adjacent_words.append([i[-1]])
+            elif left_n>0:
+                adjacent_words.append([i[0]])
+        return adjacent_words
+    else:
+        return []
+
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -151,7 +167,8 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+    with open (path_to_file,"w",encoding="utf-8") as fs:
+        fs.write(" ".join(content))
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
