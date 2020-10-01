@@ -28,10 +28,10 @@ if __name__ == '__main__':
     print(f"concordance for 'mountain': {mountain_concordance}")
 
     mountain_adjacent_words = main.get_adjacent_words(tokens, 'mountain', 1, 1)
-    print=(f"adjacent words for 'mountain': {mountain_adjacent_words}")
+    print(f"adjacent words for 'mountain': {mountain_adjacent_words}")
 
     mountain_sorted_concordance = main.sort_concordance(tokens, 'mountain', 1, 2, True)
-    print=(f"sorted concordance for 'mountain': {mountain_sorted_concordance}")
+    print(f"sorted concordance for 'mountain': {mountain_sorted_concordance}")
 
     main.write_to_file ('report.txt', mountain_sorted_concordance)
     RESULT = mountain_sorted_concordance
