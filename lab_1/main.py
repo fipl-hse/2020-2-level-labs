@@ -189,9 +189,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
                         current_words = [left_word, right_word]
                     if left_n < 1 and right_n > 0:
                         if 0 <= small_list.index(token) + right_n <= len(small_list):
-                            print(small_list)
-                            print (small_list.index(token) + right_n)
-                            current_words = [small_list[small_list.index(token) + right_n - 1]]
+                            current_words = [small_list[small_list.index(token) + right_n]]
                         else:
                             current_words = ''
                     if right_n < 1 and left_n > 0:

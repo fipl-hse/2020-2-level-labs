@@ -1,2 +1,0 @@
-global local 
-man woman 
