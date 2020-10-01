@@ -33,4 +33,4 @@ if __name__ == '__main__':
     adjacent = main.get_adjacent_words(tokens, 'cat', 2, 3)
     print('The adjacent words is: ', adjacent[:5])
 
-    assert RESULT == [['of', 'a']], 'Concordance not working'
+    assert RESULT == [['recommended', 'a', 'main', 'division', 'services', 'relocation']], 'Concordance not working'
