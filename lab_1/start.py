@@ -31,6 +31,11 @@ if __name__ == '__main__':
     adjacent_words = main.get_adjacent_words(tokens, "task", 2, 3)
     print("Adjacent words for word 'task':", adjacent_words)
 
-    RESULT = None
+    sorts_concordance = main.sort_concordance(tokens, 'task', 2, 3, True)
+    print("Sorted concordance for word 'task':", sorts_concordance[:7])
+
+    main.write_to_file('report.txt', sorts_concordance)
+
+    RESULT = sorts_concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [(), ()], 'Concordance not working'
+    assert RESULT, 'Concordance not working'

@@ -2,6 +2,7 @@
 Lab 1
 A concordance extraction
 """
+from typing import TextIO
 
 
 def tokenize(text: str) -> list:
@@ -18,10 +19,10 @@ def tokenize(text: str) -> list:
     raw = text.split()
     for part in raw:
         cleaned = []
-        for el in part:
-            if el.isalpha():
-                cleaned.append(el.lower())
-        if cleaned:
+        for element in part:
+            if element.isalpha():
+                cleaned.append(element.lower())
+        if not cleaned == []:
             tokens.append(''.join(cleaned))
     return tokens
 
@@ -39,9 +40,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     if not isinstance(tokens, list) and not isinstance(stop_words, list):
         return []
     clean_tokens = []
-    for el in tokens:
-        if el not in stop_words:
-            clean_tokens.append(el)
+    for element in tokens:
+        if element not in stop_words:
+            clean_tokens.append(element)
     return clean_tokens
 
 
@@ -102,9 +103,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         return []
     elif not isinstance(right_context_size, int) and not (left_context_size, int):
         return []
-    if left_context_size < 1:
+    if not left_context_size >= 1:
         left_context_size = 0
-    elif right_context_size < 1:
+    elif not right_context_size >= 1:
         right_context_size = 0
     concordance = []
     for index, token in enumerate(tokens):
@@ -151,6 +152,7 @@ def read_from_file(path_to_file: str) -> str:
     """
     with open(path_to_file, 'r', encoding='utf-8') as file:
         data = file.read()
+
     return data
 
 
@@ -160,7 +162,7 @@ def write_to_file(path_to_file: str, content: list):
     """
     with open(path_to_file, 'w', encoding='utf-8') as file:
         for i in content:
-            file.write('/n'.join(content))
+            file.write(' '.join(i) + '\n')
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -180,4 +182,13 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    pass
+    if not isinstance(left_sort, bool) or not isinstance(tokens, list) or not isinstance(word, str) \
+            or not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
+        return []
+    concord = get_concordance(tokens, word, left_context_size, right_context_size)
+    if left_sort and left_context_size > 0:
+        return sorted(concord)
+    if not left_sort and right_context_size > 0:
+        return sorted(concord, key=lambda element: element[element.index(word) + 1])
+    return []
+
