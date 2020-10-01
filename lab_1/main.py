@@ -16,15 +16,13 @@ def tokenize(text: str) -> list:
     """
 
 
-     if not isinstance(text, str) or not text:
+    
+    if not isinstance(text, str) or not text:
         return []
 
-    text = text.lower()
-    punctuation = ['.', ',', ':', ';']
-    for symb in punctuation:
-        text = text.replace(symb, '')
-    text = list(text.split())
-    return text
+    prepared_text = re.sub('[^a-zA-Z \n`]', '', text).lower()
+    return prepared_text.split()
+   
 
 
 
