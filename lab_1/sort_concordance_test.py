@@ -109,7 +109,7 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         """
         Checks if a context sorts right for a given term and can be found properly
         """
-        text = read_from_file('lab1/data.txt')
+        text = read_from_file('lab_1/data.txt')
         tokens = tokenize(text)
 
         expected = [['although', 'less', 'compact', 'than', 'tex', 'the',
@@ -124,7 +124,7 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         Checks if contexts for a given term can be found in real text properly
         Taking into consideration left context
         """
-        text = read_from_file('lab1/data.txt')
+        text = read_from_file('lab_1/data.txt')
         tokens = tokenize(text)
 
         expected = [['by', 'sodium', 'bicarbonate'],
@@ -139,7 +139,7 @@ class GetAndSortConcordanceTest(unittest.TestCase):
         Checks if contexts for a given term can be found in real text properly
         Taking into consideration right context
         """
-        text = read_from_file('lab1/data.txt')
+        text = read_from_file('lab_1/data.txt')
         tokens = tokenize(text)
 
         expected = [['means', 'sodium', 'aluminate'],
