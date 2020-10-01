@@ -1,3 +1,4 @@
+import re
 """
 Lab 1
 A concordance extraction
@@ -13,10 +14,9 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
 
+
     text = text.lower()
-    punctuation = ['.', ',', ':', ';']
-    for symb in punctuation:
-        text = text.replace(symb, '')
+    text = re.sub(r'[^a-zA-Z0-9\s ]', '', text)
     text = list(text.split())
     return text
 
