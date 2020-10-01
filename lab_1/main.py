@@ -36,13 +36,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if not isinstance(tokens, list) and not isinstance(stop_words, list):
-        return []
-    tokens = []
-    for stop_word in stop_words:
-        while stop_word in tokens:
-            tokens.remove(stop_word)
-    return tokens
+    clean_tokens = []
+    if isinstance(tokens, list) and isinstance(stop_words, list):
+        for i in tokens:
+            if i not in stop_words:
+                clean_tokens.append(i)
+    else:
+        clean_tokens = []
+    return clean_tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
