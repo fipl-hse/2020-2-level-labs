@@ -12,10 +12,13 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = text.lower()
-    tokens = re.sub(,*+=, "", text).split()
-    return tokens
 
+ text = text.lower()
+    punctuation = ['.', ',', ':', ';']
+    for symb in punctuation:
+        text = text.replace(symb, '')
+    text = list(text.split())
+    return text
 
 
 
@@ -30,7 +33,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+
+
+    result = []
+    for word in tokens:
+        if word not in stop_words:
+            result.append(word)
+
+    return result
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -41,8 +51,13 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
 
+     result = {}
+    tokens_set = set(tokens)
+    for word in tokens_set:
+        result[word] = tokens.count(word)
+
+    return result
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
@@ -54,7 +69,17 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+
+     freq_array = []
+    for key, val in freq_dict.items():
+        freq_array.append([val, key])
+    freq_array.sort(reverse = True)
+
+    result = []
+    for i in range(top_n):
+        result.append(freq_array[i][1])
+
+    return result
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -74,7 +99,18 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+
+    freq_array = []
+    for key, val in freq_dict.items():
+        freq_array.append([val, key])
+    freq_array.sort(reverse = True)
+
+    result = []
+    for i in range(top_n):
+        result.append(freq_array[i][1])
+
+    return result
+
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -92,7 +128,18 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+
+
+    result = []
+    for i in range(len(tokens)):
+        if tokens[i] == word:
+            A = []
+            for j in range(i - left_context_size,
+                           i + right_context_size + 1):
+                A.append(tokens[j])
+            result.append(A)
+
+    return result
 
 
 def read_from_file(path_to_file: str) -> str:
