@@ -33,7 +33,9 @@ if __name__ == '__main__':
     concordance = get_concordance(tokens, 'entire', 2, 3)
     print('concordance for "entire":', concordance)
 
+    adjacent_words = main.get_adjacent_words(tokens, 'entire', 2, 3)
+    print('adjacent words for "entire":', adjacent_words[:5])
 
-    RESULT = concordance
+    RESULT = adjacent_words
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == ['covered', 'the', 'entire', 'world', 'but', 'magneto'], 'Concordance not working'
+    assert RESULT ==  'Concordance not working'
