@@ -162,8 +162,9 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
+    res=[''.join(concordance) for concordance in content]
     with open (path_to_file,"w",encoding="utf-8") as concordance_file:
-        concordance_file.write("\n".join(content))
+        concordance_file.write("\n".join(res))
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
