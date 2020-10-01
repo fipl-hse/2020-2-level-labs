@@ -2,7 +2,6 @@
 Lab 1
 A concordance extraction
 """
-from typing import TextIO
 
 
 def tokenize(text: str) -> list:
@@ -103,9 +102,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         return []
     elif not isinstance(right_context_size, int) and not (left_context_size, int):
         return []
-    if not left_context_size >= 1:
+    if left_context_size < 1:
         left_context_size = 0
-    elif not right_context_size >= 1:
+    elif right_context_size < 1:
         right_context_size = 0
     concordance = []
     for index, token in enumerate(tokens):
@@ -191,4 +190,3 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     if not left_sort and right_context_size > 0:
         return sorted(concord, key=lambda element: element[element.index(word) + 1])
     return []
-
