@@ -72,13 +72,15 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
 
+    if  not isinstance(tokens, list):  # if not word
+        return {}
 
-    if isinstance(tokens, list) and tokens: #check
-        for words in tokens:
-            if not isinstance(words, str):  #if not word
-                return {}
-            return {words:tokens.count(words)}
-    return{}
+
+    for words in tokens:
+        if not isinstance(words, str):
+            return {}
+    return {words: tokens.count(words) for words in tokens}
+
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -98,7 +100,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_list = list(freq_dict.items())
     top_list = sorted(top_list, key=lambda i:i[1],reverse = True)    #sort by keys(2 element) for less volume-lambda formed increase
 
-    return n_top_list
+    return top_list
 
 
 
