@@ -160,10 +160,10 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
 
     for element in context_line:
         if left_n == 0:
-            adjacent_words.extend([[element[-1]]])
+            adjacent_words.append([element[-1]])
 
         elif right_n == 0:
-            adjacent_words.extend([[element[0]]])
+            adjacent_words.append([element[0]])
 
         else:
             adjacent_words.extend([[element[0], element[-1]]])
@@ -187,10 +187,13 @@ def write_to_file(path_to_file: str, content: list):
     Writes the result in a file
     """
     if isinstance(path_to_file, str) and isinstance(content, list):
+        conc_str = ''
 
         with open(path_to_file, 'w', encoding='utf-8') as file:
             for concordance in content:
-                file.write(' '.join(concordance) + '\n')
+                concordance = ' '.join(concordance)
+                conc_str += concordance + '\n'
+            file.write(conc_str)
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:

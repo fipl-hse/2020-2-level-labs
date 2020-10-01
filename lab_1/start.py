@@ -36,6 +36,8 @@ if __name__ == '__main__':
 
     main.write_to_file('report.txt', sorted_conc)
 
-    RESULT = sorted_conc
+    RESULT = sorted_conc[:3]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Concordance not working'
+    assert RESULT == [['a', 'people', 'bent', 'conquest'],
+                      ['a', 'people', 'mover', 'station'],
+                      ['address', 'people', 'internet', 'politeness']], 'Concordance not working'
