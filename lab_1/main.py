@@ -162,10 +162,9 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
+    list_of_conc = [' '.join(conc) for conc in content]
     with open(path_to_file, 'w', encoding='utf-8') as file:
-        for conc in content:
-            conc = '\n'.join(conc)
-            file.write(conc)
+        file.write('\n'.join(list_of_conc))
 
 
 
