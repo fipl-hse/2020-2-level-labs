@@ -15,7 +15,7 @@ def tokenize(text: str) -> list:
     if not isinstance(text, str):
         return []
     text = text.lower()
-    text = re.sub(r'[^a-z0-9\s ]', '', text)
+    text = re.sub(r'[^a-z\s ]', '', text)
     text = text.split()
     return text
 
@@ -164,7 +164,9 @@ def write_to_file(path_to_file: str, content: list):
     """
     with open(path_to_file, 'w', encoding='utf-8') as file:
         for conc in content:
-            file.write('\n'.join(conc))
+            conc = '\n'.join(conc)
+        file.write(conc)
+
 
 
 
