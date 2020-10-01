@@ -37,20 +37,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    stop_words = open('C:\\Users\\Acer\\2020-2-level-labs\\lab_1\\stop_words.txt', "r", encoding='utf-8')
-    stop_words1 = stop_words.read().split()
-    sentence = ' '.join(stop_words1)
-    slices = list(sentence)
-    panel = ["'", ",", ".", "`", "`", "”", "“"]
+
     bad_inputs_first = [{}, (), None, 9, 9.34, True, False]
     bad_inputs_second = [{}, (), None, 9, 9.34, True, False]
     empty = []
-    for element in slices:
-        for component in panel:
-            if component in slices:
-                slices.remove(component)
-    line = ''.join(slices)
-    stop_words = line.split()
     for constituent in tokens:
         for component in stop_words:
             if component in tokens:
