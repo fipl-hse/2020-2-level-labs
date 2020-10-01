@@ -1,8 +1,8 @@
 """
 Concordance implementation starter
 """
-from main import read_from_file
 import os
+from main import read_from_file
 import main
 
 
