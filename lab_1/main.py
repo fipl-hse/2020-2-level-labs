@@ -109,10 +109,11 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     concordance = []
-    wrong_circumstance = word == '' or not isinstance(word, str) or tokens == [] \
-     or not isinstance(tokens, list) or None in tokens \
-     or not isinstance(left_context_size, int) or not isinstance(right_context_size, int) \
-     or (left_context_size < 1 and right_context_size < 1)
+    wrong_circumstance = word == '' or (not isinstance(word, str)) or tokens == [] \
+     or (not isinstance(tokens, list)) or None in tokens \
+     or (not isinstance(left_context_size, int)) or (not isinstance(right_context_size, int)) \
+     or (left_context_size < 1 and right_context_size < 1) \
+     or isinstance(left_context_size, bool) or isinstance(right_context_size, bool)
     if wrong_circumstance:
         return []
     if left_context_size == -1:
