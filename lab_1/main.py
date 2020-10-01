@@ -101,11 +101,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     concordance = []
 
-    if not isinstance(tokens, list) or not isinstance(word, str) or not word.isalpha():
+    if not isinstance(tokens, list) or not isinstance(word, str)\
+            or not isinstance(right_context_size, int) or (right_context_size, bool):
         return []
-    if isinstance(left_context_size, int) or isinstance(right_context_size, int):
-        return []
-    if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
+    if not isinstance(left_context_size, bool) or not isinstance(left_context_size, int):
         return []
     if left_context_size < 0:
         left_context_size = 0
@@ -132,17 +131,19 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    if not isinstance(tokens, list) or not isinstance(word, str):
+    if isinstance(tokens, list) or isinstance(word, str):
         return []
-    elif not isinstance(left_n, int) and not (right_n, int):
+    if isinstance(left_n, int) and isinstance (right_n, int):
+        return []
+    if not isinstance(left_n, bool) and not isinstance(right_n, bool):
         return []
     concordance = get_concordance(tokens, word, left_n, right_n)
     adj_words = []
     for i in concordance:
-        if left_n == 0:
-            adj_words.append([i[-1]])
-        elif right_n == 0:
+        if left_n > 0:
             adj_words.append([i[0]])
+        elif right_n > 0:
+            adj_words.append([i[-1]])
         else:
             adj_words.append([i[0], i[1]])
     return adj_words
