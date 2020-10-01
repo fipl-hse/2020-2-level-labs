@@ -15,7 +15,7 @@ def tokenize(text: str) -> list:
     if not isinstance(text, str):
         return []
     text = text.lower()
-    text = re.sub(r'[^a-zA-Z0-9\s ]', '', text)
+    text = re.sub(r'[^a-z0-9\s ]', '', text)
     text = text.split()
     return text
 
@@ -105,6 +105,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                   or (left_context_size < 1 and right_context_size < 1))
     if check_circ:
         return []
+    if left_context_size < 0:
+        left_context_size = 0
     concordance = []
     index_list = []
     for index, token in enumerate(tokens):
@@ -161,6 +163,9 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
+    with open(path_to_file, 'w', encoding='utf-8') as file:
+        for conc in content:
+            file.write('\n'.join(conc))
 
 
 
@@ -181,4 +186,19 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    pass
+    if (not isinstance(tokens, list) or not isinstance(word, str)\
+        or not isinstance(left_context_size, int) or not isinstance (right_context_size, int)\
+        or not isinstance(left_sort, bool)):
+        return []
+    sort_contexts = get_concordance(tokens, word, left_context_size, right_context_size)
+    if (left_context_size < 1 and left_sort) or (right_context_size < 1 and not left_sort):
+        return []
+    if left_sort and left_context_size > 0:
+        sort_contexts.sort(key=lambda w: w[0])
+    elif not left_sort and right_context_size > 0:
+        index_w = left_context_size + 1
+        sort_contexts.sort(key=lambda w: w[index_w])
+    else:
+        return []
+    return sort_contexts
+
