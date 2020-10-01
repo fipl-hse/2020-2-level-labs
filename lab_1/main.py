@@ -27,7 +27,6 @@ def tokenize(text: str) -> list:
         if word:
             tokens.append(word)
     return tokens
-    pass
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -48,7 +47,6 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
             without_st_wrds.append(i)
 
     return without_st_wrds
-    pass
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -68,7 +66,6 @@ def calculate_frequencies(tokens: list) -> dict:
         frequencies = {i: tokens.count(i)}
         freq.update(frequencies)
     return freq
-    pass
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -87,8 +84,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
 
     top_n_words = sorted(freq_dict, key=freq_dict.get, reverse=True)
     return top_n_words[:top_n]
-
-    pass
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -131,8 +126,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         else:
             return []
     return context
-
-    pass
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -177,15 +170,13 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         return adj_words
     return adj_words
 
-    pass
-
 
 def read_from_file(path_to_file: str) -> str:
     """
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    if type(path_to_file) is str:
+    if isinstance(path_to_file, str):
         with open(path_to_file, 'r', encoding='utf-8') as file:
             data = file.read()
 
@@ -201,7 +192,6 @@ def write_to_file(path_to_file: str, content: list):
             for i in content:
                 file.write(" ".join(i))
                 file.write("\n")
-    pass
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -237,4 +227,3 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
         return sorted(concordance, key=lambda x: x[left_context_size + 1])
 
     return []
-    pass
