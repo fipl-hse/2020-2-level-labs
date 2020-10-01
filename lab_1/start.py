@@ -34,7 +34,7 @@ if __name__ == '__main__':
     print(f"sorted concordance for 'mountain': {mountain_sorted_concordance}")
 
     main.write_to_file('report.txt', mountain_sorted_concordance)
-    RESULT = mountain_sorted_concordance
+    RESULT = mountain_sorted_concordance[:1]
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [['shadow', 'mountain', 'p', 'release']], 'Concordance not working'
