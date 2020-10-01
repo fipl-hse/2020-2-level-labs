@@ -14,7 +14,7 @@ def tokenize(text):
     """
     if isinstance(text,str):
         text = text.lower()
-        litter = '!@#$%^&*()_+=-\;№:?[]{},.<>~\'\"/|\\1234567890'
+        litter = '!@#$%^&*()_+=-;№:?[]{},.<>~\'\"/|\\1234567890'
         tokens = ''
         for i in text:
             if i not in litter:
