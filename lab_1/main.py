@@ -52,11 +52,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     if (isinstance(tokens, list) and tokens) and not (isinstance(stop_words, list) and stop_words):
         return tokens
 
+    s_tokens = tokens [:]
+
     for words in tokens:
         if words in stop_words:
-            tokens.remove(words)
+            s_tokens.remove(words)
 
-    return tokens
+    return s_tokens
 
 
 
@@ -75,7 +77,7 @@ def calculate_frequencies(tokens: list) -> dict:
         for words in tokens:
             if not isinstance(words, str):  #if not word
                 return {}
-        return {words:tokens.count(words)}
+            return {words:tokens.count(words)}
     return{}
 
 
@@ -94,11 +96,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         return []
 
     top_list = list(freq_dict.items())
-    top_list.sort(key=lambda i:i[1])    #sort by keys(2 element) for less volume-lambda formed increase
+    top_list = sorted(top_list, key=lambda i:i[1],reverse = True)    #sort by keys(2 element) for less volume-lambda formed increase
 
-    n_top_list = []
-    for f_word in top_list[:top_n]:
-        n_top_list.append(f_word[0])
     return n_top_list
 
 
