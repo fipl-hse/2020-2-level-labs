@@ -38,11 +38,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     if not isinstance(tokens, list) and not isinstance(stop_words, list):
         return []
-    clean_tokens = []
-    for stop_word in tokens:
-        if stop_word in stop_words:
-            clean_tokens.append(stop_word)
-    return clean_tokens
+    tokens = []
+    for stop_word in stop_words:
+        while stop_word in tokens:
+            tokens.remove(stop_word)
+    return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
