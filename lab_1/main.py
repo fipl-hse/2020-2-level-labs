@@ -136,9 +136,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     for i,k in enumerate(concordance):
         left_right_word.insert(i,[])
         if left_n > 0:
-            left_right_word[i].append(concordance[i][0])
+            left_right_word[i].append(k[0])
         if right_n > 0:
-            left_right_word[i].append(concordance[i][-1])
+            left_right_word[i].append(k[-1])
 
     return left_right_word
 
