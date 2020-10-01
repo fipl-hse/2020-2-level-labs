@@ -86,7 +86,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
             list_of_keys = []
             list_of_ranged_keys = []
             for value_1 in freq_dict.values():
-                list_of_values.append(value)
+                list_of_values.append(value_1)
             maximum = max(list_of_values)
             for value_1 in range(0, maximum):
                 for value in list_of_values:
