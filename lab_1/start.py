@@ -24,10 +24,10 @@ if __name__ == '__main__':
     top_5 = main.get_top_n_words(frequencies, 3)
     print(f"top 5 words: {top_5}")
 
-    mountain_concordance = main.get_corcondance(tokens, 'mountain', 2, 3)
+    mountain_concordance = main.get_concordance(tokens, 'mountain', 2, 3)
     print(f"concordance for 'mountain': {mountain_concordance}")
 
-    mountain_adjacent_words = main.adjacent_words (tokens, 'mountain', 1, 1)
+    mountain_adjacent_words = main.get_adjacent_words(tokens, 'mountain', 1, 1)
     print=(f"adjacent words for 'mountain': {mountain_adjacent_words}")
 
     mountain_sorted_concordance = main.sort_concordance(tokens, 'mountain', 1, 2, True)
