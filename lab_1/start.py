@@ -2,7 +2,8 @@
 Concordance implementation starter
 """
 
-import main, os
+import main
+import os
 
 if __name__ == '__main__':
     #  use data.txt file to test your program

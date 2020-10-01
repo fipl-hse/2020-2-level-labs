@@ -2,6 +2,7 @@
 Lab 1
 A concordance extraction
 """
+import re
 
 def tokenize(text: str) -> list:
     """
@@ -11,10 +12,9 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    import re
     if isinstance(text,str):
         text = text.lower()
-        tokens = re.sub('[^\w\s]', '', text)
+        tokens = re.sub('[^a-zA-z \n]', '', text)
         tokens = tokens.split()
     else:
         tokens = []
@@ -30,13 +30,12 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-
     if not isinstance(tokens,list) or tokens == stop_words:
         return []
-    elif isinstance(stop_words,list):
+    if isinstance(stop_words,list) and (isinstance(tokens,list) or not tokens == stop_words):
         for i in tokens:
             if i in stop_words:
-                    tokens.remove(i)
+                tokens.remove(i)
     return tokens
 
 
@@ -97,15 +96,16 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     concordance = []
+    if isinstance(left_context_size, bool) and isinstance(right_context_size, bool):
+        return []
     if isinstance(tokens, list) and isinstance(word, str) \
             and isinstance(left_context_size,int) and isinstance(right_context_size,int) \
-            and (left_context_size > 0 or right_context_size > 0) and word in tokens and word != '' \
-            and not isinstance(left_context_size,bool) and not isinstance(right_context_size,bool):
+            and (left_context_size > 0 or right_context_size > 0) and word in tokens and word != '':
         word_index = []
-        for i, x in enumerate(tokens):
-            if x == word:
+        for i, k in enumerate(tokens):
+            if k == word:
                 word_index.append(i)
-        for i in range(len(word_index)):
+        for i,k in enumerate(word_index):
             concordance.insert(i, [])
             if left_context_size > 0:
                 concordance[i].extend(tokens[word_index[i] - left_context_size:word_index[i]])
@@ -132,7 +132,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
     left_right_word = []
     concordance = get_concordance(tokens,word,left_n,right_n)
-    for i in range(len(concordance)):
+    for i,k in enumerate(concordance):
         left_right_word.insert(i,[])
         if left_n > 0:
             left_right_word[i].append(concordance[i][0])
@@ -147,9 +147,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
-
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
     return data
 
 
@@ -157,9 +156,9 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    with open(path_to_file, 'w') as fw:
+    with open(path_to_file, 'w') as file:
         for i in content:
-            fw.write(' '.join(i),'\n')
+            file.write(' '.join(i),'\n')
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
