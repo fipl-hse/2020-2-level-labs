@@ -122,7 +122,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     if (isinstance(left_context_size, int) and isinstance (right_context_size, int)
-            and isinstance (tokens, list) and isinstance (word, str)):
+            and isinstance (tokens, list) and isinstance (word, str) and not isinstance (left_context_size, bool)
+            and not isinstance (right_context_size, bool)):
         concordance = []
         for token in tokens:
             if token == word and isinstance (token, str):
@@ -163,39 +164,36 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
     adjacent_words = []
     concordance = get_concordance (tokens, word, left_n, right_n)
-    if (isinstance(tokens, list) and isinstance(word, str) and isinstance(left_n, int) and isinstance(right_n, int)
+    if not (isinstance(tokens, list) and isinstance(word, str) and isinstance(left_n, int) and isinstance(right_n, int)
             and not isinstance (left_n, bool) and not isinstance (right_n, bool)):
-        def aid_function (tokens, word, left_n, right_n):
-            if right_n > (len(small_list) - small_list.index(token)):
-                right_n = len(small_list) - small_list.index(token)
-            if left_n > (len(small_list[0:small_list.index(token)])):
-                left_n = len(small_list[0:small_list.index(token)])
-            if left_n > 0 and right_n > 0:
-                if 0 <= small_list.index(token) - left_n <= (len(small_list)):
-                    left_word = small_list[small_list.index(token) - left_n]
-                if 0 <= small_list.index(token) + right_n <= len(small_list):
-                    right_word = small_list[small_list.index(token) + right_n]
-                current_words = [left_word, right_word]
-            elif left_n < 1 and right_n > 0:
-                if 0 <= small_list.index(token) + right_n < len(small_list):
-                    current_words = [small_list[small_list.index(token) + right_n]]
-                else:
-                    current_words = [small_list[small_list.index(token) + right_n - 1]]
-            elif right_n < 1 and left_n > 0:
-                if 0 <= small_list.index(token) - left_n <= len(small_list):
-                    current_words = [small_list[small_list.index(token) - left_n]]
-                else:
-                    current_words = ''
-            elif left_n < 1 and right_n < 1:
-                return []
-            adjacent_words.append(current_words)
-        for small_list in concordance:
-            for token in small_list:
-                if token == word:
-                    aid_function(tokens, word, left_n, right_n)
+        return []
+    for small_list in concordance:
+        for token in small_list:
+            if token == word:
+                if right_n > (len(small_list) - small_list.index(token)):
+                    right_n = len(small_list) - small_list.index(token)
+                if left_n > (len(small_list[0:small_list.index(token)])):
+                    left_n = len(small_list[0:small_list.index(token)])
+                if left_n > 0 and right_n > 0:
+                    if 0 <= small_list.index(token) - left_n <= (len(small_list)):
+                        left_word = small_list[small_list.index(token) - left_n]
+                    if 0 <= small_list.index(token) + right_n <= len(small_list):
+                        right_word = small_list[small_list.index(token) + right_n]
+                    current_words = [left_word, right_word]
+                elif left_n < 1 and right_n > 0:
+                    if 0 <= small_list.index(token) + right_n < len(small_list):
+                        current_words = [small_list[small_list.index(token) + right_n]]
+                    else:
+                        current_words = [small_list[small_list.index(token) + right_n - 1]]
+                elif right_n < 1 and left_n > 0:
+                    if 0 <= small_list.index(token) - left_n <= len(small_list):
+                        current_words = [small_list[small_list.index(token) - left_n]]
+                    else:
+                        current_words = ''
+                elif left_n < 1 and right_n < 1:
+                    return []
+                adjacent_words.append(current_words)
         return adjacent_words
-    return []
-
 
 def read_from_file(path_to_file: str) -> str:
     """
