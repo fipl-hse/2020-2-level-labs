@@ -39,9 +39,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     if not isinstance(tokens, list) and not isinstance(stop_words, list):
         return []
     clean_tokens = []
-    for stop_words in tokens:
-        if i not in stop_words:
-            clean_tokens.append(i)
+    for element in tokens:
+        if element not in stop_words:
+            clean_tokens.append(element)
     return clean_tokens
 
 
@@ -99,9 +99,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
 
-    if not isinstance(tokens, list) or not isinstance(word, str):
+    if not isinstance(tokens, list) or not isinstance(word, str)\
+            or not isinstance(right_context_size, int) or not (left_context_size, int):
         return []
-    elif not isinstance(right_context_size, int) and not (left_context_size, int):
+    if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
         return []
     if left_context_size < 1:
         left_context_size = 0
