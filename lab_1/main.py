@@ -9,14 +9,14 @@ def tokenize(text: str) -> list:
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
     :return: a list of lowercased tokens without punctuation
-    E.G.. text = 'The weather is sunny, the man is happy.'
+    e.g.. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     new_text = ""
     text = text.lower()
-    trash = set("""1234567890-=!@#$%^&*()_+,./<>?;:'"[{}]"'""")
+    extra = set("""1234567890-=!@#$%^&*()_+,./<>?;:'"[{}]"'""")
     for c in text:
-        if c not in trash:
+        if c not in extra:
             new_text += c
     new_text = new_text.split()
     return new_text
