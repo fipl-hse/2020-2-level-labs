@@ -17,7 +17,7 @@ def tokenize(text: str) -> list:
     tokens = []
     if text and isinstance(text, str):
         tokens = text.lower()
-        tokens = re.sub('[^a-z\s\n]', '', tokens).split()
+        tokens = re.sub('[^a-zA-Z \n]', '', tokens).split()
     return tokens
 
 
@@ -105,20 +105,24 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     concordance = []
-    if not isinstance(tokens, list) or not isinstance(word, str) or \
-            not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
+
+    lcs = left_context_size
+    rcs = right_context_size
+    it_bool = isinstance(lcs, bool) or isinstance(rcs, bool)
+    it_int = isinstance(lcs, int) or isinstance(rcs, int)
+
+    if not isinstance(tokens, list) or not isinstance(word, str):
         return []
-    if isinstance(left_context_size, bool) or isinstance(right_context_size, bool) or \
-            (left_context_size < 1 and right_context_size < 1):
+    if it_bool or (not it_int) or (lcs < 1 and rcs < 1):
         return []
 
-    indexes = [i for i, x in enumerate(tokens) if x == word]
-    if left_context_size > 0 and right_context_size > 0:
-        [concordance.append(tokens[i - left_context_size: i + right_context_size + 1]) for i in indexes]
-    elif left_context_size > 0:
-        [concordance.append(tokens[i - left_context_size: i + 1]) for i in indexes]
-    elif right_context_size > 0:
-        [concordance.append(tokens[i: i + right_context_size + 1]) for i in indexes]
+    if lcs < 0:
+        lcs = 0
+    elif rcs < 0:
+        rcs = 0
+    for index, token in enumerate(tokens):
+        if token == word:
+            concordance.append(tokens[index - lcs: index + rcs + 1])
     return concordance
 
 
