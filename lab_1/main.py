@@ -57,7 +57,7 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
 
-    if isinstance(tokens, list) and tokens:
+    if isinstance(tokens, list) and len(tokens) > 0:
         for word in tokens:
             if not isinstance(word, str):
                 return {}
@@ -80,7 +80,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
 
-    if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or not freq_dict or not top_n >= 1:
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or not len(freq_dict) == 0 or not top_n >= 1:
         return []
     freq_array = []
     for key, val in freq_dict.items():
@@ -94,7 +94,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         except IndexError:
             break
 
-    return result
+    return list(reversed(result))
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -115,7 +115,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
 
-    if isinstance(right_context_size, bool) or isinstance(left_context_size, bool):
+    if not(isinstance(right_context_size, int)) or not(isinstance(left_context_size, int)):
         return []
 
     result = []
@@ -124,7 +124,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             A = []
             for j in range(i - left_context_size,
                            i + right_context_size + 1):
-                A.append(tokens[j])
+                try:
+                    A.append(tokens[j])
+                except IndexError:
+                    break
             result.append(A)
 
     return result
