@@ -2,8 +2,6 @@
 Lab 1
 A concordance extraction
 """
-import random
-from typing import List, Any
 
 
 def tokenize(text: str) -> list:
@@ -23,7 +21,7 @@ def tokenize(text: str) -> list:
         for el in part:
             if el.isalpha():
                 cleaned.append(el.lower())
-        if cleaned != []:
+        if cleaned:
             tokens.append(''.join(cleaned))
     return tokens
 
@@ -38,10 +36,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    clean_tokens = []
     if not isinstance(tokens, list) and not isinstance(stop_words, list):
-        clean_tokens = []
+        return []
+    clean_tokens = []
+    for el in tokens:
+        if el not in stop_words:
+            clean_tokens.append(el)
     return clean_tokens
+
 
 def calculate_frequencies(tokens: list) -> dict:
     """
@@ -62,7 +64,6 @@ def calculate_frequencies(tokens: list) -> dict:
     return freq_dict
 
 
-
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     Returns the most common words
@@ -78,6 +79,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         sort_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
         sort_dict = sort_dict[:top_n]
     return sort_dict
+
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
@@ -109,6 +111,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         if token == word:
             concordance.append(tokens[index - left_context_size: index + right_context_size + 1])
     return concordance
+
+
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
     Gets adjacent words from the left and right context
@@ -132,12 +136,12 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     adj_words = []
     for i in concordance:
         if left_n == 0:
-            concordance.append([i[-1]])
+            adj_words.append([i[-1]])
         elif right_n == 0:
-            concordance.append([i[0]])
+            adj_words.append([i[0]])
         else:
-            concordance.append([i[0], i[-1]])
-    return concordance
+            adj_words.append([i[0], i[1]])
+    return adj_words
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -145,15 +149,16 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
+    return data
 
 
 def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    with open(path_to_file, 'r', encoding='utf-8') as file:
-        data = file.read()
+    with open(path_to_file, 'w', encoding='utf-8') as file:
         for i in content:
             file.write('/n'.join(content))
 
