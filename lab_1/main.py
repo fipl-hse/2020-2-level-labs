@@ -13,7 +13,7 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
 
-    if not type(text) is str:
+    if not isinstance(text, str):
         return []
 
     tokens = []
@@ -41,7 +41,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
     without_st_wrds = []
-    if not type(tokens) is list:
+    if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return []
     for i in tokens:
         if i not in stop_words:
@@ -60,7 +60,7 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
 
-    if not type(tokens) is list or None in tokens:
+    if not isinstance(tokens, list) or None in tokens:
         return{}
 
     freq = {}
@@ -82,7 +82,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
 
-    if not type(freq_dict) is dict or not type(top_n) is int or None in freq_dict:
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or None in freq_dict:
         return []
 
     top_n_words = sorted(freq_dict, key=freq_dict.get, reverse=True)
@@ -108,9 +108,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    circ_type = (type(tokens) is list and type(word) is str)
-    circ_cont_type = (type(left_context_size) is int and type(right_context_size) is int)
-    circ_type_bool = (type(left_context_size) is bool and type(right_context_size) is bool)
+    circ_type = (isinstance(tokens, list) and isinstance(word, str))
+    circ_cont_type = (isinstance(left_context_size, int) and isinstance(right_context_size, int))
+    circ_type_bool = (isinstance(left_context_size, bool) and isinstance(right_context_size, bool))
 
     if not circ_type or not circ_cont_type or circ_type_bool:
         return []
@@ -150,9 +150,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    circ_type = (type(tokens) is list and type(word) is str)
-    circ_cont_type = (type(left_n) is int and type(right_n) is int)
-    circ_type_bool = (type(left_n) is bool and type(right_n) is bool)
+    circ_type = (isinstance(tokens, list) and isinstance(word, str))
+    circ_cont_type = (isinstance(left_n, int) and isinstance(right_n, int))
+    circ_type_bool = (isinstance(left_n, bool) and isinstance(right_n, bool))
 
     if not circ_type or not circ_cont_type or circ_type_bool:
         return []
