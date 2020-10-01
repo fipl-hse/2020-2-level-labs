@@ -12,8 +12,16 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text=text.split()
-    return text
+    text_split =text.replace(',','').replace('.','').replace('-','').replace('!','').replace('?','').replace(':','').split(' ')
+    request=[world.lower() for word in text_split]
+    for word in request:
+        if word =='':
+            request.remove(word)
+    return request
+
+#text='The weather is sunny, the man is happy'
+#print(tokenize(text))
+
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -26,7 +34,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    pass
+    for word in tokens:
+        if word in stop_words:
+            tokens.remove(word)
+    return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -37,7 +48,11 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
+    frequencies_dict=dict()
+    for word in tokens:
+        if word not in frequencies_dict.keys():
+            frequencies_dict[word]=tokens.count(word)
+    return frequencies_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -50,7 +65,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+    request=list()
+    sor_dic ={k: v for k, v in sorted (freq_dict.items(),key=lambda item: item[1])}
+    element=list(sor_dic)[-top_n]
+    request.append(element)
+    return request
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -70,7 +89,14 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    word_index=list()
+    request=list()
+    for i in range(len(tokens)):
+        if word in tokens[i]:
+            word_index.append(i)
+    for index in word_index:
+        request.append(tokens[index-left_context_size:index+1]+tokens[index+1:index+right_context_size+1])
+    return request
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -88,7 +114,17 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    word_index=list()
+    request=list()
+    for i in range(len(tokens)):
+        if word in tokens[i]:
+            word_index.append(i)
+    for index in word_index:
+        element=list()
+        element.append(tokens[index-left_n])
+        element.append(tokens[index+right_n])
+        request.append(element)
+    return request
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -106,10 +142,10 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+    with open(path_to_file, 'w', encoding='utf-8') as fs:
+        fs.write("\n".join(content).join("\n"))
 
-
-def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
+    def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
     """
     Gets a concordance of a word and sorts it by either left or right context
     :param tokens: a list of tokens
@@ -126,4 +162,14 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    pass
+    word_index=list()
+    request =list()
+    for i in range(len(tokens)):
+        if word in tokens[i]:
+            word_index.append(i)
+    for index in word_index:
+        request.append(tokens[index-left_context_size:index+1])+tokens[index+1:index+right_context_size+1]
+        if left_sort:
+            return sorted(request)
+        else:
+            return sorted(request,reverse=True)
