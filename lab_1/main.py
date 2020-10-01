@@ -186,8 +186,8 @@ def read_from_file(path_to_file: str) -> str:
     :return: the initial text in string format
     """
     if type(path_to_file) is str:
-        with open(path_to_file, 'r', encoding='utf-8') as fs:
-            data = fs.read()
+        with open(path_to_file, 'r', encoding='utf-8') as file:
+            data = file.read()
 
         return data
 
@@ -196,7 +196,7 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    if type(path_to_file) is str and type(content) is list:
+    if isinstance(path_to_file, str) and isinstance(content, list):
         with open(path_to_file, 'w', encoding='utf-8') as file:
             for i in content:
                 file.write(" ".join(i))
