@@ -3,6 +3,8 @@ Lab 1
 A concordance extraction
 """
 
+import re
+
 
 def tokenize(text: str) -> list:
     """
@@ -12,13 +14,10 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    tokens = ''
-    punctuation = set('!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~.')
-
-    for i in text.lower().split():
-        if i in punctuation:
-            tokens = tokens.replace(i, '')
-
+    tokens = []
+    if text and isinstance(text, str):
+        tokens = text.lower()
+        tokens = re.sub('[^a-z\s\n]', '', tokens).split()
     return tokens
 
 
@@ -93,11 +92,11 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     concordance = []
-    if type(tokens) != list or type(word) != str:
+    if not isinstance(tokens, list) or not isinstance(word, str) \
+            or None in tokens:
         return []
-    elif type(left_context_size) != int or type(right_context_size) != int:
-        return []
-    elif left_context_size < 1 and right_context_size < 1:
+    if left_context_size < 1 and right_context_size < 1 \
+            or not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
         return []
 
     indexes = [i for i, x in enumerate(tokens) if x == word]
@@ -107,7 +106,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         [concordance.append(tokens[i - left_context_size: i + 1]) for i in indexes]
     elif right_context_size > 0:
         [concordance.append(tokens[i: i + right_context_size + 1]) for i in indexes]
-# can i not change these lines? it works anyway.
+
     return concordance
 
 
@@ -126,15 +125,17 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    func_tokens = get_adjacent_words(tokens, word, left_n, right_n)
+    func_tokens = get_concordance(tokens, word, left_n, right_n)
     adj_words_list = []
-    for i in func_tokens:
-        if left_n == 0:
-            adj_words_list.append(i[-1])
-        elif right_n == 0:
-            adj_words_list.append(i[0])
-        else:
-            adj_words_list.append([word[0], word[-1]])
+
+    if all(func_tokens):
+        for i in get_concordance(tokens, word, left_n, right_n):
+            if left_n > 0 and right_n > 0:
+                adj_words_list.append([i[0], i[-1]])
+            elif left_n > 0:
+                adj_words_list.append([i[0]])
+            elif right_n > 0:
+                adj_words_list.append([i[-1]])
 
     return adj_words_list
 
@@ -158,6 +159,7 @@ def write_to_file(path_to_file: str, content: list):
 
     with open(path_to_file, 'w', encoding='utf-8') as file:
         file.write('\n'.join(output_file))
+
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
     """
