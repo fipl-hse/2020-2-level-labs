@@ -21,8 +21,7 @@ def tokenize(text):
                 tokens += c
         tokens = tokens.split()
         return tokens
-    else:
-        return []
+    return []
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -41,8 +40,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
             if i not in stop_words:
                 tokens_without_stop.append(i)
         return tokens_without_stop
-    else:
-        return []
+    return []
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -59,8 +57,7 @@ def calculate_frequencies(tokens: list) -> dict:
             frequences.append (tokens.count(i) )
         freq_dict = {tokens[i]: frequences[i] for i in range(len(frequences))}
         return freq_dict
-    else:
-        return {}
+    return {}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -80,8 +77,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         for i in list_dict:
             top_words.append(i[0])
         return top_words[:top_n]
-    else :
-        return []
+    return []
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -101,8 +97,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    requirements=[isinstance(tokens,list),isinstance(word,str),isinstance(left_context_size,int),isinstance(right_context_size,int),
-                 not isinstance(left_context_size,bool),not isinstance(right_context_size,bool)]
+    requirements=[isinstance(tokens,list),isinstance(word,str),
+                  isinstance(left_context_size,int), isinstance(right_context_size,int),
+                  not isinstance(left_context_size,bool),not isinstance(right_context_size,bool)]
     if all (requirements):
         concordance = []
         for i, c in enumerate(tokens):
@@ -115,8 +112,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                 elif right_context_size > 0:
                     concordance.append(tokens[word_index:word_index + right_context_size + 1])
         return concordance
-    else:
-        return []
+    return []
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
@@ -147,8 +143,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             elif left_n>0:
                 adjacent_words.append([i[0]])
         return adjacent_words
-    else:
-        return []
+    return []
 
 
 
