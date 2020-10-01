@@ -49,9 +49,8 @@ def calculate_frequencies(tokens: list) -> dict:
     for word in tokens:
         if not isinstance(word, str):
             return {}
-        else:
-            freq_dic = {word: tokens.count(word) for word in tokens}
-            return freq_dic
+    freq_dic = {word: tokens.count(word) for word in tokens}
+    return freq_dic
 
 
 
@@ -67,13 +66,13 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
        """
     if not isinstance(freq_dict, dict) and isinstance(top_n, int):
        return []
-    else:
-        list_of_items = list(freq_dict.items())
-        list_of_items.sort(key=lambda x: x[1], reverse=True)
-        top_n_words = []
-        for pair_el in list_of_items:
-            top_n_words.append(pair_el[0])
-        return top_n_words[:top_n]
+
+    list_of_items = list(freq_dict.items())
+    list_of_items.sort(key=lambda x: x[1], reverse=True)
+    top_n_words = []
+    for pair_el in list_of_items:
+        top_n_words.append(pair_el[0])
+    return top_n_words[:top_n]
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -137,13 +136,13 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     new_check = (isinstance(tokens,list) and isinstance(word,str) \
                  and not isinstance(left_n, bool) and not isinstance(right_n, bool))
     if new_check:
-        for w in concordance:
+        for word in concordance:
             if left_n == 0:
-                conc_pair.append([w[-1]])
+                conc_pair.append([word[-1]])
             elif right_n == 0:
-                conc_pair.append([w[0]])
+                conc_pair.append([word[0]])
             else:
-                conc_pair.append([w[0], w[-1]])
+                conc_pair.append([word[0], word[-1]])
     return conc_pair
 
 
