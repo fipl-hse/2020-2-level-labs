@@ -11,16 +11,13 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    try:
-        text = text.replace('\n',' ')
+    import re
+    if isinstance(text,str):
         text = text.lower()
-        for i in text:
-            if  not i.isalpha() and i != ' ':
-                text = text.replace(i,'')
-        tokens = text.split()
-    except:
+        tokens = re.sub('[^\w\s]', '', text)
+        tokens = tokens.split()
+    else:
         tokens = []
-
     return tokens
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -33,18 +30,14 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    try:
-        if not isinstance(tokens,list) or tokens == stop_words:
-            tokens = []
-            return tokens
-        elif not isinstance(stop_words,list):
-            return tokens
-        else:
-            for i in tokens:
-                if i in stop_words:
-                        tokens.remove(i)
-    finally:
-        return tokens
+
+    if not isinstance(tokens,list) or tokens == stop_words:
+        return []
+    elif isinstance(stop_words,list):
+        for i in tokens:
+            if i in stop_words:
+                    tokens.remove(i)
+    return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -56,14 +49,13 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
     freq_dict = {}
-    try:
+    if isinstance(tokens,list):
         for i in tokens:
-            if isinstance(i,str) and isinstance(tokens,list):
+            if isinstance(i,str):
                 freq_dict[i] = tokens.count(i)
             else:
                 freq_dict = {}
-    finally:
-        return freq_dict
+    return freq_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -77,15 +69,14 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
     top_words = []
-    try:
+    if isinstance(freq_dict,dict) and isinstance(top_n,int):
         if top_n >= len(freq_dict):
             top_n = len(freq_dict)
         list_freq_dict = list(freq_dict.items())
         list_freq_dict.sort(key=lambda i: i[1], reverse = True)
         for i in range(top_n):
             top_words.append(list_freq_dict[i][0])
-    finally:
-        return top_words
+    return top_words
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -121,7 +112,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             concordance[i].extend([word])
             if right_context_size > 0:
                 concordance[i].extend(tokens[word_index[i]+1:right_context_size + word_index[i]+1])
-
     return concordance
 
 
@@ -167,8 +157,9 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-
-    pass
+    with open(path_to_file, 'w') as fw:
+        for i in content:
+            fw.write(' '.join(i),'\n')
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -188,12 +179,14 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    concordance = get_concordance(tokens,word,left_context_size,right_context_size)
-    if concordance:
-        if left_sort == True and left_context_size > 0:
-            concordance.sort()
-        elif left_sort == False and right_context_size > 0:
-            concordance.sort(key = lambda i: i[-left_context_size])
+
+    sorted_concordance = []
+    if isinstance(left_sort,bool) and isinstance(left_sort,int) and isinstance(right_context_size,int):
+        sorted_concordance = get_concordance(tokens,word,left_context_size,right_context_size)
+        if left_sort and left_context_size > 0:
+            sorted_concordance.sort()
+        elif not left_sort and right_context_size > 0:
+            sorted_concordance.sort(key = lambda i: i[-left_context_size])
         else:
-            concordance = []
-    return concordance
+            sorted_concordance = []
+    return sorted_concordance
