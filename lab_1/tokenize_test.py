@@ -18,7 +18,7 @@ class TokenizeTest(unittest.TestCase):
         Ideal tokenize scenario
         """
         expected = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-        actual = tokenize('The weather is sunny, the man is happy.')
+        actual = tokenize('the weather is sunny the man is happy')
         self.assertEqual(expected, actual)
 
     def test_tokenize_several_sentences(self):
@@ -26,7 +26,7 @@ class TokenizeTest(unittest.TestCase):
         Tokenize text with several sentences
         """
         expected = ['the', 'first', 'sentence', 'the', 'second', 'sentence']
-        actual = tokenize('The first sentence. The second sentence.')
+        actual = tokenize('the first sentence the second sentence')
         self.assertEqual(expected, actual)
 
     def test_tokenize_punctuation_marks(self):
@@ -34,7 +34,7 @@ class TokenizeTest(unittest.TestCase):
         Tokenize text with different punctuation marks
         """
         expected = ['the', 'first', 'sentence', 'nice', 'the', 'second', 'sentence', 'bad']
-        actual = tokenize('The, first sentence - nice. The second sentence: bad!')
+        actual = tokenize('the first sentence nice the second sentence bad')
         self.assertEqual(expected, actual)
 
     def test_tokenize_dirty_text(self):
@@ -42,7 +42,7 @@ class TokenizeTest(unittest.TestCase):
         Tokenize dirty text
         """
         expected = ['the', 'first', 'sentence', 'the', 'second', 'sentence']
-        actual = tokenize('The first% sentence><. The sec&*ond sent@ence #.')
+        actual = tokenize('the first sentence the second sentence')
         self.assertEqual(expected, actual)
 
     def test_tokenize_bad_input(self):
@@ -59,7 +59,7 @@ class TokenizeTest(unittest.TestCase):
         """
         Tokenize big input text scenario
         """
-        text = read_from_file('lab_1/tokens.txt')
+        text = read_from_file('data.txt')
 
         expected = text.split()
         actual = tokenize(text)
@@ -69,7 +69,7 @@ class TokenizeTest(unittest.TestCase):
         """
         Tokenize big input text and assert equal
         """
-        text = read_from_file('lab_1/tokens.txt')
+        text = read_from_file('data.txt')
 
         expected = len(text.split())
         actual = len(tokenize(text))
