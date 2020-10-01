@@ -18,8 +18,8 @@ if __name__ == '__main__':
     top_n_tokens = main.get_top_n_words(freq_dict, 2)
     concordance = main.get_concordance(tokens, 'seriously', 1, 1)
     adjacent_words = main.get_adjacent_words(tokens, 'seriously', 1, 1)
-    main.write_to_file('report.txt', adjacent_words)
     sorted_concordance_list = main.sort_concordance(tokens, 'seriously', 1, 1, True)
+    main.write_to_file('report.txt', sorted_concordance_list)
     RESULT = sorted_concordance_list
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Concordance not working'
