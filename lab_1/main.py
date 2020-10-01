@@ -144,16 +144,23 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    concordance = get_concordance(tokens, word, left_n, right_n)
-    adj_words = []
-    for el in concordance:
-        if left_n > 0 and right_n > 0:
-            adj_words.append([el[0], el[-1]])
-        elif left_n > 0:
-            adj_words.append([el[0]])
-        elif right_n > 0:
-            adj_words.append([el[-1]])
-    return adj_words
+
+    requirments = [isinstance(tokens, list), isinstance(word, str), not isinstance(left_n, bool),
+                  not isinstance(right_n, bool), isinstance(left_n, int), isinstance(right_n, int)]
+    if all(requirments):
+        adj_words = []
+        concordance = get_concordance(tokens, word, left_n, right_n)
+        for element in concordance:
+            if left_n > 0 and right_n > 0:
+                adj_words.append([element[0], element[-1]])
+            elif left_n > 0 and not right_n > 0:
+                adj_words.append([element[0]])
+            elif right_n > 0 and not left_n > 0:
+                adj_words.append([element[-1]])
+        return adj_words
+    else:
+        return []
+
 def read_from_file(path_to_file: str) -> str:
     """
     Opens the file and reads its content
@@ -195,6 +202,6 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    pass
+
 
 
