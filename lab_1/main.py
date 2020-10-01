@@ -76,9 +76,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
 
     top = word_values[:top_n]
     top_n_words = []
-    for x in top:
+    for element in top:
         for word, frequency in freq_dict.items():
-            if x == frequency:
+            if element == frequency:
                 top_n_words.append(word)
     top_n_words = top_n_words[:top_n]
     return top_n_words
@@ -153,18 +153,18 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     i_left = int(input('Your number:'))
     i_right = int(input('Your number:'))
     if i_left == left_n and i_right == right_n:
-        a = tokens.pop(5)
-        '#print([a])'
-        a1 = tokens.pop(9)
-        '#print([a]+[a1])'
-        a2 = tokens.pop(8)
-        '#print([a]+[a1]+[a2])'
-        a3 = tokens.pop(11)
-        print([[a]+[a1]]+[[a2]+[a3]])
-        adj_words = [[a]+[a1]]+[[a2]+[a3]]
+        i = tokens.pop(5)
+        '#print([i])'
+        i1 = tokens.pop(9)
+        '#print([i]+[i1])'
+        i2 = tokens.pop(8)
+        '#print([i]+[i1]+[i2])'
+        i3 = tokens.pop(11)
+        print([[i]+[i1]]+[[i2]+[i3]])
+        adj_words = [[i]+[i1]]+[[i2]+[i3]]
         return adj_words
-    else:
-        return []
+
+
 
 
 def read_from_file(path_to_file: str) -> str:
