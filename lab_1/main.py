@@ -20,6 +20,16 @@ def tokenize(text: str) -> list:
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
+    def remove_stop_words(tokens: list, stop_words: list) -> list:
+"""
+Removes stop words
+:param tokens: a list of tokens
+:param stop_words: a list of stop words
+:return: a list of tokens without stop words
+e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+stop_words = ['the', 'is']
+--> ['weather', 'sunny', 'man', 'happy']
+"""
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return []
 
