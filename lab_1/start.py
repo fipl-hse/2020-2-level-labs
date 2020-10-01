@@ -28,15 +28,15 @@ if __name__ == '__main__':
     print('adjacent words for the word "street":', adjacent_words[:5])
 
     sorted_concordance = main.sort_concordance(tokens, 'street', 2, 3, False)
-    print('sorted concordance for the word "street":', sorted_concordance)
+    print('sorted concordance for the word "street":', sorted_concordance[:5])
 
     main.write_to_file('report.txt', sorted_concordance)
 
     RESULT = sorted_concordance[:5]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [['originally', 'each', 'street', 'a', 'small', 'siren'],
+    assert RESULT == [['preprocessor', 'originally', 'street', 'a', 'small', 'siren'],
                       ['located', 'monnow', 'street', 'access', 'clean', 'water'],
+                      ['nightmare', 'elm', 'street', 'character', 'nancy', 'thompson'],
                       ['involvement', 'sesame', 'street', 'continued', 'henson', 'mused'],
-                      ['on', 'the', 'street', 'corners', 'a', 'population'],
-                      ['physically', 'assaulted', 'street', 'deane', 'supporters', 'fixed']], \
+                      ['sessions', 'erupt', 'street', 'corners', 'a', 'population']],\
         'Concordance not working'
