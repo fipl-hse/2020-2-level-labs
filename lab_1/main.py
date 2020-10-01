@@ -99,21 +99,28 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    concordance = []
 
-    if not isinstance(tokens, list) or not isinstance(word, str)\
-            or not isinstance(right_context_size, int) or (right_context_size, bool):
+    if not isinstance(tokens, list) or not isinstance(word, str) \
+            or not isinstance(right_context_size, int) or not (left_context_size, int):
         return []
-    if not isinstance(left_context_size, bool) or not isinstance(left_context_size, int):
+    if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
         return []
-    if left_context_size < 0:
-        left_context_size = 0
-    elif right_context_size < 0:
-        right_context_size = 0
-    for index, token in enumerate(tokens):
-        if token == word:
+    concordance = []
+    word_index = []
+    for index, element in enumerate(tokens):
+        if element == word:
+            word_index += [index]
+    for index in word_index:
+        if left_context_size > 0 and right_context_size > 0:
             concordance.append(tokens[index - left_context_size: index + right_context_size + 1])
-    return concordance
+        elif right_context_size > 0:
+            concordance.append(tokens[index: index + right_context_size + 1])
+        elif left_context_size > 0:
+             concordance.append(tokens[index - left_context_size: index + 1])
+        else:
+            return []
+        return concordance
+    return []
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -131,21 +138,18 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    if isinstance(tokens, list) or isinstance(word, str):
+    if not isinstance(tokens, list) or not isinstance(word, str) \
+            or not isinstance(left_n, int) or not isinstance(right_n, int):
         return []
-    if isinstance(left_n, int) and isinstance (right_n, int):
-        return []
-    if not isinstance(left_n, bool) and not isinstance(right_n, bool):
-        return []
-    concordance = get_concordance(tokens, word, left_n, right_n)
+    concord = get_concordance(tokens, word, left_n, right_n)
     adj_words = []
-    for i in concordance:
-        if left_n > 0:
-            adj_words.append([i[0]])
-        elif right_n > 0:
-            adj_words.append([i[-1]])
-        else:
-            adj_words.append([i[0], i[1]])
+    for element in concord:
+        if left_n > 0 and right_n > 0:
+            adj_words.append([element[0], element[-1]])
+        elif left_n > 0 and not right_n > 0:
+            adj_words.append([element[0]])
+        elif right_n > 0 and not left_n > 0:
+            adj_words.append([element[-1]])
     return adj_words
 
 
@@ -186,12 +190,4 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    if not isinstance(left_sort, bool) or not isinstance(tokens, list) or not isinstance(word, str) \
-            or not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
-        return []
-    concord = get_concordance(tokens, word, left_context_size, right_context_size)
-    if left_sort and left_context_size > 0:
-        return sorted(concord)
-    if not left_sort and right_context_size > 0:
-        return sorted(concord, key=lambda element: element[element.index(word) + 1])
-    return []
+
