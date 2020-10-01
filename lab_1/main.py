@@ -13,7 +13,7 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     if isinstance(text, str):
-        signs = '!@#$%^&*;()_+=-\№:?[]{},.<>~/|1234567890'
+        signs = '!@#$%^&*;()_+=-:?[]{},.<>~/\|1234567890'
         text = text.lower()
         tokens = ''
         for i in text:
@@ -155,10 +155,9 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
-    with open(path_to_file, 'r', encoding='utf-8') as file:
-        data = file.read()
+    with open(path_to_file, 'r', encoding='utf-8') as concordance_file:
+        data = concordance_file.read()
+
     return data
 
 
@@ -167,9 +166,9 @@ def write_to_file(path_to_file: str, content: list):
     Writes the result in a file
     """
     if isinstance(path_to_file, str) and isinstance(content, list):
-        with open(path_to_file, 'w', encoding='utf-8') as file:
+        with open(path_to_file, 'w', encoding='utf-8') as concordance_file:
             for i in content:
-                file.write("\n".join(i))
+                concordance_file.write("\n".join(i))
 
 
 
@@ -191,6 +190,6 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-
+    pass
 
 
