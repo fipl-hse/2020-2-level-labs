@@ -198,4 +198,12 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    pass
+    if not isinstance(left_sort, bool) or not isinstance(tokens, list) or not isinstance(word, str) \
+            or not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
+        return []
+    concord = get_concordance(tokens, word, left_context_size, right_context_size)
+    if left_sort and left_context_size > 0:
+        return sorted(concord)
+    if not left_sort and right_context_size > 0:
+        return sorted(concord, key=lambda element: element[element.index(word) + 1])
+    return []
