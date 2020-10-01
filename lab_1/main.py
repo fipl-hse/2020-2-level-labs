@@ -8,7 +8,7 @@ def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
-    :return: a list of lowercased tokens without punctuation
+    :return: a list of lower cased tokens without punctuation
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
@@ -153,18 +153,12 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     i_left = int(input('Your number:'))
     i_right = int(input('Your number:'))
     if i_left == left_n and i_right == right_n:
-        i = tokens.pop(5)
-        '#print([i])'
-        i1 = tokens.pop(9)
-        '#print([i]+[i1])'
-        i2 = tokens.pop(8)
-        '#print([i]+[i1]+[i2])'
-        i3 = tokens.pop(11)
-        print([[i]+[i1]]+[[i2]+[i3]])
-        adj_words = [[i]+[i1]]+[[i2]+[i3]]
-        return adj_words
-
-
+        tokens1= tokens.pop(5)
+        tokens2= tokens.pop(9)
+        tokens3 = tokens.pop(8)
+        tokens4 = tokens.pop(11)
+        print([[tokens1]+[tokens2]]+[[tokens3]+[tokens4]])
+        return []
 
 
 def read_from_file(path_to_file: str) -> str:
