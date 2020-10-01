@@ -59,20 +59,25 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
 
-    freq_dict = {}
-    items = list(freq_dict.items())
-    values = {}
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
+        return []
 
-    for pair in items:
-        if pair[1] in values.keys():
-            values[pair[1]].append(pair[0])
-        else:
-            values[int(pair[1])] = [pair[0]]
+    word_values = []
+    for i in freq_dict.values():
+        if i in word_values:
+            continue
+        word_values.append(i)
+    word_values.sort()
+    word_values = word_values[::-1]
 
-    top_n = list(values.keys)
-    top_n.sort()
-
-    return [list]
+    top = word_values[:top_n]
+    top_n_words = []
+    for x in top:
+        for word, frequency in freq_dict.items():
+            if x == frequency:
+                top_n_words.append(word)
+    top_n_words = top_n_words[:top_n]
+    return top_n_words
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -92,6 +97,17 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
+    check_tokens = isinstance(tokens, list)
+    check_word = isinstance(word, list)
+    check_left_size = isinstance(left_context_size, int)
+    check_right_size = isinstance(right_context_size, int)
+
+    if not check_tokens or not check_word:
+        return []
+    if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
+        return []
+    if not check_left_size or not check_right_size:
+        return []
 
     del tokens[:5]
     print(tokens)
@@ -123,7 +139,11 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
 
-    word = str('happy')
+    if isinstance(tokens,list) or isinstance(word, list):
+        return []
+    if isinstance(left_n, int) or isinstance(right_n, int):
+        return []
+
     left_n = int(2)
     right_n = int(3)
     i_left = int(input('Your number:'))
