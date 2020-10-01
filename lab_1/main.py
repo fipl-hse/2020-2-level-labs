@@ -52,13 +52,14 @@ def calculate_frequencies(tokens: list) -> dict:
     freq_dict = {}
     if isinstance(tokens, list):
         for k in tokens:
-            if isinstance(k, str):
-                if k in freq_dict:
-                    freq_dict[k] = freq_dict[k] + 1
-                else:
-                    freq_dict[k] = 1
-
+            if not isinstance(k, str):
+                freq_dict = {}
+            elif k in freq_dict:
+                freq_dict[k] += 1
+            else:
+                freq_dict[k] = 1
         return freq_dict
+    return {}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
