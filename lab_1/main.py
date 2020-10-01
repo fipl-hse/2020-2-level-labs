@@ -56,7 +56,7 @@ def calculate_frequencies(tokens: list) -> dict:
     if isinstance(tokens,list) and all (tokens):
         frequences = []
         for i in tokens:
-            frequences.append ([tokens.count(i) ])
+            frequences.append (tokens.count(i) )
         freq_dict = {tokens[i]: frequences[i] for i in range(len(frequences))}
         return freq_dict
     else:
