@@ -36,10 +36,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return []
-    for word in stop_words:
-        while word in tokens:
-            tokens.remove(word)
-    return tokens
+    new_tokens = []
+    for word in tokens:
+        if word not in stop_words:
+            new_tokens.append(word)
+    return new_tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -189,9 +190,9 @@ def write_to_file(path_to_file: str, content: list):
         concordance_str = ' '.join(concordance)
         concordance_text.append(concordance_str)
     concordance_text = '\n'.join(concordance_text)
-    fail_concordance = open(path_to_file, 'w')
-    fail_concordance.write(concordance_text)
-    fail_concordance.close()
+    file_concordance = open(path_to_file, 'w')
+    file_concordance.write(concordance_text)
+    file_concordance.close()
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
