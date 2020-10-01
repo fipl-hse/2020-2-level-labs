@@ -157,17 +157,17 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         for i in concordance:
             wrds = [[i[0], i[-1]]]
             adj_words.extend(wrds)
-        return adj_words
+
     elif right_n > 0:
         for i in concordance:
             wrds = [[i[-1]]]
             adj_words.extend(wrds)
-        return adj_words
+
     elif left_n > 0:
         for i in concordance:
             wrds = [[i[0]]]
             adj_words.extend(wrds)
-        return adj_words
+
     return adj_words
 
 
@@ -180,7 +180,7 @@ def read_from_file(path_to_file: str) -> str:
         with open(path_to_file, 'r', encoding='utf-8') as file:
             data = file.read()
 
-        return data
+    return data
 
 
 def write_to_file(path_to_file: str, content: list):
