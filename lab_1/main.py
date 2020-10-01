@@ -107,8 +107,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         return []
     concordance = []
     word_index = []
-    for index, element in enumerate(tokens):
-        if element == word:
+    for index, i in enumerate(tokens):
+        if i == word:
             word_index += [index]
     for index in word_index:
         if left_context_size > 0 and right_context_size > 0:
@@ -116,7 +116,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         elif right_context_size > 0:
             concordance.append(tokens[index: index + right_context_size + 1])
         elif left_context_size > 0:
-             concordance.append(tokens[index - left_context_size: index + 1])
+            concordance.append(tokens[index - left_context_size: index + 1])
         else:
             return []
         return concordance
@@ -190,4 +190,3 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-
