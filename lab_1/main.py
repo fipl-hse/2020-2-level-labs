@@ -85,10 +85,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
             list_of_ranged_values = []
             list_of_keys = []
             list_of_ranged_keys = []
-            for value in freq_dict.values():
+            for value_1 in freq_dict.values():
                 list_of_values.append(value)
             maximum = max(list_of_values)
-            for value in range(0, maximum):
+            for value_1 in range(0, maximum):
                 for value in list_of_values:
                     if value == maximum:
                         list_of_ranged_values.append(value)
@@ -164,8 +164,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
     adjacent_words = []
     concordance = get_concordance (tokens, word, left_n, right_n)
-    '''if not (isinstance(tokens, list) and isinstance(word, str) and isinstance(left_n, int) and isinstance(right_n, int)
-            and not isinstance (left_n, bool) and not isinstance (right_n, bool)):
+    if not (isinstance(tokens, list) and isinstance(word, str) and isinstance(left_n, int)
+            and isinstance(right_n, int)
+            and not isinstance(left_n, bool) and not isinstance(right_n, bool)):
         return []
     for small_list in concordance:
         for token in small_list:
@@ -192,37 +193,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
                         current_words = ''
                 elif left_n < 1 and right_n < 1:
                     return []
-                adjacent_words.append(current_words)
-        print(adjacent_words)
-        return adjacent_words'''
-    if not (isinstance(tokens, list) and isinstance(word, str) and isinstance(left_n, int) and isinstance(right_n, int)
-            and not isinstance(left_n, bool) and not isinstance(right_n, bool)):
-        return []
-    for small_list in concordance:
-        for token in small_list:
-            if token == word:
-                if right_n > (len(small_list) - small_list.index(token)):
-                    right_n = len(small_list) - small_list.index(token)
-                if left_n > (len(small_list[0:small_list.index(token)])):
-                    left_n = len(small_list[0:small_list.index(token)])
-                if left_n > 0 and right_n > 0:
-                    if 0 <= small_list.index(token) - left_n <= (len(small_list)):
-                        left_word = small_list[small_list.index(token) - left_n]
-                    if 0 <= small_list.index(token) + right_n <= len(small_list):
-                        right_word = small_list[small_list.index(token) + right_n]
-                    current_words = [left_word, right_word]
-                if left_n < 1 and right_n > 0:
-                    if 0 <= small_list.index(token) + right_n < len(small_list):
-                        current_words = [small_list[small_list.index(token) + right_n]]
-                    else:
-                        current_words = [small_list[small_list.index(token) + right_n - 1]]
-                if right_n < 1 and left_n > 0:
-                    if 0 <= small_list.index(token) - left_n <= len(small_list):
-                        current_words = [small_list[small_list.index(token) - left_n]]
-                    else:
-                        current_words = ''
-                if left_n < 1 and right_n < 1:
-                    return ([])
                 adjacent_words.append(current_words)
     return adjacent_words
 
