@@ -13,7 +13,7 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     if isinstance(text, str):
-        signs = '!@#$%^&*;()_+=-:?[]{},.<>~/\|1234567890'
+        signs = '!@#$%^&*;()_+=-:?[]{},.<>~/\\|1234567890'
         text = text.lower()
         tokens = ''
         for i in text:
@@ -190,6 +190,6 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    pass
 
+    pass
 
