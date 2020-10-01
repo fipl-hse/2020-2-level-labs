@@ -25,13 +25,13 @@ if __name__ == '__main__':
     print('The frequency dictionary of tokens is: {}'. format(freq_dict))
 
     top_n_words = main.get_top_n_words(freq_dict, 2)
-    print('Top_n_words:'. format(top_n_words))
+    print('Top_n_words:', freq_dict, 2)
 
     concordance = main.get_concordance(tokens, 'division', 2, 3)
     print('The concordance for the token "division" is: {}'. format(concordance))
 
-    adjacent = main.get_adjacent_words(tokens, 'team', 2, 2)
-    print('The adjacent words is: '. format(adjacent))
+    adjacent = main.get_adjacent_words(tokens, 'cat', 2, 3)
+    print('The adjacent words is: ', adjacent[:5])
 
     assert RESULT == [(), ()], 'Concordance not working'
     assert RESULT == [['of', 'a']], 'Concordance not working'
