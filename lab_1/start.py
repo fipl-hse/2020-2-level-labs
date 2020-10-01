@@ -25,20 +25,19 @@ if __name__ == '__main__':
     top_words = main.get_top_n_words(frequencies, 4)
     print("top 4 words:", top_words)
 
-    concordance = main.get_concordance(tokens, 'century', 2, 3)
+    concordance = main.get_concordance(tokens, 'islands', 2, 3)
     print("this is concordance:", concordance[:5])
 
-    adjacent_words = main.get_adjacent_words(tokens, 'century', 2, 3)
+    adjacent_words = main.get_adjacent_words(tokens, 'islands', 2, 3)
     print("adjacent words for 'book':", adjacent_words[:4])
 
-    main.write_to_file('report.txt', adjacent_words)
+    main.write_to_file('report.txt', top_words)
 
 
     #  here goes your logic: calling methods from concordance.py
 
     RESULT = None
-    Result = adjacent_words
+    RESULT = top_words
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     #assert RESULT == [(), ()], 'Concordance not working'
-    assert RESULT == [['a', 'georg'], ['early', 'on'],
-                    ['the', 'of'], ['in', 'of']],'Concordance not working'
+    assert RESULT == ['years', 'team', 'presented', 'roundup'], 'Concordance not working'
