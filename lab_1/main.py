@@ -16,10 +16,12 @@ def tokenize(text: str) -> list:
     """
 
 
-    text = text.lower()
-    text = re.sub(r'[^a-zA-Z0-9\s ]', '', text)
-    text = list(text.split())
-    return text
+    if not isinstance(text, str) or not text:
+        return []
+
+    prepared_text = re.sub('[^a-zA-Z \n`]', '', text).lower()
+    return prepared_text.split()
+
 
 
 
