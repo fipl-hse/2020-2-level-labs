@@ -15,12 +15,12 @@ def tokenize(text: str) -> list:
     sentences = ''
     text1 = text.lower()
     slices = list(text1)
-    l = ["”", "“", "^", "|", "}", "{", "]", "[", "&", "%", "№", "#", "`", "`", "'", "<", ">", ".", ",", "!", "?", ";", ":", "*", "’", "$", "@", "*", "/", "-", "_", "+", "=", "(", ")", "1", "2", "3",
+    l = ["—", "”", "“", "^", "|", "}", "{", "]", "[", "&", "%", "№", "#", "`", "`", "'", "<", ">", ".", ",", "!", "?", ";", ":", "*", "’", "$", "@", "*", "/", "-", "_", "+", "=", "(", ")", "1", "2", "3",
              "4", "5", "6", "7", "8", "9", "0"]
-    for y in slices:
-        for y in l:
-            if y in slices:
-                slices.remove(y)
+    for constituent in slices:
+        for component in l:
+            if component in slices:
+                slices.remove(component)
     sentences = ''.join(slices)
     result = sentences.split()
     return result
@@ -37,32 +37,34 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    words = open('C:\\Users\\Acer\\2020-2-level-labs\\lab_1\\stop_words.txt', "r", encoding='utf-8')
-    stop_words = words.read().split()
-    sentence = ' '.join(stop_words)
+    stop_words = open('C:\\Users\\Acer\\2020-2-level-labs\\lab_1\\stop_words.txt', "r", encoding='utf-8')
+    stop_words1 = stop_words.read().split()
+    sentence = ' '.join(stop_words1)
     slices = list(sentence)
-    l = ["'", ",", ".", "`", "`", "”", "“"]
+    panel = ["'", ",", ".", "`", "`", "”", "“"]
     bad_inputs_first = [{}, (), None, 9, 9.34, True, False]
     bad_inputs_second = [{}, (), None, 9, 9.34, True, False]
     empty = []
-    for x in slices:
-        for x in l:
-            if x in slices:
-                slices.remove(x)
+    for element in slices:
+        for component in panel:
+            if component in slices:
+                slices.remove(component)
     line = ''.join(slices)
     stop_words = line.split()
-    for z in tokens:
-        for z in stop_words:
-            if z in tokens:
-                tokens.remove(z)
-    for z in tokens:
-        if z in bad_inputs_first:
+    for constituent in tokens:
+        for component in stop_words:
+            if component in tokens:
+                tokens.remove(component)
+    for constituent in tokens:
+        if constituent in bad_inputs_first:
             return empty
         else:
-            return tokens
-    for a in stop_words:
-        if a in bad_inputs_second:
-            return tokens
+            result = tokens
+            return result
+    for component in stop_words:
+        if component in bad_inputs_second:
+            res = tokens
+            return res
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -73,7 +75,14 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
+    dictionary = {}
+    freq = 0
+    for b in tokens:
+        freq = tokens.count(b)
+        dictionary[b] = freq
+        result = dictionary
+
+    return result
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
