@@ -18,6 +18,22 @@ if __name__ == '__main__':
     tokens = main.tokenize(data)
     print('tokenize:', tokens[:preview_length * 10], "\n")
 
-    RESULT = None
+    token_frequency = main.calculate_frequencies(tokens[:preview_length * 10])
+    print('frequency of tokens:', token_frequency, "\n")
+
+    random_word = choice(tokens)
+
+    concordance = main.get_concordance(tokens, random_word, 3, 2)
+    print('concordance of word "{}":'.format(random_word), concordance, "\n")
+
+    adjacent = main.get_adjacent_words(tokens, random_word, 3, 2)
+    print('adjacent words for "{}"'.format(random_word), adjacent, "\n")
+
+    sorted_concordance = main.sort_concordance(tokens, random_word, 3, 2, False)
+    print('sorted concordance for "{}", left_sort=False'.format(random_word), sorted_concordance, "\n")
+
+    main.write_to_file('', sorted_concordance)
+
+    RESULT = sorted_concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [(), ()], 'Concordance not working'
+    assert RESULT, 'Concordance not working'
