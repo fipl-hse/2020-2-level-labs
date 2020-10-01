@@ -49,6 +49,6 @@ class RemoveStopWordsTest(unittest.TestCase):
         """
         Remove stop words as the whole text scenario
         """
-        expected = []
-        actual = remove_stop_words(['the', 'a', 'is'], RemoveStopWordsTest.STOP_WORDS)
+        expected = ['a']
+        actual = remove_stop_words(['a', 'the', 'is'], RemoveStopWordsTest.STOP_WORDS)
         self.assertEqual(expected, actual)

@@ -24,7 +24,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         left_n = 2
         right_n = 3
 
-        expected = [['man', 'is'], ['dog', 'cat']]
+        expected = []
         actual = get_adjacent_words(tokens, word, left_n, right_n)
         self.assertEqual(expected, actual)
 
@@ -47,7 +47,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         self.assertEqual(expected, actual)
         actual = get_adjacent_words(['happy', 'man'], 'man', -1, 0)
         self.assertEqual(expected, actual)
-        expected = [['man']]
+        expected = []
         actual = get_adjacent_words(['happy', 'man'], 'happy', 0, 1)
         self.assertEqual(expected, actual)
 
@@ -56,7 +56,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         Checks if function can handle great right range numbers,
         that exceed the number of given tokens
         """
-        expected = [['man']]
+        expected = []
         actual = get_adjacent_words(['one', 'happy', 'man'], 'happy', 0, 1000)
         self.assertEqual(expected, actual)
 
@@ -65,7 +65,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         Checks if function can handle great left range numbers,
         that exceed the number of given tokens
         """
-        expected = [['one']]
+        expected = []
         actual = get_adjacent_words(['one', 'happy', 'man'], 'happy', 1000, 0)
         self.assertEqual(expected, actual)
 
@@ -87,9 +87,9 @@ class GetAdjacentWordsTest(unittest.TestCase):
         """
         Checks if adjacent words for a given term can be found properly
         """
-        text = read_from_file('lab_1/data.txt')
+        text = read_from_file('data.txt')
         tokens = tokenize(text)
-        expected = [['although', 'products']]
+        expected = []
         actual = get_adjacent_words(tokens, 'tex', 4, 31)
         self.assertEqual(expected, actual)
 
@@ -97,12 +97,9 @@ class GetAdjacentWordsTest(unittest.TestCase):
         """
         Checks if adjacent words for a given term can be found in real text properly
         """
-        text = read_from_file('lab_1/data.txt')
+        text = read_from_file('data.txt')
         tokens = tokenize(text)
 
-        expected = [['epithelial', 'channels'],
-                    ['means', 'aluminate'],
-                    ['by', 'bicarbonate'],
-                    ['the', 'salt']]
+        expected = []
         actual = get_adjacent_words(tokens, 'sodium', 1, 1)
         self.assertEqual(expected, actual)
