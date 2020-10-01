@@ -142,7 +142,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                 concordance.append(current_context_list)
                 tokens.insert(tokens.index(token), 'буферный элемент')
                 tokens.remove(token)
-        print (concordance)
         return concordance
     return []
 
@@ -164,7 +163,8 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
     adjacent_words = []
     concordance = get_concordance (tokens, word, left_n, right_n)
-    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_n, int) and isinstance(right_n, int):
+    if (isinstance(tokens, list) and isinstance(word, str) and isinstance(left_n, int) and isinstance(right_n, int)
+            and not isinstance (left_n, bool) and not isinstance (right_n, bool)):
         def aid_function (tokens, word, left_n, right_n):
             if right_n > (len(small_list) - small_list.index(token)):
                 right_n = len(small_list) - small_list.index(token)
