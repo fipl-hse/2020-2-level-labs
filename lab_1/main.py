@@ -2,6 +2,7 @@
 Lab 1
 A concordance extraction
 """
+import re
 
 
 def tokenize(text: str) -> list:
@@ -14,7 +15,6 @@ def tokenize(text: str) -> list:
     """
     if not isinstance(text, str):
         return []
-    import re
     text = re.sub(r'[^A-Za-z \n]', '', text, count=0)
     text = text.lower()
     text = text.split()
@@ -141,16 +141,14 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             (left_n < 1 and right_n < 1):
         return []
     word_pairs = []
+    concordances = get_concordance(tokens, word, left_n, right_n)
     if not isinstance(left_n, int) or left_n < 1:
-        concordances = get_concordance(tokens, word, left_n, right_n)
         for i in concordances:
             word_pairs.append(i[-1:])
     elif not isinstance(right_n, int) or right_n < 1:
-        concordances = get_concordance(tokens, word, left_n, right_n)
         for i in concordances:
             word_pairs.append(i[:1])
     else:
-        concordances = get_concordance(tokens, word, left_n, right_n)
         interim_list = []
         for i in concordances:
             interim_list.append(i[0])
@@ -201,12 +199,12 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     """
     if not isinstance(left_sort, bool):
         return []
+    concordances = get_concordance(tokens, word, left_context_size, right_context_size)
     if left_sort and left_context_size > 0:
-        sorted_concordance = sorted(get_concordance(tokens, word, left_context_size, right_context_size))
+        sorted_concordance = sorted(concordances)
         return sorted_concordance
     elif not left_sort and right_context_size > 0:
-        sorted_concordance = sorted(get_concordance(tokens, word, left_context_size, right_context_size),\
-                                    key=lambda x: x[left_context_size+1])
+        sorted_concordance = sorted(concordances, key=lambda x: x[left_context_size+1])
         return sorted_concordance
     else:
         return []
