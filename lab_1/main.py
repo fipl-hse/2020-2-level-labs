@@ -1,4 +1,5 @@
 import re
+import string 
 """
 Lab 1
 A concordance extraction
