@@ -4,7 +4,7 @@ A concordance extraction
 """
 
 
-def tokenize(text = open(data.txt).read()):
+def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
@@ -13,17 +13,17 @@ def tokenize(text = open(data.txt).read()):
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     lower_text = text.lower()
-    punctuation = ['.', ',', '!', '?', '-', '"', '1', '2', '3', '4', '5', '6','7', '8', '9', '0']
+    punctuation = ['.', ',', '!', '?', '-', '"', '1', '2', '3', '4', '5', '6','7', '8', '9', '0', '@', '#', '/', '^', '%', ]
     for element in lower_text:
         if element in punctuation:
             index_of_element = lower_text.index(element)
             next_index = index_of_element + 1
             no_punct_text = lower_text[:index_of_element] + lower_text[next_index:]
-    text = no_punct_text.split()
-    return text
+    tokens = no_punct_text.split()
+    return tokens
 
 
-def remove_stop_words(tokens = tokenize(), stop_words = open(stop_words.txt).read()):
+def remove_stop_words (tokens: list, stop_words: list) -> list:
     """
     Removes stop words
     :param tokens: a list of tokens
@@ -39,10 +39,10 @@ def remove_stop_words(tokens = tokenize(), stop_words = open(stop_words.txt).rea
             index_of_word = tokens.index (word)
             tokens.pop (index_of_word)
     return tokens
-    pass
 
 
-def calculate_frequencies(tokens = remove_stop_words()):
+
+def calculate_frequencies(tokens: list) -> dict:
     """
     Calculates frequencies of given tokens
     :param tokens: a list of tokens without stop words
@@ -57,10 +57,10 @@ def calculate_frequencies(tokens = remove_stop_words()):
         else:
             freq_dict[word] = 1
     return freq_dict
-    pass
 
 
-def get_top_n_words(freq_dict = calculate_frequencies(), top_n = 1):
+
+def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     Returns the most common words
     :param freq_dict: a dictionary with frequencies
@@ -71,10 +71,10 @@ def get_top_n_words(freq_dict = calculate_frequencies(), top_n = 1):
     --> ['happy']
     """
     top_words = []
-    top1 = max(freq_dict, key = d.get)
-    top_words = top1.split()
-    return top_words
-    pass
+    sorted_dict = {k: freq_dict[k] for k in sorted(freq_dict, key=freq_dict.get, reverse=True)}
+    for key in sorted_dict:
+        top_words.append(key)
+    return top_words[:top_n]
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -94,9 +94,28 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
+    concordance = []
+    for number, token in enumerate(tokens):
+        context = []
+        if token == word:
+            if left_context_size >= 1:
+                left_size = left_context_size
+                while left_size != 0:
+                    if number - left_size >= 0:
+                        context.append(tokens[number - left_size])
+                    left_size -= 1
+                    context.append(token)
+                if right_context_size >= 1:
+                    if not context:
+                        context = [token]
+                    for iteration in range(right_context_size):
+                        if len(tokens) > number + (iteration + 1):
+                            context.append(tokens[number + (iteration + 1)])
+                if context:
+                    concordance.append(context)
+                return concordance
 
 
-    pass
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -114,7 +133,29 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    adjacent_words = []
+    concordance = get_concordance(tokens, word, left_n, right_n)
+    for using in concordance:
+        pair = []
+        for number, token in enumerate(using):
+            if token == word:
+                if left_n >= 1:
+                    if left_n > len(using[:number]):
+                        pair.append(using[0])
+                    else:
+                        pair.append(using[number - left_n])
+                if right_n >= 1:
+                    if right_n > len(using[number + 1:]):
+                        pair.append(using[-1])
+                    else:
+                        pair.append(using[number + right_n])
+        if pair:
+            adjacent_words.append(pair)
+    return adjacent_words
+
+
+
+
 
 
 def read_from_file(path_to_file: str) -> str:
