@@ -2,9 +2,8 @@
 Concordance implementation starter
 """
 
-from main import read_from_file
 import os
-from lab_1 import main
+import main
 from lab_1.main import read_from_file
 if __name__ == '__main__':
     #  use data.txt file to test your program
