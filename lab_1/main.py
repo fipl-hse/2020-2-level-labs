@@ -207,7 +207,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     if left_sort and left_context_size > 0:
         sorted_concordance = sorted(concordances)
         return sorted_concordance
-    elif not left_sort and right_context_size > 0:
+    elif not left_sort > 0 and right_context_size > 0:
         sorted_concordance = sorted(concordances, key=lambda x: x[left_context_size+1])
         return sorted_concordance
     else:
