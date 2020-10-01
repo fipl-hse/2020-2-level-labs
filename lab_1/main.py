@@ -27,8 +27,7 @@ def tokenize(text:str) -> list:
     """
     pass
     if not isinstance(text, str):  # check type (принадлежность)
-        tokens = []
-        return tokens
+        return []
     reg = re.compile('[^a-zA-Z \n`]')
     clean_text = reg.sub('', text)
     clean_text = clean_text.lower()
@@ -53,12 +52,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     if (isinstance(tokens, list) and tokens) and not (isinstance(stop_words, list) and stop_words):
         return tokens
 
-    copy_text = tokens[:]   #copy list
     for words in tokens:
         if words in stop_words:
-            copy_text.remove(words)
+            tokens.remove(words)
 
-    return copy_text
+    return tokens
 
 
 
@@ -77,7 +75,7 @@ def calculate_frequencies(tokens: list) -> dict:
         for words in tokens:
             if not isinstance(words, str):  #if not word
                 return {}
-        freq_dict = {words:tokens.count(words)}
+            freq_dict = {words:tokens.count(words)}
         return freq_dict
     return{}
 
@@ -97,7 +95,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         return []
 
     top_list = list(freq_dict.items())
-    top_list.sort(key=lambda i:i[1])    #sort by keys(2 element) for less volume-lambda
+    top_list.sort(key=lambda i:i[1])    #sort by keys(2 element) for less volume-lambda formed increase
 
     n_top_list = []
     for f_word in top_list[:top_n]:
@@ -135,14 +133,11 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     for ind,elem in enumerate(tokens):  #make list with numbers & tokens
         if elem == word:
             if left_context_size > 0 and right_context_size > 0:
-                for i in ind:
-                    part_text.append(tokens[i - left_context_size:i+ right_context_size + 1])
+                part_text.append(tokens[ind - left_context_size:ind + right_context_size + 1])
             elif left_context_size <= 0:
-                for i in ind:
-                    part_text.append(tokens[i:i + int(right_context_size) + 1])
+                part_text.append(tokens[ind:ind + int(right_context_size) + 1])
             elif right_context_size <= 0:
-                for i in ind:
-                    part_text.append(tokens[i - left_context_size:i + 1])
+                part_text.append(tokens[ind - left_context_size:ind + 1])
             else:
                 part_text = []
     return part_text
