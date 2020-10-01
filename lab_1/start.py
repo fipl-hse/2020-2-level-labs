@@ -5,7 +5,6 @@ import os
 import main
 
 if __name__ == '__main__':
-
     #  use data.txt file to test your program
     current_dir = os.path.dirname(os.path.abspath(__file__))
     data = main.read_from_file(os.path.join(current_dir, 'data.txt'))
@@ -13,23 +12,28 @@ if __name__ == '__main__':
 
     #  here goes your logic: calling methods from concordance.py
     tokens = main.tokenize(data)
-    print("tokens:", tokens[:13])
+    print('tokens:', tokens[:10])
 
-    tokens = main.remove_stop_words(tokens, stop_words)
-    print("tokens without stop words:", tokens[:10])
+    tokens_stop_words = main.remove_stop_words(tokens, stop_words)
+    print('tokens without stop words:', tokens_stop_words[:10])
 
-    freq_dict = main.calculate_frequencies(tokens[:10])
-    print("frequency for the first word:", freq_dict[tokens[0]])
+    tokens_frequencies = main.calculate_frequencies(tokens_stop_words[:10])
+    print('frequency of the first word:', tokens_frequencies[tokens_stop_words[0]])
 
-    top_2_words = main.get_top_n_words(freq_dict, 2)
-    print("top 2 words:", top_2_words)
+    top = main.get_top_n_words(tokens_frequencies, 3)
+    print('Top 3 words:', top)
 
     concordance = main.get_concordance(tokens, 'team', 1, 2)
-    print("concordance for 'team':", concordance[:3])
+    print("concordance for word 'team':", concordance[:3])
 
     adjacent_words = main.get_adjacent_words(tokens, 'team', 1, 2)
     print("adjacent words for word 'team':", adjacent_words[:3])
 
+    sorts_concordance = main.sort_concordance(tokens, 'team', 1, 2, True)
+    print("sorted concordance for word 'team':", sorts_concordance[:4])
+
+    main.write_to_file('report.txt', sorts_concordance)
+
     RESULT = concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [['time', 'a'], ['time', 'years'], ['olympic', 'great']], 'Concordance not working'
+    assert RESULT, 'Concordance not working'
