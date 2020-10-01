@@ -16,6 +16,7 @@ def tokenize(text: str) -> list:
 
     if not isinstance(text, str):
         return []
+
     text = text.lower()
     text = text.replace('\n', ' ')
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
@@ -24,9 +25,7 @@ def tokenize(text: str) -> list:
     for symbol in text:
         if symbol in letters or symbol == ' ':
             new_text += symbol
-    tokens = new_text.split()
-    return tokens
-
+    return new_text.split()
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
@@ -89,10 +88,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
 
     # the number of words (from the most popular)
     values_of_words = []
-    for x in freq_dict.values():
-        if x in values_of_words:
+    for value in freq_dict.values():
+        if value in values_of_words:
             continue
-        values_of_words.append(x)
+        values_of_words.append(value)
     values_of_words.sort()
     values_of_words = values_of_words[::-1]
     # top_values
@@ -103,8 +102,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         for word, frequency in freq_dict.items():
             if element == frequency:
                 top_words.append(word)
-    top_words = top_words[: top_n]  # unique
-    return top_words
+    return top_words[:top_n]
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:

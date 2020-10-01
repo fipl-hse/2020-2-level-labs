@@ -18,14 +18,14 @@ if __name__ == '__main__':
     stop_words = stop_words.split('\n')
 
     #  here goes your logic: calling methods from concordance.py
-    tokens = tokenize(text) [:101]
-    print ('The first 100 tokens are: {}'. format(tokens))
+    tokens = tokenize(text)[:101]
+    print('The first 100 tokens are: {}'. format(tokens))
 
     tokens = remove_stop_words(tokens, stop_words)
     print('Stop words have been removed: {}'.format(tokens))
 
     freq_dict = calculate_frequencies(tokens)
-    print ('The frequency dictionary of tokens is: {}'. format(freq_dict))
+    print('The frequency dictionary of tokens is: {}'. format(freq_dict))
 
     top_words = get_top_n_words(freq_dict, 3)
     print('There are three the most popular words: {}'. format(top_words))
