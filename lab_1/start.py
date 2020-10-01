@@ -1,9 +1,9 @@
 """
 Concordance implementation starter
 """
+from main import read_from_file
 import os
 import main
-from main import read_from_file
 
 
 if __name__ == '__main__':
@@ -36,7 +36,6 @@ if __name__ == '__main__':
 
     #  here goes your logic: calling methods from concordance.py
 
-    RESULT = None
     RESULT = top_words
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     #assert RESULT == [(), ()], 'Concordance not working'
