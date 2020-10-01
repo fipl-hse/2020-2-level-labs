@@ -33,9 +33,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return []
-    for token in tokens:
-        if token in stop_words:
-            tokens.remove(token)
+    for stop_word in stop_words:
+        while stop_word in tokens:
+            tokens.remove(stop_word)
     return tokens
 
 
