@@ -2,7 +2,6 @@
 Lab 1
 A concordance extraction
 """
-import os
 
 
 def tokenize(text: str) -> list:
@@ -13,8 +12,11 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    text = text.split()
-    return text
+    if not isinstance(text, str) or not text:
+        return []
+
+    tokens = text.split()
+    return tokens
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -139,7 +141,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
 
-    if isinstance(tokens,list) or isinstance(word, list):
+    if isinstance(tokens, list) or isinstance(word, list):
         return []
     if isinstance(left_n, int) or isinstance(right_n, int):
         return []
@@ -176,9 +178,7 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    with open(os.path.join(path_to_file, 'report.txt'),
-              'w', encoding='utf-8') as file:
-        file.write('\n'.join([' '.join(k) for k in content]))
+
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
