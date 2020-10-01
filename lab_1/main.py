@@ -12,7 +12,7 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    if not isinstance(text) == str:
+    if not isinstance(text, str):
         return []
     text = text.lower()
     for symbol in text:
@@ -34,7 +34,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if not isinstance(tokens) == list or not isinstance(stop_words) == list:
+    if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return []
     for word in stop_words:
         while word in tokens:
@@ -50,7 +50,7 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    if not isinstance(tokens) == list or None in tokens:
+    if not isinstance(tokens, list) or None in tokens:
         return {}
     freq_dict = {}
     for token in tokens:
@@ -74,7 +74,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_tokens = []
     top_n_tokens = []
     check_value = 0
-    if not isinstance(freq_dict) == dict or not isinstance(top_n) == int:
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return []
     for key, value in freq_dict.items():
         if value > check_value:
@@ -109,9 +109,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     concordance = []
-    wrong_circumstance = word == '' or not isinstance(word) == str or tokens == [] \
-     or not isinstance(tokens) == list or None in tokens \
-     or not isinstance(left_context_size) == int or not isinstance(right_context_size) == int \
+    wrong_circumstance = word == '' or not isinstance(word, str) or tokens == [] \
+     or not isinstance(tokens, list) or None in tokens \
+     or not isinstance(left_context_size, int) or not isinstance(right_context_size, int) \
      or (left_context_size < 1 and right_context_size < 1)
     if wrong_circumstance:
         return []
@@ -141,9 +141,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     adjacent_words = []
-    wrong_circumstance = word == '' or not isinstance(word) == str or tokens == [] \
-     or not isinstance(tokens) == list or None in tokens \
-     or not isinstance(left_n) == int or not isinstance(right_n) == int \
+    wrong_circumstance = word == '' or not isinstance(word, str) or tokens == [] \
+     or not isinstance(tokens, list) or None in tokens \
+     or not isinstance(left_n, int) or not isinstance(right_n, int) \
      or (left_n < 1 and right_n < 1)
     if wrong_circumstance:
         return []
@@ -210,12 +210,12 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    wrong_circumstance = word == '' or not isinstance(word) == str or tokens == [] \
-                         or not isinstance(tokens) == list or None in tokens \
-                         or not isinstance(left_context_size) == int or not isinstance(right_context_size) == int \
+    wrong_circumstance = word == '' or not isinstance(word, str) or tokens == [] \
+                         or not isinstance(tokens, list) or None in tokens \
+                         or not isinstance(left_context_size, int) or not isinstance(right_context_size, int) \
                          or (left_context_size < 1 and right_context_size < 1) \
                          or (right_context_size < 0 and left_sort is False) \
-                         or (left_context_size < 0 and left_sort is True) or not isinstance(left_sort) == bool
+                         or (left_context_size < 0 and left_sort is True) or not isinstance(left_sort, bool)
     if wrong_circumstance:
         return []
     sort_concordance_lst = get_concordance(tokens, word, left_context_size, right_context_size)
