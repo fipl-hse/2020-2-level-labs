@@ -98,9 +98,13 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         return []
 
     top_list = list(freq_dict.items())
-    top_list = sorted(top_list, key=lambda i:i[1],reverse = True)    #sort by keys(2 element) for less volume-lambda formed increase
+    top_list.sort(key=lambda i:i[1],reverse = True)    #sort by keys(2 element) for less volume-lambda formed increase
 
-    return top_list
+    n_top = []
+    for elem in top_list[:top_n]:
+        n_top.append(elem[0])
+
+    return n_top
 
 
 
@@ -122,17 +126,14 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
 
-    if isinstance(right_context_size, bool) or isinstance(left_context_size, bool):     #check for emptiness
+    if isinstance(right_context_size, bool) or isinstance(left_context_size, bool) or left_context_size < 1 \
+            or right_context_size < 1:     #check for emptiness
         return []
 
     if not isinstance(tokens, list) and not isinstance(word, str) \
             and not isinstance(right_context_size, int) and not isinstance(left_context_size, int):       #check type
         return []
 
-    if left_context_size < 1:   #avoid ugly branches
-        left_context_size = 0
-    elif right_context_size < 1:
-        right_context_size = 0
 
     concordance = []
     for ind,elem in enumerate(tokens):  #make list with numbers & tokens
