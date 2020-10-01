@@ -16,7 +16,6 @@ if __name__ == '__main__':
     tokens = main.tokenize(data)
     print(tokens[:10])
 
-    RESULT = None
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     tokens = main.remove_stop_words(tokens[:6], [stop_words])
     print('Stop words have been removed: {}'. format(tokens))
@@ -32,5 +31,6 @@ if __name__ == '__main__':
 
     adjacent = main.get_adjacent_words(tokens, 'cat', 2, 3)
     print('The adjacent words is: ', adjacent[:5])
-
-    assert RESULT == [['recommended', 'a', 'main', 'division', 'services', 'relocation']], 'Concordance not working'
+    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
+    RESULT = concordance
+    assert RESULT == [['recommended', 'a', 'division', 'main', 'services', 'relocation']], 'Concordance not working'
