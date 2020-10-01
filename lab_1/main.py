@@ -159,6 +159,8 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         '#print([a]+[a1]+[a2])'
         a3 = tokens.pop(11)
         print([[a]+[a1]]+[[a2]+[a3]])
+        adj_words = [[a]+[a1]]+[[a2]+[a3]]
+        return adj_words
     else:
         return []
 
@@ -179,6 +181,12 @@ def write_to_file(path_to_file: str, content: list):
     Writes the result in a file
     """
 
+    text = ''
+    for i in content:
+        value = ''.join(i)
+        text += value + '\n'
+    with open(path_to_file, 'w') as file:
+        file.write(text)
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
