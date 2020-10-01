@@ -40,11 +40,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
     new_tokens = []
-    if type (tokens) == list:
-        if type (stop_words) == list:
-            for token in tokens:
-                if token not in stop_words:
-                    new_tokens.append(token)
+    if type (tokens) == list and type (stop_words) == list:
+        for token in tokens:
+            if token not in stop_words:
+                new_tokens.append(token)
         return new_tokens
     return []
 
@@ -230,8 +229,8 @@ def write_to_file(path_to_file: str, content: list):
         for word in small_list:
             text += word + ' '
         text += '\n'
-        file.write (text)
-        text = ''
+    file.write (text)
+
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:

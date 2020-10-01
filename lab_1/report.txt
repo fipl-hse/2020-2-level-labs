@@ -1,2 +1,2 @@
-man is 
-dog cat 
+global local 
+man woman 
