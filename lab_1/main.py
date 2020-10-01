@@ -21,7 +21,7 @@ def tokenize(text: str) -> list:
         for element in part:
             if element.isalpha():
                 cleaned.append(element.lower())
-        if not cleaned == []:
+        if cleaned != []:
             tokens.append(''.join(cleaned))
     return tokens
 
