@@ -2,8 +2,8 @@
 Concordance implementation starter
 """
 
-from main import read_from_file
 import os
+import main
 
 if __name__ == '__main__':
     #  use data.txt file to test your program
@@ -18,8 +18,8 @@ if __name__ == '__main__':
     top_n_tokens = main.get_top_n_words(freq_dict, 2)
     concordance = main.get_concordance(tokens, 'seriously', 1, 1)
     adjacent_words = main.get_adjacent_words(tokens, 'seriously', 1, 1)
-    sorted_concordance_list = main.sort_concordance(tokens, 'seriously', 1, 1, True)
-    main.write_to_file('report.txt', sorted_concordance_list)
-    RESULT = sorted_concordance_list
+    sort_concordance_lst = main.sort_concordance(tokens, 'seriously', 1, 1, True)
+    main.write_to_file('report.txt', sort_concordance_lst)
+    RESULT = sort_concordance_lst
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Concordance not working'
