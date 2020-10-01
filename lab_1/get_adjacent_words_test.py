@@ -87,7 +87,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         """
         Checks if adjacent words for a given term can be found properly
         """
-        text = read_from_file('data.txt')
+        text = read_from_file('lab_1/data.txt')
         tokens = tokenize(text)
         expected = [['although', 'products']]
         actual = get_adjacent_words(tokens, 'tex', 4, 31)
@@ -97,7 +97,7 @@ class GetAdjacentWordsTest(unittest.TestCase):
         """
         Checks if adjacent words for a given term can be found in real text properly
         """
-        text = read_from_file('data.txt')
+        text = read_from_file('lab_1/data.txt')
         tokens = tokenize(text)
 
         expected = [['epithelial', 'channels'],
