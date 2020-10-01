@@ -124,7 +124,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     print(tokenss)
 
     print([tokens] + [tokenss])
-    return [tokens] + [tokenss]
+    return [tokens + tokenss]
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -158,7 +158,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         tokens3 = tokens.pop(8)
         tokens4 = tokens.pop(11)
         print([[tokens1]+[tokens2]]+[[tokens3]+[tokens4]])
-        return []
+    return []
 
 
 def read_from_file(path_to_file: str) -> str:
