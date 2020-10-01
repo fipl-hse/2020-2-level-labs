@@ -162,13 +162,13 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    all_context  = ''
+    all_context = ''
     for word in content:
         context = ' '.join(word)
         all_context += context + '\n'
 
     with open(path_to_file, 'w', encoding='utf-8') as con_file:
-            con_file.write(all_context)
+        con_file.write(all_context)
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
