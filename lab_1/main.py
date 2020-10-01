@@ -172,7 +172,10 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as file:
+    if isinstance(path_to_file, str):
+        return ' '
+
+    with open('C:\\projects\2020-2-level-labs\\lab_1\\data.txt', 'r', encoding='utf-8') as file:
         data = file.read()
     return data
 
