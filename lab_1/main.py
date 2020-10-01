@@ -51,7 +51,8 @@ def calculate_frequencies(tokens: list) -> dict:
         return {}
     freq_dict = {}
     for token in tokens:
-        freq_dict[token] = tokens.count(token)
+        if isinstance(token, str):
+            freq_dict[token] = tokens.count(token)
     return freq_dict
 
 
@@ -101,6 +102,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     if not isinstance(tokens, list) or not isinstance(word, str):
         return []
+    for token in tokens:
+        if not isinstance(token, str):
+            return []
     if (not isinstance(left_context_size, int) and not isinstance(right_context_size, int)) or \
             (left_context_size < 1 and right_context_size < 1):
         return []
