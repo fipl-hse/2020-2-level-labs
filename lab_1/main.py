@@ -33,9 +33,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     tokens_clean = []
     if isinstance(tokens, list):
-        for i in tokens:
-            if i not in stop_words:
-                tokens_clean.append(i)
+        for word in tokens:
+            if word not in stop_words:
+                tokens_clean.append(word)
     return tokens_clean
 
 
@@ -49,12 +49,12 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     frequency = {}
     if isinstance(tokens, list):
-        for i in tokens:
-            if type(i) == str:
-                if i in frequency:
-                    frequency[i] += 1
+        for word in tokens:
+            if isinstance(word, str):
+                if word in frequency:
+                    frequency[word] += 1
                 else:
-                    frequency[i] = 1
+                    frequency[word] = 1
     return frequency
 
 
@@ -155,16 +155,16 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             return []
 
         operative_tokens = get_concordance(tokens, word, left_n, right_n)
-        for i in operative_tokens:
+        for some_words in operative_tokens:
             word = word.lower()
-            i.remove(word)
-            if len(i) > 2:
-                words.append(i[0])
-                words.append(i[-1])
+            some_words.remove(word)
+            if len(some_words) > 2:
+                words.append(some_words[0])
+                words.append(some_words[-1])
                 adjacent_words.append(words[:])
                 words.clear()
             else:
-                adjacent_words.append(i)
+                adjacent_words.append(some_words)
 
     return adjacent_words
 
@@ -186,8 +186,8 @@ def write_to_file(path_to_file: str, content: list):
     """
     if isinstance(path_to_file, str) and isinstance(content, list):
         with open(path_to_file, 'w', encoding='utf-8') as fs:
-            for i in content:
-                fs.write(' '.join(i))
+            for element in content:
+                fs.write(' '.join(element))
                 fs.write('\n')
 
 
