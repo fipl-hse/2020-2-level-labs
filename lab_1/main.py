@@ -159,7 +159,8 @@ def write_to_file(path_to_file: str, content: list):
     """
     with open(path_to_file, 'w') as file:
         for i in content:
-            file.write(' '.join(i),'\n')
+            file.write(' '.join(i))
+            file.write('\n')
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
