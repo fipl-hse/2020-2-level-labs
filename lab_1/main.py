@@ -106,6 +106,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         return []
     if left_context_size < 1 and right_context_size < 1:
         return []
+    if isinstance(left_context_size, bool) and isinstance(right_context_size, bool):
+        return []
     concordance = []
     count = 0
     if left_context_size < 1 or not isinstance(left_context_size, int):
