@@ -32,4 +32,3 @@ if __name__ == '__main__':
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [['by', 'sodium', 'bicarbonate'], ['epithelial', 'sodium', 'channels'],
                       ['means', 'sodium', 'aluminate'], ['the', 'sodium', 'salt']]
-
