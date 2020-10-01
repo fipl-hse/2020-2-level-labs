@@ -98,9 +98,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     concordance = []
     if isinstance(left_context_size, bool) and isinstance(right_context_size, bool):
         return []
-    if isinstance(tokens, list) and isinstance(word, str) \
-            and isinstance(left_context_size,int) and isinstance(right_context_size,int) \
-            and (left_context_size > 0 or right_context_size > 0) and word in tokens and word != '':
+    if not isinstance(tokens, list) or not isinstance(word, str) \
+            or not isinstance(left_context_size,int) or not isinstance(right_context_size,int):
+        return []
+    if (left_context_size > 0 or right_context_size > 0) and word in tokens and word != '':
         word_index = []
         for i, k in enumerate(tokens):
             if k == word:
@@ -108,10 +109,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         for i,k in enumerate(word_index):
             concordance.insert(i, [])
             if left_context_size > 0:
-                concordance[i].extend(tokens[word_index[i] - left_context_size:word_index[i]])
+                concordance[i].extend(tokens[k - left_context_size:k])
             concordance[i].extend([word])
             if right_context_size > 0:
-                concordance[i].extend(tokens[word_index[i]+1:right_context_size + word_index[i]+1])
+                concordance[i].extend(tokens[k+1:right_context_size+k+1])
     return concordance
 
 
