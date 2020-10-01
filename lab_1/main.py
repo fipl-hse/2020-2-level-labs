@@ -13,7 +13,7 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
     pass
-    if not isinstance(text, str) == True:
+    if not isinstance(text, str) or not text:
         return []
     text_input = re.sub(r'[^a-zA-Z ]', '', text).lower().split()
     return text_input
