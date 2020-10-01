@@ -54,10 +54,9 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     if not isinstance(tokens, list):
         return {}
-    if isinstance(tokens, list) and tokens:
-        for element in tokens:
-            if not isinstance(element, str):
-                return {}
+    for element in tokens:
+        if not isinstance(element, str):
+            return {}
     return {element: tokens.count(element) for element in tokens}
 
 
@@ -155,8 +154,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as file:
-        data = file.read()
+    with open(path_to_file, 'r', encoding='utf-8') as concord_file:
+        data = concord_file.read()
 
     return data
 
@@ -165,10 +164,10 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    with open(path_to_file, 'w', encoding='utf-8') as file:
+    with open(path_to_file, 'w', encoding='utf-8') as concord_file:
         for element in content:
-            file.write(' '.join(element) + '\n')
-        file.close()
+            concord_file.write(' '.join(element) + '\n')
+        concord_file.close()
 
 
 
