@@ -106,21 +106,18 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
         return []
     concordance = []
-    word_index = []
-    for index, i in enumerate(tokens):
-        if i == word:
-            word_index += [index]
-    for index in word_index:
+    w_index = []
+    for index, element in enumerate(tokens):
+        if element == word:
+            w_index += [index]
+    for index in w_index:
         if left_context_size > 0 and right_context_size > 0:
             concordance.append(tokens[index - left_context_size: index + right_context_size + 1])
+        elif left_context_size > 0:
+            concordance.append(tokens[index - left_context_size:index + 1])
         elif right_context_size > 0:
             concordance.append(tokens[index: index + right_context_size + 1])
-        elif left_context_size > 0:
-            concordance.append(tokens[index - left_context_size: index + 1])
-        else:
-            return []
-        return concordance
-    return []
+    return concordance
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
