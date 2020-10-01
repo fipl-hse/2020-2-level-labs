@@ -16,8 +16,7 @@ def tokenize(text: str) -> list:
     """
     tokens = []
     if text and isinstance(text, str):
-        tokens = text.lower()
-        tokens = re.sub(r'[^\w\s]', '', tokens).split()
+        tokens = re.sub('[^a-z \n]', '', text.lower()).split()
     return tokens
 
 
