@@ -14,6 +14,8 @@ if __name__ == '__main__':
     #  here goes your logic: calling methods from concordance.py
 
     tokens = tokenize(data)
-    RESULT = sort_concordance(tokens, 'text', 1, 2, True)
+    res = sort_concordance(tokens, 'text', 1, 2, True)
+    print(res[:3])
+    RESULT = res[:2]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT,  'sort concordance not working'
+    assert RESULT == [['80', 'text', 'columns', 'although'], ['a', 'text', 'as', 'quickly']],  'sort concordance not working'
