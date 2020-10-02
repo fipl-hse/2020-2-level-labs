@@ -107,9 +107,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    left_check = isinstance(left_context_size, int) and left_context_size > 0 \
+    left_check = isinstance(left_context_size, int) and left_context_size < 1 \
             and not isinstance(left_context_size, bool)
-    right_check = isinstance(right_context_size, int) and right_context_size > 0 \
+    right_check = isinstance(right_context_size, int) and right_context_size < 1 \
             and not isinstance(right_context_size, bool)
     tokens_check = isinstance(tokens, list)
     word_check = isinstance(word, str)
@@ -119,7 +119,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         left_context_size = 0
     elif right_context_size < 0:
         right_context_size = 0
-
     for ind, element in enumerate(tokens):
         if element == word:
             concordance.append(tokens[ind - left_context_size: ind + right_context_size + 1])
@@ -142,19 +141,20 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    if not isinstance(tokens, list) or not isinstance(word, str):
+    if not isinstance(tokens, list) or not isinstance(word, str) \
+        or not isinstance(left_n, int) or not isinstance(right_n, int):
         return []
 
-    if isinstance(left_n, int) and isinstance(right_n, int) and left_n >= 1 and right_n >= 1:
-        concordance = get_concordance(tokens, word, left_n, right_n)
-        adjacent_words = []
-        for element in concordance:
-            if left_n <= 0:
-                adjacent_words.append([element[-1]])
-            elif right_n <= 0:
-                adjacent_words.append([element[0]])
-            else:
-                adjacent_words.append([element[0], element[-1]])
+    concordance = get_concordance(tokens, word, left_n, right_n)
+    adjacent_words = []
+    for element in concordance:
+        if left_n <= 0:
+            adjacent_words.append([element[-1]])
+        elif right_n <= 0:
+            adjacent_words.append([element[0]])
+        else:
+            adjacent_words.append([element[0], element[-1]])
+
     return adjacent_words
 
 
