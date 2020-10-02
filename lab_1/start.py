@@ -31,10 +31,10 @@ if __name__ == '__main__':
     adjacent_words = main.get_adjacent_words(tokens, 'islands', 2, 3)
     print("adjacent words for 'book':", adjacent_words[:4])
 
-    main.write_to_file('report.txt', adjacent_words)
+    main.write_to_file('report.txt', top_words)
 
     #  here goes your logic: calling methods from concordance.py
 
-    RESULT = adjacent_words
+    RESULT = top_words
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [['the', 'of'], ['and', 'freezeout'], ['of', 'the'], ['that', 'people']], 'Concordance not working'
+    assert RESULT == ['of', 'years', 'time', 'team'], 'Concordance not working'
