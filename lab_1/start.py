@@ -20,20 +20,20 @@ if __name__ == '__main__':
 
         #  here goes your logic: calling methods from concordance.py
         tokens = main.tokenize(data)
-        print('tokens: ', tokens[:3])
+        print('tokens: ', tokens[:2])
 
         stop_words = main.remove_stop_words(tokens, stop_words)
-        print('without stop words: ', tokens[:5])
+        print('without stop words: ', tokens[:2])
 
         frequencies = main.calculate_frequencies(tokens)
-        print('frequency for a word:', frequencies[tokens[5]])
+        print('frequencies:', frequencies[tokens[2]])
 
-        top_n = main.get_top_n_words(frequencies, 10)
-        print('top 10 words: ', top_n)
+        top_n = main.get_top_n_words(frequencies, 2)
+        print('top words: ', top_n)
 
-        concordance = main.get_concordance(tokens, 'people', 2, 3)
-        print('concordance for the word: ', concordance[:5])
+        concordance = main.get_concordance(tokens, 'people', 1, 2)
+        print('concordance of words: ', concordance[:2])
 
-    RESULT = concordance[:5]
+    RESULT = concordance[:2]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [['presented', 'in', 'people', 'who', 'wereare', 'not'], ['persuaded', 'many', 'people', 'that', 'death', 'was'], ['among', 'these', 'people', 'and', 'had', 'buried'], ['distancesafrican', 'creole', 'people', 'in', 'the', 'early'], ['airplaneafter', 'the', 'people', 'are', 'happily', 'fed']], 'Concordance not working'
+    assert RESULT == [['in', 'people', 'who', 'wereare'], ['many', 'people', 'that', 'death']]
