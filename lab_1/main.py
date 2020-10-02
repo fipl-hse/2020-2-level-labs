@@ -2,7 +2,7 @@
 Lab 1
 A concordance extraction
 """
-
+import re
 
 def tokenize(text: str) -> list:
     """
@@ -18,6 +18,7 @@ def tokenize(text: str) -> list:
     clear_text = ''.join(clear_symbols)
     clear_text = clear_text.lower()
     return [word for word in clear_text.split(' ') if word != '']
+
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -47,15 +48,15 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    freq_dict = {}
+    frequency_dict = {}
     if isinstance(tokens, list) and len(tokens) > 0:
         if isinstance(tokens[0], str):
             for i in tokens:
-                if i in freq_dict:
-                    freq_dict[i] += 1
+                if i in frequency_dict:
+                    frequency_dict[i] += 1
                 else:
-                    freq_dict[i] = 1
-    return freq_dict
+                    frequency_dict[i] = 1
+    return frequency_dict
 
 
 
@@ -70,11 +71,11 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    sorted_dict = []
+    top_words = []
     if isinstance(freq_dict, dict) and top_n > 0:
-        sorted_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
-        sorted_dict = sorted_dict[:top_n]
-    return sorted_dict
+        top_words = sorted(freq_dict, key=freq_dict.get, reverse=True)
+        top_words = top_words[:top_n]
+    return top_words
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
