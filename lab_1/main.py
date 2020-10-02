@@ -10,12 +10,10 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
-
-
 
 def tokenize(text:str) -> list:
     """
@@ -47,9 +45,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
 
-    if not isinstance(tokens, list) or not tokens or not isinstance(stop_words, list):  #check for emptiness
+    if not isinstance(tokens, list) or not tokens\
+            or not isinstance(stop_words, list):  #check for emptiness
         return []
-    if (isinstance(tokens, list) and tokens) and not (isinstance(stop_words, list) and stop_words):
+    if (isinstance(tokens, list) and tokens)\
+            and not (isinstance(stop_words, list) and stop_words):
         return tokens
 
     s_tokens = tokens [:]
@@ -71,7 +71,6 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-
     if  not isinstance(tokens, list):  # if not word
         return {}
 
@@ -94,7 +93,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     """
 
-    if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or not freq_dict or not top_n >= 1:
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int)\
+            or not freq_dict or not top_n >= 1:
         return []
 
     top_list = list(freq_dict.items())
@@ -165,36 +165,29 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    if isinstance(tokens, list) or isinstance(word, str):
-       if isinstance(left_n, int) and isinstance(right_n, int):
-
-           if (left_n < 1):
-               left_n = 0
-           elif (right_n < 1):
-               right_n = 0
-
-           l_concordance = get_concordance(tokens, word, left_n, right_n)
-           adjacent_words = []
-           for need_words in l_concordance:
-               for i,w in enumerate(need_words):
-                   if w == word:
-                       if len(need_words[:i]) < left_n:
-                           left_n = len(need_words[:i])
-                       if len(need_words[(i + 1):]) < right_n:
-                           right_n = len(need_words[(i + 1):])
-
-                       if (right_n < 1) or (not isinstance(right_n, int)):
-                           adjacent_words.extend([[need_words[i - left_n]]])
-                       elif (left_n < 1) or (not isinstance(left_n, int)):
-                           adjacent_words.extend([[need_words[i + right_n]]])
-                       else:
-                           adjacent_words.extend([[need_words[i - left_n], need_words[i + right_n]]])
-
-           return adjacent_words
-
-
-       return []
-    return []
+    if not isinstance(tokens, list) or not isinstance(word, str):
+        return []
+    if isinstance(left_n, int) and isinstance(right_n, int):
+        if left_n < 1:
+            left_n = 0
+        elif right_n < 1:
+            right_n = 0
+        l_concordance = get_concordance(tokens, word, left_n, right_n):
+        adjacent_words = []
+        for need_words in l_concordance:
+            for i,w in enumerate(need_words):
+                if len(need_words[:i]) < left_n:
+                    left_n = len(need_words[:i])
+                if len(need_words[(i + 1):]) < right_n:
+                    right_n = len(need_words[(i + 1):])
+                if (right_n < 1) or (not isinstance(right_n, int)):
+                    adjacent_words.extend([[need_words[i - left_n]]])
+                elif (left_n < 1) or (not isinstance(left_n, int)):
+                    adjacent_words.extend([[need_words[i + right_n]]])
+                else:
+                    adjacent_words.extend([[need_words[i - left_n], need_words[i + right_n]]])
+            return adjacent_words
+        return []
 
 
 def write_to_file(path_to_file: str, content: list):
