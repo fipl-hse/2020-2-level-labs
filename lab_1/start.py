@@ -20,12 +20,12 @@ if __name__ == '__main__':
 
     #  here goes your logic: calling methods from concordance.py
     tokens = tokenize(data)
-    stop_words = read_from_file(os.path.join(current_dir, 'stop_words.txt')).split()
+    '''stop_words = read_from_file(os.path.join(current_dir, 'stop_words.txt')).split()
     clean_text_list = remove_stop_words(tokens, stop_words)
     frequencies_dict = calculate_frequencies(tokens)
     top_n_words = get_top_n_words(frequencies_dict, 5)
     concordance = get_concordance(tokens, 'sodium', 2, 2)
-    adjacent_words = get_adjacent_words(tokens, 'sodium', 2, 2)
+    adjacent_words = get_adjacent_words(tokens, 'sodium', 2, 2)'''
 
     RESULT = sort_concordance(tokens, 'sodium', 1, 1, True)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
