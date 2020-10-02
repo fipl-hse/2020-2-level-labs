@@ -55,7 +55,7 @@ def calculate_frequencies(tokens: list) -> dict:
     dictionary = {} #создаем словарь
     if isinstance(tokens[0], str):
         for token in tokens:
-            if token in dict:
+            if token in dictionary:
                 dictionary[token] += 1
             else:
                 dictionary[token] = 1
