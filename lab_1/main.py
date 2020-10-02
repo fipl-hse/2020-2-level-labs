@@ -126,6 +126,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if len(tokens) == 0 or not(isinstance(tokens[0], str)):
         return []
     
+    if left_context_size < 0 and right_context_size < 0:
+        return
+    
     if word not in tokens:
         return []
     
@@ -133,18 +136,14 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         right_context_size = 0
     if not(l_is_int) or left_context_size < 0:
         left_context_size = 0
-        
-    result = []
-    for i in range(len(tokens)):
-        if tokens[i] == word:
-            A = []
-            for j in range(i - left_context_size,
-                           i + right_context_size + 1):
-                if j < 0 or j >= len(tokens):
-                    continue
-                A.append(tokens[j])
-            result.append(A)
 
+    result = []
+    A = []
+    for ind, val in enumerate(tokens):
+        if val == word:
+            A.append(ind)
+    for ind in A:
+        result.append(tokens[ind - left_context_size:ind + right_context_size + 1])
     return result
 
 
