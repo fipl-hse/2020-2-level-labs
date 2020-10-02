@@ -2,6 +2,13 @@
 Lab 1
 A concordance extraction
 """
+import re
+
+
+
+
+
+
 
 
 def tokenize(text: str) -> list:
@@ -12,13 +19,12 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    if not isinstance(text, str): # проверка, является ли аргумент строкой
-        return[]
+    if not isinstance(text, str):
+        return []
     clear_symbols = [char for char in text if char.isalpha() or char == ' ']
     clear_text = ''.join(clear_symbols)
     clear_text = clear_text.lower()
     return [word for word in clear_text.split(' ') if word != '']
-    pass
 
 
 
@@ -49,15 +55,15 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    if not isinstance(tokens, list):
-        return {}
-    frequencies = {}
-    if token not in frequencies:
-        frequencies[token] = 1
-    else:
-        frequencies[token] += 1
-
-    return frequencies
+    freq_dict = {}
+    if isinstance(tokens, list) and len(tokens) > 0:
+        if isinstance(tokens[0], str):
+            for i in tokens:
+                if i in freq_dict:
+                    freq_dict[i] += 1
+                else:
+                    freq_dict[i] = 1
+    return freq_dict
 
     pass
 
@@ -72,20 +78,12 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
-        return []
-    if len(freq_dict) == 0 or top_n < 0 or top_n >= len(freq_dict):
-        return []
-    reversed_freq_dict = {v: k for k, v in freq_dict.items()}
-    sorted_freq_list = [k for v, k in sorted(reversed_freq_dict.items())]
-    top_token = sorted_freq_list[-1]
-    top_n_token = sorted_freq_list[-1 - top_n]
-
-    return [top_token, top_n_token]
-
-
-    pass
-
+    sorted_dict = []
+    if isinstance(freq_dict, dict) and top_n > 0:
+        sorted_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
+        sorted_dict = sorted_dict[:top_n]
+    return sorted_dict
+pass
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
