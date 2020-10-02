@@ -70,13 +70,20 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     top_n_words = []
     not_needed = []
-    if isinstance(freq_dict, dict) and isinstance(top_n, int):
-        freq_list = list(freq_dict.items())
-        freq_list.sort(key=lambda x: x[1], reverse=True)
-        new_freq_dict = dict(freq_list)
-        for i, word in enumerate(new_freq_dict):
-            top_n_words.append(word)
-            not_needed.append(i)
+    checks_for_arguments = [
+        isinstance(freq_dict, dict),
+        isinstance(top_n, int),
+        not isinstance(top_n, bool)
+    ]
+    if not all(checks_for_arguments):
+        return []
+
+    freq_list = list(freq_dict.items())
+    freq_list.sort(key=lambda x: x[1], reverse=True)
+    new_freq_dict = dict(freq_list)
+    for number, word in enumerate(new_freq_dict):
+        top_n_words.append(word)
+        not_needed.append(number)
 
     return top_n_words[:top_n]
 
@@ -102,33 +109,42 @@ def get_concordance(tokens: list, word: str, left_context_size: int,
     concordance = []
     left_context = []
     right_context = []
-    if isinstance(tokens, list) and isinstance(word, str)\
-            and isinstance(left_context_size, int) and not isinstance(left_context_size, bool)\
-            and isinstance(right_context_size, int) and not isinstance(right_context_size, bool):
-        if left_context_size < 0:
-            left_context_size = 0
-        elif right_context_size < 0:
-            right_context_size = 0
-        if left_context_size == 0 and right_context_size == 0:
-            return []
 
-        operative_tokens = tokens[:]
-        word = word.lower()
-        while word in operative_tokens:
-            index = operative_tokens.index(word)
+    check_for_arguments = [
+        isinstance(tokens, list),
+        isinstance(word, str),
+        isinstance(left_context_size, int),
+        isinstance(right_context_size, int),
+        not isinstance(left_context_size, bool),
+        not isinstance(right_context_size, bool),
+    ]
+    if not all(check_for_arguments):
+        return []
 
-            left_index = index - left_context_size
-            left_context.extend(operative_tokens[left_index:index])
+    if left_context_size < 0:
+        left_context_size = 0
+    elif right_context_size < 0:
+        right_context_size = 0
+    if left_context_size == 0 and right_context_size == 0:
+        return []
 
-            right_index = index + right_context_size + 1
-            right_context.extend(operative_tokens[index:right_index])
+    operative_tokens = tokens[:]
+    word = word.lower()
+    while word in operative_tokens:
+        index = operative_tokens.index(word)
 
-            left_context.extend(right_context[:])
-            concordance.append(left_context[:])
-            left_context.clear()
-            right_context.clear()
+        left_index = index - left_context_size
+        left_context.extend(operative_tokens[left_index:index])
 
-            operative_tokens.remove(word)
+        right_index = index + right_context_size + 1
+        right_context.extend(operative_tokens[index:right_index])
+
+        left_context.extend(right_context[:])
+        concordance.append(left_context[:])
+        left_context.clear()
+        right_context.clear()
+
+        operative_tokens.remove(word)
     return concordance
 
 
@@ -149,26 +165,35 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
     adjacent_words = []
     words = []
-    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_n, int)\
-            and isinstance(right_n, int):
-        if left_n < 0:
-            left_n = 0
-        elif right_n < 0:
-            right_n = 0
-        if left_n == 0 and right_n == 0:
-            return []
+    check_for_arguments = [
+        isinstance(tokens, list),
+        isinstance(word, str),
+        isinstance(left_n, int),
+        not isinstance(left_n, bool),
+        isinstance(right_n, int),
+        not isinstance(right_n, bool)
+    ]
+    if not all(check_for_arguments):
+        return []
 
-        operative_tokens = get_concordance(tokens, word, left_n, right_n)
-        for some_words in operative_tokens:
-            word = word.lower()
-            some_words.remove(word)
-            if len(some_words) > 2:
-                words.append(some_words[0])
-                words.append(some_words[-1])
-                adjacent_words.append(words[:])
-                words.clear()
-            else:
-                adjacent_words.append(some_words)
+    if left_n < 0:
+        left_n = 0
+    elif right_n < 0:
+        right_n = 0
+    if left_n == 0 and right_n == 0:
+        return []
+
+    operative_tokens = get_concordance(tokens, word, left_n, right_n)
+    for some_words in operative_tokens:
+        word = word.lower()
+        some_words.remove(word)
+        if len(some_words) > 2:
+            words.append(some_words[0])
+            words.append(some_words[-1])
+            adjacent_words.append(words[:])
+            words.clear()
+        else:
+            adjacent_words.append(some_words)
 
     return adjacent_words
 
@@ -213,15 +238,23 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int)\
-            and isinstance(right_context_size, int) and isinstance(left_sort, bool):
-        operative_tokens = get_concordance(tokens, word, left_context_size, right_context_size)
+    check_for_arguments = [
+        isinstance(tokens, list),
+        isinstance(word, str),
+        isinstance(left_context_size, int),
+        not isinstance(left_context_size, bool),
+        isinstance(right_context_size, int),
+        not isinstance(right_context_size, bool),
+        isinstance(left_sort, bool)
+        ]
+    if not all(check_for_arguments):
+        return []
 
-        word = word.lower()
+    operative_tokens = get_concordance(tokens, word, left_context_size, right_context_size)
+    word = word.lower()
+    if left_sort and left_context_size > 0:
+        return sorted(operative_tokens)
 
-        if left_sort and left_context_size > 0:
-            return sorted(operative_tokens)
+    if not left_sort and right_context_size > 0:
+        return sorted(operative_tokens, key=lambda x: x[x.index(word) + 1])
 
-        if not left_sort and right_context_size > 0:
-            return sorted(operative_tokens, key=lambda x: x[x.index(word) + 1])
-    return []
