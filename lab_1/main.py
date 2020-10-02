@@ -157,10 +157,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
                        checker(word, str),
                        checker(left_n, int),
                        checker(right_n, int),
-                       left_n >= 0,
-                       right_n >= 0]
+                       ]
 
-    if False not in good_conditions:
+    if False not in good_conditions and left_n >= 0 and right_n >= 0:
 
         for _ in range(tokens.count(word)):
             if not tokens.index(word):
@@ -183,6 +182,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
                 conco_all.append(concordance)
     return conco_all
 
+get_adjacent_words(['happy', 'man', 'went'], 'man', [], [])
 
 def read_from_file(path_to_file: str) -> str:
     """
