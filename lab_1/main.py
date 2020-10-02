@@ -3,6 +3,8 @@ Lab 1
 A concordance extraction
 """
 
+import re
+
 def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
@@ -10,9 +12,8 @@ def tokenize(text: str) -> list:
     :return: a list of lowercased tokens without punctuation
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    """
-    import re
-    if type(text) == str:
+    ""
+    if isinstance(text, str):
         tokens = re.sub(r'[^\w\s]', '', text.lower())
         tokens = tokens.split()
         return tokens
@@ -30,7 +31,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if type(tokens) == list:
+    if isinstance(tokens, list):
         if type(stop_words) == list:
             tokens = [token for token in tokens if token not in stop_words]
             return tokens
@@ -49,7 +50,7 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
     freq_dict = {}
-    if type(tokens) == list:
+    if isinstance(tokens, list):
         for token in tokens:
             if type(token) == str:
                 freq_dict[token] = tokens.count(token)
@@ -71,7 +72,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     --> ['happy']
     Здесь при неккорректных значениях должен возвращаться пустой список!
     """
-    if type(freq_dict) == dict and type(top_n) == int:
+    if isinstance(freq_dict, dict) and isinstance(top_n, int):
         sorted_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
         top_n_words = sorted_dict[:top_n]
         return top_n_words
@@ -108,9 +109,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if left_context_size > 0 and right_context_size > 0:
         concordance += [tokens[i - left_context_size: i + right_context_size + 1] for i in indexes]
     elif left_context_size > 0:
-            concordance += [tokens[i - left_context_size: i + 1] for i in indexes]
+        concordance += [tokens[i - left_context_size: i + 1] for i in indexes]
     elif right_context_size > 0:
-            concordance += [tokens[i: i + right_context_size + 1] for i in indexes]
+        concordance += [tokens[i: i + right_context_size + 1] for i in indexes]
     return concordance
 
 
@@ -162,7 +163,7 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    if type(path_to_file) == str and type(content) == list:
+    if isinstance(path_to_file, str) and isinstance(content, list):
         result = [' '.join(i) for i in content]
         with open(path_to_file, 'w') as file:
             file.write('\n'.join(result))
@@ -188,7 +189,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     """
     concordance = []
 
-    if type(left_sort) == bool and type(left_context_size) == int and type(right_context_size) == int:
+    if isinstance(left_sort, bool) and isinstance(left_context_size, int) and isinstance(right_context_size, int):
         if left_sort > 0 and (left_context_size > 0 or left_context_size <= 0):
             concordance = sorted(get_concordance(tokens, word, left_context_size, right_context_size))
         elif left_sort <= 0 and right_context_size <= 0:
