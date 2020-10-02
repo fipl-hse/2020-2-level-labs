@@ -4,11 +4,11 @@ Concordance implementation starter
 """
 import os
 from main import tokenize
-from main import remove_stop_words
+'''from main import remove_stop_words
 from main import calculate_frequencies
 from main import get_top_n_words
 from main import get_concordance
-from main import get_adjacent_words
+from main import get_adjacent_words'''
 from main import read_from_file
 from main import sort_concordance
 
