@@ -16,6 +16,7 @@ if __name__ == '__main__':
     #  here goes your logic: calling methods from concordance.py
     tokens = tokenize(data) # токенезирование
     stop_words = get_stop_words()
+    write_to_file(os.path.join(current_dir, 'stop_words.txt'), stop_words)
     # токены без стоп слов
     tokens_clean = remove_stop_words(tokens, stop_words)
     # частоты токенов
