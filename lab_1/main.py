@@ -107,12 +107,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     concordance = []
     lcs_checked = False
     rcs_checked = False
-    if isinstance(left_context_size, int) and not isinstance(left_context_size, bool):
-        if left_context_size >= 1:
-            lcs_checked = True
-    if isinstance(right_context_size, int) and not isinstance(right_context_size, bool):
-        if right_context_size >= 1:
-            rcs_checked = True
+    if isinstance(left_context_size, int) and not isinstance(left_context_size, bool) and left_context_size >= 1:
+        lcs_checked = True
+    if isinstance(right_context_size, int) and not isinstance(right_context_size, bool) and right_context_size >= 1:
+        rcs_checked = True
     if not rcs_checked and not lcs_checked:
         return []
     for index, item in enumerate(tokens):

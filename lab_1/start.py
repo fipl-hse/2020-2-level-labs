@@ -32,7 +32,7 @@ if __name__ == '__main__':
     print(f'Finally, you can access 10 first contexts in which a certain '
           f'word appeard using this prog. Here is all the contexts for '
           f'word "year":\n{CONTEXTS}')
-    print('What do we mean by "first"? Well, they are all sorted!' 
+    print('What do we mean by "first"? Well, they are all sorted!'
           'Notice that they appear in a alphabetical order.'
           ' And even reversed.')
     adj_words = main.get_adjacent_words(tokens, 'year', 3, 5)
