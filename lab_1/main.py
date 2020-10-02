@@ -13,18 +13,18 @@ def tokenize(text: str) -> list:
     """
     if not isinstance(text, str):
         return []
-    lines = text.split()
+    list = text.split()
     tokens = []
-    for words in lines:
+    for words in list:
         words = words.split()
         for word in words:
             word = word.lower()
-            word_new = ''
+            word1 = ''
             for letter in word:
                 if letter.isalpha():
-                    word_new += letter
-            if word_new != '':
-                tokens.append(word_new)
+                    word1 += letter
+            if word1 != '':
+                tokens.append(word1)
     return tokens
 
 
@@ -58,9 +58,9 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     if not isinstance(tokens, list):
         return {}
-    freq_dict = {token: tokens.count(token)
+    dictionary = {token: tokens.count(token)
                 for token in tokens if isinstance(token, str)}
-    return freq_dict
+    return dictionary
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
