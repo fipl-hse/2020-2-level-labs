@@ -13,26 +13,26 @@ if __name__ == '__main__':
     #  here goes your logic: calling methods from concordance.py
 
     tokens = main.tokenize(data)
-    print('Tokens: ', tokens[:20])
+    print('Tokens: ', tokens[:10])
 
     tokens = main.remove_stop_words(tokens, stop_words)
-    print('Tokens without stop words: ', tokens[:20])
+    print('Tokens without stop words: ', tokens[:10])
 
     freq_dict = main.calculate_frequencies(tokens)
-    print('Frequency for a word: ', freq_dict[tokens[5]])
+    print('Frequency for the first word: ', freq_dict[tokens[0]])
 
-    top_n_words = main.get_top_n_words(freq_dict, 10)
-    print('Top 10 words: ', top_n_words)
+    top_n_words = main.get_top_n_words(freq_dict, 5)
+    print('Top 5 words: ', top_n_words)
 
-    concordance = main.get_concordance(tokens, 'time', 2, 3)
-    print('Concordance for "time":', concordance[:5])
+    concordance = main.get_concordance(tokens, 'october', 2, 3)
+    print('Concordance for "october":', concordance)
 
-    adjacent_words = main.get_adjacent_words(tokens, 'time', 5, 5)
-    print('Adjacent words for "time":', adjacent_words[:3])
+    adjacent_words = main.get_adjacent_words(tokens, 'october', 2, 3)
+    print('Adjacent words for "october":', adjacent_words)
 
     main.write_to_file('report.text', adjacent_words)
 
-    RESULT = adjacent_words[:3]
+    RESULT = adjacent_words
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [(), ()], 'Concordance not working'
