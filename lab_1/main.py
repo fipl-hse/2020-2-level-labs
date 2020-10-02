@@ -12,7 +12,7 @@ def tokenize(text: str) -> list:
     :return: a list of lowercased tokens without punctuation
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    ""
+    """
     if isinstance(text, str):
         tokens = re.sub(r'[^\w\s]', '', text.lower())
         tokens = tokens.split()
