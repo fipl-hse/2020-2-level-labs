@@ -166,8 +166,8 @@ def write_to_file(path_to_file: str, content: list):
     Writes the result in a file
     """
     with open(path_to_file, 'r', encoding='utf-8') as concordance_file:
-        for concordance in content:
-            return concordance_file.write('/n'. join(content))
+        for cont in content:
+            return concordance_file.write('/n'. join(cont))
 
 
 
