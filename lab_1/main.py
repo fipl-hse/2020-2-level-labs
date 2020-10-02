@@ -13,9 +13,9 @@ def tokenize(text: str) -> list:
     """
     if not isinstance(text, str):
         return []
-    list = text.split()
+    list_of_words = text.split()
     tokens = []
-    for words in list:
+    for words in list_of_words:
         words = words.split()
         for word in words:
             word = word.lower()
