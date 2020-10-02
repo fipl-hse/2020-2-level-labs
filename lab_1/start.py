@@ -19,20 +19,20 @@ if __name__ == '__main__':
     print('Tokens without stop words: ', tokens[:20])
 
     freq_dict = main.calculate_frequencies(tokens)
-    print('Frequency for the first word: ', freq_dict[tokens[0]])
+    print('Frequency for a word: ', freq_dict[tokens[5]])
 
-    top_n_words = main.get_top_n_words(freq_dict, 5)
-    print('Top 5 words: ', top_n_words)
+    top_n_words = main.get_top_n_words(freq_dict, 10)
+    print('Top 10 words: ', top_n_words)
 
     concordance = main.get_concordance(tokens, 'time', 2, 3)
-    print('Concordance for "time":', concordance[:6])
+    print('Concordance for "time":', concordance[:5])
 
-    adjacent_words = main.get_adjacent_words(tokens, 'time', 2, 3)
-    print('Adjacent words for "time":', adjacent_words)
+    adjacent_words = main.get_adjacent_words(tokens, 'time', 5, 5)
+    print('Adjacent words for "time":', adjacent_words[:3])
 
-    main.write_to_file('report.text', concordance)
+    main.write_to_file('report.text', adjacent_words)
 
-    RESULT = concordance
+    RESULT = adjacent_words[:3]
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [(), ()], 'Concordance not working'
