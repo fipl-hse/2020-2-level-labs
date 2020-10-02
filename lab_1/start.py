@@ -32,8 +32,9 @@ if __name__ == '__main__':
     sorted_concordance = main.sort_concordance(tokens, random_word, 3, 2, False)
     print('sorted concordance for "{}", left_sort=False'.format(random_word), sorted_concordance, "\n")
 
-    main.write_to_file('', sorted_concordance)
+    main.write_to_file('report.txt', sorted_concordance)
 
-    RESULT = sorted_concordance
+
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
+    RESULT = sorted_concordance
     assert RESULT, 'Concordance not working'
