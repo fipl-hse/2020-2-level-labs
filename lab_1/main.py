@@ -104,21 +104,27 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    left_check = isinstance(left_context_size, int) and left_context_size < 1 \
-            and not isinstance(left_context_size, bool)
-    right_check = isinstance(right_context_size, int) and right_context_size < 1 \
-            and not isinstance(right_context_size, bool)
+    left_check = isinstance(left_context_size, int) \
+                  and left_context_size > 0 and not isinstance(left_context_size, bool)
+    right_check = isinstance(right_context_size, int) \
+                  and right_context_size > 0 and not isinstance(right_context_size, bool)
     tokens_check = isinstance(tokens, list)
     word_check = isinstance(word, str)
-
     concordance = []
-    if left_context_size < 0:
-        left_context_size = 0
-    elif right_context_size < 0:
-        right_context_size = 0
+
+    if tokens_check and word_check:
+        check = word in tokens
+    else:
+        return []
+
     for ind, element in enumerate(tokens):
         if element == word:
-            concordance.append(tokens[ind - left_context_size: ind + right_context_size + 1])
+            if left_check and right_check and check:
+                concordance.append(tokens[ind-left_context_size:ind+right_context_size+1])
+            elif left_check and check:
+                concordance.append(tokens[ind-left_context_size:ind+1])
+            elif right_check and check:
+                concordance.append(tokens[ind:ind+right_context_size+1])
 
     return concordance
 
@@ -145,9 +151,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     concordance = get_concordance(tokens, word, left_n, right_n)
     adjacent_words = []
     for element in concordance:
-        if left_n <= 0:
+        if left_n == 0:
             adjacent_words.append([element[-1]])
-        elif right_n <= 0:
+        elif right_n == 0:
             adjacent_words.append([element[0]])
         else:
             adjacent_words.append([element[0], element[-1]])
