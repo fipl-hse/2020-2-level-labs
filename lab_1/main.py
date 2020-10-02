@@ -84,16 +84,14 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     freq_array = []
     for key, val in freq_dict.items():
         freq_array.append([val, key])
-    freq_array.sort(reverse = True)
+    freq_array.sort(reverse = True, key=lambda x: x[0])
 
     result = []
     for i in range(top_n):
-        try:
-            result.append(freq_array[i][1])
-        except IndexError:
-            break
+        result.append(freq_array[i][1])
 
-    return list(reversed(result))
+
+    return result
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -113,7 +111,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if not(isinstance(right_context_size, int)) or not(isinstance(left_context_size, int)):
+    if not(isinstance(right_context_size, int)) and not(isinstance(left_context_size, int)):
         return []
 
     if not(isinstance(tokens, list)) or not(isinstance(word, str)):
