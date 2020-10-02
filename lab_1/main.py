@@ -99,8 +99,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if not isinstance(tokens, list) or not isinstance(word, str) \
-            or not isinstance(right_context_size, int) or not (left_context_size, int):
+    if not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(right_context_size, int) or not (left_context_size, int):
         return []
     if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
         return []
@@ -135,7 +134,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     if not isinstance(tokens, list) or not isinstance(word, str) \
- \
             or not isinstance(left_n, int) or not isinstance(right_n, int):
         return []
     concord = get_concordance(tokens, word, left_n, right_n)
