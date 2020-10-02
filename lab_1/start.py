@@ -35,7 +35,4 @@ if __name__ == '__main__':
 
     RESULT = adjacent_words[:3]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [[['presented', 'in', 'people', 'who', 'wereare'], ['it', 'but', 'people', 'like', 'the']],\
-    [['presented', 'in', 'people', 'who', 'wereare'], ['it', 'but', 'people', 'like', 'the']],\
-    [['presented', 'in', 'people', 'who', 'wereare'], ['it', 'but', 'people', 'like', 'the']]],\
-    'Concordance not working'
+    assert RESULT == [['presented', 'wereare'], ['persuaded', 'death'], ['among', 'had']], 'Concordance not working'
