@@ -139,13 +139,13 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     previous_conc = get_concordance(tokens, word, left_n, right_n)
     ad_word = []
     for context in previous_conc:
-        if (left_n < 1) and (right_n >= 1):
-            ad_word.append([previous_conc[-1]])
-        elif (right_n < 1) and (left_n >= 1):
-            ad_word.append([previous_conc[0]])
-        elif (right_n >= 1) and (left_n >= 1):
-            ad_word.append([previous_conc[0], previous_conc[-1]])
-    return  ad_word
+        if left_n > 0 and right_n > 0:
+            ad_word.append([context[0], context[-1]])
+        elif right_n > 0:
+            ad_word.append([context[-1]])
+        elif left_n > 0:
+            ad_word.append([context[0]])
+    return ad_word
 
 
 
