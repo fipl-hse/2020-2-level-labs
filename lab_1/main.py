@@ -175,7 +175,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     all_adjacent_words = []
-    context = []
     test1 = isinstance(tokens, list)
     test2 = isinstance(word, str)
     test3 = isinstance(left_n, int)
@@ -198,7 +197,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         for text in concordance:
             all_adjacent_words.append([text[0]])
     return all_adjacent_words
-
 
 
 
