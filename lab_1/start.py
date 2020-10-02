@@ -1,34 +1,31 @@
 """
-Sample change by me
 Concordance implementation starter
 """
 import os
-from main import tokenize
-from main import remove_stop_words
-from main import calculate_frequencies
-from main import get_top_n_words
-from main import get_concordance
-from main import get_adjacent_words
-from main import read_from_file
-from main import sort_concordance
-
+from main import read_from_file, sort_concordance, tokenize
 if __name__ == '__main__':
     #  use data.txt file to test your program
     current_dir = os.path.dirname(os.path.abspath(__file__))
     data = read_from_file(os.path.join(current_dir, 'data.txt'))
     stop_words = []
-
     #  here goes your logic: calling methods from concordance.py
-    text = read_from_file('lab_1/data.txt')
-    tokens = tokenize(text)
-    stop_words = read_from_file('lab_1/stop_words.txt')
-    clean_text_list = remove_stop_words(tokens, stop_words)
-    frequencies_dict = calculate_frequencies(tokens)
-    top_n_words = get_top_n_words(frequencies_dict, 5)
-    concordance = get_concordance(tokens, 'sodium', 2, 2)
-    adjacent_words = get_adjacent_words(tokens, 'sodium', 2, 2)
-
-    RESULT = sort_concordance(tokens, 'sodium', 1, 1, True)
+    tokens = tokenize(data)
+    RESULT = sort_concordance(tokens, 'text', 1, 2, True)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [['by', 'sodium', 'bicarbonate'], ['epithelial', 'sodium', 'channels'],
-                      ['means', 'sodium', 'aluminate'], ['the', 'sodium', 'salt']]
+    assert RESULT == [['80', 'text', 'columns', 'although'], ['a', 'text', 'as', 'quickly'],
+                      ['a', 'text', 'or', 'laboratory'], ['actual', 'text', 'the', 'information'],
+                      ['and', 'text', 'messaging', 'mobile'], ['and', 'text', 'dolkart', 'andrew'],
+                      ['arabic', 'text', 'have', 'been'], ['biblical', 'text', '5016', 'mid-sized'],
+                      ['displaying', 'text', 'within', 'graphics'],
+                      ['essence', 'text', 'requiring', 'an'], ['final', 'text', '7719', 'the'],
+                      ['five-minute', 'text', 'chat', '8444'], ['full', 'text', 'of', 'the'],
+                      ['gnostic', 'text', 'the', 'apocryphal'], ['his', 'text', '1352', 'by'],
+                      ['ia5', 'text', '1858', 'drainage'], ['incorporates', 'text', 'from', 'a'],
+                      ['its', 'text', 'differs', 'however'], ['latin', 'text', 'in', 'praise'],
+                      ['mischmasch', 'text', 'carroll', 'states'],
+                      ['monolingual', 'text', 'corpus', '9898'], ['on-screen', 'text', 'to', 'aid'],
+                      ['plain', 'text', 'across', 'the'], ['prepare', 'text', 'graphs', 'or'],
+                      ['s', 'text', '5278', 'new'], ['the', 'text', 'in', 'these'],
+                      ['the', 'text', 'of', 'the'], ['the', 'text', 'of', 'the'],
+                      ['the', 'text', 'we', 'are'], ['this', 'text', 'explains', 'how']]
+    assert RESULT,  'sort concordance not working'
