@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
 
     tokens = main.remove_stop_words(tokens, stop_words)
-    print('Tokens without stop words:', [tokens[:100]])
+    print('Tokens without stop words:', {tokens[:100]})
 
     tokens_frequencies = main.calculate_frequencies(tokens)
     print('The frequency dictionary of tokens is:', tokens[:10])
