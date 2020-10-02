@@ -51,7 +51,7 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
 
-    if len(tokens) == 0 or not(isinstance(tokens, list)):
+    if not(isinstance(tokens, list)) or len(tokens) == 0:
         return {}
     
     if not(isinstance(tokens[0], str)):
@@ -93,7 +93,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         except IndexError:
             break
 
-    return result
+    return list(reversed(result))
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -157,16 +157,21 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     if not isinstance(tokens, list) or not isinstance(word, str):
         return []
 
-    if not isinstance(left_n, int) or not isinstance(right_n, int):
+    left_check = isinstance(left_n, int)
+    right_check = isinstance(right_n, int)
+    if (not left_check) and (not right_check):
         return []
 
     result = []
     for i in range(len(tokens)):
         if tokens[i] == word:
             A = []
-            A.append(tokens[i - left_n])
-            if left_n != 0 or right_n != 0:
-                A.append(tokens[i + right_n])
+            if left_n == 0:
+                concordance_n.append([tokens[i + right_n]])
+            elif right_n == 0:
+                concordance_n.append([tokens[i - left_n]])
+            else:
+                concordance_n.append([tokens[i + right_n], tokens[i - left_n]])
             result.append(A)
 
     return result
