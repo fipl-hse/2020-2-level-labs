@@ -30,11 +30,11 @@ if __name__ == '__main__':
     print('adjacent_words:', left_right_word[:5])
 
     sorted_concordance = main.sort_concordance(tokens, 'happy', 2, 3, True)
-    print('sorted_concordance:', sorted_concordance)
+    print('sorted_concordance:', sorted_concordance[0])
 
     main.write_to_file('report.txt', sorted_concordance)
     #  here goes your logic: calling methods from concordance.py
 
-    RESULT = sorted_concordance[:5]
+    RESULT = sorted_concordance[0]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Concordance not working'
+    assert RESULT == [['a', 'wellmatched', 'happy', 'marriage', 'cello', 'concertos']], 'Concordance not working'
