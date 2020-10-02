@@ -2,7 +2,6 @@
 Lab 1
 A concordance extraction
 """
-gir
 
 def tokenize(text: str) -> list:
     """
