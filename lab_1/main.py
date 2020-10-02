@@ -31,13 +31,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
     new_tokens = []
-    if not isinstance(tokens, list) and not isinstance(stop_words, list):#проверяем, списки ли это
-        return []
-    else:
-
+    if isinstance(tokens, list) and isinstance(stop_words, list):#проверяем, списки ли это
         for token in tokens:
             if token not in stop_words: #проверяем входит ли слово в список стоп-слов
-
                 new_tokens.append(token)
     return new_tokens
 
@@ -102,19 +98,18 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if not isinstance(tokens, list) and not isinstance(word, str) and not isinstance(left_context_size, int) and not isinstance(right_context_size,int):
-        return []
     concordance = []
-    if right_context_size < 0:
-        right_context_size = 0
-    if left_context_size < 0:
-        left_context_size = 0
-    if right_context_size == 0 and left_context_size == 0:
-        return []
-    for index, element in enumerate(tokens):
-        if element == word:
-            new_concordance = tokens[index - left_context_size: index + right_context_size +1]
-            concordance.append(new_concordance)
+    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int) and isinstance(right_context_size,int):
+        if right_context_size < 0:
+            right_context_size = 0
+        if left_context_size < 0:
+            left_context_size = 0
+        if right_context_size == 0 and left_context_size == 0:
+            return []
+        for index, element in enumerate(tokens):
+            if element == word:
+                new_concordance = tokens[index - left_context_size: index + right_context_size +1]
+                concordance.append(new_concordance)
     return concordance
 
 
