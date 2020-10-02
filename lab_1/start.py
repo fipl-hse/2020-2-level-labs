@@ -32,7 +32,6 @@ if __name__ == '__main__':
 
     main.write_to_file('report.text', adjacent_words)
 
-    RESULT = adjacent_words
-
+    RESULT = adjacent_words[:3]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [['happen', 'working'], ['noah', 'leading'], ['los', 'edition']], 'Concordance not working'
