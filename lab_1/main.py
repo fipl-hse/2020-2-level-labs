@@ -51,7 +51,7 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
 
-    if not(isinstance(tokens, list)) and len(tokens) > 0:
+    if len(tokens) == 0 or not(isinstance(tokens, list)):
         return {}
     
     if not(isinstance(tokens[0], str)):
@@ -119,7 +119,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if not(isinstance(tokens, list)) or not(isinstance(word, str)):
         return []
 
-    if not(isinstance(tokens[0], str)) or len(tokens) == 0:
+    if len(tokens) == 0 or not(isinstance(tokens[0], str)):
         return []
 
     if left_context_size < 0 or right_context_size < 0:
