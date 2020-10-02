@@ -11,16 +11,19 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
+    if not isinstance(text, str):
+        return False
 
-    text1 = text.lower().split()
-    new_text = []
-    for word in text1:
-        new_word = []
-        for element in word:
-            if element.isalpha():
-                new_word.append(element)
-                new_word1 = ''.join(new_word)
-        new_text.append(new_word1)
+    else:
+        text1 = text.lower().split()
+        new_text = []
+        for word in text1:
+            new_word = []
+            for element in word:
+                if element.isalpha():
+                    new_word.append(element)
+                    new_word1 = ''.join(new_word)
+            new_text.append(new_word1)
     return new_text
 
 
@@ -36,23 +39,12 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
 
-    bad_inputs_first = [{}, (), None, 9, 9.34, True, False]
-    bad_inputs_second = [{}, (), None, 9, 9.34, True, False]
     empty = []
     for constituent in tokens:
         for component in stop_words:
             if component in tokens:
                 tokens.remove(component)
-    for constituent in tokens:
-        if constituent in bad_inputs_first:
-            return empty
-        else:
-            result = tokens
-            return result
-    for component in stop_words:
-        if component in bad_inputs_second:
-            res = tokens
-            return res
+    return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -64,13 +56,12 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
     dictionary = {}
-    freq = 0
-    for b in tokens:
-        freq = tokens.count(b)
-        dictionary[b] = freq
-        result = dictionary
+    frequency = 0
+    for element in tokens:
+        frequency = tokens.count(element)
+        dictionary[element] = frequency
 
-    return result
+    return dictionary
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
