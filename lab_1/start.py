@@ -22,14 +22,14 @@ if __name__ == '__main__':
     freq_dict = main.calculate_frequencies(tokens)
     print('Frequency for the first word: ', freq_dict[tokens[0]])
 
-    top_list = main.get_top_n_words(frequencies, 5)
-    print('Top 5 words: ', top_list)
+    top_n_words = main.get_top_n_words(freq_dict, 5)
+    print('Top 5 words: ', top_n_words)
 
     concordance = main.get_concordance(tokens, 'time', 2, 3)
     print('Concordance for "time":', concordance[:6])
 
     adjacent_words = main.get_adjacent_words(tokens, 'time', 2, 3)
-    print ('Adjacent words for "time":', adjacent_words)
+    print('Adjacent words for "time":', adjacent_words)
 
     main.write_to_file('report.text', concordance)
 
