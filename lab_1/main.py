@@ -38,7 +38,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-        if not isinstance(tokens, list):
+    if not isinstance(tokens, list):
         return []
     if not isinstance(stop_words, list):
         return tokens
@@ -56,10 +56,10 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-        if not isinstance(tokens, list):
+    if not isinstance(tokens, list):
         return {}
     freq_dict = {token: tokens.count(token)
-                 for token in tokens if isinstance(token, str)}
+                for token in tokens if isinstance(token, str)}
     return freq_dict
 
 
@@ -73,7 +73,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-        if (not isinstance(freq_dict, dict)) or (not isinstance(top_n, int)) or (top_n < 0):
+    if (not isinstance(freq_dict, dict)) or (not isinstance(top_n, int)) or (top_n < 0):
         return []
     top_words = []
     sorted_dict = {k: freq_dict[k] for k in sorted(freq_dict, key=freq_dict.get, reverse=True)}
@@ -99,7 +99,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-        if not isinstance(tokens, list) or not isinstance(word, str) \
+    if not isinstance(tokens, list) or not isinstance(word, str) \
             or not isinstance(right_context_size, int) or not (left_context_size, int):
         return []
     if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
@@ -134,7 +134,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-        if not isinstance(tokens, list) or not isinstance(word, str) \
+    if not isinstance(tokens, list) or not isinstance(word, str) \
  \
             or not isinstance(left_n, int) or not isinstance(right_n, int):
         return []
