@@ -183,11 +183,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     test2 = isinstance(word, str)
     test3 = isinstance(left_n, int)
     test4 = isinstance(right_n, int)
-    if not (test1 and test2 and word in tokens):
+    if not (test1 and test2 and word in tokens and test3 and test4):
         return []
-    if not test3 or not test4:
-        return []
-    if isinstance(tokens, bool) or isinstance(left_n, bool) or isinstance(right_n, bool):
+    if isinstance(left_n, bool) or isinstance(right_n, bool):
         return []
     if right_n > 0 and left_n > 0:
         concordance = get_concordance(tokens, word, left_n, right_n)
