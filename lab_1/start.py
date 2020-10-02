@@ -35,6 +35,6 @@ if __name__ == '__main__':
 
     #  here goes your logic: calling methods from concordance.py
 
-    RESULT = top_words
+    RESULT = adjacent_words
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Concordance not working'
+    assert RESULT == [['the', 'of'], ['and', 'freezeout'], ['of', 'the'], ['that', 'people']], 'Concordance not working'
