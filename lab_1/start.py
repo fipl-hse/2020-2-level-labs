@@ -18,4 +18,5 @@ if __name__ == '__main__':
     print(res[:3])
     RESULT = res[:2]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [['80', 'text', 'columns', 'although'], ['a', 'text', 'as', 'quickly']],  'sort concordance not working'
+    assert RESULT == [['80', 'text', 'columns', 'although'], ['a', 'text', 'as', 'quickly']],\
+        'sort concordance not working'
