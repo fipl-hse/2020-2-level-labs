@@ -165,10 +165,9 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    if isinstance(path_to_file, str) and isinstance(content, list):
-        result = ["".join(concordance) for concordance in content]
-        with open (path_to_file, 'r', encoding='utf-8') as concordance_file:
-            concordance_file.write("\n".join(result))
+    result = ["".join(concordance) for concordance in content]
+    with open (path_to_file, 'w', encoding='utf-8') as concordance_file:
+        concordance_file.write("\n".join(result))
 
 
 
