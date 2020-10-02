@@ -52,14 +52,14 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     if not isinstance(tokens, list):
         return {}
-    dict = {} #создаем словарь
+    dictionary = {} #создаем словарь
     if isinstance(tokens[0], str):
         for token in tokens:
             if token in dict:
-                dict[token] += 1
+                dictionary[token] += 1
             else:
-                dict[token] = 1
-    return dict
+                dictionary[token] = 1
+    return dictionary
 
 
 
@@ -133,8 +133,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    if not isinstance(tokens, list) and not isinstance(word, str) and not isinstance(left_n, int) and not isinstance(right_n, int)\
-    and not (left_n < 1) and not (right_n < 1):
+    if not isinstance(tokens, list) and not isinstance(word, str) and not isinstance(left_n, int)\
+    and not isinstance(right_n, int)\
+    and not left_n < 1 and not right_n < 1:
         return []
     previous_conc = get_concordance(tokens, word, left_n, right_n)
     ad_word = []
@@ -165,7 +166,7 @@ def write_to_file(path_to_file: str, content: list):
     Writes the result in a file
     """
     with open(path_to_file, 'r', encoding='utf-8') as concordance_file:
-        for con in content:
+        for concordance in content:
             return concordance_file.write('/n'. join(content))
 
 
