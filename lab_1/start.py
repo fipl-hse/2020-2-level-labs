@@ -25,10 +25,10 @@ if __name__ == '__main__':
     print('Top 5 words: ', top_n_words)
 
     concordance = main.get_concordance(tokens, 'october', 2, 3)
-    print('Concordance for "october":', concordance)
+    print('Concordance for "october":', concordance[:5])
 
     adjacent_words = main.get_adjacent_words(tokens, 'october', 2, 3)
-    print('Adjacent words for "october":', adjacent_words)
+    print('Adjacent words for "october":', adjacent_words[:3])
 
     main.write_to_file('report.text', adjacent_words)
 
