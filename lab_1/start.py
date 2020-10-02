@@ -30,10 +30,10 @@ if __name__ == '__main__':
     top_list = get_top_n_words(freq_dict, 3)
     print('3 most popular words: ', top_list )
 
-    concordance = get_concordance(tokens, 'october', 2, 3)
-    print('concordance for "october":', concordance[0])
+    concordance = get_concordance(tokens, 'division', 2, 3)
+    print('concordance for "division":', concordance)
 
 
     RESULT = concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [['happen', 'future', 'october', 'marked', 'initial', 'working']], 'Concordance not working'
+    assert RESULT == [['recommended', 'a', 'division', 'main', 'services', 'relocation']], 'Concordance not working'
