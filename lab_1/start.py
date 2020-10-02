@@ -39,6 +39,6 @@ if __name__ == '__main__':
 
     write_to_file = write_to_file('report.txt', concordance)
 
-    RESULT = write_to_file
+    RESULT = adjacent_words
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [['man', 'is'], ['dog', 'cat']]
+    assert RESULT == [['man', 'is'], ['dog', 'cat']], 'Concordance not working'
