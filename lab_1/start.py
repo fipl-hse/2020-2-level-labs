@@ -8,7 +8,7 @@ from main import remove_stop_words
 from main import calculate_frequencies
 from main import get_top_n_words
 from main import get_concordance
-from main import get_adjacent_words
+
 
 
 if __name__ == '__main__':
@@ -34,9 +34,7 @@ if __name__ == '__main__':
     concordance = get_concordance(tokens, 'entire', 2, 3)
     print('concordance for "entire":', concordance)
 
-    adjacent_words = get_adjacent_words (tokens, 'entire', 2, 3)
-    print('adjacent words for "entire":', adjacent_words[:5])
 
-    RESULT = adjacent_words
+    RESULT = concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT ==  'Concordance not working'

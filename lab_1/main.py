@@ -165,29 +165,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    if not isinstance(tokens, list) or not isinstance(word, str):
-        return []
-    if isinstance(left_n, int) and isinstance(right_n, int):
-        if left_n < 1:
-            left_n = 0
-        elif right_n < 1:
-            right_n = 0
-        l_concordance = get_concordance(tokens, word, left_n, right_n)
-        adjacent_words = []
-        for need_words in l_concordance:
-            for i,w in enumerate(need_words):
-                if len(need_words[:i]) < left_n:
-                    left_n = len(need_words[:i])
-                if len(need_words[(i + 1):]) < right_n:
-                    right_n = len(need_words[(i + 1):])
-                if (right_n < 1) or (not isinstance(right_n, int)):
-                    adjacent_words.extend([[need_words[i - left_n]]])
-                elif (left_n < 1) or (not isinstance(left_n, int)):
-                    adjacent_words.extend([[need_words[i + right_n]]])
-                else:
-                    adjacent_words.extend([[need_words[i - left_n], need_words[i + right_n]]])
-            return adjacent_words
-        return []
+    pass
 
 
 def write_to_file(path_to_file: str, content: list):
