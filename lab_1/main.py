@@ -258,3 +258,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     if not left_sort and right_context_size > 0:
         return sorted(operative_tokens, key=lambda x: x[x.index(word) + 1])
 
+    return []
+a1 = sort_concordance(['one', 'happy', 'man'], 'happy', -1, 1000, True)
+a2 = sort_concordance(['one', 'happy', 'man'], 'happy', 1000, -1, False)
+print(a1)
