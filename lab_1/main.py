@@ -124,7 +124,21 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    concordance = get_concordance(tokens, word, left_n, right_n)
+    if not concordance:             # в булевых значениях [] - False, -> not F = T"
+        return []
+
+    list_result = []
+    for context in concordance:
+        if left_n == 0:
+            result = [context[-1]]
+        elif right_n == 0:
+            result = [context[0]]
+        else:
+            result = [context[0], context[-1]]
+        list_result.append(result)
+
+    return list_result
 
 
 def read_from_file(path_to_file: str) -> str:
