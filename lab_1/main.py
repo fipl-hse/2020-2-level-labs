@@ -40,7 +40,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
     if not isinstance(tokens, list):
-        scraped = []
+        return []
     else:
         if not isinstance(stop_words, list):
             return tokens
@@ -111,10 +111,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         concordance = []
         lcs_checked = False
         rcs_checked = False
-        if isinstance(left_context_size, int):
+        if isinstance(left_context_size, int) and not isinstance(left_context_size, bool):
             if left_context_size >= 1:
                 lcs_checked = True
-        if isinstance(right_context_size, int):
+        if isinstance(right_context_size, int) and not isinstance(right_context_size, bool):
             if right_context_size >= 1:
                 rcs_checked = True
         if not rcs_checked and not lcs_checked:
