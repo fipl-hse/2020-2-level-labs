@@ -12,18 +12,16 @@ def tokenize(text: str) -> list:
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
 
-    sentences = ''
-    text1 = text.lower()
-    slices = list(text1)
-    l = ["—", "”", "“", "^", "|", "}", "{", "]", "[", "&", "%", "№", "#", "`", "`", "'", "<", ">", ".", ",", "!", "?", ";", ":", "*", "’", "$", "@", "*", "/", "-", "_", "+", "=", "(", ")", "1", "2", "3",
-             "4", "5", "6", "7", "8", "9", "0"]
-    for constituent in slices:
-        for component in l:
-            if component in slices:
-                slices.remove(component)
-    sentences = ''.join(slices)
-    result = sentences.split()
-    return result
+    text1 = text.lower().split()
+    new_text = []
+    for word in text1:
+        new_word = []
+        for element in word:
+            if element.isalpha():
+                new_word.append(element)
+                new_word1 = ''.join(new_word)
+        new_text.append(new_word1)
+    return new_text
 
 
 
@@ -85,7 +83,28 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+    diction = {}
+    values_keys = list(freq_dict.items())
+    for key_value in values_keys:
+        if key_value[1] in diction.keys():
+            diction[key_value[1]].append(key_value[0])
+        else:
+            diction[key_value[1]] = [key_value[0]]
+
+    frequent = list(diction.keys())
+    frequent.sort(reverse = True)
+    collection = []
+    for number in frequent:
+        collection.append(diction[number])
+
+    finished = []
+    for element in collection:
+        if len(element) == 1:
+            finished.append(element[0])
+        else:
+            finished.extend(element)
+
+    return finished[:top_n + 1]
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
