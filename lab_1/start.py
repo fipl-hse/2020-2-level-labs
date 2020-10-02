@@ -28,12 +28,11 @@ if __name__ == '__main__':
     concordance = main.get_concordance(tokens, 'name', 3, 0)
     print('get_concordance', concordance[:5])
 
-    adjacent = main.get_adjacent_words(tokens, 'name', 2, 0)
+    adjacent = main.get_adjacent_words(tokens, 'dog', 2, 0)
     print('get_adjacent_words', adjacent[:5])
 
-    sorted_concordance = main.sort_concordance(tokens, 'name', 5, 2, True)
+    sorted_concordance = main.sort_concordance(tokens, 'cat', 5, 2, True)
     print('sort_concordance', sorted_concordance[:5])
 
     RESULT = sorted_concordance
-    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [(), ()], 'Concordance not working'
+    assert RESULT, 'Concordance not working'
