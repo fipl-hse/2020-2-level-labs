@@ -1,20 +1,21 @@
+"""
+Lab 1
+A concordance extraction
+"""
 import re
 def tokenize(text: str) -> list:
     """
-        Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
-        :param text: the initial text
-        :return: a list of lowercased tokens without punctuation
-        e.g. text = 'The weather is sunny, the man is happy.'
-        --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-        """
+    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
+    :param text: the initial text
+    :return: a list of lowercased tokens without punctuation
+    e.g. text = 'The weather is sunny, the man is happy.'
+    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+    """
     if not isinstance(text, str):
         return []
-
-    else:
-        text = text.lower()
-        text = re.sub(r'[^a-z\s\n]', '', text)  # с помощью рег. выраж. убираю знаки препинания и числительные
-        tokenize_list = text.split()
-
+    text = text.lower()
+    text = re.sub(r'[^a-z\s\n]', '', text)  # с помощью рег. выраж. убираю знаки препинания и числительные
+    tokenize_list = text.split()
     return tokenize_list
 
 
@@ -43,12 +44,12 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
 
 def calculate_frequencies(tokens: list) -> dict:
     """
-        Calculates frequencies of given tokens
-        :param tokens: a list of tokens without stop words
-        :return: a dictionary with frequencies
-        e.g. tokens = ['weather', 'sunny', 'man', 'happy']
-        --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
-        """
+    Calculates frequencies of given tokens
+    :param tokens: a list of tokens without stop words
+    :return: a dictionary with frequencies
+    e.g. tokens = ['weather', 'sunny', 'man', 'happy']
+    --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
+    """
     if not isinstance(tokens, list):
         return {}
     dict = {} #создаем словарь
@@ -64,14 +65,14 @@ def calculate_frequencies(tokens: list) -> dict:
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
-        Returns the most common words
-        :param freq_dict: a dictionary with frequencies
-        :param top_n: a number of the most common words to return
-        :return: a list of the most common words
-        e.g. tokens = ['weather', 'sunny', 'man', 'happy', 'and', 'dog', 'happy']
-        top_n = 1
-        --> ['happy']
-        """
+    Returns the most common words
+    :param freq_dict: a dictionary with frequencies
+    :param top_n: a number of the most common words to return
+    :return: a list of the most common words
+    e.g. tokens = ['weather', 'sunny', 'man', 'happy', 'and', 'dog', 'happy']
+    top_n = 1
+    --> ['happy']
+    """
     sorted_list = []
     if isinstance(freq_dict, dict) and isinstance(top_n, int):
         sorted_list = sorted(freq_dict,key=freq_dict.get,reverse=True)
@@ -102,9 +103,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if isinstance(tokens, list) and isinstance(word, str) and not isinstance(left_context_size, bool) \
             and not isinstance(right_context_size, bool) and isinstance(right_context_size, int)\
             and isinstance(left_context_size,int):
-
-
-
         if right_context_size < 0:
             right_context_size = 0
         if left_context_size < 0:
@@ -140,7 +138,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         return []
     previous_conc = get_concordance(tokens, word, left_n, right_n)
     ad_word = []
-    for cotext in previous_conc:
+    for context in previous_conc:
         if (left_n < 1) and (right_n >= 1):
             ad_word.append([previous_conc[-1]])
         elif (right_n < 1) and (left_n >= 1):
@@ -167,7 +165,7 @@ def write_to_file(path_to_file: str, content: list):
     Writes the result in a file
     """
     with open(path_to_file, 'r', encoding='utf-8') as concordance_file:
-        for i in content:
+        for con in content:
             return concordance_file.write('/n'. join(content))
 
 
