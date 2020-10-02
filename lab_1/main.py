@@ -139,3 +139,4 @@ with open('data.txt', 'r') as f:
         dictionary = calculate_frequencies(tokens_with_out_stop_words)
         top_words = get_top_n_words(dictionary, 10)
         concordances = get_concordance(tokenize_text, 'time', 1, 1)
+        print(concordances)
