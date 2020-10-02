@@ -162,8 +162,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
 
 
 
-
-
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
     Gets adjacent words from the left and right context
@@ -185,10 +183,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     test2 = isinstance(word, str)
     test3 = isinstance(left_n, int)
     test4 = isinstance(right_n, int)
-    test5 = (isinstance(left_n, bool) and isinstance(right_n, bool))
-    if not (test1 and test2 and test3 and test4):
+    if not (test1 and test2 and test3 and test4 and word in tokens):
         return []
-    if isinstance(tokens, bool) or test5 or not word in tokens:
+    if isinstance(tokens, bool) or isinstance(left_n, bool) or isinstance(right_n, bool):
         return []
     if right_n >= 1 and left_n >= 1:
         concordance = get_concordance(tokens, word, left_n, right_n)
