@@ -8,21 +8,27 @@ def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
-    :return: a list of lowercased tokens without punctuation
+    :return: a list of lowercase tokens without punctuation
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    print(text)
     if not isinstance(text, str):
         return []
+    digits = '0123456789'
+    length = len(text)
+    for i in range(length):
+        if text[i] in digits:
+            return []
 
     signs = ",;:%#№@$&*=+`\"\'.!?—(){}[]-><|"
-    length = len(text)
+    clean_text = ''
     for i in range(length):  # цикл по длине строки
         if text[i] in signs:  # если в введенной строке нашли знак препинания
-            text = text.replace(text[i], '')
-    text = text.lower()
-    return text.split()
+            clean_text += ''
+        else:
+            clean_text += text[i]
+    clean_text = clean_text.lower()
+    return clean_text.split()
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -41,9 +47,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
         return tokens
 
     else:  # если всё корректно
-        stop_words = stop_words.split()
+        #        stop_words = stop_words.split()
         tokens = [token for token in tokens if token not in stop_words]
         return tokens
+
 
 def calculate_frequencies(tokens: list) -> dict:
     """
@@ -55,7 +62,7 @@ def calculate_frequencies(tokens: list) -> dict:
     """
 
     if not isinstance(tokens, list):
-        return []
+        return {}
     else:
         dictionary = {}
         for elem in tokens:
@@ -78,20 +85,16 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return []
-    else:
-        top_n = []
-    frequency = []
-    number = 0
-    for key, value in dictionary.items():
-        frequency.append([value, key])
-    frequency.sort(reverse=True)
-    if n <= len(frequency):
-        for element in frequency:
-            if number < n:
-            top_n.append(element[1])
-    number += 1
-    return top_n
 
+    new_list = []
+    frequency = list((freq_dict.items()))
+    frequency.sort(key=lambda x: x[1], reverse=True)
+    number = 0
+    for elem in frequency:
+        if number < top_n:
+            new_list.append(elem[0])
+            number += 1
+    return new_list
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -112,30 +115,24 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
 
-    k = 0
-    for i in range(len(tokens)):  # проверка строки на корректность
-        if 48 <= ord(' '.join(tokens)[i]) <= 57 or (128 <= ord(' '.join(tokens)[i]) <= 175 or 224 <= ord(' '.join(tokens)[i]) <= 243):
-            k += 1
-            break
-    m = 0
-    for i in range(len(word)):  # проверка слова на корректность
-        if 48 <= ord(word[i]) <= 57 or (128 <= ord(word[i]) <= 175 or 224 <= ord(word[i]) <= 243):
-            m += 1
-            break
+    if not isinstance(tokens, list) or not isinstance(word, str) or (
+            left_context_size == 0 and right_context_size == 0):
+        return []
 
     concordance = []
-    if k != 0 or m != 0 or (left_context_size == 0 and right_context_size == 0) or (i - left_context_size < 0 and i + 1 + right_context_size > len(tokens)- 1):  # если некорректные токены
-        return []
-    else:
-        for i in range(len(tokens)):
-            if word == tokens[i]:
-                if i - left_context_size > 0 and i + 1 + right_context_size < len(tokens) - 1:
-                    concordance.append(tokens[i - left_context_size:i + 1 + right_context_size])
-                elif i - left_context_size < 0:
-                    concordance.append(tokens[i:i + 1 + right_context_size])
-                elif i + 1 + right_context_size > len(tokens) - 1:
-                    concordance.append(tokens[i - left_context_size:i + 1])
+
+    for i in range(len(tokens)):
+        if word == tokens[i]:
+            if i - left_context_size > 0 and i + 1 + right_context_size < len(tokens) - 1:
+                concordance.append(tokens[i - left_context_size:i + 1 + right_context_size])
+            elif i - left_context_size < 0:
+                concordance.append(tokens[i:i + 1 + right_context_size])
+            elif i + 1 + right_context_size > len(tokens) - 1:
+                concordance.append(tokens[i - left_context_size:i + 1])
+            else:
+                return []
     return concordance
+
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
@@ -152,10 +149,11 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-
+    i = 0
     k = 0
     for i in range(len(tokens)):  # проверка строки на корректность
-        if 48 <= ord(' '.join(tokens)[i]) <= 57 or (128 <= ord(' '.join(tokens)[i]) <= 175 or 224 <= ord(' '.join(tokens)[i]) <= 243):
+        if 48 <= ord(' '.join(tokens)[i]) <= 57 or (128 <= ord(' '.join(tokens)[i]) <= 175 or 224 <= ord(
+                ' '.join(tokens)[i]) <= 243):
             k += 1
             break
     m = 0
@@ -165,7 +163,8 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             break
 
     adjacent_words = []
-    if k != 0 or m != 0 or (left_n == 0 and right_n == 0) or (i - left_n < 0 and i + 1 + right_n > len(tokens) - 1):  # если некорректные токены
+    if k != 0 or m != 0 or (left_n == 0 and right_n == 0) or (
+            i - left_n < 0 and i + 1 + right_n > len(tokens) - 1):  # если некорректные токены
         return []
     else:
         for i in range(len(tokens)):
@@ -184,7 +183,7 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding = 'utf-8') as report:
+    with open(path_to_file, 'r', encoding="utf-8") as report:
         data = report.read()
     return data
 
@@ -194,9 +193,10 @@ def write_to_file(path_to_file: str, content: list):
     Writes the result in a file
     """
     with open(path_to_file, 'w') as report:
-        for i in range(len(concordance)):
-            report.write(' '.join(concordance[i]))
+        for i in range(len(content)):
+            report.write(' '.join(content[i]))
             report.write('\n')
+
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
     """
