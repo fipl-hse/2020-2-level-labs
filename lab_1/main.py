@@ -172,7 +172,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             left_n = 0
         elif right_n < 1:
             right_n = 0
-        l_concordance = get_concordance(tokens, word, left_n, right_n):
+        l_concordance = get_concordance(tokens, word, left_n, right_n)
         adjacent_words = []
         for need_words in l_concordance:
             for i,w in enumerate(need_words):
