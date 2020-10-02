@@ -165,8 +165,8 @@ def read_from_file(path_to_file: str) -> str:
     :return: the initial text in string format
     """
     with open(path_to_file, 'r', encoding='utf-8') as read_file:
-        text = read_file.read()
-    return text
+        data = read_file.read()
+    return data
 
 
 
