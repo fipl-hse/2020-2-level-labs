@@ -14,14 +14,15 @@ def tokenize(text: str) -> list:
     if not isinstance(text, str):
         return []
 
-    text = text.lower()
-    new_text = ' '
-    for token in text:
-        if token.isalpha() or token == ' ':
-            new_text += token
-    token_list = new_text.split()
-
-    return token_list
+    tokens_list = []
+    for token in text.lower().split():
+        word = ''
+        for element in token:
+            if element.isalpha():
+                word += element
+        if word:
+            tokens_list.append(word)
+    return tokens_list
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
