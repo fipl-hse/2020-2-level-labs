@@ -36,7 +36,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
         tokens.remove('the')
     while 'is' in tokens:
         tokens.remove('is')
-    return tokens
+    return list(tokens)
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -153,8 +153,8 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     i_left = int(input('Your number:'))
     i_right = int(input('Your number:'))
     if i_left == left_n and i_right == right_n:
-        tokens1= tokens.pop(5)
-        tokens2= tokens.pop(9)
+        tokens1 = tokens.pop(5)
+        tokens2 = tokens.pop(9)
         tokens3 = tokens.pop(8)
         tokens4 = tokens.pop(11)
         print([[tokens1]+[tokens2]]+[[tokens3]+[tokens4]])
