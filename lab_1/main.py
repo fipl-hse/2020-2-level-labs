@@ -2,7 +2,7 @@
 Lab 1
 A concordance extraction
 """
-
+import os
 
 def checker(con_object, type_ob):
     if isinstance(con_object, type_ob) and type_ob is list:
@@ -39,7 +39,8 @@ def tokenize(text: str) -> list:
 
 
 def get_stop_words() -> list:
-    with open("stop_words.txt") as file:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(current_dir, 'stop_words.txt'))as file:
         stop_words = file.readlines()
     return stop_words
 
