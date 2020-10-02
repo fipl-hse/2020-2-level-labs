@@ -5,6 +5,16 @@ A concordance extraction
 
 
 def tokenize(text: str) -> list:
+    """
+    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
+    :param text: the initial text
+    :return: a list of lowercased tokens without punctuation
+    e.g. text = 'The weather is sunny, the man is happy.'
+    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+
+    text = text.split()
+    return text
+    """
     if not isinstance(text, str):
         return []
 
@@ -20,7 +30,7 @@ def tokenize(text: str) -> list:
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
-"""
+    """
     Removes stop words
     :param tokens: a list of tokens
     :param stop_words: a list of stop words
@@ -28,7 +38,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
-"""
+    """
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return []
 
@@ -36,6 +46,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
 
 
 def calculate_frequencies(tokens: list) -> dict:
+    """
+    Calculates frequencies of given tokens
+    :param tokens: a list of tokens without stop words
+    :return: a dictionary with frequencies
+    e.g. tokens = ['weather', 'sunny', 'man', 'happy']
+    --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
+    """
     if not isinstance(tokens, list) or None in tokens:
         return {}
 
