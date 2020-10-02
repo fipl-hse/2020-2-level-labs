@@ -39,10 +39,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if type(tokens) != list:
+    if not type(tokens) == list:
         scraped = []
     else:
-        if type(stop_words) != list:
+        if not type(stop_words) == list:
             return tokens
         else:
             scraped = [token for token in tokens if token not in stop_words]
@@ -57,10 +57,10 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    frequencies = {}
-    if type(tokens) != list:
-        pass
+    if not type(tokens) == list:
+        return {}
     else:
+        frequencies = {}
         for token in tokens:
             if type(token) == str:
                 if token not in frequencies:
@@ -80,10 +80,10 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    if type(freq_dict) != dict or type(top_n) != int:
+    if not type(freq_dict) == dict or not type(top_n) == int:
         top = []
     else:
-        top = [i[0] for i in sorted(list(freq_dict.items()), key=lambda i: i[1], reverse=True)[:top_n]] # Marina from future, will you kindly shorten this line
+        top = [i[0] for i in sorted(list(freq_dict.items()), key=lambda i: i[1], reverse=True)[:top_n]]
     return top
 
 
@@ -104,12 +104,13 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    concordance = []
-    lcs_checked = False
-    rcs_checked = False
-    if type(tokens) != list or type(word) != str:
-        pass
+
+    if not type(tokens) == list or not type(word) == str:
+        return []
     else:
+        concordance = []
+        lcs_checked = False
+        rcs_checked = False
         if type(left_context_size) == int:
             if left_context_size >= 1:
                 lcs_checked = True
@@ -117,7 +118,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             if right_context_size >= 1:
                 rcs_checked = True
         if not rcs_checked and not lcs_checked:
-            pass
+            return []
         else:
             for index, item in enumerate(tokens):
                 if item == word:
@@ -161,19 +162,19 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    adj_words = []
-    if type(tokens) != list or type(word) != str:
-        pass
+    if not type(tokens) == list or not type(word) == str:
+        return []
     else:
-        if type(left_n) != int:
+        adj_words = []
+        if not type(left_n) == int:
             left_n = 0
-        if type(right_n) != int:
+        if not type(right_n) == int:
             right_n = 0
         concordance = get_concordance(tokens, word, left_n, right_n)
         for context in concordance:
             subcontext = []
             for end in [context[0], context[-1]]:
-                if end != word:
+                if not end == word:
                     subcontext.append(end)
             adj_words.append(subcontext)
     return adj_words
@@ -219,10 +220,10 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    ordered = []
     if not type(left_sort) == bool:
-        pass
+        return []
     else:
+        ordered = []
         concordance = get_concordance(tokens, word, left_context_size, right_context_size)
         contexts = []
         for context in concordance:

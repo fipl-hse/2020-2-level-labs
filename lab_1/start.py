@@ -3,9 +3,8 @@ Concordance implementation starter
 """
 
 
-
-from main import *
 import os
+from main import *
 
 if __name__ == '__main__':
     #  use data.txt file to test your program
