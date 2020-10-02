@@ -127,7 +127,19 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_n, int) and isinstance(right_n, int)/n
+    and (left_n < 1) and (right_n < 1):
+        previous_conc = get_concordance(tokens, word, left_n, right_n)
+        ad_word = []
+        for cotext in previous_conc:
+            if (left_n < 1) and (right_n >= 1):
+                ad_word.append([previous_conc[-1]])
+            elif (right_n < 1) and (left_n >= 1):
+                ad_word.append([previous_conc[0]])
+            elif (right_n >= 1) and (left_n >= 1):
+                ad_word.append([previous_conc[0]], [previous_conc[-1]])
+        return  ad_word
+
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -135,8 +147,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as concordance_file:
+        data = concordance_file.read()
 
     return data
 
@@ -145,7 +157,10 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+    with open(path_to_file, 'r', encoding='utf-8') as concordance_file:
+        for i in content:
+            return concordance_file.write('/n'. join(content))
+
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
