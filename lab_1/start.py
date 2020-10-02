@@ -36,4 +36,4 @@ if __name__ == '__main__':
 
     RESULT = concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == ['covered', 'the', 'entire', 'world', 'but' 'magneto'], 'Concordance not working'
+    assert RESULT == ['once','covered', 'entire', 'world', 'magneto', 'altered'], 'Concordance not working'
