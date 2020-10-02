@@ -21,7 +21,7 @@ if __name__ == '__main__':
     # частоты токенов
     freq_dict = calculate_frequencies(tokens_clean)
     # слово для поиска
-    top_words = get_top_n_words(freq_dict, "mom", 10, 10)
+    top_words = get_top_n_words(freq_dict, 10)
     print("top 10 words {}".format(top_words))
 
     result_normal_concordance = get_concordance(tokens_clean, "mom", 3, 2)
