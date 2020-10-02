@@ -12,8 +12,8 @@ if __name__ == '__main__':
     stop_words = []
 
     #  here goes your logic: calling methods from concordance.py
-    tokens = read_from_file('data.txt')
-    tokens = tokenize(tokens)
+
+    tokens = tokenize(data)
     RESULT = sort_concordance(tokens, 'text', 1, 2, True)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [['80', 'text', 'columns', 'although'], ['a', 'text', 'as', 'quickly'],
