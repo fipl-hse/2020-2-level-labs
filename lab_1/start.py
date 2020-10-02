@@ -2,7 +2,9 @@
 Concordance implementation starter
 """
 import os
-from main import *
+from main import read_from_file, get_stop_words, calculate_frequencies
+from main import tokenize, remove_stop_words, get_top_n_words, write_to_file
+from main import get_concordance, get_adjacent_words, sort_concordance
 
 
 if __name__ == '__main__':
