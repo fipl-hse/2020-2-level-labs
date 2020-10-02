@@ -31,7 +31,7 @@ if __name__ == '__main__':
     print('3 most popular words: ', top_list )
 
     concordance = get_concordance(tokens, 'entire', 2, 3)
-    print('concordance for "entire":', concordance[:-1])
+    print('concordance for "entire":', concordance[:23])
 
 
     RESULT = concordance
