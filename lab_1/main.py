@@ -153,11 +153,16 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
     conco_all = []
     index_word = 0
-    if checker(tokens, list) and checker(word, str) \
-            and checker(left_n, int) and checker(right_n, int) \
-            and left_n >= 0 and right_n >= 0:
+    good_conditions = [checker(tokens, list),
+                       checker(word, str),
+                       checker(left_n, int),
+                       checker(right_n, int),
+                       left_n >= 0,
+                       right_n >= 0]
 
-        for i in range(tokens.count(word)):
+    if False not in good_conditions:
+
+        for _ in range(tokens.count(word)):
             if not tokens.index(word):
                 concordance = [tokens[right_n]]
             else:
@@ -184,8 +189,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
 
@@ -194,8 +199,8 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    with open(path_to_file, "w", encoding="utf-8") as fs:
-        fs.write(" ".join(content))
+    with open(path_to_file, "w", encoding="utf-8") as file:
+        file.write(" ".join(content))
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -253,6 +258,3 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
             if left_sort and not left_context_bool:
                 return []
     return conco_all
-
-
-

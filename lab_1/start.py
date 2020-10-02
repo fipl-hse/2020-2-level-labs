@@ -1,14 +1,8 @@
 """
 Concordance implementation starter
 """
-
-from main import *
-"""
-Concordance implementation starter
-"""
-
-from main import read_from_file
 import os
+from main import *
 
 
 if __name__ == '__main__':
@@ -25,11 +19,16 @@ if __name__ == '__main__':
     # частоты токенов
     freq_dict = calculate_frequencies(tokens_clean)
     # слово для поиска
-    word = input()
-    left_size, right_size = int(input()), int(input())
+    top_words = get_top_n_words(freq_dict, "mom", 10, 10)
+    print("top 10 words {}".format(top_words))
 
-    result_normal_concordance = get_concordance(tokens_clean, word, left_size, right_size)
-    result_adjacent_concordance = get_adjacent_words(tokens, word, left_size, right_size)
-    result_sorted_concordance = sort_concordance(tokens, word, left_size, right_size, True)
+    result_normal_concordance = get_concordance(tokens_clean, "mom", 3, 2)
+    result_adjacent_concordance = get_adjacent_words(tokens, "mom", 3, 2)
+    result_sorted_concordance = sort_concordance(tokens, "mom", 3, 2, True)
+    print(f"normal concordance: {result_normal_concordance}, "
+          f"adjacent concordance: {result_adjacent_concordance}, "
+          f"sorted concordance: {result_sorted_concordance}")
+
+    write_to_file(os.path.join(current_dir, 'concordance.txt'), result_normal_concordance)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [(), ()], 'Concordance not working'
+    assert result_normal_concordance, 'Concordance not working'
