@@ -31,7 +31,7 @@ if __name__ == '__main__':
     print('3 most popular words: ', top_list )
 
     concordance = get_concordance(tokens, 'october', 2, 3)
-    print('concordance for "october":', concordance)
+    print('concordance for "october":', concordance[0])
 
 
     RESULT = concordance
