@@ -185,7 +185,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         return []
     if right_n > 0 and left_n > 0:
         concordance = get_concordance(tokens, word, left_n, right_n)
-        print(concordance)
         for text in concordance:
             all_adjacent_words.append([text[0], text[-1]])
     elif right_n > 0:

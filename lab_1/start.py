@@ -41,4 +41,4 @@ if __name__ == '__main__':
 
     RESULT = write_to_file
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Concordance not working'
+    assert RESULT == [['man', 'is'], ['dog', 'cat']]
