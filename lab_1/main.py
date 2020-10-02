@@ -21,7 +21,7 @@ def tokenize(text: str) -> list:
             for symbol in word:
                 if symbol.isalpha():
                     token.append(symbol)
-            if len(token):
+            if len(token) > 0:
                 tokens.append("".join(token))
         tokens = [token.lower() for token in tokens]
     else:
@@ -41,12 +41,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     if not isinstance(tokens, list):
         return []
-    else:
-        if not isinstance(stop_words, list):
-            return tokens
-        else:
-            scraped = [token for token in tokens if token not in stop_words]
-        return scraped
+    if not isinstance(stop_words, list):
+        return tokens
+    scraped = [token for token in tokens if token not in stop_words]
+    return scraped
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -59,15 +57,14 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     if not isinstance(tokens, list):
         return {}
-    else:
-        frequencies = {}
-        for token in tokens:
-            if type(token) == str:
-                if token not in frequencies:
-                    frequencies[token] = 1
-                else:
-                    frequencies[token] += 1
-        return frequencies
+    frequencies = {}
+    for token in tokens:
+        if isinstance(token, str):
+            if token not in frequencies:
+                frequencies[token] = 1
+            else:
+                frequencies[token] += 1
+    return frequencies
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -107,44 +104,42 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
 
     if not isinstance(tokens, list) or not isinstance(word, str):
         return []
-    else:
-        concordance = []
-        lcs_checked = False
-        rcs_checked = False
-        if isinstance(left_context_size, int) and not isinstance(left_context_size, bool):
-            if left_context_size >= 1:
-                lcs_checked = True
-        if isinstance(right_context_size, int) and not isinstance(right_context_size, bool):
-            if right_context_size >= 1:
-                rcs_checked = True
-        if not rcs_checked and not lcs_checked:
-            return []
-        else:
-            for index, item in enumerate(tokens):
-                if item == word:
-                    subconcor = []
-                    if lcs_checked:
-                        shift = 0
-                        for _ in range(left_context_size):
-                            try:
-                                subconcor.append(tokens[index - left_context_size + shift])
-                                shift += 1
-                            except IndexError:
-                                for _ in range(index):
-                                    subconcor.append(tokens[shift])
-                                    shift += 1
-                                break
-                    subconcor.append(word)
-                    if rcs_checked:
-                        shift = 1
-                        for _ in range(right_context_size):
-                            try:
-                                subconcor.append(tokens[index + shift])
-                                shift += 1
-                            except IndexError:
-                                break
-                    concordance.append(subconcor)
-            return concordance
+    concordance = []
+    lcs_checked = False
+    rcs_checked = False
+    if isinstance(left_context_size, int) and not isinstance(left_context_size, bool):
+        if left_context_size >= 1:
+            lcs_checked = True
+    if isinstance(right_context_size, int) and not isinstance(right_context_size, bool):
+        if right_context_size >= 1:
+            rcs_checked = True
+    if not rcs_checked and not lcs_checked:
+        return []
+    for index, item in enumerate(tokens):
+        if item == word:
+            subconcor = []
+            if lcs_checked:
+                shift = 0
+                for _ in range(left_context_size):
+                    try:
+                        subconcor.append(tokens[index - left_context_size + shift])
+                        shift += 1
+                    except IndexError:
+                        for _ in range(index):
+                            subconcor.append(tokens[shift])
+                            shift += 1
+                        break
+            subconcor.append(word)
+            if rcs_checked:
+                shift = 1
+                for _ in range(right_context_size):
+                    try:
+                        subconcor.append(tokens[index + shift])
+                        shift += 1
+                    except IndexError:
+                        break
+            concordance.append(subconcor)
+    return concordance
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -164,20 +159,19 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
     if not isinstance(tokens, list) or not isinstance(word, str):
         return []
-    else:
-        adj_words = []
-        if not isinstance(left_n, int):
-            left_n = 0
-        if not isinstance(right_n, int):
-            right_n = 0
-        concordance = get_concordance(tokens, word, left_n, right_n)
-        for context in concordance:
-            subcontext = []
-            for end in [context[0], context[-1]]:
-                if not end == word:
-                    subcontext.append(end)
-            adj_words.append(subcontext)
-        return adj_words
+    adj_words = []
+    if not isinstance(left_n, int):
+        left_n = 0
+    if not isinstance(right_n, int):
+        right_n = 0
+    concordance = get_concordance(tokens, word, left_n, right_n)
+    for context in concordance:
+        subcontext = []
+        for end in [context[0], context[-1]]:
+            if not end == word:
+                subcontext.append(end)
+        adj_words.append(subcontext)
+    return adj_words
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -222,22 +216,21 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     """
     if not isinstance(left_sort, bool):
         return []
-    else:
-        concordance = get_concordance(tokens, word, left_context_size, right_context_size)
-        contexts = []
-        for context in concordance:
-            if left_sort:
-                if context[0] == word and context.count(word) == 1:
-                    pass
-                else:
-                    contexts.append(context)
-            else:
-                if context[-1] == word and context.count(word) == 1:
-                    pass
-                else:
-                    contexts.append(context)
+    concordance = get_concordance(tokens, word, left_context_size, right_context_size)
+    contexts = []
+    for context in concordance:
         if left_sort:
-            ordered = sorted(contexts, key=lambda x: x[0])
+            if context[0] == word and context.count(word) == 1:
+                pass
+            else:
+                contexts.append(context)
         else:
-            ordered = sorted(contexts, key=lambda x: x[left_context_size + 1])
-        return ordered
+            if context[-1] == word and context.count(word) == 1:
+                pass
+            else:
+                contexts.append(context)
+    if left_sort:
+        ordered = sorted(contexts, key=lambda x: x[0])
+    else:
+        ordered = sorted(contexts, key=lambda x: x[left_context_size + 1])
+    return ordered
