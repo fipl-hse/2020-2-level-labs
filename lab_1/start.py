@@ -28,8 +28,8 @@ if __name__ == '__main__':
     concordance_love = main.get_concordance(tokens, 'love', 3, 4)
     print('concordance for "love":', concordance_love[:7])
 
-    adjacent_words_windy = main.get_adjacent_words(tokens, '', 2, 3)
-    print('adjacent words for "windy":', adjacent_words_windy)
+    adjacent_words_love = main.get_adjacent_words(tokens, 'love', 2, 3)
+    print('adjacent words for "love":', adjacent_words_love[:7])
 
     RESULT = main.get_concordance(tokens, 'love', 3, 4)
 
