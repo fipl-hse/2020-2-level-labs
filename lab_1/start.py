@@ -10,7 +10,6 @@ from main import get_top_n_words
 from main import get_concordance
 
 
-
 if __name__ == '__main__':
     #  use data.txt file to test your program
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -28,7 +27,7 @@ if __name__ == '__main__':
     freq_dict = calculate_frequencies(tokens)
     print('frequency of 5 first words: ', freq_dict[tokens[:5]])
 
-    top_list = get_top_n_words(frequencies, 3)
+    top_list = get_top_n_words(freq_dict, 3)
     print('3 most popular words: ', top_list )
 
     concordance = get_concordance(tokens, 'entire', 2, 3)

@@ -15,7 +15,8 @@ def read_from_file(path_to_file: str) -> str:
 
     return data
 
-def tokenize(text:str) -> list:
+
+def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
@@ -33,7 +34,6 @@ def tokenize(text:str) -> list:
     return tokens
 
 
-
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     Removes stop words
@@ -46,21 +46,19 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
 
     if not isinstance(tokens, list) or not tokens\
-            or not isinstance(stop_words, list):  #check for emptiness
+            or not isinstance(stop_words, list):
         return []
     if (isinstance(tokens, list) and tokens)\
             and not (isinstance(stop_words, list) and stop_words):
         return tokens
 
-    s_tokens = tokens [:]
+    s_tokens = tokens[:]
 
     for words in tokens:
         if words in stop_words:
             s_tokens.remove(words)
 
     return s_tokens
-
-
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -71,15 +69,12 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    if  not isinstance(tokens, list):  # if not word
+    if not isinstance(tokens, list):  # if not word
         return {}
-
-
     for words in tokens:
         if not isinstance(words, str):
             return {}
     return {words: tokens.count(words) for words in tokens}
-
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -98,14 +93,13 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         return []
 
     top_list = list(freq_dict.items())
-    top_list.sort(key=lambda i:i[1],reverse = True)    #sort by keys(2 element) for less volume-lambda formed increase
+    top_list.sort(key=lambda i: i[1], reverse = True)    #sort by keys(2 element) for less volume-lambda formed increase
 
     n_top = []
     for elem in top_list[:top_n]:
         n_top.append(elem[0])
 
     return n_top
-
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -134,20 +128,15 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if not isinstance(tokens, list) or not isinstance(word, str) \
             or (not isinstance(right_context_size, int) and not isinstance(left_context_size, int)):  #check type
         return []
-    if isinstance(right_context_size, int) and  isinstance(left_context_size, int):
+    if isinstance(right_context_size, int) and isinstance(left_context_size, int):
         if left_context_size < 1 and right_context_size < 1:
             return []
-
-
-
     concordance = []
-    for ind,elem in enumerate(tokens):  #make list with numbers & tokens
+    for ind, elem in enumerate(tokens):  #make list with numbers & tokens
         if elem == word:
             concordance.append(tokens[ind - left_context_size:ind + right_context_size + 1])
 
     return concordance
-
-
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
