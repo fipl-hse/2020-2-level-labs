@@ -186,49 +186,17 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         return []
     if right_n > 0 and left_n > 0:
         concordance = get_concordance(tokens, word, left_n, right_n)
-        num = len(concordance)
-        text = concordance[0]
-        context.append(text[0])
-        context.append(text[-1])
-        all_adjacent_words.append(context)
-        if num > 1:
-            concordance.remove(text)
-            while num >= 1:
-                new_text = concordance[0]
-                new_context = []
-                new_context.append(new_text[0])
-                new_context.append(new_text[-1])
-                all_adjacent_words.append(new_context)
-                concordance.remove(new_text)
-                num = len(concordance)
+        print(concordance)
+        for text in concordance:
+            all_adjacent_words.append([text[0], text[-1]])
     elif right_n > 0:
         concordance = get_concordance(tokens, word, left_n, right_n)
-        num = len(concordance)
-        text = concordance[0]
-        context.append(text[-1])
-        all_adjacent_words.append(context)
-        if num > 1:
-            while num != 1:
-                concordance.remove(text)
-                new_text = concordance[0]
-                new_context = []
-                new_context.append(new_text[-1])
-                all_adjacent_words.append(new_context)
-                num -= 1
+        for text in concordance:
+            all_adjacent_words.append([text[-1]])
     elif left_n > 0:
         concordance = get_concordance(tokens, word, left_n, right_n)
-        num = len(concordance)
-        text = concordance[0]
-        context.append(text[0])
-        all_adjacent_words.append(context)
-        if num > 1:
-            while num != 1:
-                concordance.remove(text)
-                new_text = concordance[0]
-                new_context = []
-                new_context.append(new_text[0])
-                all_adjacent_words.append(new_context)
-                num -= 1
+        for text in concordance:
+            all_adjacent_words.append([text[0]])
     return all_adjacent_words
 
 
@@ -250,11 +218,13 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-
+    all_context = ''
     with open(path_to_file, 'w') as report:
         for text in content:
             context = ' '.join(text) + '\n'
-            report.write(context)
+            all_context += context
+
+        report.write(all_context)
 
     return report
 
