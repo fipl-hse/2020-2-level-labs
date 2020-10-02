@@ -16,10 +16,7 @@ def tokenize(text: str) -> list:
     if isinstance(text, str):
         tokens = ''
         text = text.lower()
-        if '\n' in text:
-            text = text.replace('\n', ' ')
-        if '\t' in text:
-            text = text.replace('\t', ' ')
+        text = text.replace('\n', ' ')
         for i in text:
             if i.isalpha() or i == ' ':
                 tokens += i
@@ -232,7 +229,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
                 new_context.append(new_text[0])
                 all_adjacent_words.append(new_context)
                 num -= 1
-
     return all_adjacent_words
 
 
