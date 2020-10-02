@@ -100,20 +100,20 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     concordance = []
-    if isinstance(tokens, list) and isinstance(word, str) and not isinstance(left_context_size, bool) \
-            and not isinstance(right_context_size, bool) and isinstance(right_context_size, int)\
-            and isinstance(left_context_size,int):
-        if right_context_size < 0:
-            right_context_size = 0
-        if left_context_size < 0:
-            left_context_size = 0
-        if right_context_size == 0 and left_context_size == 0:
-            return []
-        for index, element in enumerate(tokens):
-            if element == word:
+    if isinstance(tokens, list) and isinstance(word, str) and isinstance(right_context_size, int)\
+    and isinstance(left_context_size,int):
+        if not isinstance(left_context_size, bool) and not isinstance(right_context_size, bool):
+            if right_context_size < 0:
+                right_context_size = 0
+            if left_context_size < 0:
+                left_context_size = 0
+            if right_context_size == 0 and left_context_size == 0:
+                return []
+            for index, element in enumerate(tokens):
+                if element == word:
 
-                new_concordance = tokens[index - left_context_size: index + right_context_size +1]
-                concordance.append(new_concordance)
+                    new_concordance = tokens[index - left_context_size: index + right_context_size +1]
+                    concordance.append(new_concordance)
     return concordance
 
 
@@ -134,9 +134,9 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     if not isinstance(tokens, list) and not isinstance(word, str) and not isinstance(left_n, int)\
-    and not isinstance(right_n, int)\
-    and not left_n < 1 and not right_n < 1:
-        return []
+    and not isinstance(right_n, int):
+        if not left_n < 1 and not right_n < 1:
+            return []
     previous_conc = get_concordance(tokens, word, left_n, right_n)
     ad_word = []
     for context in previous_conc:
