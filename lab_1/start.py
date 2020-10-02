@@ -19,17 +19,19 @@ if __name__ == '__main__':
     tokens = main.remove_stop_words(tokens, stop_words)
     print('tokens without stop words', tokens[:7])
 
-    frequency = main.calculate_frequencies(tokens)
-    print('frequency for the second word:', frequencies[tokens[2]])
+    frequencies = main.calculate_frequencies(tokens)
+    print('frequency for the second word:', frequencies[tokens[1]])
 
-    top_7 = main.get_top_n_words(frequency, 7)
+    top_7 = main.get_top_n_words(frequencies, 7)
     print('top 7 words:', top_7)
 
     concordance_love = main.get_concordance(tokens, 'love', 3, 4)
     print('concordance for "love":', concordance_love[:7])
 
     adjacent_words_windy = main.get_adjacent_words(tokens, '', 2, 3)
-    print('adjacent words for "windy":', adjacent_words_windy[:5])
+    print('adjacent words for "windy":', adjacent_words_windy)
+
+    RESULT = main.get_concordance(tokens, 'love', 3, 4)
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Concordance not working'
