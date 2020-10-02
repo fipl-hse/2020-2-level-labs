@@ -2,7 +2,6 @@
 Lab 1
 A concordance extraction
 """
-import re
 
 def tokenize(text: str) -> list:
     """
@@ -18,7 +17,6 @@ def tokenize(text: str) -> list:
     clear_text = ''.join(clear_symbols)
     clear_text = clear_text.lower()
     return [word for word in clear_text.split(' ') if word != '']
-
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
