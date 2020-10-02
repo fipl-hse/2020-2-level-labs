@@ -119,17 +119,14 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     
     if not(r_is_int) and not(l_is_int):
         return []
-    
-    if word not in tokens:
-        return []
 
     if not(isinstance(tokens, list)) or not(isinstance(word, str)):
         return []
 
     if len(tokens) == 0 or not(isinstance(tokens[0], str)):
         return []
-
-    if left_context_size < 0 and right_context_size < 0:
+    
+    if word not in tokens:
         return []
     
     if not(r_is_int) or right_context_size < 0:
