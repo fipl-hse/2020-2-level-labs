@@ -30,13 +30,18 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-
+    new_tokens = []
     if not isinstance(tokens, list) and not isinstance(stop_words, list):#проверяем, списки ли это
         return []
-    for token in stop_words:
-        if token not in stop_words: #проверяем входит ли слово в список стоп-слов
-            tokens.append(token)
-    return tokens
+    else:
+
+        for token in tokens:
+            if token not in stop_words: #проверяем входит ли слово в список стоп-слов
+
+                new_tokens.append(token)
+    return new_tokens
+
+
 
 
 
@@ -51,11 +56,12 @@ def calculate_frequencies(tokens: list) -> dict:
     if not isinstance(tokens, list):
         return {}
     dict = {} #создаем словарь
-    for token in tokens:
-        if token in dict:
-            dict[token] += 1
-        else:
-            dict[token] = 1
+    if isinstance(tokens[0], str):
+        for token in tokens:
+            if token in dict:
+                dict[token] += 1
+            else:
+                dict[token] = 1
     return dict
 
 
@@ -70,17 +76,12 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         top_n = 1
         --> ['happy']
         """
-    if not isinstance(freq_dict, dict) and not isinstance(top_n, int):
-        return []
-    list_dict_items = list(freq_dict.items())
-    list_dict_items.sort(key=lambda x: x[1], reverse=True)
-    new_list = []
-    if top_n > len(list_dict_items ):
-        return []
-    else:
-        for word in list_dict_items[:top_n]:
-            new_list.append(word[0])
-    return new_list
+    sorted_list = []
+    if isinstance(freq_dict, dict) and isinstance(top_n, int):
+        sorted_list = sorted(freq_dict,key=freq_dict.get,reverse=True)
+        sorted_list = sorted_list[:top_n]
+
+    return sorted_list
 
 
 
