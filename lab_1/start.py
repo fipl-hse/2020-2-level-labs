@@ -31,7 +31,7 @@ if __name__ == '__main__':
     adjacent_words = main.get_adjacent_words(tokens, 'islands', 2, 3)
     print("adjacent words for 'book':", adjacent_words[:4])
 
-    main.write_to_file('report.txt', top_words)
+    main.write_to_file('report.txt', adjacent_words)
 
     #  here goes your logic: calling methods from concordance.py
 
