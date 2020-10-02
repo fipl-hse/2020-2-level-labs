@@ -63,7 +63,7 @@ def calculate_frequencies(without_stop_words: list) -> dict:
     if isinstance(without_stop_words, list) and len(without_stop_words) > 1:
         for i in without_stop_words:
             num = without_stop_words.count(i)
-            element = {i : num}
+            element = {i: num}
             freq.update(element)
         return freq
     else:
@@ -119,7 +119,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     test2 = isinstance(word, str)
     test3 = isinstance(left_context_size, int)
     test4 = isinstance(right_context_size, int)
-    if test1 and test2 and test3 and test4 and len(word) != 0 and len(tokens) > 1 and (word in tokens):
+    test5 = (isinstance(right_context_size, bool) and isinstance(left_context_size, bool))
+    if test1 and test2 and test3 and test4 and not test5 and len(word) != 0 and len(tokens) > 1 and word in tokens:
         words = tokens.count(word)
         num = tokens.index(word)
         if left_context_size >= 1 and right_context_size >= 1:
@@ -150,6 +151,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
 
 
 
+
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
     Gets adjacent words from the left and right context
@@ -165,7 +167,68 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    all_adjacent_words = []
+    context = []
+    test1 = isinstance(tokens, list)
+    test2 = isinstance(word, str)
+    test3 = isinstance(left_n, int)
+    test4 = isinstance(right_n, int)
+    test5 = (isinstance(left_n, bool) and isinstance(right_n, bool))
+    if not (test1 and test2 and test3 and test4 and not test5 and word in tokens):
+        return []
+    elif right_n < 1 and left_n < 1:
+        return []
+    elif isinstance(tokens, bool):
+        return []
+    elif right_n >= 1 and left_n >= 1:
+        concordance = get_concordance(tokens, word, left_n, right_n)
+        num = len(concordance)
+        text = concordance[0]
+        context.append(text[0])
+        context.append(text[-1])
+        all_adjacent_words.append(context)
+        if num > 1:
+            concordance.remove(text)
+            while num >= 1:
+                new_text = concordance[0]
+                new_context = []
+                new_context.append(new_text[0])
+                new_context.append(new_text[-1])
+                all_adjacent_words.append(new_context)
+                concordance.remove(new_text)
+                num = len(concordance)
+    elif right_n >= 1 and left_n < 1:
+        concordance = get_concordance(tokens, word, left_n, right_n)
+        num = len(concordance)
+        text = concordance[0]
+        context.append(text[-1])
+        all_adjacent_words.append(context)
+        if num > 1:
+            while num != 1:
+                concordance.remove(text)
+                new_text = concordance[0]
+                new_context = []
+                new_context.append(new_text[-1])
+                all_adjacent_words.append(new_context)
+                num -= 1
+    elif right_n < 1 and left_n >= 1:
+        concordance = get_concordance(tokens, word, left_n, right_n)
+        num = len(concordance)
+        text = concordance[0]
+        context.append(text[0])
+        all_adjacent_words.append(context)
+        if num > 1:
+            while num != 1:
+                concordance.remove(text)
+                new_text = concordance[0]
+                new_context = []
+                new_context.append(new_text[0])
+                all_adjacent_words.append(new_context)
+                num -= 1
+    return all_adjacent_words
+
+
+
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -183,7 +246,11 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+
+    with open(path_to_file, 'w') as report:
+        for text in content:
+            context = ' '.join(text) + '\n'
+            report.write(context)
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:

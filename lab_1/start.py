@@ -8,6 +8,8 @@ from main import remove_stop_words
 from main import calculate_frequencies
 from main import get_top_n_words
 from main import get_concordance
+from main import get_adjacent_words
+from main import write_to_file
 import os
 
 if __name__ == '__main__':
@@ -30,8 +32,12 @@ if __name__ == '__main__':
     concordance = get_concordance(tokens, 'sodium', 1, 1)
     print('Getting concordance for the token "sodium": {}'.format(concordance))
 
-    RESULT = concordance
+    adjacent_words = get_adjacent_words(['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
+                                         'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad'], 'happy', 2, 3)
+    print('Adjacent words for word "happy": {} '.format(adjacent_words))
+
+    write_to_file = write_to_file('report.txt', concordance)
+
+    RESULT = write_to_file
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Concordance not working'
-
-
