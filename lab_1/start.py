@@ -37,4 +37,4 @@ if __name__ == '__main__':
 
     RESULT = top_words
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Concordance not working'
+    assert RESULT == ['the', 'man'], 'Concordance not working'
