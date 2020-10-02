@@ -3,9 +3,9 @@ Concordance implementation starter
 """
 
 import os
-from main import read_from_file
+import main 
 
-if __name__ == '__main__'
+if __name__ == '__main__':
     #  here goes your logic: calling methods from concordance.py
     current_dir = os.path.dirname(os.path.abspath(__file__))
     data = main.read_from_file(os.path.join(current_dir, 'data.txt'))
