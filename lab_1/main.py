@@ -121,30 +121,32 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if (isinstance(left_context_size, int) and isinstance (right_context_size, int)
-            and isinstance (tokens, list) and isinstance (word, str) and not isinstance (left_context_size, bool)
-            and not isinstance (right_context_size, bool)):
-        concordance = []
-        for token in tokens:
-            if token == word and isinstance (token, str):
-                if left_context_size > 0:
-                    left_context = tokens[tokens.index(token) - left_context_size: tokens.index(token)]
-                else:
-                    left_context = []
-                if right_context_size > 0:
-                    right_context = tokens[tokens.index(token) + 1: tokens.index(token) + right_context_size + 1]
-                else:
-                    right_context = []
-                if left_context_size < 1 and right_context_size < 1:
-                    return []
-                current_context_list = left_context
-                current_context_list.append(token)
-                current_context_list.extend (right_context)
-                concordance.append(current_context_list)
-                tokens.insert(tokens.index(token), 'буферный элемент')
-                tokens.remove(token)
-        return concordance
-    return []
+    if not isinstance(left_context_size, int) or not isinstance(right_context_size, int) \
+            or not isinstance(tokens, list) or not isinstance(word, str):
+        return []
+    if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
+        return []
+    concordance = []
+    for token in tokens:
+        if token == word and isinstance (token, str):
+            if left_context_size > 0:
+                left_context = tokens[tokens.index(token) - left_context_size: tokens.index(token)]
+            else:
+                left_context = []
+            if right_context_size > 0:
+                right_context = tokens[tokens.index(token) + 1: tokens.index(token) + right_context_size + 1]
+            else:
+                right_context = []
+            if left_context_size < 1 and right_context_size < 1:
+                return []
+            current_context_list = left_context
+            current_context_list.append(token)
+            current_context_list.extend (right_context)
+            concordance.append(current_context_list)
+            tokens.insert(tokens.index(token), 'буферный элемент')
+            tokens.remove(token)
+    return concordance
+
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -208,7 +210,6 @@ def write_to_file(path_to_file: str, content: list):
     file.write (text)
 
 
-
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
     """
     Gets a concordance of a word and sorts it by either left or right context
@@ -226,12 +227,13 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    if (isinstance (tokens, list) and isinstance (word, str) and isinstance (left_context_size, int)
-            and isinstance (right_context_size, int) and isinstance (left_sort, bool)
-            and not isinstance (right_context_size, bool) and not isinstance (left_context_size, bool)):
-        concordance = get_concordance(tokens, word, left_context_size, right_context_size)
-        if left_sort is True and left_context_size > 0:
-            return sorted (concordance)
-        if left_sort is False and right_context_size > 0:
-            return sorted(concordance, key = lambda list_of_words: list_of_words[list_of_words.index (word) + 1])
-    return []
+    if not isinstance(left_context_size, int) or not isinstance(right_context_size, int) \
+            or not isinstance(tokens, list) or not isinstance(word, str):
+        return []
+    if isinstance(left_context_size, bool) or isinstance(right_context_size, bool) or not isinstance(left_sort, bool):
+        return []
+    concordance = get_concordance(tokens, word, left_context_size, right_context_size)
+    if left_sort is True and left_context_size > 0:
+        return sorted (concordance)
+    if left_sort is False and right_context_size > 0:
+        return sorted(concordance, key = lambda list_of_words: list_of_words[list_of_words.index (word) + 1])
