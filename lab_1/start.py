@@ -37,4 +37,4 @@ if __name__ == '__main__':
 
     RESULT = sorted_concordance[0]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [['a', 'wellmatched', 'happy', 'marriage', 'cello', 'concertos']], 'Concordance not working'
+    assert RESULT == ['a', 'wellmatched', 'happy', 'marriage', 'cello', 'concertos'], 'Concordance not working'
