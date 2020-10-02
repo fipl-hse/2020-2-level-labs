@@ -190,7 +190,7 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     concordance = []
 
     if isinstance(left_sort, bool) and isinstance(left_context_size, int) and isinstance(right_context_size, int):
-        if left_sort > 0 and (left_context_size > 0 or left_context_size <= 0):
+        if left_sort > 0 and left_context_size > 0:
             concordance = sorted(get_concordance(tokens, word, left_context_size, right_context_size))
         elif left_sort <= 0 and right_context_size <= 0:
             return []
