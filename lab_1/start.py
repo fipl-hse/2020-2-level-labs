@@ -28,7 +28,6 @@ if __name__ == '__main__':
     adjacent_words = get_adjacent_words(tokens, 'sodium', 2, 2)
 
     RESULT = sort_concordance(tokens, 'sodium', 1, 1, True)
-    print (RESULT)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [['by', 'sodium', 'bicarbonate'], ['epithelial', 'sodium', 'channels'],
                       ['means', 'sodium', 'aluminate'], ['the', 'sodium', 'salt']]
