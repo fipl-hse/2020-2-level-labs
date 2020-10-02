@@ -25,7 +25,7 @@ if __name__ == '__main__':
     print('30 tokens without stop words: ', tokens[:30])
 
     freq_dict = calculate_frequencies(tokens)
-    print('frequency of 5 first words: ', freq_dict[tokens[:5]])
+    print('frequency of first words: ', freq_dict)
 
     top_list = get_top_n_words(freq_dict, 3)
     print('3 most popular words: ', top_list )
