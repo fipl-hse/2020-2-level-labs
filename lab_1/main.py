@@ -1,9 +1,8 @@
-import re
-import string
 """
 Lab 1
 A concordance extraction
 """
+import re
 
 
 def tokenize(text: str) -> list:
@@ -16,7 +15,6 @@ def tokenize(text: str) -> list:
     """
     if not isinstance(text, str) or not text:
         return []
-
     prepared_text = re.sub('[^a-zA-Z \n`]', '', text).lower()
     return prepared_text.split()
 
@@ -33,12 +31,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     if not isinstance(tokens, list) or not tokens or not isinstance(stop_words, list):
         return []
-
     result = []
     for word in tokens:
         if word not in stop_words:
-            result.append(word)
-            
+            result.append(word)     
     return result
 
 
@@ -50,18 +46,14 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-
-    if not(isinstance(tokens, list)) or len(tokens) == 0:
+    if not isinstance(tokens, list) or len(tokens) == 0:
         return {}
-    
-    if not(isinstance(tokens[0], str)):
-        return {}
-           
+    if not isinstance(tokens[0], str):
+        return {}     
     result = {}
     tokens_set = set(tokens)
     for word in tokens_set:
         result[word] = tokens.count(word)
-
     return result
 
 
@@ -77,23 +69,18 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return []
-
     if len(freq_dict) == 0 or top_n == 0:
         return []
-    
     freq_array = []
     for key, val in freq_dict.items():
         freq_array.append([val, key])
     freq_array.sort(reverse = True, key=lambda x: x[0])
-
     result = []
     for i in range(top_n):
         try:
             result.append(freq_array[i][1])
         except IndexError:
             break
-
-
     return result
 
 
@@ -116,39 +103,28 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     r_is_int = isinstance(right_context_size, int)
     l_is_int = isinstance(left_context_size, int)
-    
     l_is_bool = isinstance(left_context_size, bool)
     r_is_bool = isinstance(right_context_size, bool)
-
-    if not(r_is_int) and not(l_is_int):
+    if not r_is_int and not l_is_int:
         return []
-
-    if not(isinstance(tokens, list)) or not(isinstance(word, str)):
+    if not isinstance(tokens, list) or not isinstance(word, str):
         return []
-
     if l_is_bool and r_is_bool:
         return []
-    '''
-    if len(tokens) == 0 or not(isinstance(tokens[0], str)):
-        return []
-    '''
     if left_context_size <= 0 and right_context_size <= 0:
-        return []
-    
+        return []    
     if word not in tokens:
-        return []
-    
+        return []   
     if right_context_size < 0:
         right_context_size = 0
     if left_context_size < 0:
         left_context_size = 0
-
     result = []
-    A = []
+    arr = []
     for ind, val in enumerate(tokens):
         if val == word:
-            A.append(ind)
-    for ind in A:
+            arr.append(ind)
+    for ind in arr:
         result.append(tokens[ind - left_context_size:ind + right_context_size + 1])
     return result
 
@@ -170,24 +146,21 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     """
     if not isinstance(tokens, list) or not isinstance(word, str):
         return []
-
     left_check = isinstance(left_n, int)
     right_check = isinstance(right_n, int)
     if (not left_check) and (not right_check):
         return []
-
     result = []
     for i in range(len(tokens)):
         if tokens[i] == word:
-            A = []
+            arr = []
             if left_n == 0:
                 concordance_n.append([tokens[i + right_n]])
             elif right_n == 0:
                 concordance_n.append([tokens[i - left_n]])
             else:
                 concordance_n.append([tokens[i + right_n], tokens[i - left_n]])
-            result.append(A)
-
+            result.append(arr)
     return result
 
 
@@ -196,9 +169,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
-
+    with open(path_to_file, 'r', encoding='utf-8') as open_file:
+        data = open_file.read()
     return data
 
 
@@ -206,8 +178,8 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    with open(path_to_file, 'w', encoding='utf-8') as f:
-        print(content, file = f)
+    with open(path_to_file, 'w', encoding='utf-8') as open_file:
+        print(content, file = open_file)
         
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
