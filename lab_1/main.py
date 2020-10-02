@@ -2,13 +2,6 @@
 Lab 1
 A concordance extraction
 """
-import re
-
-
-
-
-
-
 
 
 def tokenize(text: str) -> list:
@@ -27,7 +20,6 @@ def tokenize(text: str) -> list:
     return [word for word in clear_text.split(' ') if word != '']
 
 
-
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     Removes stop words
@@ -44,7 +36,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
         return tokens
     return [token for token in tokens if token not in stop_words]
 
-    pass
+
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -65,7 +57,7 @@ def calculate_frequencies(tokens: list) -> dict:
                     freq_dict[i] = 1
     return freq_dict
 
-    pass
+
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -83,7 +75,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         sorted_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
         sorted_dict = sorted_dict[:top_n]
     return sorted_dict
-pass
+
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
@@ -102,24 +94,30 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if not isinstance(tokens, list) or not isinstance(word, str) or \
-            not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
-        return []
-    if isinstance(left_context_size, bool) or isinstance(right_context_size, bool) or \
-            (left_context_size < 1 and right_context_size < 1):
-        return []
-    concordance = []
-    for index, token in enumerate(tokens):
+    check_left = isinstance(left_context_size, int) \
+                 and left_context_size > 0 and not isinstance(left_context_size, bool)
+    check_right = isinstance(right_context_size, int) \
+                  and right_context_size > 0 and not isinstance(right_context_size, bool)
+    check_tokens = isinstance(tokens, list)
+    word_check = isinstance(word, str)
+    all_context = []
+
+    if check_tokens and word_check:
+        check = word in tokens
+    else:
+        return all_context
+
+    for ind, token in enumerate(tokens):
         if token == word:
-            left_size = index - left_context_size
-            start = left_size if left_size >= 0 else index
-            right_size = index + right_context_size + 1
-            stop = right_size if right_size < len(tokens) else index
-            concordance.append([tokens[i] for i in range(start, stop)])
+            if check_left and check_right and check:
+                all_context.append(tokens[ind - left_context_size:ind + right_context_size + 1])
+            elif check_left and check:
+                all_context.append(tokens[ind - left_context_size:ind + 1])
+            elif check_right and check:
+                all_context.append(tokens[ind:ind + right_context_size + 1])
 
-            return concordance
+    return all_context
 
-    pass
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -138,7 +136,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
 
-    pass
+
 
 
 
@@ -157,7 +155,7 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -177,6 +175,6 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    pass
+
 
 
