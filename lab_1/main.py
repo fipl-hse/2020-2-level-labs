@@ -28,9 +28,13 @@ def tokenize(text: str) -> list:
       --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
       """
     tokens = []
+    if not isinstance(text, str):
+        return []
+
     for token in text.lower().split():
         token = "".join([letter for letter in token if letter.isalpha()])
-        tokens.append(token)
+        if token != "":
+            tokens.append(token)
     return tokens
 
 
