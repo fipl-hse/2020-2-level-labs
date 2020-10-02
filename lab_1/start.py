@@ -3,14 +3,13 @@ Concordance implementation starter
 """
 
 import os
-import main 
+import main
 
 if __name__ == '__main__':
     #  here goes your logic: calling methods from concordance.py
     current_dir = os.path.dirname(os.path.abspath(__file__))
     data = main.read_from_file(os.path.join(current_dir, 'data.txt'))
     stop_words = main.read_from_file(os.path.join(current_dir, 'stop_words.txt'))
-    
     tokens = main.tokenize(data)
     print('tokenize', tokens[:10])
 
