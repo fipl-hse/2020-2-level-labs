@@ -20,7 +20,7 @@ if __name__ == '__main__':
     # токены без стоп слов
     tokens_clean = remove_stop_words(tokens, stop_words)
     # частоты токенов
-    freq_dict = calculate_frequencies(tokens_clean)
+    freq_dict = calculate_frequencies(tokens_clean[: 100])
     # слово для поиска
     top_words = get_top_n_words(freq_dict, 10)
     print("top 10 words {}".format(top_words))
