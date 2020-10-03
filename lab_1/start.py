@@ -32,6 +32,5 @@ if __name__ == '__main__':
           f"adjacent concordance: {result_adjacent_concordance}, "
           f"sorted concordance: {result_sorted_concordance}")
 
-    write_to_file(os.path.join(current_dir, 'concordance.txt'), result_normal_concordance)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert result_normal_concordance, 'Concordance not working'
