@@ -32,5 +32,6 @@ if __name__ == '__main__':
           f"adjacent concordance: {result_adjacent_concordance}, "
           f"sorted concordance: {result_sorted_concordance}")
 
+    RESULT = result_normal_concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert result_normal_concordance, 'Concordance not working'
+    assert RESULT, 'Concordance not working'
