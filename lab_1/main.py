@@ -15,11 +15,11 @@ def tokenize(text: str) -> list:
     if not isinstance(text, str):
         return []
 
-    digits = '0123456789'
+#    digits = '0123456789'
 
-    for i in range(len(text)):
-        if text[i] in digits:
-            return []
+#    for i in range(len(text)):
+#        if text[i] in digits:
+#            return []
 
     signs = ",;:%#№@$&*=+`\"\'.!?—(){}[]-><|"
     clean_text = ''
