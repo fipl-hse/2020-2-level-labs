@@ -19,27 +19,27 @@ if __name__ == '__main__':
     stop_words = stop_words.split()
     
     string = tokenize(data)[:10]
-    print("tokenize: ", string)
+    print("First ten tokens look like this: ", string)
     
     string_new = remove_stop_words(string, stop_words)
-    print("remove_stop_words: ", string_new)
+    print("The tokens are now clear of stop words: ", string_new)
 
     dictionary = calculate_frequencies(string_new)
-    print("calculate_frequencies: ", dictionary)
+    print("Frequencies of words are now counted: ", dictionary)
     
     top_n = get_top_n_words(dictionary, 3)
-    print("get_top_n_words: ", top_n)
+    print("Here are top n popular words: ", top_n)
 
-    concordance = get_concordance(string_new, 'presented', 3, 1)
-    print("get_concordance: ", concordance)    
+    concordance = get_concordance(string_new, 'sick', 1, 2)
+    print("Concordance for token 'sick' looks like this: ", concordance)
 
-    adjacent_words = get_adjacent_words(string, 'presented', 2, 1)
-    print("get_adjacent_words: ", adjacent_words) 
+    adjacent_words = get_adjacent_words(string, 'sick', 1, 2)
+    print("Here are the adjacent words: ", adjacent_words)
 
 #    write_to_file(r"D:\Прога\Python\report.txt", concordance)
 
     #  here goes your logic: calling methods from concordance.py
 
-    RESULT = None
+    RESULT = concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [(), ()], 'Concordance not working'
+    assert RESULT == [['feels', 'sick', 'worn', 'tired']], 'Concordance not working'
