@@ -57,9 +57,10 @@ def calculate_frequencies(tokens: list) -> dict:
 
     if not isinstance(tokens, list):
         return {}
-    for i in range(len(tokens)):
+
+    for c, token in enumerate(tokens):
         dictionary = {}
-        if isinstance(tokens[i], str):
+        if isinstance(tokens[c], str):
             for elem in tokens:
                 if elem in dictionary:
                     dictionary[elem] += 1
@@ -114,14 +115,14 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_context_size, int) or \
             not isinstance(right_context_size, int):
         return []
-    elif (isinstance(left_context_size, bool) and isinstance(right_context_size, bool)) or \
+    if (isinstance(left_context_size, bool) and isinstance(right_context_size, bool)) or \
             (left_context_size < 1 and right_context_size < 1):
         return []
-    elif left_context_size < 0 or right_context_size < 0 or tokens == [] or word == '':
+    if left_context_size < 0 or right_context_size < 0 or tokens == [] or word == '':
         return []
     for elem in tokens:
         if isinstance(elem, str):
-            for i in range(len(tokens)):
+            for i, token in enumerate(tokens):
                 if word == tokens[i]:
                     if i - left_context_size >= 0 and i + 1 + right_context_size <= len(tokens) - 1:
                         concordance.append(tokens[i - left_context_size:i + 1 + right_context_size])
@@ -153,14 +154,14 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     if not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_n, int) or \
             not isinstance(right_n, int):
         return []
-    elif (isinstance(left_n, bool) and isinstance(right_n, bool)) or (left_n < 1 and right_n < 1):
+    if (isinstance(left_n, bool) and isinstance(right_n, bool)) or (left_n < 1 and right_n < 1):
         return []
-    elif left_n < 0 or right_n < 0 or tokens == [] or word == '':
+    if left_n < 0 or right_n < 0 or tokens == [] or word == '':
         return []
 
     concordance = get_concordance(tokens, word, left_n, right_n)
     for element in concordance:
-        for i in range(len(element)):
+        for i, token in enumerate(element):
             if word == element[i]:
                 if i - left_n >= 0 and i + right_n <= len(element) - 1:
                     # если не выходим за границы
@@ -187,9 +188,8 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
                     # если выходим за границу справа и справа никакое слово не берём
                     adjacent_words.append([element[0]])
 
-    for i in range(len(adjacent_words)):
-        if word in adjacent_words[i]:
-            adjacent_words[i].remove(word)
+    [adjacent_words[i].remove(word) if word in adjacent_words[i] else adjacent_words for i, token in enumerate(
+        adjacent_words)]
 
     return adjacent_words
 
