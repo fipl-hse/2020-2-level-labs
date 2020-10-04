@@ -15,7 +15,6 @@ def tokenize(text: str) -> list:
     if not isinstance(text, str):
         return []
 
-
     signs = ",;:%#№@$&*=+`\"\'.!?—(){}[]-><|"
     clean_text = ''
     length = len(text)
@@ -130,9 +129,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                         concordance.append(tokens[:i + 1 + right_context_size])
                     elif i + 1 + right_context_size > len(tokens) - 1:
                         concordance.append(tokens[i - left_context_size:])
-                    else:
-                        concordance = []
-    return concordance
+        else:
+            concordance = []
+        return concordance
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -191,7 +190,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     for i in range(len(adjacent_words)):
         if word in adjacent_words[i]:
             adjacent_words[i].remove(word)
-            
+
     return adjacent_words
 
 

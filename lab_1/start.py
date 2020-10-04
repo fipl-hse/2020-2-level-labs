@@ -37,7 +37,6 @@ if __name__ == '__main__':
     adjacent_words = get_adjacent_words(string, 'sick', 1, 2)
     print("Here are the adjacent words: ", adjacent_words)
 
-
     #  here goes your logic: calling methods from concordance.py
 
     RESULT = concordance
