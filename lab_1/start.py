@@ -2,13 +2,13 @@
 Concordance implementation starter
 """
 
-from lab_1.main import read_from_file
-from lab_1.main import tokenize
-from lab_1.main import remove_stop_words
-from lab_1.main import calculate_frequencies
-from lab_1.main import get_top_n_words
-from lab_1.main import get_concordance
-from lab_1.main import get_adjacent_words
+from main import read_from_file
+from main import tokenize
+from main import remove_stop_words
+from main import calculate_frequencies
+from main import get_top_n_words
+from main import get_concordance
+from main import get_adjacent_words
 import os
 
 if __name__ == '__main__':
