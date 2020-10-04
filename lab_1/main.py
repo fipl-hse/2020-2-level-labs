@@ -49,7 +49,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
             return tokens
         else:
             for x in stop_words:
-                tokens.remove(x)
+                try:
+                    tokens.remove(x)
+                except Exception:
+                    pass
 
     return tokens
 
@@ -63,20 +66,20 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
 
-    dict = {}
+    result_dict = {}
 
     if not isinstance(tokens, list):
-        return dict
+        return result_dict
 
     for i in tokens:
         if not isinstance(i, str):
             return {}
-        if dict.get(i):
-            dict[i] += 1
+        if result_dict.get(i):
+            result_dict[i] += 1
         else:
-            dict[i] = 1
+            result_dict[i] = 1
 
-    return dict
+    return result_dict
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -96,7 +99,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     max_list = list(freq_dict.items())
     max_list.sort(key=lambda x: -x[1])
     result = []
-    for i in range(top_n):
+    for i in range(min(len(max_list), top_n)):
         result.append(max_list[i][0])
     return result
 
