@@ -133,24 +133,16 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
             not isinstance(right_n, int) or isinstance(left_n, bool) or isinstance(right_n, bool) or \
             right_n < 0 or left_n < 0 or word not in tokens:
         return []
-
-    word_index = list()
-    request = list()
-
-    for i in range(len(tokens)):
-        if word in tokens[i]:
-            word_index.append(i)
-    for index in word_index:
-        if left_n > len(tokens[:index]):
-            request.append([tokens[index - 1]])
-        elif right_n > len(tokens[index:]):
-            request.append([tokens[index + right_n]])
+    contexts = get_concordance(tokens, word, left_n, right_n)
+    adjacent_words = []
+    for context in contexts:
+        if not left_n:
+            adjacent_words.append([context[-1]])
+        elif not right_n:
+            adjacent_words.append([context[0]])
         else:
-            need = [tokens[index - left_n], tokens[index + right_n]]
-            if word in need:
-                need.remove(word)
-            request.append(need)
-    return request
+            adjacent_words.append([context[0], context[-1]])
+    return adjacent_words
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -158,6 +150,9 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
+    if '/' in path_to_file:
+        path_to_file = path_to_file[path_to_file.rfind('/')+1:]
+
     with open(path_to_file, 'r', encoding='utf-8') as fs:
         data = fs.read()
 
