@@ -14,14 +14,16 @@ def tokenize(text: str) -> list:
     """
     if not isinstance(text, str):
         return []
+
     digits = '0123456789'
-    length = len(text)
-    for i in range(length):
+
+    for i in range(len(text)):
         if text[i] in digits:
             return []
 
     signs = ",;:%#№@$&*=+`\"\'.!?—(){}[]-><|"
     clean_text = ''
+    length = len(text)
     for i in range(length):  # цикл по длине строки
         if text[i] in signs:  # если в введенной строке нашли знак препинания
             clean_text += ''
@@ -47,7 +49,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
         return tokens
 
     else:  # если всё корректно
-        #        stop_words = stop_words.split()
+        # stop_words = stop_words.split()
         tokens = [token for token in tokens if token not in stop_words]
         return tokens
 
@@ -63,14 +65,17 @@ def calculate_frequencies(tokens: list) -> dict:
 
     if not isinstance(tokens, list):
         return {}
-    else:
-        dictionary = {}
-        for elem in tokens:
-            if elem in dictionary:
-                dictionary[elem] += 1
-            else:
-                dictionary[elem] = 1
-        return dictionary
+    for i in range(len(tokens)):
+        if isinstance(tokens[i], str):
+            dictionary = {}
+            for elem in tokens:
+                if elem in dictionary:
+                    dictionary[elem] += 1
+                else:
+                    dictionary[elem] = 1
+            return dictionary
+        else:
+            return {}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -114,24 +119,31 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-
-    if not isinstance(tokens, list) or not isinstance(word, str) or (
-            left_context_size == 0 and right_context_size == 0):
-        return []
-
     concordance = []
 
-    for i in range(len(tokens)):
-        if word == tokens[i]:
-            if i - left_context_size > 0 and i + 1 + right_context_size < len(tokens) - 1:
-                concordance.append(tokens[i - left_context_size:i + 1 + right_context_size])
-            elif i - left_context_size < 0:
-                concordance.append(tokens[i:i + 1 + right_context_size])
-            elif i + 1 + right_context_size > len(tokens) - 1:
-                concordance.append(tokens[i - left_context_size:i + 1])
+    if not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_context_size,
+                                                                                   int) or not isinstance(
+            right_context_size, int) \
+            or (isinstance(left_context_size, bool) and isinstance(right_context_size, bool)) or (
+            left_context_size < 1 and right_context_size < 1) \
+            or left_context_size < 0 or right_context_size < 0 or tokens == [] or word == '':
+        return []
+    else:
+        for elem in tokens:
+            if isinstance(elem, str):
+                for i in range(len(tokens)):
+                    if word == tokens[i]:
+                        if i - left_context_size >= 0 and i + 1 + right_context_size <= len(tokens) - 1:
+                            concordance.append(tokens[i - left_context_size:i + 1 + right_context_size])
+                        elif i - left_context_size < 0:
+                            concordance.append(tokens[:i + 1 + right_context_size])
+                        elif i + 1 + right_context_size > len(tokens) - 1:
+                            concordance.append(tokens[i - left_context_size:])
+                        else:
+                            concordance = []
+                return concordance
             else:
                 return []
-    return concordance
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -149,32 +161,42 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    i = 0
-    k = 0
-    for i in range(len(tokens)):  # проверка строки на корректность
-        if 48 <= ord(' '.join(tokens)[i]) <= 57 or (128 <= ord(' '.join(tokens)[i]) <= 175 or 224 <= ord(
-                ' '.join(tokens)[i]) <= 243):
-            k += 1
-            break
-    m = 0
-    for i in range(len(word)):  # проверка слова на корректность
-        if 48 <= ord(word[i]) <= 57 or (128 <= ord(word[i]) <= 175 or 224 <= ord(word[i]) <= 243):
-            m += 1
-            break
-
     adjacent_words = []
-    if k != 0 or m != 0 or (left_n == 0 and right_n == 0) or (
-            i - left_n < 0 and i + 1 + right_n > len(tokens) - 1):  # если некорректные токены
+    if not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_n, int) or not isinstance(
+            right_n, int) \
+            or (isinstance(left_n, bool) and isinstance(right_n, bool)) or (
+            left_n < 1 and right_n < 1) or left_n < 0 or right_n < 0 or tokens == [] or word == '':
         return []
     else:
-        for i in range(len(tokens)):
-            if word == tokens[i]:
-                if i - left_n > 0 and i + 1 + right_n < len(tokens) - 1:  # если не выходим за границы
-                    adjacent_words.append([tokens[i - left_n], tokens[i + right_n]])
-                elif i - left_n < 0:
-                    adjacent_words.append(tokens[i + right_n])
-                elif i + 1 + right_n > len(tokens) - 1:
-                    adjacent_words.append(tokens[i - left_n])
+        concordance = get_concordance(tokens, word, left_n, right_n)
+        for element in concordance:
+            for i in range(len(element)):
+                if word == element[i]:
+                    if i - left_n >= 0 and i + right_n <= len(element) - 1:  # если не выходим за границы
+                        adjacent_words.append([element[i - left_n], element[i + right_n]])
+                    elif i - left_n < 0 and i + right_n > len(element) - 1:  # если выходим за границы с обеих сторон
+                        adjacent_words.append([element[0], element[-1]])
+                    elif i - left_n < 0 and i + right_n <= len(
+                            element) - 1 and right_n != 0:  # если выходим за границу слева, но не выходим справа
+                        adjacent_words.append([element[0], element[i + right_n]])
+                    elif left_n == 0 and i + right_n <= len(
+                            element) - 1:  # если не выходим за границу справа и слева никакое слово не берём
+                        adjacent_words.append([element[i + right_n]])
+                    elif left_n == 0 and i + right_n > len(
+                            element) - 1:  # если выходим за границу справа и слева ничего не берём
+                        adjacent_words.append([element[-1]])
+                    elif i + right_n > len(
+                            element) - 1 and i - left_n > 0 and left_n != 0:  # если выходим за границу справа, но не выходим слева
+                        adjacent_words.append([element[i - left_n], element[-1]])
+                    elif right_n == 0 and i - left_n >= 0:  # если не выходим за границу слева и справа никакое слово не берём
+                        adjacent_words.append([element[i - left_n]])
+                    elif right_n == 0 and i - left_n < 0:  # если выходим за границу справа и справа никакое слово не берём
+                        adjacent_words.append([element[0]])
+
+    for i in range(len(adjacent_words)):
+        if word in adjacent_words[i]:
+            adjacent_words[i].remove(word)
+
     return adjacent_words
 
 
@@ -192,10 +214,11 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
+    new_list = ''
     with open(path_to_file, 'w') as report:
-        for i in range(len(content)):
-            report.write(' '.join(content[i]))
-            report.write('\n')
+        for elem in content:
+            new_list = new_list + elem + '\n'
+        report.write(new_list)
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
