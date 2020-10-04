@@ -15,11 +15,6 @@ def tokenize(text: str) -> list:
     if not isinstance(text, str):
         return []
 
-#    digits = '0123456789'
-
-#    for i in range(len(text)):
-#        if text[i] in digits:
-#            return []
 
     signs = ",;:%#№@$&*=+`\"\'.!?—(){}[]-><|"
     clean_text = ''
@@ -48,10 +43,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     if not isinstance(stop_words, list):
         return tokens
 
-    else:  # если всё корректно
-        # stop_words = stop_words.split()
-        tokens = [token for token in tokens if token not in stop_words]
-        return tokens
+    tokens = [token for token in tokens if token not in stop_words]
+    return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -66,16 +59,14 @@ def calculate_frequencies(tokens: list) -> dict:
     if not isinstance(tokens, list):
         return {}
     for i in range(len(tokens)):
+        dictionary = {}
         if isinstance(tokens[i], str):
-            dictionary = {}
             for elem in tokens:
                 if elem in dictionary:
                     dictionary[elem] += 1
                 else:
                     dictionary[elem] = 1
-            return dictionary
-        else:
-            return {}
+        return dictionary
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -121,29 +112,27 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     """
     concordance = []
 
-    if not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_context_size,
-                                                                                   int) or not isinstance(
-            right_context_size, int) \
-            or (isinstance(left_context_size, bool) and isinstance(right_context_size, bool)) or (
-            left_context_size < 1 and right_context_size < 1) \
-            or left_context_size < 0 or right_context_size < 0 or tokens == [] or word == '':
+    if not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_context_size, int) or \
+            not isinstance(right_context_size, int):
         return []
-    else:
-        for elem in tokens:
-            if isinstance(elem, str):
-                for i in range(len(tokens)):
-                    if word == tokens[i]:
-                        if i - left_context_size >= 0 and i + 1 + right_context_size <= len(tokens) - 1:
-                            concordance.append(tokens[i - left_context_size:i + 1 + right_context_size])
-                        elif i - left_context_size < 0:
-                            concordance.append(tokens[:i + 1 + right_context_size])
-                        elif i + 1 + right_context_size > len(tokens) - 1:
-                            concordance.append(tokens[i - left_context_size:])
-                        else:
-                            concordance = []
-                return concordance
-            else:
-                return []
+    elif (isinstance(left_context_size, bool) and isinstance(right_context_size, bool)) or \
+            (left_context_size < 1 and right_context_size < 1):
+        return []
+    elif left_context_size < 0 or right_context_size < 0 or tokens == [] or word == '':
+        return []
+    for elem in tokens:
+        if isinstance(elem, str):
+            for i in range(len(tokens)):
+                if word == tokens[i]:
+                    if i - left_context_size >= 0 and i + 1 + right_context_size <= len(tokens) - 1:
+                        concordance.append(tokens[i - left_context_size:i + 1 + right_context_size])
+                    elif i - left_context_size < 0:
+                        concordance.append(tokens[:i + 1 + right_context_size])
+                    elif i + 1 + right_context_size > len(tokens) - 1:
+                        concordance.append(tokens[i - left_context_size:])
+                    else:
+                        concordance = []
+    return concordance
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -162,41 +151,47 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     adjacent_words = []
-    if not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_n, int) or not isinstance(
-            right_n, int) \
-            or (isinstance(left_n, bool) and isinstance(right_n, bool)) or (
-            left_n < 1 and right_n < 1) or left_n < 0 or right_n < 0 or tokens == [] or word == '':
+    if not isinstance(tokens, list) or not isinstance(word, str) or not isinstance(left_n, int) or \
+            not isinstance(right_n, int):
         return []
-    else:
-        concordance = get_concordance(tokens, word, left_n, right_n)
-        for element in concordance:
-            for i in range(len(element)):
-                if word == element[i]:
-                    if i - left_n >= 0 and i + right_n <= len(element) - 1:  # если не выходим за границы
-                        adjacent_words.append([element[i - left_n], element[i + right_n]])
-                    elif i - left_n < 0 and i + right_n > len(element) - 1:  # если выходим за границы с обеих сторон
-                        adjacent_words.append([element[0], element[-1]])
-                    elif i - left_n < 0 and i + right_n <= len(
-                            element) - 1 and right_n != 0:  # если выходим за границу слева, но не выходим справа
-                        adjacent_words.append([element[0], element[i + right_n]])
-                    elif left_n == 0 and i + right_n <= len(
-                            element) - 1:  # если не выходим за границу справа и слева никакое слово не берём
-                        adjacent_words.append([element[i + right_n]])
-                    elif left_n == 0 and i + right_n > len(
-                            element) - 1:  # если выходим за границу справа и слева ничего не берём
-                        adjacent_words.append([element[-1]])
-                    elif i + right_n > len(
-                            element) - 1 and i - left_n > 0 and left_n != 0:  # если выходим за границу справа, но не выходим слева
-                        adjacent_words.append([element[i - left_n], element[-1]])
-                    elif right_n == 0 and i - left_n >= 0:  # если не выходим за границу слева и справа никакое слово не берём
-                        adjacent_words.append([element[i - left_n]])
-                    elif right_n == 0 and i - left_n < 0:  # если выходим за границу справа и справа никакое слово не берём
-                        adjacent_words.append([element[0]])
+    elif (isinstance(left_n, bool) and isinstance(right_n, bool)) or (left_n < 1 and right_n < 1):
+        return []
+    elif left_n < 0 or right_n < 0 or tokens == [] or word == '':
+        return []
+
+    concordance = get_concordance(tokens, word, left_n, right_n)
+    for element in concordance:
+        for i in range(len(element)):
+            if word == element[i]:
+                if i - left_n >= 0 and i + right_n <= len(element) - 1:
+                    # если не выходим за границы
+                    adjacent_words.append([element[i - left_n], element[i + right_n]])
+                elif i - left_n < 0 and i + right_n > len(element) - 1:
+                    # если выходим за границы с обеих сторон
+                    adjacent_words.append([element[0], element[-1]])
+                elif i - left_n < 0 and i + right_n <= len(element) - 1 and right_n != 0:
+                    # если выходим за границу слева, но не выходим справа
+                    adjacent_words.append([element[0], element[i + right_n]])
+                elif left_n == 0 and i + right_n <= len(element) - 1:
+                    # если не выходим за границу справа и слева никакое слово не берём
+                    adjacent_words.append([element[i + right_n]])
+                elif left_n == 0 and i + right_n > len(element) - 1:
+                    # если выходим за границу справа и слева ничего не берём
+                    adjacent_words.append([element[-1]])
+                elif i + right_n > len(element) - 1 and i - left_n > 0 and left_n != 0:
+                    # если выходим за границу справа, но не выходим слева
+                    adjacent_words.append([element[i - left_n], element[-1]])
+                elif right_n == 0 and i - left_n >= 0:
+                    # если не выходим за границу слева и справа никакое слово не берём
+                    adjacent_words.append([element[i - left_n]])
+                elif right_n == 0 and i - left_n < 0:
+                    # если выходим за границу справа и справа никакое слово не берём
+                    adjacent_words.append([element[0]])
 
     for i in range(len(adjacent_words)):
         if word in adjacent_words[i]:
             adjacent_words[i].remove(word)
-
+            
     return adjacent_words
 
 
