@@ -11,20 +11,18 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    if not isinstance(text, str):
-        return False
-
-    else:
+    if isinstance(text, str):
         text1 = text.lower().split()
         new_text = []
         for word in text1:
             new_word = []
             for element in word:
+                new_word1 = ''
                 if element.isalpha():
                     new_word.append(element)
                     new_word1 = ''.join(new_word)
             new_text.append(new_word1)
-    return new_text
+        return new_text
 
 
 
@@ -38,13 +36,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-
-    empty = []
-    for constituent in tokens:
-        for component in stop_words:
-            if component in tokens:
-                tokens.remove(component)
-    return tokens
+    if isinstance(tokens, list) and isinstance(stop_words, list):
+        empty = []
+        for constituent in tokens:
+            for component in stop_words:
+                if component in tokens:
+                    tokens.remove(component)
+        return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -55,13 +53,14 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    dictionary = {}
-    frequency = 0
-    for element in tokens:
-        frequency = tokens.count(element)
-        dictionary[element] = frequency
+    if isinstance(tokens, list):
+        dictionary = {}
+        frequency = 0
+        for element in tokens:
+            frequency = tokens.count(element)
+            dictionary[element] = frequency
 
-    return dictionary
+        return dictionary
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -74,28 +73,29 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    diction = {}
-    values_keys = list(freq_dict.items())
-    for key_value in values_keys:
-        if key_value[1] in diction.keys():
-            diction[key_value[1]].append(key_value[0])
-        else:
-            diction[key_value[1]] = [key_value[0]]
+    if isinstance(freq_dict, dict) and isinstance(top_n, int):
+        diction = {}
+        values_keys = list(freq_dict.items())
+        for key_value in values_keys:
+            if key_value[1] in diction.keys():
+                diction[key_value[1]].append(key_value[0])
+            else:
+                diction[key_value[1]] = [key_value[0]]
 
-    frequent = list(diction.keys())
-    frequent.sort(reverse = True)
-    collection = []
-    for number in frequent:
-        collection.append(diction[number])
+        frequent = list(diction.keys())
+        frequent.sort(reverse = True)
+        collection = []
+        for number in frequent:
+            collection.append(diction[number])
 
-    finished = []
-    for element in collection:
-        if len(element) == 1:
-            finished.append(element[0])
-        else:
-            finished.extend(element)
+        finished = []
+        for element in collection:
+            if len(element) == 1:
+                finished.append(element[0])
+            else:
+                finished.extend(element)
 
-    return finished[:top_n + 1]
+        return finished[:top_n + 1]
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
