@@ -124,3 +124,15 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         if element == word:
             contexts.append(tokens[index-left_context_size:index+right_context_size+1])
     return contexts
+
+def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
+    
+    
+    
+def read_from_file(path_to_file: str) -> str:
+    
+    
+def write_to_file(path_to_file: str, content: list):
+    
+    
+def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
