@@ -100,8 +100,7 @@ def write_to_file(path_to_file: str, content: list):
         for text in content:
             fs.write(" ".join(text).join("\n"))
 
-    def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
-
+def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
     contexts = get_concordance(tokens, word, left_context_size, right_context_size)
     if not isinstance(left_sort, bool):
         return []
@@ -109,7 +108,6 @@ def write_to_file(path_to_file: str, content: list):
         return []
     if (left_sort and left_context_size < 0) or (not left_sort and right_context_size < 0):
         return []
-
     if left_sort:
         return sorted(contexts)
 
