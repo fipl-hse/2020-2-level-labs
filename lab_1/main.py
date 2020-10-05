@@ -66,9 +66,13 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    pass
+    if not isinstance(freq_dict, dict) and not isinstance(top_n, int):
+        return []
+    top_n_list = sorted(freq_dict, key=freq_dict.get, reverse=True)
+    print(top_n_list[:top_n])
 
 
+# 5
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
     Gets a concordance of a word
@@ -89,6 +93,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     pass
 
 
+# 6
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
     Gets adjacent words from the left and right context
@@ -107,6 +112,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     pass
 
 
+# 7
 def read_from_file(path_to_file: str) -> str:
     """
     Opens the file and reads its content
@@ -125,6 +131,7 @@ def write_to_file(path_to_file: str, content: list):
     pass
 
 
+# 8
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
     """
     Gets a concordance of a word and sorts it by either left or right context
