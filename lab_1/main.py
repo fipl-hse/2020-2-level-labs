@@ -2,49 +2,42 @@
 Lab 1
 A concordance extraction
 """
-
-
-def read_from_file(path_to_file: str) -> str:
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
-
-    return data
+import re
 
 
 # 1
 def tokenize(text: str) -> list:
-    tokens = []
-    blank = []
-    if type(text) == str:
-        text = text.lower()
-        for smb in text:
-            if smb in '1234567890-=!@#$%^&*()_+`~[]\\{}|;\':",./<>?':
-                text = text.replace(smb, '')
-        text = text.split()
-        tokens.extend(text)
-        print(tokens)
-    else:
-        print(blank)
-
-
-tokenize('How are you, man?')
+    """
+    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
+    :param text: the initial text
+    :return: a list of lowercased tokens without punctuation
+    e.g. text = 'The weather is sunny, the man is happy.'
+    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+    """
+    if not isinstance(text, str):
+        return []
+    tokens = re.sub(r'[^\w\s]', '', text).lower()
+    return tokens.split()
 
 
 # 2
 def remove_stop_words(tokens: list, stop_words: list) -> list:
-    clean_tokens = []
-    stop_words = ['the', 'is', 'are']
-    if type(tokens) == list:
-        for i in tokens:
-            if i in stop_words:
-                tokens.remove(i)
-                clean_tokens.extend(tokens)
-        print(clean_tokens)
+    """
+    Removes stop words
+    :param tokens: a list of tokens
+    :param stop_words: a list of stop words
+    :return: a list of tokens without stop words
+    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
+    stop_words = ['the', 'is']
+    --> ['weather', 'sunny', 'man', 'happy']
+    """
+    if not isinstance(tokens, list) and not isinstance(stop_words, list):
+        return []
+    cleaned_tokens = [word for word in tokens if word not in stop_words]
+    return cleaned_tokens
 
 
-remove_stop_words('How are you, man', stop_words=['are'])
-
-
+# 3
 def calculate_frequencies(tokens: list) -> dict:
     """
     Calculates frequencies of given tokens
@@ -53,9 +46,16 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    pass
+    if isinstance(tokens, list) and tokens:
+        for token in tokens:
+            if not isinstance(token, str):
+                return {}
+        return {token: tokens.count(token) for token in tokens}
+
+    return {}
 
 
+# 4
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     Returns the most common words
