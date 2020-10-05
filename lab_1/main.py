@@ -14,15 +14,18 @@ def tokenize(text: str) -> list:
     if isinstance(text, str):
         text1 = text.lower().split()
         new_text = []
+
         for word in text1:
             new_word = []
             for element in word:
                 new_word1 = ''
                 if element.isalpha():
                     new_word.append(element)
-                    new_word1 = ''.join(new_word)
+            new_word1 = ''.join(new_word)
             new_text.append(new_word1)
         return new_text
+
+    return []
 
 
 
@@ -44,6 +47,8 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
                     tokens.remove(component)
         return tokens
 
+    return []
+
 
 def calculate_frequencies(tokens: list) -> dict:
     """
@@ -53,14 +58,16 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
+
+    dictionary = {}
+    frequency = 0
     if isinstance(tokens, list):
-        dictionary = {}
-        frequency = 0
         for element in tokens:
             frequency = tokens.count(element)
             dictionary[element] = frequency
-
         return dictionary
+
+    return {}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -97,6 +104,8 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
 
         return finished[:top_n + 1]
 
+    return []
+
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
@@ -115,7 +124,23 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    if isinstance(tokens, list) and isinstance(word, str) \
+            and isinstance(left_context_size, int) \
+            and isinstance(right_context_size, int):
+
+        if left_context_size <= 0 and right_context_size <= 0:
+            return []
+
+        concord = []
+        concordance = []
+
+        for index, component in enumerate(tokens):
+            if component == word:
+                concord = tokens[index - left_context_size: index + right_context_size + 1]
+                concordance.append(concord)
+        return concordance
+
+    return []
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
