@@ -131,10 +131,14 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     В данной функции ОБЯЗАТЕЛЬНО использовать функцию get_concordance (см. Шаг 5).
     """
+    
     if not isinstance(tokens, list) or not isinstance(word, str):
         return []
 
     if not isinstance(left_n, int) and not isinstance(right_n, int):
+        return []
+    
+    if left_n < 0 or right_n < 0:
         return []
 
     adjacent_words = []
