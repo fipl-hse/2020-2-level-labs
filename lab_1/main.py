@@ -9,8 +9,8 @@ def tokenize(text: str) -> list:
         for character in token:
             if character.isalpha():
                 word += character
-        if word:
-            clean_tokens.append(word)
+             if word:
+                 clean_tokens.append(word)
     return clean_tokens
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -85,9 +85,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
 
 def read_from_file(path_to_file: str) -> str:
 
-    if '/' in path_to_file:
-        path_to_file = path_to_file[path_to_file.rfind('/')+1:]
-
     with open(path_to_file, 'r', encoding='utf-8') as fs:
         data = fs.read()
 
@@ -95,7 +92,6 @@ def read_from_file(path_to_file: str) -> str:
 
 
 def write_to_file(path_to_file: str, content: list):
-
     with open(path_to_file, 'w', encoding='utf-8') as fs:
         for text in content:
             fs.write(" ".join(text).join("\n"))
@@ -115,3 +111,65 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     right_contexts = [(context[word_index + 1:], context[:word_index + 1]) for context in contexts]
     right_contexts_sorted = sorted(right_contexts)
     return [sorted_right_context[1] + sorted_right_context[0] for sorted_right_context in right_contexts_sorted]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
