@@ -2,8 +2,6 @@
 Longest common subsequence problem
 """
 
-import re
-
 
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
@@ -37,7 +35,6 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :return: a length of the longest common subsequence
     """
     pass
-# 4 ------------
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
@@ -73,23 +70,11 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     pass
-# 6 ------------
 
 
 def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
     """
     Finds words not present in lcs.
-    These words will be later framed into | |.
-    It returns indexes – where these frames (| |) should be put.
-    An index means BEFORE which token a frame should be put
-    e.g.
-    first_sentence = ['He',  'likes', 'to',  'swim']
-    second_sentence = ['She',  'likes', 'to',  'sing']
-    first_sentence = ['He',  '|', 'likes', 'to', '|',  'swim'], as an illustration
-    second_sentence = ['She',  '|', 'likes', 'to', '|',  'sing'], as an illustration
-    --->
-    ((1, 3), (1, 3)),
-    where the first pair are indexes of future '|' for the first sentence, the second pair – for the second
     :param original_sentence_tokens: a tuple of tokens
     :param suspicious_sentence_tokens: a tuple of tokens
     :param lcs: a longest common subsequence
@@ -100,7 +85,8 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
     """
-    Accumulates the main statistics for pairs of sentences in texts: lcs_length, plagiarism_score and indexes of '|'
+    Accumulates the main statistics for pairs of sentences in texts:
+            lcs_length, plagiarism_score and indexes of differences
     :param original_text_tokens: a tuple of sentences with tokens
     :param suspicious_text_tokens: a tuple of sentences with tokens
     :return: a dictionary of main statistics for each pair of sentences
@@ -122,10 +108,9 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :return: a report
     """
     pass
-# 8 ------------
 
 
-def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_tokens: list) -> int: # previous + this = 10
+def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_tokens: list) -> int:
     """
     Finds a length of the longest common subsequence using the Hirschberg's algorithm
     At the same time, if the first and last tokens coincide,
@@ -135,4 +120,3 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
     :return: a length of the longest common subsequence
     """
     pass
-# 10 ------------
