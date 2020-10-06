@@ -17,7 +17,6 @@ def tokenize(text: str) -> list:
         tokens = re.sub(r'[^\w\s]', '', text.lower())
         tokens = tokens.split()
         return tokens
-    
     return []
 
 
@@ -35,9 +34,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
         if isinstance(stop_words, list):
             tokens = [token for token in tokens if token not in stop_words]
             return tokens
-        else:
-            return tokens
-    
+        return tokens
     return []
 
 
@@ -57,7 +54,6 @@ def calculate_frequencies(tokens: list) -> dict:
             else:
                 return {}
         return freq_dict
-    
     return {}
 
 
@@ -76,7 +72,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         sorted_dict = sorted(freq_dict, key=freq_dict.get, reverse=True)
         top_n_words = sorted_dict[:top_n]
         return top_n_words
-    
     return []
 
 
@@ -131,13 +126,11 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     В данной функции ОБЯЗАТЕЛЬНО использовать функцию get_concordance (см. Шаг 5).
     """
-    
     if not isinstance(tokens, list) or not isinstance(word, str):
         return []
 
     if type(left_n) != int and type (right_n) != int:
         return []
-    
     if left_n < 0 or right_n < 0:
         return []
 
