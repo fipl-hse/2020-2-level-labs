@@ -100,7 +100,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if not isinstance(tokens, list) or not isinstance(word, str):
         return []
 
-    if not isinstance(left_context_size, int) and not isinstance(right_context_size, int):
+    if type(left_context_size) != int and type(right_context_size) != int:
         return []
 
     concordance = []
@@ -135,7 +135,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     if not isinstance(tokens, list) or not isinstance(word, str):
         return []
 
-    if not isinstance(left_n, int) and not isinstance(right_n, int):
+    if type(left_n) != int and type (right_n) != int::
         return []
     
     if left_n < 0 or right_n < 0:
