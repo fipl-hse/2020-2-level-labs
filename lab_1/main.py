@@ -58,15 +58,15 @@ def calculate_frequencies(tokens: list) -> dict:
     if not isinstance(tokens, list):
         return {}
 
-    for c, token in enumerate(tokens):
-        dictionary = {}
-        if isinstance(tokens[c], str):
-            for elem in tokens:
-                if elem in dictionary:
-                    dictionary[elem] += 1
-                else:
-                    dictionary[elem] = 1
-        return dictionary
+
+    dictionary = {}
+    for token in tokens:
+        if isinstance(token, str):
+            if token in dictionary:
+                dictionary[token] += 1
+            else:
+                dictionary[token] = 1
+    return dictionary
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -123,7 +123,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     for elem in tokens:
         if isinstance(elem, str):
             for i, token in enumerate(tokens):
-                if word == tokens[i]:
+                if word == token:
                     if i - left_context_size >= 0 and i + 1 + right_context_size <= len(tokens) - 1:
                         concordance.append(tokens[i - left_context_size:i + 1 + right_context_size])
                     elif i - left_context_size < 0:
@@ -161,36 +161,12 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
 
     concordance = get_concordance(tokens, word, left_n, right_n)
     for element in concordance:
-        for i, token in enumerate(element):
-            if word == element[i]:
-                if i - left_n >= 0 and i + right_n <= len(element) - 1:
-                    # если не выходим за границы
-                    adjacent_words.append([element[i - left_n], element[i + right_n]])
-                elif i - left_n < 0 and i + right_n > len(element) - 1:
-                    # если выходим за границы с обеих сторон
-                    adjacent_words.append([element[0], element[-1]])
-                elif i - left_n < 0 and i + right_n <= len(element) - 1 and right_n != 0:
-                    # если выходим за границу слева, но не выходим справа
-                    adjacent_words.append([element[0], element[i + right_n]])
-                elif left_n == 0 and i + right_n <= len(element) - 1:
-                    # если не выходим за границу справа и слева никакое слово не берём
-                    adjacent_words.append([element[i + right_n]])
-                elif left_n == 0 and i + right_n > len(element) - 1:
-                    # если выходим за границу справа и слева ничего не берём
-                    adjacent_words.append([element[-1]])
-                elif i + right_n > len(element) - 1 and i - left_n > 0 and left_n != 0:
-                    # если выходим за границу справа, но не выходим слева
-                    adjacent_words.append([element[i - left_n], element[-1]])
-                elif right_n == 0 and i - left_n >= 0:
-                    # если не выходим за границу слева и справа никакое слово не берём
-                    adjacent_words.append([element[i - left_n]])
-                elif right_n == 0 and i - left_n < 0:
-                    # если выходим за границу справа и справа никакое слово не берём
-                    adjacent_words.append([element[0]])
-
-    [adjacent_words[i].remove(word) if word in adjacent_words[i] else adjacent_words for i, token in enumerate(
-        adjacent_words)]
-
+        if word != element[0] and word != element[-1]:
+            adjacent_words.append([element[0], element[-1]])
+        elif word == element[0]:
+            adjacent_words.append([element[-1]])
+        else:
+            adjacent_words.append([element[0]])
     return adjacent_words
 
 
