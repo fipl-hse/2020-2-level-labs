@@ -58,7 +58,6 @@ def calculate_frequencies(tokens: list) -> dict:
     if not isinstance(tokens, list):
         return {}
 
-
     dictionary = {}
     for token in tokens:
         if isinstance(token, str):
@@ -120,19 +119,21 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         return []
     if left_context_size < 0 or right_context_size < 0 or tokens == [] or word == '':
         return []
-    for elem in tokens:
-        if isinstance(elem, str):
-            for i, token in enumerate(tokens):
-                if word == token:
-                    if i - left_context_size >= 0 and i + 1 + right_context_size <= len(tokens) - 1:
-                        concordance.append(tokens[i - left_context_size:i + 1 + right_context_size])
-                    elif i - left_context_size < 0:
-                        concordance.append(tokens[:i + 1 + right_context_size])
-                    elif i + 1 + right_context_size > len(tokens) - 1:
-                        concordance.append(tokens[i - left_context_size:])
+
+    for i, token in enumerate(tokens):
+        if isinstance(token, str):
+            if word == token:
+                if i - left_context_size >= 0 and i + 1 + right_context_size <= len(tokens) - 1:
+                    concordance.append(tokens[i - left_context_size:i + 1 + right_context_size])
+                elif i - left_context_size < 0:
+                    concordance.append(tokens[:i + 1 + right_context_size])
+                elif i + 1 + right_context_size > len(tokens) - 1:
+                    concordance.append(tokens[i - left_context_size:])
+                else:
+                    concordance = []
         else:
             concordance = []
-        return concordance
+    return concordance
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -161,7 +162,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
 
     concordance = get_concordance(tokens, word, left_n, right_n)
     for element in concordance:
-        if word != element[0] and word != element[-1]:
+        if word not in ([element[0], element[-1]]):
             adjacent_words.append([element[0], element[-1]])
         elif word == element[0]:
             adjacent_words.append([element[-1]])
