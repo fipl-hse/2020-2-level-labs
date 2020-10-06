@@ -40,7 +40,4 @@ if __name__ == '__main__':
 
     RESULT = family_sorted_concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert [['woman', 'family', 'assist', 'a'], ['pythoninae', 'family', 'boidae', 'boas'],
-            ['recommendation', 'family', 'cautioned', 'heisenberg'],
-            ['reverted', 'family', 'childless', 'children']], 'Concordance not working'
-
+    assert RESULT, 'Concordance not working'
