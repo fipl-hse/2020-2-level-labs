@@ -96,7 +96,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                 not isinstance(left_context_size, bool), isinstance(right_context_size, int),
                 not isinstance(right_context_size, bool)]
 
-    if all(checking) == False:
+    if not all(checking):
         return []
 
     concordance = []
@@ -127,12 +127,11 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     В данной функции ОБЯЗАТЕЛЬНО использовать функцию get_concordance (см. Шаг 5).
     """
-    if not isinstance(tokens, list) or not isinstance(word, str):
-        return []
-
-    if type(left_n) != int and type (right_n) != int:
-        return []
-    if left_n < 0 or right_n < 0:
+    checking = [isinstance(tokens, list), isinstance(word, str), isinstance(left_n, int),
+                not isinstance(left_n, bool), isinstance(right_n, int), 
+                not isinstance(right_n, bool)]
+    
+    if not all(checking):
         return []
 
     adjacent_words = []
