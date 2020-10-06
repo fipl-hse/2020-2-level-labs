@@ -135,7 +135,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     if not isinstance(tokens, list) or not isinstance(word, str):
         return []
 
-    if type(left_n) != int and type (right_n) != int::
+    if type(left_n) != int and type (right_n) != int:
         return []
     
     if left_n < 0 or right_n < 0:
