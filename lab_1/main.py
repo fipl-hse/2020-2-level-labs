@@ -65,7 +65,7 @@ def calculate_frequencies(tokens: list) -> dict:
     dictionary = {}
     frequency = 0
     for element in tokens:
-        if isinstance(element, str):
+        if not isinstance(element, str):
             return {}
 
         else:
