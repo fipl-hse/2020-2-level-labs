@@ -4,7 +4,8 @@ Tests find_lcs_length function
 
 import unittest
 from unittest.mock import patch
-from main import find_lcs_length, fill_lcs_matrix
+from main import find_lcs_length
+from main import fill_lcs_matrix
 
 
 class FindLcsLengthTest(unittest.TestCase):

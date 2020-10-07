@@ -4,7 +4,8 @@ Tests fill_lcs_matrix function
 
 import unittest
 from unittest.mock import patch
-from main import fill_lcs_matrix, create_zero_matrix
+from main import fill_lcs_matrix
+from main import create_zero_matrix
 
 
 class FillLcsMatrixTest(unittest.TestCase):
