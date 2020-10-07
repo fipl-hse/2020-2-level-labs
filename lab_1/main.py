@@ -134,6 +134,8 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         return []
     if not isinstance(right_context_size, int):
         return []
+    if left_context_size == 0 and right_context_size == 0:
+        return []
     if left_context_size < 0 or right_context_size < 0:
         return []
     concordance = []
@@ -142,9 +144,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             return []
         if b == word:
             temp = tokens[
-                    max(0, i - left_context_size)
-                    :
-                    min(len(tokens), i + (right_context_size + 1))
+                max(0, i - left_context_size)
+                :
+                min(len(tokens), i + (right_context_size + 1))
             ]
             if len(temp) != 0:
                 concordance.append(temp)
@@ -171,11 +173,23 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         return []
     if not isinstance(right_n, int):
         return []
+    if not isinstance(tokens, list):
+        return []
     if left_n + right_n + 1 > len(tokens):
+        return []
+    if not isinstance(left_n, int):
+        return []
+    if not isinstance(right_n, int):
+        return []
+    if left_n == 0 and right_n == 0:
+        return []
+    if left_n < 0 or right_n < 0:
         return []
     concordances = get_concordance(tokens, word, left_n, right_n)
     result = []
     for concordance in concordances:
+        if not isinstance(concordance, list):
+            return []
         if len(concordance) < left_n + 1 + right_n:
             if not concordance.index(word) < left_n + 1:
                 result.append([concordance[0]])
@@ -230,4 +244,3 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     pass
- 
