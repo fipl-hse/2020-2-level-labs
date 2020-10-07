@@ -41,7 +41,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     --> ['weather', 'sunny', 'man', 'happy']
     """
     if isinstance(tokens, list) and isinstance(stop_words, list):
-        empty = []
+
         for constituent in tokens:
             for component in stop_words:
                 if component in tokens:
@@ -59,15 +59,18 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    if not isinstance(tokens, list):
-        return {}
+    if isinstance(tokens, list):
 
-    dictionary = {}
-    frequency = 0
-    for element in tokens:
-        frequency = tokens.count(element)
-        dictionary[element] = frequency
-    return dictionary
+        dictionary = {}
+        frequency = 0
+        for element in tokens:
+            if isinstance(element, str):
+                return {}
+
+            else:
+                frequency = tokens.count(element)
+                dictionary[element] = frequency
+        return dictionary
 
 
 
@@ -125,7 +128,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    if isinstance(tokens, list) and isinstance(word, str) \
+    if isinstance(left_context_size, bool) and isinstance(right_context_size, bool):
+        return []
+
+    elif isinstance(tokens, list) and isinstance(word, str) \
             and isinstance(left_context_size, int) \
             and isinstance(right_context_size, int):
 
