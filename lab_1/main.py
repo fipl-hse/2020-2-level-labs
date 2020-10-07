@@ -21,8 +21,9 @@ def tokenize(text: str) -> list:
                 new_word1 = ''
                 if element.isalpha():
                     new_word.append(element)
-            new_word1 = ''.join(new_word)
-            new_text.append(new_word1)
+            if len(new_word) > 0:
+                new_word1 = ''.join(new_word)
+                new_text.append(new_word1)
         return new_text
 
     return []
@@ -58,16 +59,16 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
+    if not isinstance(tokens, list):
+        return {}
 
     dictionary = {}
     frequency = 0
-    if isinstance(tokens, list):
-        for element in tokens:
-            frequency = tokens.count(element)
-            dictionary[element] = frequency
-        return dictionary
+    for element in tokens:
+        frequency = tokens.count(element)
+        dictionary[element] = frequency
+    return dictionary
 
-    return {}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -102,7 +103,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
             else:
                 finished.extend(element)
 
-        return finished[:top_n + 1]
+        return finished[:top_n]
 
     return []
 
@@ -131,10 +132,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         if left_context_size <= 0 and right_context_size <= 0:
             return []
 
-        concord = []
         concordance = []
-
         for index, component in enumerate(tokens):
+            concord = []
             if component == word:
                 concord = tokens[index - left_context_size: index + right_context_size + 1]
                 concordance.append(concord)
