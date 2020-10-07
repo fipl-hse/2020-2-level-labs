@@ -34,6 +34,7 @@ def get_by_url(url: str):
     encrypted = b'gAAAAABfbE7eXkXz9DNtehmlk3jSOtoss_8vvkxHNZm9BzdZ16sSI9su9k4Wka_frv5v54oHafz5Y0FaGR7HianCZd7Us6uxcDA9WWgCMvTQM-4QsOMKXQ6ZRXodFJ70MIq3WTB0KtWf'
     # token = decrypt_message(encrypted)
     token = os.environ.get('ACCESS_TOKEN')
+    print(len(token))
 
     headers = {'Authorization': f'token {token}'}
     response = get(url, headers=headers)
