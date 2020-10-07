@@ -72,6 +72,8 @@ def calculate_frequencies(tokens: list) -> dict:
                 dictionary[element] = frequency
         return dictionary
 
+    return {}
+
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
