@@ -31,14 +31,14 @@ if __name__ == '__main__':
     top_n = get_top_n_words(dictionary, 3)
     print("Here are top n popular words: ", top_n)
 
-    concordance = get_concordance(string_new, 'time', 1, 2)
+    concordance = get_concordance(string_new, 'time', 1, 1)
     print("Concordance for a searched token looks like this: ", concordance)
 
-    adjacent_words = get_adjacent_words(string, 'time', 1, 2)
+    adjacent_words = get_adjacent_words(string, 'time', 1, 1)
     print("Here are the adjacent words: ", adjacent_words)
 
     #  here goes your logic: calling methods from concordance.py
 
     RESULT = concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [['years', 'time', 'team', 'presented']], 'Concordance not working'
+    assert RESULT == [['years', 'time', 'team']], 'Concordance not working'
