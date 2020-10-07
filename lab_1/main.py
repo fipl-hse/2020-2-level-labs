@@ -59,20 +59,20 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-    if isinstance(tokens, list):
+    if not isinstance(tokens, list):
+        return {}
 
-        dictionary = {}
-        frequency = 0
-        for element in tokens:
-            if isinstance(element, str):
-                return {}
+    dictionary = {}
+    frequency = 0
+    for element in tokens:
+        if isinstance(element, str):
+            return {}
 
-            else:
-                frequency = tokens.count(element)
-                dictionary[element] = frequency
-        return dictionary
+        else:
+            frequency = tokens.count(element)
+            dictionary[element] = frequency
+    return dictionary
 
-    return {}
 
 
 
