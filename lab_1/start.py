@@ -14,10 +14,21 @@ if __name__ == '__main__':
     stop_words = stop_words.split('\n')
 
     #  here goes your logic: calling methods from concordance.py
-    tokens = tokenize(text)[:101]
-    tokens = remove_stop_words(tokens, stop_words)
-    freq_dict = calculate_frequencies(tokens)
-    top_words = get_top_n_words(freq_dict, 3)
+    tokens = main.tokenize(f)
+    print('tokens:', tokens[:10])
+
+    RESULT = None
+    tokens = main.remove_stop_words(tokens, stop_words)
+    print('tokens without stop words:', tokens[:10])
+
+    frequencies = main.calculate_frequencies(tokens)
+    print('frequency for the first word:', frequencies[tokens[0]])
+
+    top_10 = main.get_top_n_words(dictionary, n)
+    print('top 10 words:', top_10)
+
+    concordance = main.get_concordance(tokens, 'time', 2, 3)
+    print('concordance for "time":', concordance[:5])
 
     RESULT = concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
