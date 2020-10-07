@@ -20,6 +20,7 @@ stages:
 
 env:
   global:
+    - secure: HjXLR9m1OdcuwblgYeNNsmqU5ofqGUliH7RW/7+G8yRIJgWShHU6OAijYJlgkyUJIunD30T1mRxtfWqIdZ8VPy/C58olJL8+p6YtzSp4/fxJwSZw+/dPZyDqkpNNxSGfIDKn4DMwR3kfF4G8CGQS/hhuJ64h5LFQZnlDtYDAG9v8AFjfDisixa/opHXxVyS4dcz7C4gZy9+UA9UTElulGreIK9vpX+qZeTttmFvECDIr3mkpDNm46trnliNfxe7NDY09RXBtwLarsV18pmbwlBzKKtSZO+D3DuPq730nm9+0y1XdUlRmKZp+grk/bG9FuNmeTJ7EMg09xenC57aoNe84It7hSlDxNEli/Gl3EtDwJ5dIOq+G6Jf0t5fAXrHjx/4KOjdxTzVCaP9/DPL6NHwPkAgAl30WoiBP6RdLV3BQxezQDQP+BqVZIq35qlCyMriSGTuQfhsOclC6tpSG1xJhS0lHBiQrcbVZcSeVQoSPkT8O+PCmeiNh4r/ZJCkne6wZAH/hVKf/WLkqajYGRZe/HKsQFjIB8oaGA2WVI5AaIAXKbE+cpdbCg59KvVjhnqxzzGaUIoi82xT7iQ+deNnX8/Xj+2/0ozW6DMvaD8SxdU3KzaghRXs/4/rYebhh4ubWOikClm4kTKCCbOwdfW4GW/F2TJJaULyOhkEy77M=
     - PR_TITLE=$(curl https://github.com/${TRAVIS_REPO_SLUG}/pull/${TRAVIS_PULL_REQUEST} | grep "title" | head -1)
 
 jobs:

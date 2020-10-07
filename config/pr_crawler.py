@@ -12,27 +12,28 @@ from cryptography.fernet import Fernet
 from requests import get
 
 
-def load_key() -> bytes:
-    """
-    Loads the key named `secret.key` from the current directory.
-    """
-    return open('config/secret.key', 'rb').read()
-
-
-def decrypt_message(encrypted_message: bytes) -> str:
-    """
-    Decrypts an encrypted message
-    """
-    key = load_key()
-    f = Fernet(key)
-    decrypted_message = f.decrypt(encrypted_message)
-
-    return decrypted_message.decode()
+# def load_key() -> bytes:
+#     """
+#     Loads the key named `secret.key` from the current directory.
+#     """
+#     return open('config/secret.key', 'rb').read()
+#
+#
+# def decrypt_message(encrypted_message: bytes) -> str:
+#     """
+#     Decrypts an encrypted message
+#     """
+#     key = load_key()
+#     f = Fernet(key)
+#     decrypted_message = f.decrypt(encrypted_message)
+#
+#     return decrypted_message.decode()
 
 
 def get_by_url(url: str):
     encrypted = b'gAAAAABfbE7eXkXz9DNtehmlk3jSOtoss_8vvkxHNZm9BzdZ16sSI9su9k4Wka_frv5v54oHafz5Y0FaGR7HianCZd7Us6uxcDA9WWgCMvTQM-4QsOMKXQ6ZRXodFJ70MIq3WTB0KtWf'
-    token = decrypt_message(encrypted)
+    # token = decrypt_message(encrypted)
+    token = os.environ.get('ACCESS_TOKEN')
 
     headers = {'Authorization': f'token {token}'}
     response = get(url, headers=headers)
