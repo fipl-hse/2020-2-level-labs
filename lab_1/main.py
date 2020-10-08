@@ -153,14 +153,12 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     result = []
     for i in range(len(tokens)):
         if tokens[i] == word:
-            arr = []
             if left_n == 0:
-                concordance_n.append([tokens[i + right_n]])
+                result.append([tokens[i + right_n]])
             elif right_n == 0:
-                concordance_n.append([tokens[i - left_n]])
+                result.append([tokens[i - left_n]])
             else:
-                concordance_n.append([tokens[i + right_n], tokens[i - left_n]])
-            result.append(arr)
+                result.append([tokens[i + right_n], tokens[i - left_n]])
     return result
 
 
