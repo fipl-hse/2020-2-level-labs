@@ -27,6 +27,8 @@ if __name__ == '__main__':
     concordance = main.get_concordance(tokens, 'time', 1, 3)
     print(" concordance:", concordance[:3])
 
-    RESULT = top_words
+    write_file = ('report.txt', adjacent_words)
+
+    RESULT = adjacent_words[:3]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == ['a', 'time', 'main', 'season', 'presented'],'Concordance not working'
+    assert RESULT == [['presented', 'wereare'], ['persuaded', 'death'], ['among', 'had']], 'Concordance not working'
