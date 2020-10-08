@@ -15,11 +15,10 @@ def tokenize(text: str) -> list:
     text = text.split()
     return text
     """
-    
     if not isinstance(text, str):
         return []
     text = text.lower()
-    text = re.sub(r'[^a-z\s\n]', '', text)  
+    text = re.sub(r'[^a-z\s\n]', '', text)
     tokenize_list = text.split()
     return tokenize_list
 
@@ -37,10 +36,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     new_tokens = []
     if isinstance(tokens, list) and isinstance(stop_words, list):#проверяем, списки ли это
         for token in tokens:
-            if token not in stop_words: 
+            if token not in stop_words:
                 new_tokens.append(token)
     return new_tokens
-
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -78,7 +76,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or None in freq_dict:
         return []
 
-   
     frequencies_and_words_sorted = sorted(list(freq_dict.items()), key=lambda i: i[1], reverse=True)
     result = []
     for word_freq in frequencies_and_words_sorted[:top_n]:
@@ -157,8 +154,7 @@ def write_to_file(path_to_file: str, content: list):
     Writes the result in a file
     """
     pass
-    
-    
+
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
     """
     Gets a concordance of a word and sorts it by either left or right context
