@@ -20,6 +20,6 @@ if __name__ == '__main__':
     adjacent_words = get_adjacent_words(tokens_no_stop_words, 'point', 2, 2)
     print('adjacent words of the word "point"', adjacent_words)
     write_to_file(os.path.join(current_dir, 'adjacent_king.txt'), adjacent_words)
-    RESULT = contexts_no_stop_words
+    RESULT = tokens_no_stop_words
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [(), ()], 'Concordance not working'
