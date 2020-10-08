@@ -29,4 +29,4 @@ if __name__ == '__main__':
     
     RESULT = concordance[:3]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Concordance not working'
+    assert RESULT == [['of', 'time', 'team', 'presented', 'a'], ['in', 'time', 'team', 'over', 'the'], ['the', 'time', 'a', 'stalin', 'directive']], 'Concordance not working'
