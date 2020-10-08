@@ -32,11 +32,9 @@ def remove_stop_words (tokens: list, stop_words: list) -> list:
     """
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return []
-    stop_words = stop_words.split()
-    for word in tokens:
-        if word in stop_words:
-            index_of_word = tokens.index (word)
-            tokens.pop (index_of_word)
+    for word in stop_words:
+        while word in tokens:
+            tokens.remove(word)
     return tokens
 
 
