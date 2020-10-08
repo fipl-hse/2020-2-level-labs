@@ -15,7 +15,8 @@ def tokenize(text: str) -> list:
     if not isinstance(text, str):
         return []
     lower_text = text.lower()
-    punctuation = ['.', ',', '!', '?', '-', '"', '1', '2', '3', '4', '5', '6','7', '8', '9', '0', '@', '#', '/', '^', '%', ]
+    punctuation = ['.', ',', '!', '?', '-', '"', '1', '2', '3', '4', '5', '6','7', '8', '9', '0', '@', '#', '/', '^', '%']
+    no_punctuation_text = []
     for element in lower_text:
         if element in punctuation:
             index_of_element = lower_text.index(element)
