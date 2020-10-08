@@ -153,12 +153,12 @@ class FindLcsTest(unittest.TestCase):
         actual = find_lcs(sentence_first, sentence_second, lcs_matrix)
         self.assertEqual(expected, actual)
 
-# hidden check for function fill_lcs_matrix calling below
     def test_find_lcs_with_incorrect_matrix_provided(self):
         """
         Tests that find lcs function
             can check lcs_matrix matches given sentences
         """
+        # hidden check for function fill_lcs_matrix calling below
         lcs_matrix = [[1000, 1, 1, 1],
                       [1, 1000, 1, 1],
                       [1, 1, 1, 1000]]
@@ -172,6 +172,13 @@ class FindLcsTest(unittest.TestCase):
     def test_find_lcs_matrix_with_incorrect_matrix_shape(self):
         """
         Tests that find_lcs function
-            can check lcs_matrix shape is correct due to given sentences
+            can check lcs_matrix shape is incorrect due to given sentences
         """
-        pass
+        lcs_matrix = [[0, 0],
+                      [0, 0]]
+        sentence_first = ('the', 'dog', 'sleeps')
+        sentence_second = ('the', 'cat', 'is', 'sleeping')
+
+        expected = ()
+        actual = find_lcs(sentence_first, sentence_second, lcs_matrix)
+        self.assertEqual(expected, actual)
