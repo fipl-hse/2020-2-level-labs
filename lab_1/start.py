@@ -1,9 +1,8 @@
 """
 Concordance implementation starter
 """
-
-from main import *
 import os
+from main import tokenize, remove_stop_words, calculate_frequencies, get_top_n_words, get_concordance, get_adjacent_words, read_from_file, write_to_file
 
 if __name__ == '__main__':
     #  use data.txt file to test your program
@@ -13,14 +12,14 @@ if __name__ == '__main__':
     tokens = tokenize(data)
     tokens_no_stop_words = remove_stop_words(tokens, stop_words)
     tokens_freq = calculate_frequencies(tokens_no_stop_words)
-    n_words = 10
+    numb_words = 10
     top_n_words = get_top_n_words(tokens_freq, n_words)
-    print('top', n, 'words:', top_n_words)
+    print('top', numb_words, 'words:', top_n_words)
     concordance = get_concordance(tokens, 'point', 2, 2)
     print('concordance of the word "point:"',concordance)
     adjacent_words = get_adjacent_words(tokens_no_stop_words, 'point', 2, 2)
     print('adjacent words of the word "point"', adjacent_words)
     write_to_file(os.path.join(current_dir, 'adjacent_king.txt'), adjacent_words)
-    RESULT = contexts_no_stop_words
+    RESULT = []
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [(), ()], 'Concordance not working'
