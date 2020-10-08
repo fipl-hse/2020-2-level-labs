@@ -32,7 +32,7 @@ class CalculateFrequenciesTest(unittest.TestCase):
         """
         Calculate frequencies invalid input tokens check
         """
-        bad_inputs = ['string', {},  (), None, 9, 9.34, True, [None]]
+        bad_inputs = ['string', {}, (), None, 9, 9.34, True, [None]]
         expected = {}
         for bad_input in bad_inputs:
             actual = calculate_frequencies(bad_input)
