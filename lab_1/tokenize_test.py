@@ -34,7 +34,7 @@ class TokenizeTest(unittest.TestCase):
         Tokenize text with different punctuation marks
         """
         expected = ['the', 'first', 'sentence', 'nice', 'the', 'second', 'sentence', 'bad']
-        actual = tokenize('The first sentence - nice. The second sentence: bad!')
+        actual = tokenize('The, first sentence - nice. The second sentence: bad!')
         self.assertEqual(expected, actual)
 
     def test_tokenize_dirty_text(self):
@@ -42,7 +42,7 @@ class TokenizeTest(unittest.TestCase):
         Tokenize dirty text
         """
         expected = ['the', 'first', 'sentence', 'the', 'second', 'sentence']
-        actual = tokenize('The first% sentence><. The se&*cond sent@ence #.')
+        actual = tokenize('The first% sentence><. The sec&*ond sent@ence #.')
         self.assertEqual(expected, actual)
 
     def test_tokenize_bad_input(self):
