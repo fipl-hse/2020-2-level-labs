@@ -27,6 +27,5 @@ if __name__ == '__main__':
     concordance = main.get_concordance(tokens, 'time', 1, 3)
     print(" concordance:", concordance[:3])
 
-    RESULT = adjacent_words[:3]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [['presented', 'wereare'], ['persuaded', 'death'], ['among', 'had']], 'Concordance not working'
