@@ -16,7 +16,8 @@ def tokenize(text: str) -> list:
     """
     tokens = []
     if text and isinstance(text, str):
-        tokens = re.sub('[^a-z \n]', '', text.lower()).split()
+        tokens = re.sub('[^a-z \n]', '', text.lower()).split()  # [^a-z \n] — любой символ, кроме тех, что в скобках, \
+        # заменяем на пустой символ
     return tokens
 
 
@@ -35,7 +36,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
             if not isinstance(word, str):
                 return []
 
-        tokens = [word for word in tokens if word not in stop_words]
+        tokens = [word for word in tokens if word not in stop_words]  # если слово не в стоп-листе, добавляется в токен
         return tokens
     return []
 
@@ -75,8 +76,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         return []
 
     sorted_dict = dict(
-        sorted(freq_dict.items(), key=lambda item: item[1], reverse=True))  # упорядочим элементы словаря по значениям
-    sorted_dict = list(sorted_dict.keys())
+        sorted(freq_dict.items(), key=lambda item: item[1], reverse=True))  # упорядочим элементы словаря по значениям \
+    # в порядке убывания
+    sorted_dict = list(sorted_dict.keys())  # keys() - возвращает ключи в словаре
 
     if top_n >= 0:
         common_words = sorted_dict[:top_n]
@@ -119,7 +121,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         lcs = 0
     elif rcs < 0:
         rcs = 0
-    for index, token in enumerate(tokens):
+    for index, token in enumerate(tokens):  # проходим по индексам и элементам списка
         if token == word:
             concordance.append(tokens[index - lcs: index + rcs + 1])
     return concordance
@@ -204,6 +206,10 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     concord = get_concordance(tokens, word, left_context_size, right_context_size)
     if left_sort and left_context_size > 0:
         return sorted(concord)
+    elif left_sort and left_context_size <= 0:
+        return []
+    elif right_context_size <= 0 and not left_sort:
+        return []
     if not left_sort and right_context_size > 0:
-        return sorted(concord, key=lambda element: element[element.index(word) + 1])
+        return sorted(concord, key=lambda words: words[left_context_size + 1])
     return []
