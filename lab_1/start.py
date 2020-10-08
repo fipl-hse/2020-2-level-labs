@@ -17,7 +17,7 @@ if __name__ == '__main__':
     print("tokens:", tokens[:15])
 
     tokens_stop_words = main.remove_stop_words(tokens, stop_words)
-    print("tokens without stop words:", tokens_stop_words[:100])
+    print("tokens without stop words:", tokens_stop_words[:7])
 
     frequencies = main.calculate_frequencies(tokens_stop_words[:600])
     print("frequencies:", frequencies[tokens_stop_words[0]])
