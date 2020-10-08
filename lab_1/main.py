@@ -176,7 +176,7 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    strings = []
+    strings = ''
     for string in content:
         strings  += ' '.join(string) + '\n'
     with open (path_to_file, 'w', encoding = 'utf-8') as file:
