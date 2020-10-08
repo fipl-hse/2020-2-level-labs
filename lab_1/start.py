@@ -13,7 +13,7 @@ if __name__ == '__main__':
     tokens_no_stop_words = remove_stop_words(tokens, stop_words)
     tokens_freq = calculate_frequencies(tokens_no_stop_words)
     numb_words = 10
-    top_n_words = get_top_n_words(tokens_freq, n_words)
+    top_n_words = get_top_n_words(tokens_freq, numb_words)
     print('top', numb_words, 'words:', top_n_words)
     concordance = get_concordance(tokens, 'point', 2, 2)
     print('concordance of the word "point:"',concordance)
