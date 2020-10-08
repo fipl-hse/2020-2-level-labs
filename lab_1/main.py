@@ -14,6 +14,8 @@ def tokenize(text: str) -> list:
 
     text = text.split()
     return text
+    
+def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     if not isinstance(text, str):
         return []
