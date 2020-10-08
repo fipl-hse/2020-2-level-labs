@@ -14,15 +14,9 @@ def tokenize(text: str) -> list:
     """
     if not isinstance(text, str):
         return []
-    lower_text = text.lower()
-    punctuation = ['.', ',', '!', '?', '-', '"', '1', '2', '3', '4', '5', '6','7', '8', '9', '0', '@', '#', '/', '^', '%']
-    no_punctuation_text = []
-    for element in lower_text:
-        if element in punctuation:
-            index_of_element = lower_text.index(element)
-            next_index = index_of_element + 1
-            no_punctuation_text = lower_text[:index_of_element] + lower_text[next_index:]
-    tokens = no_punctuation_text.split()
+    tokens = []
+    if text and isinstance(text, str):
+        tokens = re.sub('[^a-z \n]', '', text.lower()).split()
     return tokens
 
 
