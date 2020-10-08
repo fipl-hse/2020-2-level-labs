@@ -176,10 +176,10 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    output_file = [' '.join(i) for i in content]
+    output_file = [' '.join(i) for i in content]  # объединяем в файле слова через пробел
 
     with open(path_to_file, 'w', encoding='utf-8') as file:
-        file.write('\n'.join(output_file))
+        file.write('\n'.join(output_file))  # запишем в файл слова через строчку
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
