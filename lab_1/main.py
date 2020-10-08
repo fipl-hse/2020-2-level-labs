@@ -42,10 +42,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
     if isinstance(tokens, list) and isinstance(stop_words, list):
 
+        without_stop_words = []
         for constituent in tokens:
-            for component in stop_words:
-                if component in tokens:
-                    tokens.remove(component)
+            if constituent not in stop_words:
+                without_stop_words.append(constituent)
         return tokens
 
     return []
