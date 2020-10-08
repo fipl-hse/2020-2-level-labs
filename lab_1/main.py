@@ -2,6 +2,7 @@
 Lab 1
 A concordance extraction
 """
+import re
 
 
 def tokenize(text: str) -> list:
@@ -12,10 +13,9 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    if not isinstance(text, str) or not text:
-        return []
-
-    tokens = text.split()
+    tokens = []
+    if text and isinstance(text, str):
+        tokens = re.sub('[^a-z \n]', '', text.lower()).split()
     return tokens
 
 
@@ -36,6 +36,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
         tokens.remove('the')
     while 'is' in tokens:
         tokens.remove('is')
+    tokens = [word for word in tokens if word not in stop_words]
     return list(tokens)
 
 
@@ -48,8 +49,13 @@ def calculate_frequencies(tokens: list) -> dict:
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
 
-    dictionary = dict.fromkeys(tokens, 1)
-    return dictionary
+    if isinstance(tokens, list):
+        for word in tokens:
+            if not isinstance(word, str):
+                return {}
+        cal_freq = {word: tokens.count(word) for word in tokens}
+        return cal_freq
+    return {}
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -101,30 +107,25 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    check_tokens = isinstance(tokens, list)
-    check_word = isinstance(word, list)
-    check_left_size = isinstance(left_context_size, int)
-    check_right_size = isinstance(right_context_size, int)
 
-    if not check_tokens or not check_word:
-        return []
-    if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
-        return []
-    if not check_left_size or not check_right_size:
+    if isinstance(right_context_size, bool) or isinstance(left_context_size, bool):
         return []
 
-    del tokens[:5]
-    print(tokens)
-    del tokens[6:]
+    check = [isinstance(tokens, list), isinstance(word, str),
+             isinstance(right_context_size, int), isinstance(left_context_size, int)]
+    if not all(check):
+        return []
 
-    tokenss = [tokens]
-    del tokenss[:9]
-    print(tokenss)
-    del tokenss[6:]
-    print(tokenss)
+    output_list = []
+    inds = [ind for ind, w in enumerate(tokens) if w == word]
 
-    print([tokens] + [tokenss])
-    return [tokens + tokenss]
+    if left_context_size > 0 and right_context_size > 0:
+        output_list = [tokens[i - left_context_size:i + right_context_size + 1] for i in inds]
+    elif left_context_size > 0 and not right_context_size > 0:
+        output_list = [tokens[i - left_context_size:i + 1] for i in inds]
+    elif right_context_size > 0 and not left_context_size > 0:
+        output_list = [tokens[i:i + int(right_context_size) + 1] for i in inds]
+    return output_list
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -142,23 +143,27 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
+    check = [isinstance(tokens, list),
+             isinstance(word, str),
+             isinstance(left_n, int),
+             isinstance(right_n, int),
+             not isinstance(left_n, bool),
+             not isinstance(right_n, bool)]
 
-    if isinstance(tokens, list) or isinstance(word, list):
-        return []
-    if isinstance(left_n, int) or isinstance(right_n, int):
+    if not all(check):
         return []
 
-    left_n = int(2)
-    right_n = int(3)
-    i_left = int(input('Your number:'))
-    i_right = int(input('Your number:'))
-    if i_left == left_n and i_right == right_n:
-        tokens1 = tokens.pop(5)
-        tokens2 = tokens.pop(9)
-        tokens3 = tokens.pop(8)
-        tokens4 = tokens.pop(11)
-        print([[tokens1]+[tokens2]]+[[tokens3]+[tokens4]])
-    return []
+    concordance = get_concordance(tokens, word, left_n, right_n)
+    window = (left_n, right_n)
+
+    if window[0] > 0 and window[1] > 0:
+        return [[token[0], token[-1]]for token in concordance]
+    if window[0] > 0:
+        return [[token[0]] for token in concordance]
+    if window[1] > 0:
+        return [[token[-1]] for token in concordance]
+    else:
+        return []
 
 
 def read_from_file(path_to_file: str) -> str:
