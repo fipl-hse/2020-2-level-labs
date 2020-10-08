@@ -3,7 +3,7 @@ Lab 1
 A concordance extraction
 """
 
-
+import re
 def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
@@ -18,16 +18,10 @@ def tokenize(text: str) -> list:
     
     if not isinstance(text, str):
         return []
-
-    clean_tokens = []
-    for token in text.lower().split():
-        word = ''
-        for character in token:
-            if character.isalpha():
-                word += character
-        if word:
-            clean_tokens.append(word)
-        return clean_tokens
+    text = text.lower()
+    text = re.sub(r'[^a-z\s\n]', '', text)  
+    tokenize_list = text.split()
+    return tokenize_list
 
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
@@ -40,10 +34,13 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if not isinstance(tokens, list) or not isinstance(stop_words, list):
-        return []
+    new_tokens = []
+    if isinstance(tokens, list) and isinstance(stop_words, list):#проверяем, списки ли это
+        for token in tokens:
+            if token not in stop_words: 
+                new_tokens.append(token)
+    return new_tokens
 
-    return [token for token in tokens if token not in stop_words]
 
 
 def calculate_frequencies(tokens: list) -> dict:
