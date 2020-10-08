@@ -88,7 +88,7 @@ class GetConcordanceTest(unittest.TestCase):
         for bad_input in bad_inputs:
             actual_1 = get_concordance(['happy', 'man', 'went'], 'man', bad_input, bad_input)
             actual_2 = get_concordance(bad_input, 'happy', 2, 3)
-            actual_3 = get_concordance(['happy', 'man', 'went'], bad_input, 1, 2,)
+            actual_3 = get_concordance(['happy', 'man', 'went'], bad_input, 1, 2)
             self.assertEqual(expected, actual_1)
             self.assertEqual(expected, actual_2)
             self.assertEqual(expected, actual_3)
