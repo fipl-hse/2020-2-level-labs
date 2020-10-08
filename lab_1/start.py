@@ -3,8 +3,6 @@ Concordance implementation starter
 """
 import os
 import main
-import re
-
 
 if __name__ == '__main__':
     #  use data.txt file to test your program
