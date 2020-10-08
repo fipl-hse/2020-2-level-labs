@@ -14,22 +14,13 @@ def tokenize(text: str) -> list:
 
     text = text.split()
     return text
-    
-def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
-    if not isinstance(text, str):
-        return []
-
-    clean_tokens = []
-    for token in text.lower().split():
-        word = ''
-        for character in token:
-            if character.isalpha():
-                word += character
-        if word:
-            clean_tokens.append(word)
-    return clean_tokens
-
+    
+    if isinstance(text, str):
+        tokens = re.sub(r'[^\w\s]', '', text.lower())
+        tokens = tokens.split()
+        return tokens
+    return []
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
