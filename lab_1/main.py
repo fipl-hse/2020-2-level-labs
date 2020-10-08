@@ -20,6 +20,7 @@ def tokenize(text: str) -> list:
     return tokens
 
 
+
 def remove_stop_words (tokens: list, stop_words: list) -> list:
     """
     Removes stop words
@@ -36,7 +37,6 @@ def remove_stop_words (tokens: list, stop_words: list) -> list:
         while word in tokens:
             tokens.remove(word)
     return tokens
-
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -56,7 +56,6 @@ def calculate_frequencies(tokens: list) -> dict:
         else:
             freq_dict[word] = 1
     return freq_dict
-
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -123,8 +122,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     return concordance
 
 
-
-
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
     Gets adjacent words from the left and right context
@@ -163,16 +160,14 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     return adjacent_words
 
 
-
-
 def read_from_file(path_to_file: str) -> str:
     """
     Opens the file and reads its content
     :return: the initial text in string format
     """
     if isinstance(path_to_file, str):
-        with open(path_to_file, 'r', encoding='utf-8') as fs:
-            data = fs.read()
+        with open(path_to_file, 'r', encoding='utf-8') as file:
+            data = file.read()
 
     return data
 
@@ -186,7 +181,6 @@ def write_to_file(path_to_file: str, content: list):
         strings  += ' '.join(string) + '\n'
     with open (path_to_file, 'w', encoding = 'utf-8') as file:
         file.write(strings)
-
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -221,6 +215,5 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
                 if not left_sort:
                     if token == using[-1] and using.count(token) == 1:
                         return []
-                    sorted_concordance = sorted(concordance,
-                                                key=lambda item_after: item_after[(concordance[0].index(word)) + 1])
+                    sorted_concordance = sorted(concordance, key=lambda item_after: item_after[(concordance[0].index(word)) + 1])
     return sorted_concordance
