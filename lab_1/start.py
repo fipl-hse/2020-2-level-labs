@@ -18,8 +18,8 @@ if __name__ == '__main__':
     tokens_stop_words = main.remove_stop_words(tokens, stop_words)
     print("tokens without stop words:", tokens_stop_words[:7])
 
-    frequencies = main.calculate_frequencies(tokens_stop_words[:600])
-    print("frequencies:", frequencies[tokens_stop_words[0]])
+    frequencies = main.calculate_frequencies(tokens)
+    print('frequencies for the word: ', frequencies[tokens[2]])
 
     top_words = main.get_top_n_words(frequencies, 5)
     print("top words:", top_words)
