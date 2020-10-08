@@ -116,9 +116,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                     context = [token]
                 for iteration in range(right_context_size):
                     if len(tokens) > number + (iteration + 1):
-                            context.append(tokens[number + (iteration + 1)])
+                        context.append(tokens[number + (iteration + 1)])
         if context:
-                concordance.append(context)
+            concordance.append(context)
     return concordance
 
 
@@ -215,5 +215,6 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
                 if not left_sort:
                     if token == using[-1] and using.count(token) == 1:
                         return []
-                    sorted_concordance = sorted(concordance, key=lambda item_after: item_after[(concordance[0].index(word)) + 1])
+                    sorted_concordance = sorted(concordance,
+                                                key=lambda item_after: item_after[(concordance[0].index(word)) + 1])
     return sorted_concordance
