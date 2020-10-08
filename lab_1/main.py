@@ -146,6 +146,10 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
+    with open(path_to_file, 'r', encoding='utf-8') as concordance_file:
+        data = concordance_file.read()
+
+    return data
 
 
 def write_to_file(path_to_file: str, content: list):
