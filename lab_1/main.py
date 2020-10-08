@@ -2,6 +2,7 @@
 Lab 1
 A concordance extraction
 """
+
 import re
 
 
@@ -111,21 +112,26 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if isinstance(right_context_size, bool) or isinstance(left_context_size, bool):
         return []
 
-    check = [isinstance(tokens, list), isinstance(word, str),
-             isinstance(right_context_size, int), isinstance(left_context_size, int)]
+    check = [isinstance(tokens, list),
+             isinstance(word, str),
+             isinstance(right_context_size, int),
+             isinstance(left_context_size, int)]
+
     if not all(check):
         return []
 
-    output_list = []
-    inds = [ind for ind, w in enumerate(tokens) if w == word]
+    indexes = [i for i in range(len(tokens)) if tokens[i] == word]
 
     if left_context_size > 0 and right_context_size > 0:
-        output_list = [tokens[i - left_context_size:i + right_context_size + 1] for i in inds]
-    elif left_context_size > 0 and not right_context_size > 0:
-        output_list = [tokens[i - left_context_size:i + 1] for i in inds]
-    elif right_context_size > 0 and not left_context_size > 0:
-        output_list = [tokens[i:i + int(right_context_size) + 1] for i in inds]
-    return output_list
+        return [tokens[i - left_context_size:i + right_context_size + 1] for i in indexes]
+
+    if not left_context_size > 0 and right_context_size > 0:
+        return [tokens[i: i + right_context_size + 1] for i in indexes]
+
+    if left_context_size > 0 and not right_context_size > 0:
+        return [tokens[i - left_context_size:i + 1] for i in indexes]
+
+    return []
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
@@ -157,7 +163,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     window = (left_n, right_n)
 
     if window[0] > 0 and window[1] > 0:
-        return [[token[0], token[-1]]for token in concordance]
+        return [[token[0], token[-1]] for token in concordance]
     if window[0] > 0:
         return [[token[0]] for token in concordance]
     if window[1] > 0:
