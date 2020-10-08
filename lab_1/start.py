@@ -8,7 +8,7 @@ if __name__ == '__main__':
     #  use data.txt file to test your program
     current_dir = os.path.dirname(os.path.abspath(__file__))
     data = main.read_from_file(os.path.join(current_dir, 'data.txt'))
-    stop_words = read_from_file(os.path.join(current_dir, 'stop_words.txt'))
+    stop_words = main.read_from_file(os.path.join(current_dir, 'stop_words.txt'))
     stop_words = stop_words.split ('\n')
 
 
