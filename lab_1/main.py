@@ -72,7 +72,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    
+
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or None in freq_dict:
         return []
 
@@ -136,8 +136,8 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     --> [['man', 'is'], ['dog, 'cat']]
     """
     pass
-    
-    
+
+
 def read_from_file(path_to_file: str) -> str:
     """
     Opens the file and reads its content
