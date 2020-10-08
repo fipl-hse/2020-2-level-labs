@@ -4,7 +4,9 @@ import re
 Lab 1
 A concordance extraction
 """
+
 def tokenize(f):
+        lab_1/
         try:
                 tokens = []
                 for line in f:
@@ -78,6 +80,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                                
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
+        lab_1/data.txt 
     """
     Gets adjacent words from the left and right context
     :param tokens: a list of tokens
@@ -96,6 +99,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
 
 
 def read_from_file(path_to_file: str) -> str:
+        lab_1/data.txt 
     """
     Opens the file and reads its content
     :return: the initial text in string format
@@ -107,6 +111,8 @@ def read_from_file(path_to_file: str) -> str:
 
 
 def write_to_file(path_to_file: str, content: list):
+    lab_1/data.txt    
+        
     """
     Writes the result in a file
     """
@@ -114,6 +120,7 @@ def write_to_file(path_to_file: str, content: list):
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
+        lab_1/data.txt 
     """
     Gets a concordance of a word and sorts it by either left or right context
     :param tokens: a list of tokens
