@@ -3,15 +3,17 @@ Lab 1
 A concordance extraction
 """
 def tokenize(f):
-    import re
-    try:
-        tokens = []
-        for line in f:
-            for word in re.findall(r"[a-zA-z]+", line):
-                tokens.append(word.lower())
-        return tokens
-    except TypeError:
-        tokens = []
+    tokens = []
+    for token in txt.lower().split():
+        variable = ''
+        for character in token:
+            if character.isalpha():
+                variable += character
+
+        if len(variable) != 0:
+            tokens.append(variable)
+    return tokens
+
         
 
 def remove_stop_words(tokens, stop_words):
