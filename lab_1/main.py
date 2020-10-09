@@ -4,7 +4,7 @@ A concordance extraction
 """
 def tokenize(f):
     tokens = []
-    for token in txt.lower().split():
+    for token in f.lower().split():
         variable = ''
         for character in token:
             if character.isalpha():
