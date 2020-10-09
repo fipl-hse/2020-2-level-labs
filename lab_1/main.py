@@ -31,20 +31,20 @@ def calculate_frequencies(tokens):
         for i in tokens:
             dictionary[i] = tokens.count(i)
         return dictionary
-    
+
     return {}
 
 
 def get_top_n_words(dictionary, n):
-    if not isinstance(dictionary, dict) or not isinstance(n, int) or None in dictionary:
-        return []
-    ans = []
-    cnt = 0
-    for w in sorted(dictionary, key=dictionary.get, reverse=True):
-        ans.append(w)
-        cnt += 1
-        if cnt == n:
-            return ans
+    if isinstance(dictionary, dict) and isinstance(n, int) and None not in dictionary:
+        ans = []
+        cnt = 0
+        for w in sorted(dictionary, key=dictionary.get, reverse=True):
+            ans.append(w)
+            cnt += 1
+            if cnt == n:
+                return ans
+    return []
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int):
     """
