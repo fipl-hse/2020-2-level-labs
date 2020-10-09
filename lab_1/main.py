@@ -83,7 +83,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         freq_list.sort(key=lambda num: num[1], reverse=True)
         freq_dict_sorted = dict(freq_list)
         top_words = []
-        for frequency, word in enumerate(freq_dict_sorted):
+        for i, word in enumerate(freq_dict_sorted):
             top_words.append(word)
         top_n_words = top_words[:top_n]
 
@@ -114,7 +114,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             input_check = True
             if tokens == [] or word == '':
                 input_check = False
-            if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
+            elif isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
                 input_check = False
             if input_check:
                 tokens_copy = tokens.copy()
