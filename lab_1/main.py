@@ -12,7 +12,6 @@ def tokenize(text: str) -> list:
     """
 
     if not isinstance(text, str):
-This conversation was marked as resolved by x-ae-a-12
         return []
 
     clean_tokens = []
@@ -156,9 +155,6 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
-
     with open(path_to_file, 'r', encoding='utf-8') as file:
         data = file.read()
     return data
