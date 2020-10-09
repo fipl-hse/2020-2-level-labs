@@ -134,20 +134,17 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-   if not isinstance(tokens,list) or not isinstance(word,str) or not isinstance(left_n,int) or \
-       not isinstance(right_n,int) or isinstance(left_n,bool) or isinstance(right_n,bool) or \
-       right_n<0 or left_n<0 or word not in tokens:
-       return[]
-    context =get_concordance(tokens,word,left_n,right_n)
-    adjacent_words = []
-    for context in contexts:
-        if not left_n:
-            adjacent_words.append([context[-1]])
-        elif not right_n:
-            adjacent_words.append([context[0]])
-        else:
-            adjacent_words.append([context[0], context[-1]])
-    return adjacent_words
+contexts = get_concordance(tokens, word, left_n, right_n)
+adjacent_words = []
+for context in contexts:
+    if not left_n:
+        adjacent_words.append([context[-1]])
+    elif not right_n:
+        adjacent_words.append([context[0]])
+    else:
+        adjacent_words.append([context[0], context[-1]])
+return adjacent_words
+
 
 def read_from_file(path_to_file: str) -> str:
     """
