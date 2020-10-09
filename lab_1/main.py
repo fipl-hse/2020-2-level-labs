@@ -6,7 +6,6 @@ A concordance extraction
 """
 
 def tokenize(f):
-        lab_1/
         try:
                 tokens = []
                 for line in f:
@@ -80,7 +79,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                                
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
-        lab_1/data.txt 
+        
     """
     Gets adjacent words from the left and right context
     :param tokens: a list of tokens
@@ -99,7 +98,7 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
 
 
 def read_from_file(path_to_file: str) -> str:
-        lab_1/data.txt 
+         
     """
     Opens the file and reads its content
     :return: the initial text in string format
@@ -120,7 +119,7 @@ def write_to_file(path_to_file: str, content: list):
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
-        lab_1/data.txt 
+       
     """
     Gets a concordance of a word and sorts it by either left or right context
     :param tokens: a list of tokens
@@ -138,12 +137,3 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     pass
-
-with open('data.txt', 'r') as f:
-    with open('stop_words.txt', 'r') as stop_words:
-        tokenize_text = tokenize(f)
-        tokens_with_out_stop_words = remove_stop_words(tokenize_text, stop_words)
-        dictionary = calculate_frequencies(tokens_with_out_stop_words)
-        top_words = get_top_n_words(dictionary, 10)
-        concordances = get_concordance(tokenize_text, 'time', 1, 1)
-        print(concordances)
