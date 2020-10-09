@@ -136,7 +136,17 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    pass
+    tests = [
+        isinstance(tokens, list),
+        isinstance(word, str),
+        isinstance(left_n, int),
+        isinstance(right_n, int),
+        not isinstance(left_n, bool),
+        not isinstance(right_n, bool)
+    ]
+
+    if not all(tests):
+        return []
 
 
 # 7
