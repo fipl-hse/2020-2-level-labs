@@ -18,40 +18,42 @@ if __name__ == '__main__':
     frequencies = main.calculate_frequencies(tokens)
     print('    ...calculating frequencies...')
     top_n_words_list = main.get_top_n_words(frequencies, 10)
-    top_n_words = ''
+    TOP_N_WORDS = ''
     for word in top_n_words_list:
         top_n_words += word
         if top_n_words_list.index(word) != (len(top_n_words_list) - 1):
-            top_n_words += ', '
+            TOP_N_WORDS += ', '
     print('\n> Top 10 most mentioned words in the text:')
-    print(top_n_words)
+    print(TOP_N_WORDS)
     print("\n    ...getting a concordance of the word 'season'...")
     concordance = main.get_concordance(tokens, 'season', 2, 3)
-    example = ''
+    EXAMPLE = ''
     for word in concordance[0]:
-        example += word
+        EXAMPLE += word
         if concordance[0].index(word) != (len(concordance[0]) - 1):
-            example += ', '
+            EXAMPLE += ', '
     print("\n> The first context of the word 'season' mentioned in the text:")
-    print(example)
+    print(EXAMPLE)
     adj_words = main.get_adjacent_words(tokens, 'season', 2, 3)
     adj_words_example = adj_words[0]
     adj_word_right = adj_words_example.pop()
     adj_word_left = adj_words_example.pop()
-    print("> Adjacent words from this context: \n'" + adj_word_left + "' as 2nd on the left, \n'" + adj_word_right + "' as 3rd on the right")
+    print("""> Adjacent words from this context: \n'" + adj_word_left + "' as 2nd on the left, \n'" +
+    adj_word_right + "' as 3rd on the right""")
     print('\n\n    ...sorting the concordance...')
     sorted_concordance = main.sort_concordance(tokens, 'season', 2, 3, True)
-    sorted_example = ''
+    SORTED_EXAMPLE = ''
     for word in sorted_concordance[0]:
-        sorted_example += word
+        SORTED_EXAMPLE += word
         if sorted_concordance[0].index(word) != (len(sorted_concordance[0]) - 1):
-            sorted_example += ', '
+            SORTED_EXAMPLE += ', '
     print("\n> The first context of the word 'weather' \n(alphabetic order by left context):")
-    print(sorted_example)
+    print(SORTED_EXAMPLE)
     print("\n\n    ...writing the concordance to file 'report.txt'...")
     main.write_to_file(os.path.join(current_dir, 'report.txt'), concordance)
 
     RESULT = sorted_concordance[:2]
     print(sorted_concordance[:2])
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == [['disappointing', 'record', 'season', 'saints', 'ended', 'season'], ['saints', 'ended', 'season', 'philosophy', 'mathematics', 'selected']], 'Concordance not working'
+    assert RESULT == [['disappointing', 'record', 'season', 'saints', 'ended', 'season'],
+                      ['saints', 'ended', 'season', 'philosophy', 'mathematics', 'selected']], 'Concordance not working'

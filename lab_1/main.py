@@ -44,7 +44,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
                 else:
                     continue
             return tokens_clean
-        else:
+        if not isinstance(stop_words, list):
             return tokens
 
     return tokens_clean
@@ -77,7 +77,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    TOP_N_WORDS = []
+    top_n_words = []
     if isinstance(freq_dict, dict) and isinstance(top_n, int):
         freq_list = list(freq_dict.items())
         freq_list.sort(key=lambda num: num[1], reverse=True)
@@ -85,9 +85,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         top_words = []
         for frequency, word in enumerate(freq_dict_sorted):
             top_words.append(word)
-        TOP_N_WORDS = top_words[:top_n]
+        top_n_words = top_words[:top_n]
 
-    return TOP_N_WORDS
+    return top_n_words
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
