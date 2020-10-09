@@ -1,10 +1,7 @@
-
-
 """
 Lab 1
 A concordance extraction
 """
-
 def tokenize(f):
     import re
     try:
@@ -40,7 +37,7 @@ def get_top_n_words(dictionary, n):
     for w in sorted(dictionary, key=dictionary.get, reverse=True):
         ans.append(w)
         cnt += 1
-        if (cnt == n):
+        if cnt == n:
             return ans
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int):
@@ -64,7 +61,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     ans = []
     for i in iter:
         if (i - left_context_size) >= 0 and (i + right_context_size < len(tokens)):
-            ans.append(tokens[i - left_context_size : i + right_context_size + 1])
+            ans.append(tokens[i - left_context_size: i + right_context_size + 1])
         elif (i - left_context_size) >= 0:
             ans.append(tokens[i - left_context_size:])
         else:
@@ -113,7 +110,6 @@ def write_to_file(path_to_file: str, content: list):
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
-       
     """
     Gets a concordance of a word and sorts it by either left or right context
     :param tokens: a list of tokens
