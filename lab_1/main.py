@@ -38,8 +38,9 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
 
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return []
+    stop_words_set=frozenset(stop_words)
+    return [item for item in tokens if item not in stop_words_set]
 
-    return [token for token in tokens if token not in stop_words]
 
 def calculate_frequencies(tokens: list) -> dict:
     """
@@ -53,13 +54,13 @@ def calculate_frequencies(tokens: list) -> dict:
     if not isinstance(tokens, list) or None in tokens:
         return {}
 
-    freq_dict = {}
+    frequencies_dict = {}
     for token in tokens:
-        if token in freq_dict:
-            freq_dict[token] += 1
+        if token in frequencies_dict:
+            frequencies_dict[token] += 1
         else:
-            freq_dict[token] = 1
-    return freq_dict
+            frequencies_dict[token] = 1
+    return frequencies_dict
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
@@ -134,7 +135,11 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-    contexts = get_concordance(tokens, word, left_n, right_n)
+   if not isinstance(tokens,list) or not isinstance(word,str) or not isinstance(left_n,int) or \
+       not isinstance(right_n,int) or isinstance(left_n,bool) or isinstance(right_n,bool) or \
+       right_n<0 or left_n<0 or word not in tokens:
+       return[]
+    context =get_concordance(tokens,word,left_n,right_n)
     adjacent_words = []
     for context in contexts:
         if not left_n:
@@ -150,8 +155,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as file:
-        data = file.read()
+    with open(path_to_file, 'r', encoding='utf-8') as fs:
+        data = fs.read()
     return data
 
 
@@ -159,10 +164,10 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    with open(path_to_file, 'w', encoding='utf-8') as file:
+    with open(path_to_file, 'w', encoding='utf-8') as fs:
         for context in content:
-            file.write(' '.join(context) + '\n')
-        file.close()
+            fs.write(''.join(text).join('\n'))
+        fs.close()
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
