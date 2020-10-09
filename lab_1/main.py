@@ -14,19 +14,13 @@ def tokenize(text: str) -> list:
     """
     tokens = []
     if isinstance(text, str):
-        text += ' '
+        text_lower = text.lower()
         text_clean = ''
-        for symbol in text:
-            if symbol.isalpha() or symbol == ' ':
+        useless = set("""1234567890!@#$%^&*()_+=-;№:?[]{},.<>~/|""")
+        for symbol in text_lower:
+            if symbol not in useless:
                 text_clean += symbol
-            else:
-                symbol_index = text.index(symbol)
-                if text[symbol_index + 1] == ' ':
-                    text_clean += ' '
-                elif text[symbol_index + 1].isalpha():
-                    text_clean += symbol
-        text_lower = text_clean.lower()
-        tokens = text_lower.split()
+        tokens = text_clean.split()
 
     return tokens
 
@@ -66,8 +60,9 @@ def calculate_frequencies(tokens: list) -> dict:
     """
     freq_dict = {}
     if isinstance(tokens, list):
-        for token in tokens:
-            freq_dict[token] = tokens.count(token)
+        for word in tokens:
+            if isinstance(word, str):
+                freq_dict[word] = tokens.count(word)
 
     return freq_dict
 
@@ -84,14 +79,13 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
     top_n_words = []
     if isinstance(freq_dict, dict) and isinstance(top_n, int):
-        if top_n <= len(freq_dict):
-            freq_list = list(freq_dict.items())
-            freq_list.sort(key=lambda num: num[1], reverse=True)
-            freq_dict_sorted = dict(freq_list)
-            top_words = []
-            for frequency, word in enumerate(freq_dict_sorted):
-                top_words.append(word)
-            top_n_words = top_words[:top_n]
+        freq_list = list(freq_dict.items())
+        freq_list.sort(key=lambda num: num[1], reverse=True)
+        freq_dict_sorted = dict(freq_list)
+        top_words = []
+        for frequency, word in enumerate(freq_dict_sorted):
+            top_words.append(word)
+        top_n_words = top_words[:top_n]
 
     return top_n_words
 
@@ -116,40 +110,43 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     concordance = []
     if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int) and isinstance(right_context_size, int):
         word_indexes = []
-        tokens_copy = tokens.copy()
-        for token in tokens_copy:
-            if token == word:
-                token_index = tokens_copy.index(token)
-                word_indexes.append(token_index)
-                tokens_copy.pop(token_index)
-                tokens_copy.insert(token_index, '?')
-        left_limit = word_indexes[-1]
-        right_limit = len(tokens)
-        right_limit - int(word_indexes[-1])
-        left_subconcordance = []
-        right_subconcordance = []
-        if left_context_size >= 1 and left_context_size <= left_limit:
-            for index in word_indexes:
-                left_example = tokens[index - left_context_size:index]
-                left_example.append(word)
-                left_subconcordance.append(left_example)
-        if right_context_size >= 1 and right_context_size <= right_limit:
-            for index in word_indexes:
-                right_example = tokens[index + 1:index + right_context_size + 1]
-                right_example.insert(0, word)
-                right_subconcordance.append(right_example)
-        if len(left_subconcordance) == 0:
-            concordance = right_subconcordance
-        elif len(right_subconcordance) == 0:
-            concordance = left_subconcordance
-        elif len(left_subconcordance) == 0 and len(right_subconcordance) == 0:
-            pass
-        else:
-            for index in word_indexes:
-                example = tokens[index - left_context_size:index]  # left context
-                example.append(word)
-                example += tokens[index + 1:index + right_context_size + 1]  # right context
-                concordance.append(example)
+        input_check = True
+        if tokens == [] or word == '':
+            input_check = False
+        if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
+            input_check = False
+        if input_check:
+            tokens_copy = tokens.copy()
+            for token in tokens_copy:
+                if token == word:
+                    token_index = tokens_copy.index(token)
+                    word_indexes.append(token_index)
+                    tokens_copy.pop(token_index)
+                    tokens_copy.insert(token_index, '?')
+            left_subconcordance = []
+            right_subconcordance = []
+            if left_context_size >= 1:
+                for index in word_indexes:
+                    left_example = tokens[index - left_context_size:index]
+                    left_example.append(word)
+                    left_subconcordance.append(left_example)
+            if right_context_size >= 1:
+                for index in word_indexes:
+                    right_example = tokens[index + 1:index + right_context_size + 1]
+                    right_example.insert(0, word)
+                    right_subconcordance.append(right_example)
+            if len(left_subconcordance) == 0:
+                concordance = right_subconcordance
+            elif len(right_subconcordance) == 0:
+                concordance = left_subconcordance
+            elif len(left_subconcordance) == 0 and len(right_subconcordance) == 0:
+                pass
+            else:
+                for index in word_indexes:
+                    example = tokens[index - left_context_size:index]  # left context
+                    example.append(word)
+                    example += tokens[index + 1:index + right_context_size + 1]  # right context
+                    concordance.append(example)
 
     return concordance
 
@@ -172,9 +169,13 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     adjacent_words = []
     if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_n, int) and isinstance(right_n, int):
         concordance = get_concordance(tokens, word, left_n, right_n)
-        if len(concordance) != 0:
+        if len(concordance) > 0:
             for example in concordance:
                 if example[0] == word:
+                    right_checker = example[example.index(word):]
+                    print(right_checker)
+                    if right_n > len(right_checker):
+                        right_n = len(right_checker) - 1
                     right_adjacent_word = [example[right_n]]
                     adjacent_words.append(right_adjacent_word)
                 elif example[-1] == word:
@@ -236,11 +237,11 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
             if concordance_check:
                 concordance_sorted = sorted(concordance)
         elif not left_sort and right_context_size > 0:
-            concordance_check = True
-            for example in concordance:
-                if example[-1] == word:
-                    concordance_check = False
-            if concordance_check:
+            # concordance_check = True
+            # for example in concordance:
+            #     if example[-1] == word:
+            #         concordance_check = False
+            # if concordance_check:
                 concordance_sorted = sorted(concordance, key=lambda x: x[x.index(word) + 1])
 
     return concordance_sorted
