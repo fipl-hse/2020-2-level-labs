@@ -62,10 +62,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if not isinstance(tokens, list) or not isinstance(word, str) \
             or None in tokens:
         return []
-    iter = [i for i in range(len(tokens)) if tokens[i] == word]
+    iter = [int(i) for i in range(len(tokens)) if tokens[i] == word]
     ans = []
     for i in iter:
-        if (i - left_context_size) >= 0 and (i + right_context_size < len(tokens)):
+        if ((i - left_context_size) >= 0) and (i + right_context_size < len(tokens)):
             ans.append(tokens[i - left_context_size: i + right_context_size + 1])
         elif (i - left_context_size) >= 0:
             ans.append(tokens[i - left_context_size:])
