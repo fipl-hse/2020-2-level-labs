@@ -38,7 +38,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
 
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return []
-    stop_words_set=frozenset(stop_words)
+
     return [item for item in tokens if item not in stop_words_set]
 
 
@@ -50,17 +50,17 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-
-    if not isinstance(tokens, list) or None in tokens:
+if not isinstance(tokens, list) or None in tokens:
         return {}
 
-    frequencies_dict = {}
+    # here goes the main logic
+    freq_dict = {}
     for token in tokens:
-        if token in frequencies_dict:
-            frequencies_dict[token] += 1
+        if token in freq_dict:
+            freq_dict[token] += 1
         else:
-            frequencies_dict[token] = 1
-    return frequencies_dict
+            freq_dict[token] = 1
+    return freq_dict
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
@@ -72,7 +72,6 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or None in freq_dict:
         return []
 
