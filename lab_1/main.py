@@ -202,7 +202,10 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+    if isinstance(path_to_file, str) and isinstance(content, list):
+        with open(path_to_file, 'w', encoding='utf-8') as data:
+            for example in content:
+                data.write(' '.join(example) + '\n')
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
@@ -222,4 +225,22 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    pass
+    concordance_sorted = []
+    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int) and isinstance(right_context_size, int) and isinstance(left_sort, bool):
+        concordance = get_concordance(tokens, word, left_context_size, right_context_size)
+        if left_sort and left_context_size > 0:
+            concordance_check = True
+            for example in concordance:
+                if example[0] == word:
+                    concordance_check = False
+            if concordance_check:
+                concordance_sorted = sorted(concordance)
+        elif not left_sort and right_context_size > 0:
+            concordance_check = True
+            for example in concordance:
+                if example[-1] == word:
+                    concordance_check = False
+            if concordance_check:
+                concordance_sorted = sorted(concordance, key=lambda x: x[x.index(word) + 1])
+
+    return concordance_sorted
