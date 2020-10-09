@@ -21,10 +21,9 @@ def tokenize(f):
 def remove_stop_words(tokens, stop_words):
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return []
-    stop_words = set(tokenize(stop_words))
-    tokens = set(tokens)
-    tokens = tokens - stop_words
-    return list(tokens)
+    stop_words = tokenize(stop_words)
+    new_list_token = [word for word in tokens if word not in stop_words]
+    return list(new_list_token)
 
 
 def calculate_frequencies(tokens):
