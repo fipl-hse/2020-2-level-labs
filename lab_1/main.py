@@ -3,6 +3,8 @@ Lab 1
 A concordance extraction
 """
 def tokenize(f):
+    if not isinstance(text, str):
+        return []
     tokens = []
     for token in f.lower().split():
         variable = ''
@@ -17,15 +19,17 @@ def tokenize(f):
         
 
 def remove_stop_words(tokens, stop_words):
-    try:
-        stop_words = set(tokenize(stop_words))
-        tokens = set(tokens)
-        tokens = tokens - stop_words
-        return list(tokens)
-    except TypeError:
-        print(tokens)
+    if not isinstance(tokens, list) or not isinstance(stop_words, list):
+        return []
+    stop_words = set(tokenize(stop_words))
+    tokens = set(tokens)
+    tokens = tokens - stop_words
+    return list(tokens)
+
 
 def calculate_frequencies(tokens):
+    if not isinstance(tokens, list) or None in tokens:
+        return {}
     global tokenize_text
     dictionary = {}
     for i in tokens:
@@ -34,6 +38,8 @@ def calculate_frequencies(tokens):
 
 
 def get_top_n_words(dictionary, n):
+    if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or None in freq_dict:
+        return []
     ans = []
     cnt = 0
     for w in sorted(dictionary, key=dictionary.get, reverse=True):
@@ -59,6 +65,9 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
+    if not isinstance(tokens, list) or not isinstance(word, str) \
+            or None in tokens:
+        return []
     iter = [i for i in range(len(tokens)) if tokens[i] == word]
     ans = []
     for i in iter:
