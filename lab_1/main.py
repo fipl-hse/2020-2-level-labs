@@ -45,9 +45,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
 
     without_stop_words = []
     for constituent in tokens:
+        if isinstance(constituent, str):
+            if constituent not in stop_words:
+                without_stop_words.append(constituent)
 
-        if constituent not in stop_words:
-            without_stop_words.append(constituent)
     return without_stop_words
 
 
