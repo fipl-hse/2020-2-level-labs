@@ -69,7 +69,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     if not isinstance(freq_dict, dict) and not isinstance(top_n, int):
         return []
     top_n_list = sorted(freq_dict, key=freq_dict.get, reverse=True)
-    print(top_n_list[:top_n])
+    return top_n_list[:top_n]
 
 
 # 5
@@ -90,7 +90,34 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
-    pass
+    lcs = left_context_size
+    rcs = right_context_size
+    tests = [
+        isinstance(tokens, list),
+        isinstance(word, str),
+        isinstance(left_context_size, int),
+        isinstance(right_context_size, int),
+        not isinstance(left_context_size, bool),
+        not isinstance(right_context_size, bool)
+    ]
+
+    if not all(tests):
+        return []
+
+    concordance = []
+    word_index = [idx for idx, el in enumerate(tokens) if el == word]
+    limit = (lcs, rcs)
+
+    for idx in word_index:
+        if limit[0] > 0 and limit[1] > 0:
+            concordance.append(tokens[idx - limit[0]:idx + limit[1] + 1])
+        elif limit[0] > 0:
+            concordance.append(tokens[idx - limit[0]:idx + 1])
+        elif limit[1] > 0:
+            concordance.append(tokens[idx:idx + concordance[1] + 1])
+        else:
+            return []
+    return concordance
 
 
 # 6
