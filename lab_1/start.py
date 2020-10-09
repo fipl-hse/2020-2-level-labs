@@ -42,14 +42,7 @@ if __name__ == '__main__':
     adj_word_right + "' as 3rd on the right""")
     print('\n\n    ...sorting the concordance...')
     sorted_concordance = main.sort_concordance(tokens, 'season', 2, 3, True)
-    SORTED_EXAMPLE = ''
-    if len(sorted_concordance):
-        for word in sorted_concordance[0]:
-            SORTED_EXAMPLE += word
-            if sorted_concordance[0].index(word) != (len(sorted_concordance[0]) - 1):
-                SORTED_EXAMPLE += ', '
-    print("\n> The first context of the word 'season' \n(alphabetic order by left context):")
-    print(SORTED_EXAMPLE)
+    print(sorted_concordance)
     print("\n\n    ...writing the concordance to file 'report.txt'...")
     main.write_to_file(os.path.join(current_dir, 'report.txt'), concordance)
 
