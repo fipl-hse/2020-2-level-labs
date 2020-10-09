@@ -12,8 +12,8 @@ def tokenize(text: str) -> list:
     """
 
     if not isinstance(text, str):
+This conversation was marked as resolved by x-ae-a-12
         return []
-
 
     clean_tokens = []
     for token in text.lower().split():
@@ -24,6 +24,7 @@ def tokenize(text: str) -> list:
         if word:
             clean_tokens.append(word)
     return clean_tokens
+
 
 def remove_stop_words(tokens: list, stop_words: list) -> list:
     """
@@ -39,7 +40,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     if not isinstance(tokens, list) or not isinstance(stop_words, list):
         return []
 
-    return [item for item in tokens if item not in stop_words_set]
+    return [token for token in tokens if token not in stop_words]
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -50,10 +51,10 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
-if not isinstance(tokens, list) or None in tokens:
+
+    if not isinstance(tokens, list) or None in tokens:
         return {}
 
-    # here goes the main logic
     freq_dict = {}
     for token in tokens:
         if token in freq_dict:
@@ -61,6 +62,7 @@ if not isinstance(tokens, list) or None in tokens:
         else:
             freq_dict[token] = 1
     return freq_dict
+
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     """
@@ -72,6 +74,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
+
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or None in freq_dict:
         return []
 
@@ -80,6 +83,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     for word_freq in frequencies_and_words_sorted[:top_n]:
         result.append(word_freq[0])
     return result
+
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
     """
@@ -105,7 +109,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if left_context_size is True or right_context_size is True\
             or not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
         return []
-
     if left_context_size < 0:
         left_context_size = 0
     if right_context_size < 0:
@@ -118,6 +121,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         if element == word:
             contexts.append(tokens[index-left_context_size:index+right_context_size+1])
     return contexts
+
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
@@ -134,16 +138,17 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
-contexts = get_concordance(tokens, word, left_n, right_n)
-adjacent_words = []
-for context in contexts:
-    if not left_n:
-        adjacent_words.append([context[-1]])
-    elif not right_n:
-        adjacent_words.append([context[0]])
-    else:
-        adjacent_words.append([context[0], context[-1]])
-return adjacent_words
+
+    contexts = get_concordance(tokens, word, left_n, right_n)
+    adjacent_words = []
+    for context in contexts:
+        if not left_n:
+            adjacent_words.append([context[-1]])
+        elif not right_n:
+            adjacent_words.append([context[0]])
+        else:
+            adjacent_words.append([context[0], context[-1]])
+    return adjacent_words
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -151,6 +156,9 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
+    with open(path_to_file, 'r', encoding='utf-8') as fs:
+        data = fs.read()
+
     with open(path_to_file, 'r', encoding='utf-8') as file:
         data = file.read()
     return data
@@ -195,6 +203,6 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
         return sorted(contexts)
 
     word_index = contexts[0].index(word)
-    right_contexts = [(context[word_index + 1:], context[:word_index + 1]) for context in contexts]
+    right_contexts = [(context[word_index+1:], context[:word_index+1]) for context in contexts]
     right_contexts_sorted = sorted(right_contexts)
-    return [sorted_right_context[1] + sorted_right_context[0] for sorted_right_context in right_contexts_sorted]
+    return [sorted_right_context[1]+sorted_right_context[0] for sorted_right_context in right_contexts_sorted]
