@@ -19,9 +19,9 @@ def tokenize(f):
         
 
 def remove_stop_words(tokens, stop_words):
-    if isinstance(tokens, list) or isinstance(stop_words, list):
+    if isinstance(tokens, list) and isinstance(stop_words, list):
         new_list_token = [word for word in tokens if word not in stop_words]
-        return list(new_list_token)
+        return new_list_token
     return []
 
 
