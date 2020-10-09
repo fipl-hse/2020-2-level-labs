@@ -38,13 +38,7 @@ def calculate_frequencies(tokens):
 
 def get_top_n_words(dictionary, n):
     if isinstance(dictionary, dict) and isinstance(n, int):
-        ans = []
-        cnt = 0
-        for w in sorted(dictionary.items(), key=lambda x: x[1], reverse=True):
-            ans.append(w)
-            cnt += 1
-            if cnt == n:
-                return ans
+        return [i[0] for i in sorted(list(dictionary.items()), key=lambda i: i[1], reverse=True)[:n]]
     return []
 
 
