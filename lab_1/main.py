@@ -40,7 +40,7 @@ def get_top_n_words(dictionary, n):
         ans = []
         cnt = 0
         for w in sorted(dictionary, key=dictionary.get, reverse=True):
-            ans.append(w)
+            ans.append(w[0])
             cnt += 1
             if cnt == n:
                 return ans
