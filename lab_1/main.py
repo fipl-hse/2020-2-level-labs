@@ -38,7 +38,7 @@ def calculate_frequencies(tokens):
 
 
 def get_top_n_words(dictionary, n):
-    if not isinstance(freq_dict, dict) or not isinstance(top_n, int) or None in freq_dict:
+    if not isinstance(dictionary, dict) or not isinstance(n, int) or None in dictionary:
         return []
     ans = []
     cnt = 0
