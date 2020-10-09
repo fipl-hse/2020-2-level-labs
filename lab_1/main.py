@@ -164,9 +164,10 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    with open(path_to_file, 'r', encoding='utf-8') as file:
-        for i in content:
-            file.write('/n'.join(i))
+    if isinstance(path_to_file, str) and isinstance(content, list):
+        result = [' '.join(i) for i in content]
+        with open(path_to_file, 'w') as file:
+            file.write('\n'.join(result))
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
