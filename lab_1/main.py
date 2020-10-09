@@ -26,13 +26,13 @@ def remove_stop_words(tokens, stop_words):
 
 
 def calculate_frequencies(tokens):
-    if not isinstance(tokens, list) or None in tokens:
-        return {}
-    global tokenize_text
-    dictionary = {}
-    for i in tokens:
-        dictionary[i] = tokenize_text.count(i)
-    return dictionary
+    if isinstance(tokens, list) and None not in tokens:
+        dictionary = {}
+        for i in tokens:
+            dictionary[i] = tokens.count(i)
+        return dictionary
+    
+    return {}
 
 
 def get_top_n_words(dictionary, n):
