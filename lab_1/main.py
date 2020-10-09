@@ -2,6 +2,8 @@
 Lab 1
 A concordance extraction
 """
+
+
 def tokenize(f):
     if not isinstance(f, str):
         return []
@@ -16,7 +18,6 @@ def tokenize(f):
             tokens.append(variable)
     return tokens
 
-        
 
 def remove_stop_words(tokens, stop_words):
     if isinstance(tokens, list) and isinstance(stop_words, list):
@@ -36,15 +37,16 @@ def calculate_frequencies(tokens):
 
 
 def get_top_n_words(dictionary, n):
-    if isinstance(dictionary, dict) and isinstance(n, int) and None not in dictionary:
+    if isinstance(dictionary, dict) and isinstance(n, int):
         ans = []
         cnt = 0
-        for w in sorted(dictionary, key=dictionary.get, reverse=True):
+        for w in sorted(dictionary.items(), key=lambda x: x[1], reverse=True):
             ans.append(w)
             cnt += 1
             if cnt == n:
                 return ans
     return []
+
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int):
     """
@@ -75,12 +77,11 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             ans.append(tokens[i - left_context_size:])
         else:
             ans.append(tokens[:i + right_context_size + 1])
-                                       
+
     return any
-                               
+
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
-        
     """
     Gets adjacent words from the left and right context
     :param tokens: a list of tokens
@@ -99,7 +100,6 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
 
 
 def read_from_file(path_to_file: str) -> str:
-         
     """
     Opens the file and reads its content
     :return: the initial text in string format
@@ -111,7 +111,6 @@ def read_from_file(path_to_file: str) -> str:
 
 
 def write_to_file(path_to_file: str, content: list):
-        
     """
     Writes the result in a file
     """
