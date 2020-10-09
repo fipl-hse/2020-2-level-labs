@@ -6,9 +6,9 @@ import os
 import main
 
 if __name__ == '__main__':
-    #  use data.txt file to test your program
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    data = main.read_from_file(os.path.join(current_dir, 'data.txt'))
+    data = main.read_from_file(os.path.join(current_dir, 'data_short.txt'))
+    # just a shorter version of data.txt because my pc couldn't run start.py with 10000 string file...
     stop_words = (main.read_from_file(os.path.join(current_dir, 'stop_words.txt'))).split('\n')
 
     #  here goes your logic: calling methods from concordance.py
@@ -42,12 +42,17 @@ if __name__ == '__main__':
     adj_word_right + "' as 3rd on the right""")
     print('\n\n    ...sorting the concordance...')
     sorted_concordance = main.sort_concordance(tokens, 'season', 2, 3, True)
-    print(sorted_concordance)
+    SORTED_EXAMPLE = ''
+    for word in sorted_concordance[0]:
+        SORTED_EXAMPLE += word
+        if sorted_concordance[0].index(word) != (len(sorted_concordance[0]) - 1):
+            SORTED_EXAMPLE += ', '
+    print("\n> The first context of the word 'season' \n(alphabetic order by left context):")
+    print(SORTED_EXAMPLE)
     print("\n\n    ...writing the concordance to file 'report.txt'...")
     main.write_to_file(os.path.join(current_dir, 'report.txt'), concordance)
 
     RESULT = sorted_concordance[:2]
-    print(sorted_concordance[:2])
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == [['disappointing', 'record', 'season', 'saints', 'ended', 'season'],
-                      ['saints', 'ended', 'season', 'philosophy', 'mathematics', 'selected']], 'Concordance not working'
+                      ['earlier', 'breeding', 'season', 'larger', 'dominant', 'adults']], 'Concordance not working'
