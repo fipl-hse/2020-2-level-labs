@@ -44,14 +44,6 @@ def get_top_n_words(dictionary, n):
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int):
     """
-    Gets a concordance of a word
-    A concordance is a listing of each occurrence of a word in a text,
-    presented with the words surrounding it
-    :param tokens: a list of tokens
-    :param word: a word-base for a concordance
-    :param left_context_size: the number of words in the left context
-    :param right_context_size: the number of words in the right context
-    :return: a concordance
     e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
                     'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
     word = 'happy'
@@ -65,14 +57,14 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     iter = [int(i) for i in range(len(tokens)) if tokens[i] == word]
     ans = []
     for i in iter:
-        if ((i - left_context_size) >= 0) and (i + right_context_size < len(tokens)):
+        if ((i - left_context_size) >= 0) and (i + right_context_size + 1 < len(tokens)):
             ans.append(tokens[i - left_context_size: i + right_context_size + 1])
         elif (i - left_context_size) >= 0:
             ans.append(tokens[i - left_context_size:])
         else:
             ans.append(tokens[:i + right_context_size + 1])
 
-    return any
+    return ans
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
