@@ -16,7 +16,7 @@ def tokenize(text: str) -> list:
     if isinstance(text, str):
         text_lower = text.lower()
         text_clean = ''
-        useless = set("""1234567890!@#$%^&*()_+=-;№:?[]{},.<>~/|""")
+        useless = set("""1234567890!@#$%^&*()_+=–-;№:?[]{},.<>~/|""")
         for symbol in text_lower:
             if symbol not in useless:
                 text_clean += symbol
@@ -77,7 +77,7 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
-    top_n_words = []
+    TOP_N_WORDS = []
     if isinstance(freq_dict, dict) and isinstance(top_n, int):
         freq_list = list(freq_dict.items())
         freq_list.sort(key=lambda num: num[1], reverse=True)
@@ -85,9 +85,9 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
         top_words = []
         for frequency, word in enumerate(freq_dict_sorted):
             top_words.append(word)
-        top_n_words = top_words[:top_n]
+        TOP_N_WORDS = top_words[:top_n]
 
-    return top_n_words
+    return TOP_N_WORDS
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -108,45 +108,46 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     concordance = []
-    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int) and isinstance(right_context_size, int):
-        word_indexes = []
-        input_check = True
-        if tokens == [] or word == '':
-            input_check = False
-        if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
-            input_check = False
-        if input_check:
-            tokens_copy = tokens.copy()
-            for token in tokens_copy:
-                if token == word:
-                    token_index = tokens_copy.index(token)
-                    word_indexes.append(token_index)
-                    tokens_copy.pop(token_index)
-                    tokens_copy.insert(token_index, '?')
-            left_subconcordance = []
-            right_subconcordance = []
-            if left_context_size >= 1:
-                for index in word_indexes:
-                    left_example = tokens[index - left_context_size:index]
-                    left_example.append(word)
-                    left_subconcordance.append(left_example)
-            if right_context_size >= 1:
-                for index in word_indexes:
-                    right_example = tokens[index + 1:index + right_context_size + 1]
-                    right_example.insert(0, word)
-                    right_subconcordance.append(right_example)
-            if len(left_subconcordance) == 0:
-                concordance = right_subconcordance
-            elif len(right_subconcordance) == 0:
-                concordance = left_subconcordance
-            elif len(left_subconcordance) == 0 and len(right_subconcordance) == 0:
-                pass
-            else:
-                for index in word_indexes:
-                    example = tokens[index - left_context_size:index]  # left context
-                    example.append(word)
-                    example += tokens[index + 1:index + right_context_size + 1]  # right context
-                    concordance.append(example)
+    if isinstance(tokens, list) and isinstance(word, str):
+        if isinstance(left_context_size, int) and isinstance(right_context_size, int):
+            word_indexes = []
+            input_check = True
+            if tokens == [] or word == '':
+                input_check = False
+            if isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
+                input_check = False
+            if input_check:
+                tokens_copy = tokens.copy()
+                for token in tokens_copy:
+                    if token == word:
+                        token_index = tokens_copy.index(token)
+                        word_indexes.append(token_index)
+                        tokens_copy.pop(token_index)
+                        tokens_copy.insert(token_index, '?')
+                left_subconcordance = []
+                right_subconcordance = []
+                if left_context_size >= 1:
+                    for index in word_indexes:
+                        left_example = tokens[index - left_context_size:index]
+                        left_example.append(word)
+                        left_subconcordance.append(left_example)
+                if right_context_size >= 1:
+                    for index in word_indexes:
+                        right_example = tokens[index + 1:index + right_context_size + 1]
+                        right_example.insert(0, word)
+                        right_subconcordance.append(right_example)
+                if len(left_subconcordance) == 0:
+                    concordance = right_subconcordance
+                elif len(right_subconcordance) == 0:
+                    concordance = left_subconcordance
+                elif len(left_subconcordance) == 0 and len(right_subconcordance) == 0:
+                    pass
+                else:
+                    for index in word_indexes:
+                        example = tokens[index - left_context_size:index]  # left context
+                        example.append(word)
+                        example += tokens[index + 1:index + right_context_size + 1]  # right context
+                        concordance.append(example)
 
     return concordance
 
@@ -193,8 +194,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        data = file.read()
 
     return data
 
@@ -227,21 +228,17 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     concordance_sorted = []
-    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int) and isinstance(right_context_size, int) and isinstance(left_sort, bool):
-        concordance = get_concordance(tokens, word, left_context_size, right_context_size)
-        if left_sort and left_context_size > 0:
-            concordance_check = True
-            for example in concordance:
-                if example[0] == word:
-                    concordance_check = False
-            if concordance_check:
-                concordance_sorted = sorted(concordance)
-        elif not left_sort and right_context_size > 0:
-            # concordance_check = True
-            # for example in concordance:
-            #     if example[-1] == word:
-            #         concordance_check = False
-            # if concordance_check:
+    if isinstance(tokens, list) and isinstance(word, str) and isinstance(left_context_size, int):
+        if isinstance(right_context_size, int) and isinstance(left_sort, bool):
+            concordance = get_concordance(tokens, word, left_context_size, right_context_size)
+            if left_sort and left_context_size > 0:
+                concordance_check = True
+                for example in concordance:
+                    if example[0] == word:
+                        concordance_check = False
+                if concordance_check:
+                    concordance_sorted = sorted(concordance)
+            elif not left_sort and right_context_size > 0:
                 concordance_sorted = sorted(concordance, key=lambda x: x[x.index(word) + 1])
 
     return concordance_sorted
