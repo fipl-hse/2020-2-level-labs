@@ -95,10 +95,10 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     tests = [
         isinstance(tokens, list),
         isinstance(word, str),
-        isinstance(left_context_size, int),
-        isinstance(right_context_size, int),
-        not isinstance(left_context_size, bool),
-        not isinstance(right_context_size, bool)
+        isinstance(lcs, int),
+        isinstance(rcs, int),
+        not isinstance(lcs, bool),
+        not isinstance(rcs, bool)
     ]
 
     if not all(tests):
@@ -114,7 +114,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         elif limit[0] > 0:
             concordance.append(tokens[idx - limit[0]:idx + 1])
         elif limit[1] > 0:
-            concordance.append(tokens[idx:idx + concordance[1] + 1])
+            concordance.append(tokens[idx:idx + limit[1] + 1])
         else:
             return []
     return concordance
@@ -148,6 +148,18 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     if not all(tests):
         return []
 
+    concordance = get_concordance(tokens, word, left_n, right_n)
+    if len(concordance) == 0:
+        return []
+
+    if left_n == 0:
+        adj_words = [[token[-1]] for token in concordance]
+    elif right_n == 0:
+        adj_words = [[token[0]] for token in concordance]
+    else:
+        adj_words = [[token[0], token[-1]] for token in concordance]
+    return adj_words
+
 
 # 7
 def read_from_file(path_to_file: str) -> str:
@@ -165,7 +177,9 @@ def write_to_file(path_to_file: str, content: list):
     """
     Writes the result in a file
     """
-    pass
+    ready_file = [' '.join(concordance) for concordance in content]
+    with open(path_to_file, 'w') as file:
+        file.write('\n'.join(ready_file))
 
 
 # 8
@@ -186,4 +200,28 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     left_sort = True
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
-    pass
+    lcs = left_context_size
+    rcs = right_context_size
+
+    tests = [
+        isinstance(tokens, list),
+        isinstance(word, str),
+        isinstance(left_context_size, int),
+        isinstance(right_context_size, int),
+        not isinstance(left_context_size, bool),
+        not isinstance(right_context_size, bool),
+        isinstance(left_sort, bool)
+    ]
+
+    if not all(tests):
+        return []
+
+    concordance = get_concordance(tokens, word, lcs, rcs)
+    limit = (lcs, rcs)
+
+    if left_sort and limit[0] > 0:
+        return sorted(concordance)
+    if not left_sort and limit[1] > 0:
+        return sorted(concordance, key=lambda i: i[i.index(word) + 1])
+    return []
+
