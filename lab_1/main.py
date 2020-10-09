@@ -110,7 +110,6 @@ def read_from_file(path_to_file: str) -> str:
 
 
 def write_to_file(path_to_file: str, content: list):
-    lab_1/data.txt    
         
     """
     Writes the result in a file
