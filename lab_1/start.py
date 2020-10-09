@@ -38,8 +38,8 @@ if __name__ == '__main__':
     adj_words_example = adj_words[0]
     adj_word_right = adj_words_example.pop()
     adj_word_left = adj_words_example.pop()
-    print("""> Adjacent words from this context: \n'" + adj_word_left + "' as 2nd on the left, \n'" +
-    adj_word_right + "' as 3rd on the right""")
+    print("> Adjacent words from this context: \n'" + adj_word_left + "' as 2nd on the left, \n'" +
+    adj_word_right + "' as 3rd on the right")
     print('\n\n    ...sorting the concordance...')
     sorted_concordance = main.sort_concordance(tokens, 'season', 2, 3, True)
     SORTED_EXAMPLE = ''
