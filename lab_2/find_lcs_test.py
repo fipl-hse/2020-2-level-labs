@@ -157,11 +157,12 @@ class FindLcsTest(unittest.TestCase):
         """
         Tests that find lcs function
             can check lcs_matrix matches given sentences
+            NB! So the first element of lcs_matrix should be
+                equal to 1 or 0, otherwise - empty tuple
         """
-        # hidden check for function fill_lcs_matrix calling below
         lcs_matrix = [[1000, 1, 1, 1],
-                      [1, 1000, 1, 1],
-                      [1, 1, 1, 1000]]
+                      [1, 1, 1, 1],
+                      [1, 1, 1, 1]]
         sentence_first = ('the', 'dog', 'sleeps')
         sentence_second = ('the', 'cat', 'is', 'sleeping')
 
