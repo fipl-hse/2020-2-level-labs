@@ -110,46 +110,47 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
     concordance = []
-    word_indexes = []
-    input_check = True
-    if isinstance(tokens, list) and isinstance(word, str):
-        if isinstance(left_context_size, int) and isinstance(right_context_size, int):
-            if tokens == [] or word == '':
-                input_check = False
-            elif isinstance(left_context_size, bool) or isinstance(right_context_size, bool):
-                input_check = False
-            if input_check:
-                tokens_copy = tokens.copy()
-                for token in tokens_copy:
-                    if token == word:
-                        token_index = tokens_copy.index(token)
-                        word_indexes.append(token_index)
-                        tokens_copy.pop(token_index)
-                        tokens_copy.insert(token_index, '?')
-                left_subconcordance = []
-                right_subconcordance = []
-                if left_context_size >= 1:
-                    for index in word_indexes:
-                        left_example = tokens[index - left_context_size:index]
-                        left_example.append(word)
-                        left_subconcordance.append(left_example)
-                if right_context_size >= 1:
-                    for index in word_indexes:
-                        right_example = tokens[index + 1:index + right_context_size + 1]
-                        right_example.insert(0, word)
-                        right_subconcordance.append(right_example)
-                if len(left_subconcordance) == 0:
-                    concordance = right_subconcordance
-                elif len(right_subconcordance) == 0:
-                    concordance = left_subconcordance
-                elif len(left_subconcordance) == 0 and len(right_subconcordance) == 0:
-                    pass
-                else:
-                    for index in word_indexes:
-                        example = tokens[index - left_context_size:index]  # left context
-                        example.append(word)
-                        example += tokens[index + 1:index + right_context_size + 1]  # right context
-                        concordance.append(example)
+    input_check = [
+        isinstance(tokens, list),
+        isinstance(word, str),
+        isinstance(left_context_size, int),
+        isinstance(right_context_size, int),
+        not isinstance(left_context_size, bool),
+        not isinstance(right_context_size, bool),
+    ]
+    if all(input_check):
+        word_indexes = []
+        tokens_copy = tokens.copy()
+        for token in tokens_copy:
+            if token == word:
+                token_index = tokens_copy.index(token)
+                word_indexes.append(token_index)
+                tokens_copy.pop(token_index)
+                tokens_copy.insert(token_index, '?')
+        left_subconcordance = []
+        right_subconcordance = []
+        if left_context_size >= 1:
+            for index in word_indexes:
+                example = tokens[index - left_context_size:index]
+                example.append(word)
+                left_subconcordance.append(example)
+        if right_context_size >= 1:
+            for index in word_indexes:
+                example = tokens[index + 1:index + right_context_size + 1]
+                example.insert(0, word)
+                right_subconcordance.append(example)
+        if len(left_subconcordance) == 0:
+            concordance = right_subconcordance
+        elif len(right_subconcordance) == 0:
+            concordance = left_subconcordance
+        elif len(left_subconcordance) == 0 and len(right_subconcordance) == 0:
+            pass
+        else:
+            for index in word_indexes:
+                example = tokens[index - left_context_size:index]  # left context
+                example.append(word)
+                example += tokens[index + 1:index + right_context_size + 1]  # right context
+                concordance.append(example)
 
     return concordance
 
