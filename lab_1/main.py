@@ -31,10 +31,11 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     stop_words = ['the', 'is']
     --> ['weather', 'sunny', 'man', 'happy']
     """
-    if not isinstance(tokens, list) and not isinstance(stop_words, list):
+    if not isinstance(tokens, list):
         return []
-    cleaned_tokens = [word for word in tokens if word not in stop_words]
-    return cleaned_tokens
+    if not isinstance(stop_words, list):
+        return tokens
+    return [word for word in tokens if word not in stop_words]
 
 
 # 3
