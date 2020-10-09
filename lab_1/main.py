@@ -3,7 +3,7 @@ Lab 1
 A concordance extraction
 """
 def tokenize(f):
-    if not isinstance(text, str):
+    if not isinstance(f, str):
         return []
     tokens = []
     for token in f.lower().split():
