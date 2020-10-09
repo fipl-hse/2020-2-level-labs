@@ -1,9 +1,7 @@
 Concordance implementation starter
 """
 
-import os
 import main
-This conversation was marked as resolved by x-ae-a-12
 
 if __name__ == '__main__':
     #  use data.txt file to test your program
@@ -42,5 +40,4 @@ if __name__ == '__main__':
     main.write_to_file(os.path.join(current_dir, 'adjacent_queen.txt'), adjacent_words_queen)
 
     RESULT = contexts_without_stop_words
-    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Concordance not working'
