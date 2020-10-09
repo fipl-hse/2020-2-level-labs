@@ -20,7 +20,7 @@ if __name__ == '__main__':
     top_n_words_list = main.get_top_n_words(frequencies, 10)
     TOP_N_WORDS = ''
     for word in top_n_words_list:
-        top_n_words += word
+        TOP_N_WORDS += word
         if top_n_words_list.index(word) != (len(top_n_words_list) - 1):
             TOP_N_WORDS += ', '
     print('\n> Top 10 most mentioned words in the text:')
