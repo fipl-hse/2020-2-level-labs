@@ -35,9 +35,9 @@ def calculate_frequencies(tokens):
     return {}
 
 
-def get_top_n_words(dictionary, top_n):
-    if isinstance(dictionary, dict) and isinstance(top_n, int):
-        return [i[0] for i in sorted(list(dictionary.items()), key=lambda i: i[1], reverse=True)[:top_n]]
+def get_top_n_words(freq_dict: dict, top_n: int):
+    if isinstance(freq_dict, dict) and isinstance(top_n, int):
+        return [i[0] for i in sorted(list(freq_dict.items()), key=lambda i: i[1], reverse=True)[:top_n]]
     return []
 
 
@@ -89,6 +89,7 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
+    import os
     with open(path_to_file, 'r', encoding='utf-8') as read_file:
         data = read_file.read()
 
