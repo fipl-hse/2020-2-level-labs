@@ -4,11 +4,11 @@ A concordance extraction
 """
 
 
-def tokenize(f):
-    if not isinstance(f, str):
+def tokenize(text: str):
+    if not isinstance(text, str):
         return []
     tokens = []
-    for token in f.lower().split():
+    for token in text.lower().split():
         variable = ''
         for character in token:
             if character.isalpha():
@@ -36,9 +36,9 @@ def calculate_frequencies(tokens):
     return {}
 
 
-def get_top_n_words(dictionary, n):
-    if isinstance(dictionary, dict) and isinstance(n, int):
-        return [i[0] for i in sorted(list(dictionary.items()), key=lambda i: i[1], reverse=True)[:n]]
+def get_top_n_words(dictionary, top_n):
+    if isinstance(dictionary, dict) and isinstance(top_n, int):
+        return [i[0] for i in sorted(list(dictionary.items()), key=lambda i: i[1], reverse=True)[:top_n]]
     return []
 
 
@@ -95,8 +95,8 @@ def read_from_file(path_to_file: str) -> str:
     Opens the file and reads its content
     :return: the initial text in string format
     """
-    with open(path_to_file, 'r', encoding='utf-8') as fs:
-        data = fs.read()
+    with open(path_to_file, 'r', encoding='utf-8') as read_file:
+        data = read_file.read()
 
     return data
 
