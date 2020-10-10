@@ -1,3 +1,4 @@
+
 from main import read_from_file
 from main import tokenize
 from main import remove_stop_words
@@ -14,7 +15,7 @@ if __name__ == '__main__':
     stop_words = stop_words.split('\n')
 
     #  here goes your logic: calling methods from concordance.py
-    tokens = main.tokenize(f)
+    tokens = main.tokenize(text)
     print('tokens:', tokens[:10])
 
     RESULT = None
@@ -24,11 +25,10 @@ if __name__ == '__main__':
     frequencies = main.calculate_frequencies(tokens)
     print('frequency for the first word:', frequencies[tokens[0]])
 
-    top_10 = main.get_top_n_words(dictionary, n)
+    top_10 = main.get_top_n_words(freq_dict: dict, top_n: int)
     print('top 10 words:', top_10)
 
-    concordance = main.get_concordance(tokens, 'time', 2, 3)
-    print('concordance for "time":', concordance[:5])
+    concordance = main.get_concordance(tokens, 'time', 1, 1)
 
     RESULT = concordance
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
