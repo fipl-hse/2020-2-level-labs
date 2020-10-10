@@ -13,6 +13,6 @@ if __name__ == '__main__':
     #  here goes your logic: calling methods from concordance.py
     tokens = main.tokenize(text)
     print("tokens:", tokens[:15])
-
+    RESULT = tokens
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT
