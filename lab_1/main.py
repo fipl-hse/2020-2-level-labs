@@ -62,14 +62,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
         return []
 
 
-    if left_context_size < 0:
-        left_context_size = 0
-        if right_context_size < 0:
-            return []
-
-    if right_context_size < 0:
-        right_context_size = 0
-        if left_context_size < 0:
+    if (left_context_size < 1) and (right_context_size < 1):
             return []
 
     ans = []
