@@ -13,7 +13,6 @@ def tokenize(text: str):
         for character in token:
             if character.isalpha():
                 variable += character
-
         if len(variable) != 0:
             tokens.append(variable)
     return tokens
@@ -54,17 +53,12 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
       
 
     """
-    if not isinstance(tokens, list) or not isinstance(word, str) \
-            or None in tokens:
+    if not isinstance(tokens, list) or not isinstance(word, str) or None in tokens:
         return []
-    if left_context_size is True or right_context_size is True \
-            or not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
+    if left_context_size is True or right_context_size is True or not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
         return []
-
-
     if (left_context_size < 1) and (right_context_size < 1):
             return []
-
     ans = []
     for index, element in enumerate(tokens):
         if element == word:
