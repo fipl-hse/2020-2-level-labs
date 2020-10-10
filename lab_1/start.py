@@ -1,10 +1,5 @@
 
-from main import read_from_file
-from main import tokenize
-from main import remove_stop_words
-from main import calculate_frequencies
-from main import get_top_n_words
-from main import get_concordance
+import main
 import os
 
 if __name__ == '__main__':
@@ -18,17 +13,21 @@ if __name__ == '__main__':
     tokens = main.tokenize(text)
     
     RESULT = None
-    tokens = main.remove_stop_words(tokens, stop_words)
-    print('tokens without stop words:', tokens[:10])
+    tokens = main.tokenize(text)
+    print("tokens:", tokens[:15])
+
+    tokens_stop_words = main.remove_stop_words(tokens, stop_words)
+    print("tokens without stop words:", tokens_stop_words[:7])
 
     frequencies = main.calculate_frequencies(tokens)
-    print('frequency for the first word:', frequencies[tokens[0]])
+    print('frequencies for the word: ', frequencies[tokens[2]])
 
-    top_10 = main.get_top_n_words(freq_dict, top_n)
-    print('top 10 words:', top_10)
+    top_words = main.get_top_n_words(freq_dict, 3)
+    print("top words:", top_words)
 
-    concordance = main.get_concordance(tokens, 'time', 1, 1)
+    concordance = main.get_concordance(tokens, 'time', 1, 3)
+    print(" concordance:", concordance[:3])
 
-    RESULT = concordance
+RESULT = concordance[:3]
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == ['that', 'time', 'he']
+    assert RESULT == [['of', 'time', 'team', 'presented', 'a'], ['in', 'time', 'team', 'over', 'the'], ['the', 'time', 'a', 'stalin', 'directive']]
