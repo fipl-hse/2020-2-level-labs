@@ -16,8 +16,7 @@ if __name__ == '__main__':
 
     #  here goes your logic: calling methods from concordance.py
     tokens = main.tokenize(text)
-    print('tokens:', tokens[:10])
-
+    
     RESULT = None
     tokens = main.remove_stop_words(tokens, stop_words)
     print('tokens without stop words:', tokens[:10])
@@ -25,7 +24,7 @@ if __name__ == '__main__':
     frequencies = main.calculate_frequencies(tokens)
     print('frequency for the first word:', frequencies[tokens[0]])
 
-    top_10 = main.get_top_n_words(freq_dict: dict, top_n: int)
+    top_10 = main.get_top_n_words(freq_dict, top_n)
     print('top 10 words:', top_10)
 
     concordance = main.get_concordance(tokens, 'time', 1, 1)
