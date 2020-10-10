@@ -58,7 +58,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
             or not isinstance(left_context_size, int) or not isinstance(right_context_size, int):
         return []
 
-    if (left_context_size < 0) and (right_context_size >0):
+    if (left_context_size < 0) or (right_context_size >0):
         return []
     ans = []
     for index, element in enumerate(tokens):
