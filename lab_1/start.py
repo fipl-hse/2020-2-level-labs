@@ -20,7 +20,7 @@ if __name__ == '__main__':
     frequencies = main.calculate_frequencies(tokens)
     print('frequencies for the word: ', frequencies[tokens[2]])
 
-    top_words = main.get_top_n_words(frequencies, 3)
+    top_words = main.get_top_n_words(freq_dict, 3)
     print("top words:", top_words)
 
     concordance = main.get_concordance(tokens, 'time', 1, 3)
