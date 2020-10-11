@@ -221,8 +221,10 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     concordance = get_concordance(tokens, word, lcs, rcs)
     limit = (lcs, rcs)
 
+    a = 2
+
     if left_sort and limit[0] > 0:
         return sorted(concordance)
     if not left_sort and limit[1] > 0:
-        return sorted(concordance, key=lambda i: i[i.index(word) + 1])
+        return sorted(concordance, key=lambda i: i[i.index(word) + a])
     return []
