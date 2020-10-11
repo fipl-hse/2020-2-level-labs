@@ -55,7 +55,7 @@ class CalculatePlagiarismScoreTest(unittest.TestCase):
         bad_inputs = [[], {}, (), '', 9.22, -1, 0, -6, None, True]
         patches_sentence = ('the', 'cat', 'is', 'sleeping')
 
-        expected = 0
+        expected = -1
         for bad_input in bad_inputs:
             actual = calculate_plagiarism_score(bad_input, patches_sentence)
             self.assertEqual(expected, actual)
@@ -68,7 +68,7 @@ class CalculatePlagiarismScoreTest(unittest.TestCase):
         patches_lcs_length = 0
         bad_inputs = [[], {}, (), 9.22, -1, 0, -6, None, True]
 
-        expected = 0
+        expected = -1
         for bad_input in bad_inputs:
             actual = calculate_plagiarism_score(patches_lcs_length, bad_input)
             self.assertEqual(expected, actual)
@@ -79,9 +79,9 @@ class CalculatePlagiarismScoreTest(unittest.TestCase):
             can handle incorrectly filled sentence
         """
         patches_lcs_length = 2
-        sentence = ('', '', '')
+        sentence = ('', '', None)
 
-        expected = 0
+        expected = -1
         actual = calculate_plagiarism_score(patches_lcs_length, sentence)
         self.assertEqual(expected, actual)
 

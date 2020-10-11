@@ -116,7 +116,7 @@ class FindLcsLengthTest(unittest.TestCase):
         Tests that find_lcs_length function
             can handle incorrect inputs
         """
-        expected = 0
+        expected = -1
         bad_inputs = [[], {}, '', 9.22, -1, 0, -6, None, True, (None, None)]
         patches_sentence = ('the', 'dog', 'is', 'running')
         plagiarism_threshold = 0.3
@@ -132,7 +132,7 @@ class FindLcsLengthTest(unittest.TestCase):
         Tests that find_lcs_length function
             can handle incorrect threshold input
         """
-        expected = 0
+        expected = -1
         bad_inputs = [[], {}, '', -1, -6.34, None, True, (None, None)]
         patches_sentence = ('the', 'dog', 'is', 'running')
 
@@ -147,8 +147,9 @@ class FindLcsLengthTest(unittest.TestCase):
             calls fill_lcs_matrix function
         """
         patches_sentence = ('the', 'dog', 'is', 'running')
+        plagiarism_threshold = 0.3
 
-        find_lcs_length(patches_sentence, patches_sentence)
+        find_lcs_length(patches_sentence, patches_sentence, plagiarism_threshold)
         self.assertTrue(mock.called)
 
 
