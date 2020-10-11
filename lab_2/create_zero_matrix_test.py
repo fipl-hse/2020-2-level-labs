@@ -72,3 +72,12 @@ class ZeroMatrixTest(unittest.TestCase):
                     all_zeroes = False
                     break
         self.assertTrue(all_zeroes)
+
+    def test_create_zero_matrix_1_1(self):
+        """
+        Tests that create_zero_matrix
+            can generate 1x1 matrix correctly
+        """
+        expected = [[1]]
+        actual = create_zero_matrix(1, 1)
+        self.assertEqual(expected, actual)
