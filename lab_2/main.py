@@ -3,6 +3,18 @@ Longest common subsequence problem
 """
 
 
+def tokenize_by_lines(text: str) -> tuple:
+    """
+    Splits a text into sentences, sentences – into tokens,
+    converts the tokens into lowercase, removes punctuation
+    :param text: the initial text
+    :return: a list of sentences with lowercase tokens without punctuation
+    e.g. text = 'I have a cat.\nHis name is Bruno'
+    --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
+    """
+    pass
+
+
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
     Creates a matrix rows * columns where each element is zero
