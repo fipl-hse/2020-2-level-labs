@@ -17,6 +17,7 @@ def tokenize(text: str) -> list:
     tokens = []
     if text and isinstance(text, str):
         tokens = re.sub('[^a-z \n]', '', text.lower()).split()
+
     return tokens
 
 
@@ -33,12 +34,10 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
     if not isinstance(tokens, list) or not tokens or not isinstance(stop_words, list):
         return []
 
-    while 'the' in tokens:
-        tokens.remove('the')
-    while 'is' in tokens:
-        tokens.remove('is')
-    tokens = [word for word in tokens if word not in stop_words]
-    return list(tokens)
+    while stop_words in tokens:
+        tokens.remove(stop_words)
+
+    return tokens
 
 
 def calculate_frequencies(tokens: list) -> dict:
@@ -109,15 +108,15 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
 
-    if isinstance(right_context_size, bool) or isinstance(left_context_size, bool):
-        return []
-
     check = [isinstance(tokens, list),
              isinstance(word, str),
-             isinstance(right_context_size, int),
-             isinstance(left_context_size, int)]
+             isinstance(left_context_size, int),
+             isinstance(right_context_size, int), ]
 
     if not all(check):
+        return []
+
+    if isinstance(right_context_size, bool) or isinstance(left_context_size, bool):
         return []
 
     indexes = [i for i in range(len(tokens)) if tokens[i] == word]
@@ -130,7 +129,6 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
 
     if left_context_size > 0 and not right_context_size > 0:
         return [tokens[i - left_context_size:i + 1] for i in indexes]
-
     return []
 
 
@@ -149,13 +147,13 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
     right_n = 3
     --> [['man', 'is'], ['dog, 'cat']]
     """
+
     check = [isinstance(tokens, list),
              isinstance(word, str),
              isinstance(left_n, int),
              isinstance(right_n, int),
              not isinstance(left_n, bool),
              not isinstance(right_n, bool)]
-
     if not all(check):
         return []
 
