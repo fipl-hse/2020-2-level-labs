@@ -36,7 +36,7 @@ def remove_stop_words(tokens: list, stop_words: list) -> list:
 
     while stop_words in tokens:
         tokens.remove(stop_words)
-
+    tokens = [word for word in tokens if word not in stop_words]
     return tokens
 
 
@@ -111,7 +111,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     check = [isinstance(tokens, list),
              isinstance(word, str),
              isinstance(left_context_size, int),
-             isinstance(right_context_size, int), ]
+             isinstance(right_context_size, int)]
 
     if not all(check):
         return []
@@ -119,17 +119,20 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     if isinstance(right_context_size, bool) or isinstance(left_context_size, bool):
         return []
 
-    indexes = [i for i in range(len(tokens)) if tokens[i] == word]
+    concordance = []
+    word_index = [ind for ind, el in enumerate(tokens) if el == word]
+    limit = (left_context_size, right_context_size)
 
-    if left_context_size > 0 and right_context_size > 0:
-        return [tokens[i - left_context_size:i + right_context_size + 1] for i in indexes]
-
-    if not left_context_size > 0 and right_context_size > 0:
-        return [tokens[i: i + right_context_size + 1] for i in indexes]
-
-    if left_context_size > 0 and not right_context_size > 0:
-        return [tokens[i - left_context_size:i + 1] for i in indexes]
-    return []
+    for ind in word_index:
+        if limit[0] > 0 or limit[1] > 0:
+            concordance.append(tokens[ind - limit[0]:ind + limit[1] + 1])
+        elif limit[0] > 0:
+            concordance.append(tokens[ind - limit[0]:ind + 1])
+        elif limit[1] > 0:
+            concordance.append(tokens[ind:ind] + limit[1] + 1)
+        else:
+            return []
+    return concordance
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
