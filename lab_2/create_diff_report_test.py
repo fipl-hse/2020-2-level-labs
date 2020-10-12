@@ -1,3 +1,4 @@
+# pylint: skip-file
 """
 Tests create_diff_report function
 """
