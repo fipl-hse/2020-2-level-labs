@@ -13,7 +13,21 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    zero_matrix = list()
+    zero_matrix = []
+    row = []
+    column = []
+    for i in range(rows):
+        row.append(0)
+    for i in range(columns):
+        column.append(0)
+
+    zero_matrix += row, column
+    print(zero_matrix)
+
+    zero_matrix += row, column
+
+
+create_zero_matrix(5, 5)
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
