@@ -81,3 +81,7 @@ class ZeroMatrixTest(unittest.TestCase):
         expected = [[1]]
         actual = create_zero_matrix(1, 1)
         self.assertEqual(expected, actual)
+
+
+if __name__ == "__main__":
+    unittest.main()

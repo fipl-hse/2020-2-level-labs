@@ -42,7 +42,6 @@ class CalculatePlagiarismScoreTest(unittest.TestCase):
         lcs_length = 0
         suspicious_sentence_tokens = ('the', 'cat', 'is', 'sleeping')
 
-        print(0/4)
         expected = 0.0
         actual = calculate_plagiarism_score(lcs_length, suspicious_sentence_tokens)
         self.assertEqual(expected, actual)
@@ -93,7 +92,7 @@ class CalculatePlagiarismScoreTest(unittest.TestCase):
         patches_lcs_length = 2
         sentence = ()
 
-        expected = 0
+        expected = 0.0
         actual = calculate_plagiarism_score(patches_lcs_length, sentence)
         self.assertEqual(expected, actual)
 
@@ -119,3 +118,7 @@ class CalculatePlagiarismScoreTest(unittest.TestCase):
         expected = -1
         actual = calculate_plagiarism_score(lcs_length, suspicious_sentence_tokens)
         self.assertEqual(expected, actual)
+
+
+if __name__ == "__main__":
+    unittest.main()

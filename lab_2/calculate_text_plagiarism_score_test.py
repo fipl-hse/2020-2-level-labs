@@ -4,7 +4,7 @@ Tests calculate_text_plagiarism_score function
 
 import unittest
 from unittest.mock import patch
-from lab_2.main import calculate_text_plagiarism_score
+from lab_2.main import calculate_text_plagiarism_score, calculate_plagiarism_score
 
 
 class CalculateTextPlagiarismScoreTest(unittest.TestCase):
@@ -53,7 +53,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                   ('a', 'boy', 'left'))
         plagiarism_threshold = 0.3
 
-        expected = 0
+        expected = 0.0
         actual = calculate_text_plagiarism_score(text, suspicious_text_tokens, plagiarism_threshold)
         self.assertEqual(expected, actual)
 
@@ -88,7 +88,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                          ('the', 'dog', 'disappeared'))
         plagiarism_threshold = 0.3
 
-        expected = 0
+        expected = 0.0
         actual = calculate_text_plagiarism_score(empty_text, patches_texts, plagiarism_threshold)
         actual_second = calculate_text_plagiarism_score(patches_texts, empty_text, plagiarism_threshold)
         self.assertEqual(expected, actual)
@@ -182,7 +182,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
         plagiarism_threshold = 0.3
         plagiarism_threshold_lower = 0.1
 
-        expected = 0  # (0+1/3+0)/3  # 0.11 < 0.3
+        expected = 0.0  # (0+1/3+0)/3  # 0.11 < 0.3
         expected_lower = (0+1/3+0)/3
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
@@ -208,7 +208,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
         plagiarism_threshold_upper = 0.3
         plagiarism_threshold_lower = 0.01
         expected = (0+1/3+0+0)/4
-        expected_upper = 0
+        expected_upper = 0.0
 
         actual_upper = calculate_text_plagiarism_score(original_text_tokens,
                                                        suspicious_text_tokens,
@@ -239,7 +239,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                                  plagiarism_threshold)
         self.assertNotEqual(expected, actual)
 
-    @patch('main.calculate_text_plagiarism_score', side_effect=calculate_text_plagiarism_score)
+    @patch('main.calculate_plagiarism_score', side_effect=calculate_plagiarism_score)
     def test_calculate_text_plagiarism_score_calls_required_function(self, mock):
         """
         Tests that calculate_text_plagiarism_score function
