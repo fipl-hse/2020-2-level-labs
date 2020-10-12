@@ -90,7 +90,7 @@ class FindLcsLengthTest(unittest.TestCase):
         Tests that find_lcs_length function
             can reverse input sentences params
         """
-        expected = 2
+        expected = 5
         sentence_first = ('the', 'dog', 'is', 'running', 'inside', 'the', 'house')
         sentence_second = ('the', 'cat', 'is', 'sleeping', 'inside', 'the', 'house')
 
@@ -116,7 +116,7 @@ class FindLcsLengthTest(unittest.TestCase):
         Tests that find_lcs_length function
             can handle incorrect inputs
         """
-        expected = 0
+        expected = -1
         bad_inputs = [[], {}, '', 9.22, -1, 0, -6, None, True, (None, None)]
         patches_sentence = ('the', 'dog', 'is', 'running')
         plagiarism_threshold = 0.3
@@ -132,13 +132,26 @@ class FindLcsLengthTest(unittest.TestCase):
         Tests that find_lcs_length function
             can handle incorrect threshold input
         """
-        expected = 0
-        bad_inputs = [[], {}, '', -1, -6.34, None, True, (None, None)]
+        expected = -1
+        bad_inputs = [[], {}, '', -1, -6.34, -6, 1.2, None, True, (None, None)]
         patches_sentence = ('the', 'dog', 'is', 'running')
 
         for bad_input in bad_inputs:
             actual = find_lcs_length(patches_sentence, patches_sentence, bad_input)
             self.assertEqual(expected, actual)
+
+    def test_find_lcs_length_threshold_behaviour(self):
+        """
+        Tests that find_lcs_length function
+            can preprocess threshold inputs
+        """
+        sentence_first = ('the', 'dog', 'is')
+        sentence_second = ('the', 'cat', 'is')
+        plagiarism_threshold = 0.3
+
+        not_expected = 2/3  # 2/3 < 0.3 = 0
+        actual = find_lcs_length(sentence_first, sentence_second, plagiarism_threshold)
+        self.assertNotEqual(not_expected, actual)
 
     @patch('main.fill_lcs_matrix', side_effect=fill_lcs_matrix)
     def test_find_lcs_length_calls_required_function(self, mock):
