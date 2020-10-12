@@ -14,9 +14,22 @@ def tokenize(text: str) -> list:
     if not isinstance(text, str):
         return []
     text = text.lower()
-    text = re.sub(r'[^a-z\s\n]', '', text)  # с помощью рег. выраж. убираю знаки препинания и числительные
+    text = re.sub(r'[^a-z\s\n]', '', text)
     tokenize_list = text.split()
+    dictionary = {}
+    uni = []
+    for token in tokenize_list:
+        if token in dictionary:
+            dictionary[token] += 1
+        else:
+            dictionary[token] = 1
+    for key, value in dictionary.items():
+        if value == 1:
+            uni.append(key)
+    return
+
     return tokenize_list
+
 
 
 
