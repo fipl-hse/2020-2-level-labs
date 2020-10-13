@@ -79,18 +79,17 @@ def create_zero_matrix(rows: int, columns: int) -> list:
 
 Правило заполнения каждой ячейки матрицы:
 
-<img src="https://latex.codecogs.com/gif.latex?LCS-length(X_i,&space;Y_j)&space;=&space;\left\{\begin{matrix}0&space;&&space;i=0\:&space;or\:&space;j=0\\&space;LCS-length(X__{i-1},&space;Y_{j-1})&space;&plus;&space;1&space;&&space;i,&space;j>0\:&space;and\:&space;x_i=y_i&space;\\&space;max\left&space;\{LCS-length(X__{i},&space;Y_{j-1}),&space;LCS-length(X__{i-1},&space;Y_{j})&space;\right&space;\}&space;&&space;i,&space;j>0\:&space;and\:&space;x_i\neq&space;y_i&space;\end{matrix}\right." title="LCS-length(X_i, Y_j) = \left\{\begin{matrix}0 & i=0\: or\: j=0\\ LCS-length(X__{i-1}, Y_{j-1}) + 1 & i, j>0\: and\: x_i=y_i \\ max\left \{LCS-length(X__{i}, Y_{j-1}), LCS-length(X__{i-1}, Y_{j}) \right \} & i, j>0\: and\: x_i\neq y_i \end{matrix}\right." />
+<img src="https://latex.codecogs.com/gif.latex?LCS-length(X_i,&space;Y_j)&space;=&space;\left\{\begin{matrix}&space;LCS-length(X__{i-1},&space;Y_{j-1})&space;&plus;&space;1&space;&&space;x_i=y_i&space;\\&space;max\left&space;\{LCS-length(X__{i},&space;Y_{j-1}),&space;LCS-length(X__{i-1},&space;Y_{j})&space;\right&space;\}&space;&&space;x_i\neq&space;y_i&space;\end{matrix}\right." title="LCS-length(X_i, Y_j) = \left\{\begin{matrix}LCS-length(X__{i-1}, Y_{j-1}) + 1 & x_i=y_i \\ max\left \{LCS-length(X__{i}, Y_{j-1}), LCS-length(X__{i-1}, Y_{j}) \right \} x_i\neq y_i \end{matrix}\right." />
 
 > Матрица решений из разбора примера в Разделе "Терминология":
 
-|     |    |     |     |     |     |
-|---  |---  |---  |  ---|  ---|  ---|
-|     |**0**|**the**|**dog**|**is**|**running**|
-|**0**|    0|    0|    0|    0|    0|
-|**the**|    0|    1|    1|    1|    1|
-|**cat**|    0|    1|    1|    1|    1|
-|**is**|    0|    1|    1|    2|    2|
-|**sleeping**|    0|    1|    1|    2|    2|
+|     |    |     |     |     |
+|---  |---  |  ---|  ---|  ---|
+|     |**the**|**dog**|**is**|**running**|
+|**the**|   1|    1|    1|    1|
+|**cat**|   1|    1|    1|    1|
+|**is**|    1|    1|    2|    2|
+|**sleeping**|   1|    1|    2|    2|
 
 
 **Дополнительные требования:**
