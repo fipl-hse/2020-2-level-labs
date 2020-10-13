@@ -144,6 +144,19 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
                 concordance.append(context)
     return concordance
 
+tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy', 'the',
+          'dog', 'is', 'happy', 'but', 'the', 'dog', 'is', 'sad', 'so', 'iam', 'happy', 'too',
+          'but', 'my', 'dog', 'isnot','home']
+word = 'dog'
+left = 2
+right = 2
+def get_equal_words(tokens, word, left, right):
+    concordance = get_concordance(tokens, word, left, right)
+    for cont in concordance:
+        if cont[0] == cont[-1]:
+            print(cont)
+    #print([])
+get_equal_words(tokens, word, left, right)
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
     """
@@ -223,3 +236,4 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
     """
     pass
+
