@@ -66,7 +66,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     The score is the lcs length divided by the number of tokens in a suspicious sentence
     :param lcs_length: a length of the longest common subsequence
     :param suspicious_sentence_tokens: a tuple of tokens
-    :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
+    :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     pass
 
@@ -79,7 +79,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param original_text_tokens: a tuple of sentences with tokens
     :param suspicious_text_tokens: a tuple of sentences with tokens
     :param plagiarism_threshold: a threshold
-    :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
+    :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     pass
 
