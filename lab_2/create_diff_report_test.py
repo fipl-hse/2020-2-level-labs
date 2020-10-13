@@ -14,6 +14,7 @@ class CreateDiffReportTest(unittest.TestCase):
     Checks for create_diff_report function
     """
 
+    @unittest.skip
     def test_create_diff_report_ideal(self):
         """
         Tests that create_diff_report function
@@ -34,6 +35,7 @@ class CreateDiffReportTest(unittest.TestCase):
         actual = captured_output.getvalue()
         self.assertEqual(expected, actual)
 
+    @unittest.skip
     @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
     def test_create_diff_report_using_mock(self, mock_stdout):
         """

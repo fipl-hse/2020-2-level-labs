@@ -2,7 +2,7 @@
 Tests find_lcs_optimized function
 """
 
-import time
+import timeit
 import unittest
 from lab_2.main import find_lcs_length, find_lcs_length_optimized
 
@@ -21,14 +21,14 @@ class FindLcsOptimizedTest(unittest.TestCase):
         sentence_second = ('a', 'boy', 'plays', 'with', 'ball')
         plagiarism_threshold = 0.3
 
-        start_time = time.time()
+        start_time = timeit.default_timer()
         find_lcs_length(sentence_first, sentence_second, plagiarism_threshold)
-        end_time = time.time()
+        end_time = timeit.default_timer()
+        not_optimized = end_time - start_time
 
-        start_time_second = time.time()
-        find_lcs_length_optimized(list(sentence_first), list(sentence_second))
-        end_time_second = time.time()
+        start_time_second = timeit.default_timer()
+        find_lcs_length_optimized(sentence_first, sentence_second, plagiarism_threshold)
+        end_time_second = timeit.default_timer()
+        optimized = end_time_second - start_time_second
 
-        actual_first = end_time - start_time
-        actual_second = end_time_second - start_time_second
-        self.assertGreater(actual_first, actual_second)
+        self.assertGreater(not_optimized, optimized)

@@ -49,7 +49,7 @@ class AccumulateDiffStatsTest(unittest.TestCase):
         self.assertIn('text_plagiarism', actual)
         self.assertIn('sentence_plagiarism', actual)
         self.assertIn('sentence_lcs_length', actual)
-        self.assertIn('different_indexes', actual)
+        self.assertIn('difference_indexes', actual)
         self.assertEqual(expected['text_plagiarism'], actual['text_plagiarism'])
         self.assertEqual(expected['sentence_plagiarism'], actual['sentence_plagiarism'])
         self.assertEqual(expected['sentence_lcs_length'], actual['sentence_lcs_length'])
