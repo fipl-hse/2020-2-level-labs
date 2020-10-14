@@ -71,7 +71,7 @@ class FillLcsMatrixTest(unittest.TestCase):
         actual_reverse = fill_lcs_matrix(sentence_second, sentence_first)
         self.assertEqual(actual, actual_reverse)
 
-    @patch('main.create_zero_matrix', side_effect=create_zero_matrix)
+    @patch('lab_2.main.create_zero_matrix', side_effect=create_zero_matrix)
     def test_fill_lcs_matrix_calls_required_function(self, mock):
         """
         Tests that fill_lcs_matrix function
