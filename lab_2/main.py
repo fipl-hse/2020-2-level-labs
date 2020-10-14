@@ -28,8 +28,11 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     columns = len(second_sentence_tokens)
     zero_matrix = create_zero_matrix(rows, columns)
 
-
-
+    '''
+        for i in range(1,rows + 1):
+            for j in range(columns + 1):
+                zero_matrix[i][j] = max(zero_matrix[i-1][j-1])
+    '''
     pass
 
 
