@@ -3,6 +3,18 @@ Longest common subsequence problem
 """
 
 
+def tokenize_by_lines(text: str) -> tuple:
+    """
+    Splits a text into sentences, sentences – into tokens,
+    converts the tokens into lowercase, removes punctuation
+    :param text: the initial text
+    :return: a list of sentences with lowercase tokens without punctuation
+    e.g. text = 'I have a cat.\nHis name is Bruno'
+    --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
+    """
+    pass
+
+
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
     Creates a matrix rows * columns where each element is zero
@@ -65,7 +77,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     The score is the lcs length divided by the number of tokens in a suspicious sentence
     :param lcs_length: a length of the longest common subsequence
     :param suspicious_sentence_tokens: a tuple of tokens
-    :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
+    :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     pass
 
@@ -78,7 +90,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param original_text_tokens: a tuple of sentences with tokens
     :param suspicious_text_tokens: a tuple of sentences with tokens
     :param plagiarism_threshold: a threshold
-    :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
+    :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     pass
 
@@ -121,13 +133,23 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     pass
 
 
-def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_tokens: list) -> int:
+def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
+                              plagiarism_threshold: float) -> int:
     """
-    Finds a length of the longest common subsequence using the Hirschberg's algorithm
-    At the same time, if the first and last tokens coincide,
-    they are immediately added to lcs and not analyzed
-    :param first_sentence_tokens: a list of tokens
-    :param second_sentence_tokens: a list of tokens
+    Finds a length of the longest common subsequence using an optimized algorithm
+    When a length is less than the threshold, it becomes 0
+    :param first_sentence_tokens: a tuple of tokens
+    :param second_sentence_tokens: a tuple of tokens
+    :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
+    """
+    pass
+
+
+def tokenize_big_file(path_to_file: str) -> tuple:
+    """
+    Reads, tokenizes and transforms a big file into a numeric form
+    :param path_to_file: a path
+    :return: a tuple with ids
     """
     pass
