@@ -1,7 +1,7 @@
 """
 Longest common subsequence problem
 """
-
+from lab_2 import tokenizer
 
 def tokenize_by_lines(text: str) -> tuple:
     """
@@ -12,7 +12,16 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    pass
+    if not isinstance(text, str):  # проверка условий
+        return ()
+    text_sentences = text.split('\n')  # разделяем текст на предложения
+    text_sentences_tokenize = []
+    for sentence in text_sentences:  # добавляем в список кортежи предложений
+        sentence_tokenize = tokenizer.tokenize(sentence)  # применяем функцию к одному предложению
+        if sentence_tokenize:  # исключаем ошибку с пробелами и пустыми списками
+            text_sentences_tokenize.append(tuple(sentence_tokenize))
+    text_sentences_tokenize = tuple(text_sentences_tokenize)  # делаем из списка кортеж
+    return text_sentences_tokenize
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -24,7 +33,12 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    wrong_circumstances = not isinstance(rows, int) or not isinstance(columns, int) \
+     or isinstance(rows, bool) or isinstance(columns, bool) or rows <= 0 or columns <= 0
+    if wrong_circumstances:
+        return []
+    zero_matrix = [[0] * columns] * rows
+    return zero_matrix
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
