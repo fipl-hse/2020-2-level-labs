@@ -12,7 +12,12 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    pass
+    if not isinstance(text, str):
+        return []
+    text_output = re.sub('[^a-z \n]', '', text.lower()).split()
+    text_output = tuple(text_output)
+    return text_output
+
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -36,16 +41,18 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
+        return []
     rows = len(first_sentence_tokens)
     columns = len(second_sentence_tokens)
-    zero_matrix = create_zero_matrix(rows, columns)
-
-    '''
-        for i in range(1,rows + 1):
-            for j in range(columns + 1):
-                zero_matrix[i][j] = max(zero_matrix[i-1][j-1])
-    '''
-    pass
+    lcs_matrix = create_zero_matrix(rows, columns)
+    for i in range(len(lcs_matrix)):
+        for j in range(len(lcs_matrix[0])):
+            if first_sentence_tokens[i] == second_sentence_tokens[j]:
+                lcs_matrix[i][j] = lcs_matrix[i - 1][j - 1] + 1
+            elif first_sentence_tokens[i] != second_sentence_tokens[j]:
+                lcs_matrix[i][j] = max(lcs_matrix[i][j - 1], lcs_matrix[i - 1][j])
+    return lcs_matrix
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
