@@ -3,6 +3,16 @@ Longest common subsequence problem
 """
 
 
+def tokenize(text: str) -> tuple:
+    import tokenizer
+    if not isinstance(text, str):
+        return None
+    else:
+        all_sent = tokenizer.tokenize(text)
+    return all_sent
+
+
+
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
     Creates a matrix rows * columns where each element is zero
@@ -12,7 +22,21 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    if isinstance(rows, int) and isinstance(columns, int):
+        if rows == 1 and columns == 1:
+            table = [[1]]
+        else:
+            table = []
+            column = []
+            for i in range(columns):
+                column.append(0)
+            for n in range(rows):
+                table.append(column)
+        return table
+
+
+
+
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
@@ -22,6 +46,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
+    if isinstance(first_sentence_tokens, tuple) and isinstance(second_sentence_tokens, tuple):
     pass
 
 
