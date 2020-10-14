@@ -3,18 +3,6 @@ Longest common subsequence problem
 """
 
 
-def tokenize_by_lines(text: str) -> tuple:
-    """
-    Splits a text into sentences, sentences – into tokens,
-    converts the tokens into lowercase, removes punctuation
-    :param text: the initial text
-    :return: a list of sentences with lowercase tokens without punctuation
-    e.g. text = 'I have a cat.\nHis name is Bruno'
-    --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
-    """
-    pass
-
-
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
     Creates a matrix rows * columns where each element is zero
@@ -24,7 +12,9 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+
+    zero_matrix = [[0] * columns for i in range(rows)]
+    return zero_matrix
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
@@ -34,7 +24,32 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    pass
+    lcs_matrix = []
+
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or (first_sentence_tokens == ()) or (second_sentence_tokens == ()):
+        return []
+
+    for token in first_sentence_tokens:
+        if isinstance(token, str):
+            lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
+        else:
+            return []
+
+    for token in second_sentence_tokens:
+        if isinstance(token, str):
+            lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
+        else:
+            return []
+
+
+    print()
+    for i in range(len(lcs_matrix)):
+        for j in range(len(lcs_matrix[0])):
+            if i >= 0 and j >= 0 and first_sentence_tokens[i] == second_sentence_tokens[j]:
+                lcs_matrix[i][j] = lcs_matrix[i-1][j-1] + 1
+            elif i >= 0 and j >= 0 and first_sentence_tokens[i] != second_sentence_tokens[j]:
+                lcs_matrix[i][j] = max(lcs_matrix[i][j-1], lcs_matrix[i-1][j])
+    return lcs_matrix
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
@@ -46,7 +61,16 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    if not isinstance(first_sentence_tokens, tuple) and not isinstance(second_sentence_tokens, tuple) and not isinstance(plagiarism_threshold, float) \
+            or (first_sentence_tokens == ()) or (second_sentence_tokens == ()):
+        return -1
+    lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
+
+    length = lcs_matrix[len(first_sentence_tokens) - 1][len(second_sentence_tokens) - 1]
+    if length / len(second_sentence_tokens) < plagiarism_threshold:
+        return 0
+
+    return length
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
@@ -66,7 +90,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     The score is the lcs length divided by the number of tokens in a suspicious sentence
     :param lcs_length: a length of the longest common subsequence
     :param suspicious_sentence_tokens: a tuple of tokens
-    :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
+    :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     pass
 
@@ -79,7 +103,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param original_text_tokens: a tuple of sentences with tokens
     :param suspicious_text_tokens: a tuple of sentences with tokens
     :param plagiarism_threshold: a threshold
-    :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
+    :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     pass
 
@@ -122,23 +146,13 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     pass
 
 
-def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
-                              plagiarism_threshold: float) -> int:
+def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_tokens: list) -> int:
     """
-    Finds a length of the longest common subsequence using an optimized algorithm
-    When a length is less than the threshold, it becomes 0
-    :param first_sentence_tokens: a tuple of tokens
-    :param second_sentence_tokens: a tuple of tokens
-    :param plagiarism_threshold: a threshold
+    Finds a length of the longest common subsequence using the Hirschberg's algorithm
+    At the same time, if the first and last tokens coincide,
+    they are immediately added to lcs and not analyzed
+    :param first_sentence_tokens: a list of tokens
+    :param second_sentence_tokens: a list of tokens
     :return: a length of the longest common subsequence
-    """
-    pass
-
-
-def tokenize_big_file(path_to_file: str) -> tuple:
-    """
-    Reads, tokenizes and transforms a big file into a numeric form
-    :param path_to_file: a path
-    :return: a tuple with ids
     """
     pass
