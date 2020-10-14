@@ -245,3 +245,6 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
                 concordance_sorted = sorted(concordance, key=lambda x: x[x.index(word) + 1])
 
     return concordance_sorted
+
+
+# nothing new
