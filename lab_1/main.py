@@ -111,12 +111,11 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     check = [isinstance(tokens, list),
              isinstance(word, str),
              isinstance(left_context_size, int),
-             isinstance(right_context_size, int)]
+             isinstance(right_context_size, int),
+             not isinstance(left_context_size, bool),
+             not isinstance(right_context_size, bool)]
 
     if not all(check):
-        return []
-
-    if isinstance(right_context_size, bool) or isinstance(left_context_size, bool):
         return []
 
     concordance = []
@@ -161,16 +160,16 @@ def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> li
         return []
 
     concordance = get_concordance(tokens, word, left_n, right_n)
-    window = (left_n, right_n)
-
-    if window[0] > 0 and window[1] > 0:
-        return [[token[0], token[-1]] for token in concordance]
-    if window[0] > 0:
-        return [[token[0]] for token in concordance]
-    if window[1] > 0:
-        return [[token[-1]] for token in concordance]
-    else:
+    if len(concordance) == 0:
         return []
+
+    if left_n == 0:
+        adjacent = [[token[-1]] for token in concordance]
+    elif right_n == 0:
+        adjacent = [[token[0]] for token in concordance]
+    else:
+        adjacent = [[token[0], token[-1]] for token in concordance]
+    return adjacent
 
 
 def read_from_file(path_to_file: str) -> str:
@@ -181,7 +180,7 @@ def read_from_file(path_to_file: str) -> str:
     if isinstance(path_to_file, str):
         return ' '
 
-    with open('C:\\projects\2020-2-level-labs\\lab_1\\data.txt', 'r', encoding='utf-8') as file:
+    with open(path_to_file, 'r', encoding='utf-8') as file:
         data = file.read()
     return data
 
