@@ -57,7 +57,7 @@ class FindDiffInSentence(unittest.TestCase):
         """
         first_sentence = ('his', 'body', 'is', 'covered', 'with', 'bushy', 'white')
 
-        expected = ((0, 7), (0, 7))
+        expected = ((), ())
         actual = find_diff_in_sentence(first_sentence, first_sentence, first_sentence)
         self.assertEqual(expected, actual)
 
@@ -70,7 +70,7 @@ class FindDiffInSentence(unittest.TestCase):
         second_sentence = ('a', 'dog', 'appeared')
         lcs = ()
 
-        expected = ((), ())
+        expected = ((0, 3), (0, 3))
         actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
         self.assertEqual(expected, actual)
 
@@ -135,6 +135,19 @@ class FindDiffInSentence(unittest.TestCase):
         lcs = ()
 
         expected = ((), ())
+        actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
+        self.assertEqual(expected, actual)
+
+    def test_find_diff_in_sentence_many(self):
+        """
+        Tests that find_diff_in_sentence function
+            can handle several diffs
+        """
+        first_sentence = ('his', 'body', 'is', 'covered', 'with', 'bushy', 'white')
+        second_sentence = ('her', 'body', 'is', 'covered', 'with', 'shiny', 'black')
+        lcs = ('body', 'is', 'covered', 'with')
+
+        expected = ((0, 1, 5, 7), (0, 1, 5, 7))
         actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
         self.assertEqual(expected, actual)
 
