@@ -12,7 +12,9 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    i = 0
+    zero_matrix = [[0 for i in range(columns)] for j in range(rows)]
+    return zero_matrix
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
@@ -22,6 +24,12 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
+    rows = len(first_sentence_tokens)
+    columns = len(second_sentence_tokens)
+    zero_matrix = create_zero_matrix(rows, columns)
+
+
+
     pass
 
 
