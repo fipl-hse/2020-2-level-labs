@@ -16,7 +16,8 @@ def tokenize_by_lines(text: str) -> tuple:
         res=()
         for i in text:
             res+=tuple(tokenizer.tokenize(text))
-
+        return res
+    ()
 
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
