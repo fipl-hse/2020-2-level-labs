@@ -1,8 +1,9 @@
 """
 Longest common subsequence problem
 """
+import tokenizer
 
-print('changes')
+
 def tokenize_by_lines(text: str) -> tuple:
     """
     Splits a text into sentences, sentences – into tokens,
@@ -12,7 +13,15 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    pass
+    if not isinstance(text, str):
+        return ()
+    text = text.split('.')
+    sentences_list = []
+    for sentence in text:
+        sentence = tokenizer.tokenize(sentence)
+        sentences_list.append(tuple(sentence))
+    tokenized_text = tuple(sentences_list)
+    return tokenized_text
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -71,7 +80,8 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     pass
 
 
-def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
+def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
+                                    plagiarism_threshold=0.3) -> float:
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
     The score is the sum of lcs values for each pair divided by the number of tokens in suspicious text
