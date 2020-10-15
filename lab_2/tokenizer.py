@@ -17,4 +17,3 @@ def tokenize(text: str) -> tuple:
         all_t = tuple(all_t)
         print(all_t) # return
 tokenize(text)
-
