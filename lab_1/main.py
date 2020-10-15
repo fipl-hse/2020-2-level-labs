@@ -102,6 +102,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     requirments = [isinstance(tokens, list), isinstance(word, str), isinstance(left_context_size, int),
                    isinstance(right_context_size, int), not isinstance(left_context_size, bool),
                    not isinstance(right_context_size, bool)]
+
     if all(requirments):
         concordance = []
         numb = []
