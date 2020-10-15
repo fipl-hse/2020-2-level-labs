@@ -19,7 +19,8 @@ def tokenize_by_lines(text: str) -> tuple:
     sentences_list = []
     for sentence in text:
         sentence = tokenizer.tokenize(sentence)
-        sentences_list.append(tuple(sentence))
+        if sentence:
+            sentences_list.append(tuple(sentence))
     tokenized_text = tuple(sentences_list)
     return tokenized_text
 
