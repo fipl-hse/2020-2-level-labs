@@ -25,7 +25,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     --> [[0, 0], [0, 0]]
     """
     req=[isinstance (rows,int), isinstance(columns,int), not isinstance(rows,bool),
-         not isinstance(columns,bool),rows>0,columns>0]
+         not isinstance(columns,bool),rows>=0,columns>=0]
     if all (req):
         matrix=[[0]*columns]*rows
         return(matrix)
