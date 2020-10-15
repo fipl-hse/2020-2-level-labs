@@ -1,7 +1,8 @@
 """
 Longest common subsequence problem
 """
-
+import re
+from tokenizer import tokenize
 
 def tokenize_by_lines(text: str) -> tuple:
     """
@@ -12,7 +13,13 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    pass
+    if not isinstance(text, str):
+        return ()
+
+    raw_text = text.split('\n')
+    list_of_sentences = [tokenize(element) for element in raw_text if tokenize(element)]
+    tuple_of_sentences = tuple(tuple(sentence) for sentence in list_of_sentences if sentence)
+    return tuple_of_sentences
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -24,8 +31,13 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    if not isinstance(rows, int) or isinstance(rows, bool) or rows <= 0:
+        return []
+    if not isinstance(columns, int) or isinstance(columns, bool) or columns <= 0:
+        return []
 
+    zero_matrix = [[0] * columns for idx in range(rows)]
+    return zero_matrix
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
     """
