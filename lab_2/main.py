@@ -1,6 +1,8 @@
 """
 Longest common subsequence problem
 """
+from tokenizer import tokenize
+import copy
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -12,7 +14,18 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    checks = [
+        isinstance(rows, int),
+        isinstance(columns, int)
+    ]
+    if not all(checks):
+        return []
+
+    row = [0] * rows
+    matrix = [None] * columns
+    for element in range(0, columns):
+        matrix[element] = copy.deepcopy(row)
+    return matrix
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
@@ -22,7 +35,30 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    pass
+    checks = [
+        isinstance(first_sentence_tokens, tuple),
+        isinstance(second_sentence_tokens, tuple)
+    ]
+    if not all(checks) or not first_sentence_tokens or not second_sentence_tokens:
+        return []
+    for token_1 in first_sentence_tokens:
+        if not isinstance(token_1, str):
+            return []
+    for token_2 in second_sentence_tokens:
+        if not isinstance(token_2, str):
+            return []
+
+    columns = len(first_sentence_tokens)
+    rows = len(second_sentence_tokens)
+    matrix = create_zero_matrix(rows, columns)  # why does test_fill_lcs_matrix_calls_required_function fail!
+    for index_1, element_1 in enumerate(first_sentence_tokens):
+        for index_2, element_2 in enumerate(second_sentence_tokens):
+            if element_1 == element_2:
+                matrix[index_1][index_2] = matrix[index_1 - 1][index_2 - 1] + 1
+            else:
+                matrix[index_1][index_2] = max(matrix[index_1 - 1][index_2], matrix[index_1][index_2 - 1])
+
+    return matrix
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
@@ -34,7 +70,48 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    checks = [
+        isinstance(first_sentence_tokens, tuple),
+        isinstance(second_sentence_tokens, tuple),
+        isinstance(plagiarism_threshold, float)
+    ]
+    if not all(checks):
+        return 0
+
+    matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
+# (ideal for a2)   matrix = [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 2, 2, 2], [1, 1, 2, 2, 2], [1, 1, 2, 2, 3], [1, 1, 2, 2, 3], [1, 1, 2, 2, 3]]
+    lcs = []
+    token_1 = len(first_sentence_tokens) - 1
+    token_2 = len(second_sentence_tokens) - 1
+    while token_1 >= 0 and token_2 >= 0:
+        if first_sentence_tokens[token_1] == second_sentence_tokens[token_2]:
+            lcs.append(first_sentence_tokens[token_1])
+            token_1, token_2 = token_1 - 1, token_2 - 1
+        elif matrix[token_1 - 1][token_2] > matrix[token_1][token_2 - 1]:
+            token_1 -= 1
+        else:
+            token_2 -= 1
+    my_threshold = len(lcs) / len(second_sentence_tokens)
+    if my_threshold < 0:
+        return 0
+
+    return matrix[-1][-1]
+
+
+""" выше по формуле; ниже вариант "на глаз". пока не решила, какой лучше
+    for token_1 in first_sentence_tokens:
+        for token_2 in second_sentence_tokens:
+            if token_1 == token_2:
+                lcs.append(token_1)
+                print(lcs)
+                break"""
+
+sentence_first = ('the', 'dog', 'is', 'running', 'inside')
+sentence_second = ('the', 'cat', 'is', 'sleeping', 'inside', 'the', 'house')
+plagiarism_threshold = 0.3
+a1 = find_lcs_length(sentence_first, sentence_second, plagiarism_threshold)
+a2 = find_lcs_length(sentence_second, sentence_first, plagiarism_threshold)
+print(a2)
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
