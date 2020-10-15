@@ -1,6 +1,8 @@
 """
 Longest common subsequence problem
 """
+from tokenizer import tokenize
+import re
 
 
 def tokenize_by_lines(text: str) -> tuple:
@@ -12,7 +14,14 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    pass
+    tokens_list1 = tokenize(text)
+    tokens_list2 = []
+    last_words_in_lines = re.findall(r'(?:(?<=\s))[a-zA-z]+(?:(?=\.|$))', text, flags=re.MULTILINE)
+    for i in last_words_in_lines:
+        word_index = tokens_list1.index(i.lower())
+        tokens_list2.append(tokens_list1[:word_index + 1])
+        del tokens_list1[:word_index + 1]
+    return tuple(tuple(sentence) for sentence in tokens_list2)
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -24,7 +33,11 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    check1 = not isinstance(rows, int) or not isinstance(columns, int)
+    check2 = isinstance(rows, bool) or isinstance(columns, bool)
+    if check1 or check2 or rows <= 0 or columns <= 0:
+        return []
+    return [[0 for _ in range(columns)] for _ in range(rows)]
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
