@@ -26,7 +26,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     """
     if isinstance (rows,int) and isinstance(columns,int):
         matrix=[[0]*rows]*columns
-        print(matrix)
+        return(matrix)
     return  []
 
 
