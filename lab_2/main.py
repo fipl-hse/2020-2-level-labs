@@ -15,6 +15,8 @@ def tokenize_by_lines(text: str) -> tuple:
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
     tokens_list1 = tokenize(text)
+    if not tokens_list1:
+        return ()
     tokens_list2 = []
     last_words_in_lines = re.findall(r'(?:(?<=\s))[a-zA-z]+(?:(?=\.|$))', text, flags=re.MULTILINE)
     for i in last_words_in_lines:
@@ -47,7 +49,24 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    pass
+    if (not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or
+        not all(isinstance(i, str) for i in first_sentence_tokens) or
+        not all(isinstance(i, str) for i in second_sentence_tokens)):
+        return []
+    rows = len(first_sentence_tokens)
+    cols = len(second_sentence_tokens)
+    lcs_matrix = create_zero_matrix(rows, cols)
+    lcs = 0
+    for i, row in enumerate(lcs_matrix):  # i - индекс строки матрицы
+        for j in range(len(row)):  # j - индекс столбца матрицы
+            if first_sentence_tokens[i] == second_sentence_tokens[j]:
+                lcs += 1
+            else:
+                left_cell = row[j-1] if j-1 >= 0 else 0
+                top_cell = lcs_matrix[i-1][j] if i-1 >= 0 else 0
+                lcs = max(left_cell, top_cell)
+            row[j] = lcs
+    return lcs_matrix
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
