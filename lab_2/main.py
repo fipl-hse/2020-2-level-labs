@@ -13,9 +13,7 @@ def tokenize_by_lines(text: str) -> tuple:
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
     if isinstance(text,str):
-        res=()
-        for i in text:
-            res+=tuple(tokenizer.tokenize(text))
+        res=tuple(tokenizer.tokenize(text))
         return res
     ()
 
