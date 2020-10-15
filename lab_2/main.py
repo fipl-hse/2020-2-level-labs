@@ -2,7 +2,7 @@
 Longest common subsequence problem
 """
 
-
+print('changes')
 def tokenize_by_lines(text: str) -> tuple:
     """
     Splits a text into sentences, sentences – into tokens,
