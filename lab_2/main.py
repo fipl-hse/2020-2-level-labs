@@ -36,10 +36,8 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     zero_matrix += row, column
     print(zero_matrix)
 
-    zero_matrix += row, column
 
-
-create_zero_matrix(5, 5)
+create_zero_matrix(4, 4)
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
