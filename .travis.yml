@@ -17,6 +17,10 @@ stages:
   - lint
   - start_py
 
+env:
+  global:
+    - PR_TITLE=$(curl https://github.com/${TRAVIS_REPO_SLUG}/pull/${TRAVIS_PULL_REQUEST} | grep "title" | head -1)
+
 jobs:
   include:
     - stage: pr_name_check
