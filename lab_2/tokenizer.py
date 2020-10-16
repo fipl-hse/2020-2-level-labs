@@ -2,10 +2,10 @@
 Tokenizer out of lab_1 for usage in lab_2
 """
 
-import re
+import string
 
 
-def tokenize(text: str) -> list:
+def tokenize(text: str) -> tuple:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
     :param text: the initial text
@@ -13,7 +13,5 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    if not isinstance(text, str):
-        return []
-    text_output = re.sub('[^a-z \n]', '', text.lower()).split()
-    return text_output
+    table = text.maketrans({word: None for word in string.punctuation})
+    return tuple(text.translate(table).split())
