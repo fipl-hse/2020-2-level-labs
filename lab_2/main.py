@@ -1,9 +1,9 @@
 """
 Longest common subsequence problem
 """
+from tokenizer import tokenize
 
-
-def tokenize_by_lines(text: str) -> tuple:
+def tokenize_by_lines(text) -> tuple:
     """
     Splits a text into sentences, sentences – into tokens,
     converts the tokens into lowercase, removes punctuation
@@ -12,10 +12,14 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    pass
+    if not isinstance(text, str):
+        return ()
+    sentences = text.strip().split('\n')
+    tokenized_sent = tuple(tuple(tokenize(sentence)) for sentence in sentences if len(sentence))
+    return tokenized_sent
 
 
-def create_zero_matrix(rows: int, columns: int) -> list:
+def create_zero_matrix(rows, columns) -> list:
     """
     Creates a matrix rows * columns where each element is zero
     :param rows: a number of rows
@@ -24,20 +28,52 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    rows_is_int = isinstance(rows, int)
+    columns_is_int = isinstance(columns, int)
+    rows_is_bool = isinstance(rows, bool)
+    columns_is_bool = isinstance(columns, bool)
+    if rows_is_bool or columns_is_bool or not rows_is_int or not columns_is_int:
+        return []
+    if (rows < 0) or (columns <= 0):
+        return []
+    zero_matrix = [[0] * columns for i in range(rows)]
+    return zero_matrix
 
+# print(create_zero_matrix([], 1))
 
-def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
+def fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens) -> list:
     """
     Fills a longest common subsequence matrix using the Needleman–Wunsch algorithm
     :param first_sentence_tokens: a tuple of tokens
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    pass
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
+        return []
+
+    any_not_words_in_first = any(not isinstance(word, str) for word in first_sentence_tokens)
+    any_not_words_in_second = any(not isinstance(word, str) for word in second_sentence_tokens)
+    have_not_len_first = not len(first_sentence_tokens)
+    have_not_len_second = not len(second_sentence_tokens)
+    if any_not_words_in_first or any_not_words_in_second or have_not_len_first or have_not_len_second:
+        return []
+
+    lcs_matrix = create_zero_matrix(len(first_sentence_tokens) + 1, len(second_sentence_tokens) + 1)
+    for first_i, first_elem in enumerate(first_sentence_tokens, start=1):
+        for sec_i, second_elem in enumerate(second_sentence_tokens, start=1):
+            if first_elem == second_elem:
+                lcs_matrix[first_i][sec_i] = lcs_matrix[first_i - 1][sec_i - 1] + 1
+            else:
+                lcs_matrix[first_i][sec_i] = max(lcs_matrix[first_i][sec_i - 1], lcs_matrix[first_i - 1][sec_i])
+
+    del lcs_matrix[0]
+    for row in lcs_matrix:
+        del row[0]
+
+    return lcs_matrix
 
 
-def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
+def find_lcs_length(first_sentence_tokens, second_sentence_tokens, plagiarism_threshold) -> int:
     """
     Finds a length of the longest common subsequence using the Needleman–Wunsch algorithm
     When a length is less than the threshold, it becomes 0
@@ -46,10 +82,32 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    first_is_not_tuple = not isinstance(first_sentence_tokens, tuple)
+    second_is_not_tuple = not isinstance(second_sentence_tokens, tuple)
+    threshold_is_not_float = not isinstance(plagiarism_threshold, float)
+    if first_is_not_tuple or second_is_not_tuple or threshold_is_not_float:
+        return -1
+    if not 0 < plagiarism_threshold < 1:
+        return -1
+
+    any_not_words_in_first = any(not isinstance(word, str) for word in first_sentence_tokens)
+    any_not_words_in_second = any(not isinstance(word, str) for word in second_sentence_tokens)
+    if any_not_words_in_first or any_not_words_in_second:
+        return -1
+
+    lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
+    if lcs_matrix:
+        length_lcs = lcs_matrix[-1][-1]
+    else:
+        return 0
+
+    if (length_lcs / len(second_sentence_tokens)) < plagiarism_threshold:
+        return 0
+
+    return length_lcs
 
 
-def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
+def find_lcs(first_sentence_tokens, second_sentence_tokens, lcs_matrix) -> tuple:
     """
     Finds the longest common subsequence itself using the Needleman–Wunsch algorithm
     :param first_sentence_tokens: a tuple of tokens
@@ -57,7 +115,30 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    pass
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
+        return ()
+    any_not_words_in_first = any(not isinstance(word, str) for word in first_sentence_tokens)
+    any_not_words_in_second = any(not isinstance(word, str) for word in second_sentence_tokens)
+    have_not_len_first = not len(first_sentence_tokens)
+    have_not_len_second = not len(second_sentence_tokens)
+    if any_not_words_in_first or any_not_words_in_second or have_not_len_first or have_not_len_second:
+        return ()
+    zero_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
+    if lcs_matrix == zero_matrix or not len(lcs_matrix):
+        return ()
+
+    lcs_list = []
+    first_i, second_i = len(first_sentence_tokens) - 1, len(second_sentence_tokens) - 1
+    while first_i >= 0 and second_i >= 0:
+        if first_sentence_tokens[first_i] == second_sentence_tokens[second_i]:
+            lcs_list.append(first_sentence_tokens[first_i])
+        elif lcs_matrix[first_i - 1][second_i] > lcs_matrix[first_i][second_i - 1]:
+            first_i -= 1
+        else:
+            second_i -= 1
+    lcs_list.reverse()
+
+    return tuple(lcs_list)
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
