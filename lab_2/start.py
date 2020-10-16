@@ -105,4 +105,4 @@ a blue moon will rise'''
 #test_till_calculate_plagiarism_score()
 #test_calculate_text_plagiarism_score()
 #test_find_diff()
-test_accumulated_stat_and_report()
+#test_accumulated_stat_and_report()

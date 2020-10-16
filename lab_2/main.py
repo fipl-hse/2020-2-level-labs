@@ -27,7 +27,8 @@ def tokenize_by_lines(text: str) -> tuple:
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
     text = text.lower().split('\n')
-    return tuple(tokenize(sent) for sent in text)
+    sent = (tokenize(sent) for sent in text)
+    return tuple(tokens for tokens in sent if tokens)
 
 
 @input_checker
