@@ -7,6 +7,7 @@ A concordance extraction
 import re
 
 
+
 def tokenize(text: str) -> list:
     """
     Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
