@@ -225,7 +225,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
                                                  plagiarism_threshold)
-        self.assertNotEqual(expected, actual)
+        self.assertEqual(expected, actual)
 
     @patch('lab_2.main.calculate_plagiarism_score', side_effect=calculate_plagiarism_score)
     def test_calculate_text_plagiarism_score_calls_required_function(self, mock):
