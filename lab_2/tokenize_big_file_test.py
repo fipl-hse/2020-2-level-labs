@@ -26,4 +26,6 @@ class TokenizeBigFileTest(unittest.TestCase):
         memory_optimized = memory_usage((tokenize_big_file,
                                          ('lab_2/tokenize_test_example.txt',)), interval=2)
         mean_memory_optimized = sum(memory_optimized)/len(memory_optimized)
+        print(f"Not optimized: {mean_memory_not_optimized}")
+        print(f"Optimized: {mean_memory_optimized}")
         self.assertGreater(mean_memory_not_optimized, mean_memory_optimized)
