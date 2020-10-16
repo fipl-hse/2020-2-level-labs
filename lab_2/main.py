@@ -33,7 +33,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     req=[isinstance (rows,int), isinstance(columns,int), not isinstance(rows,bool),
          not isinstance(columns,bool),rows >= 0,columns >= 0]
     if all (req):
-        matrix=[[0]*columns]*rows
+        matrix = [[0] * columns for i in range(rows)]
         return(matrix)
     return  []
 
