@@ -14,6 +14,8 @@ def input_checker(func):
             return default_returns[func.__name__]
         if isinstance(arg, int) and (isinstance(arg, bool) or arg <= 0):
             return default_returns[func.__name__]
+        if arg == (None, None):
+            return default_returns[func.__name__]
     return func(*args, **kwargs)
   return wrapper
 
@@ -55,9 +57,6 @@ def fill_lcs_matrix(first_sentence_tokens: tuple,
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    if first_sentence_tokens == None or second_sentence_tokens == None:
-        return []
-
     matrix = create_zero_matrix(len(first_sentence_tokens),
                                 len(second_sentence_tokens))
 
