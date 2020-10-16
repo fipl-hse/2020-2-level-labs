@@ -12,6 +12,7 @@ class TokenizeBigFileTest(unittest.TestCase):
     Checks for tokenize_big_file function
     """
 
+    @unittest.skip
     def test_tokenize_big_file_ideal(self):
         """
         Tests that tokenize_big_file function
