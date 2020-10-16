@@ -25,6 +25,5 @@ if __name__ == '__main__':
     args: argparse.Namespace = parser.parse_args()
 
     pr_name_to_check = convert_raw_pr_name(args.pr_name)
-    if not is_matching_name(pr_name_to_check):
-        sys.exit(1)
-    sys.exit(0)
+
+    sys.exit(not is_matching_name(pr_name_to_check))
