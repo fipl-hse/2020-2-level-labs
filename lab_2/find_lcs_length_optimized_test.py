@@ -46,14 +46,14 @@ class FindLcsOptimizedTest(unittest.TestCase):
         plagiarism_threshold = 0.3
 
         memory_not_optimized = memory_usage((find_lcs_length,
-                                             patches_sentence,
-                                             patches_sentence,
-                                             plagiarism_threshold), interval=2)
+                                             (patches_sentence,
+                                              patches_sentence,
+                                              plagiarism_threshold)), interval=2)
         mean_memory_not_optimized = sum(memory_not_optimized) / len(memory_not_optimized)
 
         memory_optimized = memory_usage((find_lcs_length_optimized,
-                                         patches_sentence,
-                                         patches_sentence,
-                                         plagiarism_threshold), interval=2)
+                                         (patches_sentence,
+                                          patches_sentence,
+                                          plagiarism_threshold)), interval=2)
         mean_memory_optimized = sum(memory_optimized) / len(memory_optimized)
         self.assertGreater(mean_memory_not_optimized, mean_memory_optimized)
