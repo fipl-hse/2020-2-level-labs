@@ -134,7 +134,7 @@ class FindDiffInSentence(unittest.TestCase):
         second_sentence = ('a', 'dog', 'appeared')
         lcs = ()
 
-        expected = ((), ())
+        expected = ((), (0, 3))
         actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
         self.assertEqual(expected, actual)
 
