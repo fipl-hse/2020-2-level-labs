@@ -181,7 +181,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                   ('the', 'boy', 'left'))
         plagiarism_threshold = 0.3
 
-        expected = 0.11
+        expected = (0+1/3+0)/3
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
                                                  plagiarism_threshold)
