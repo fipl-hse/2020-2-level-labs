@@ -9,3 +9,4 @@ find_diff_in_sentence_test.py
 accumulate_diff_stats_test.py
 create_diff_report_test.py
 find_lcs_length_optimized_test.py
+tokenize_big_file_test.py
