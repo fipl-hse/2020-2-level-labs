@@ -1,3 +1,4 @@
+# pylint: skip-file
 """
 Tests find_lcs_length function
 """
@@ -79,9 +80,10 @@ class FindLcsLengthTest(unittest.TestCase):
 
         empty_sentence = ()
         patches_sentence = ('a', 'boy', 'plays', 'with', 'ball')
+        plagiarism_threshold = 0.3
 
-        actual = find_lcs_length(empty_sentence, patches_sentence)
-        actual_reversed = find_lcs_length(patches_sentence, empty_sentence)
+        actual = find_lcs_length(empty_sentence, patches_sentence, plagiarism_threshold)
+        actual_reversed = find_lcs_length(patches_sentence, empty_sentence, plagiarism_threshold)
         self.assertEqual(expected, actual)
         self.assertEqual(expected, actual_reversed)
 
@@ -93,9 +95,10 @@ class FindLcsLengthTest(unittest.TestCase):
         expected = 5
         sentence_first = ('the', 'dog', 'is', 'running', 'inside', 'the', 'house')
         sentence_second = ('the', 'cat', 'is', 'sleeping', 'inside', 'the', 'house')
+        plagiarism_threshold = 0.3
 
-        actual = find_lcs_length(sentence_first, sentence_second)
-        actual_reversed = find_lcs_length(sentence_second, sentence_first)
+        actual = find_lcs_length(sentence_first, sentence_second, plagiarism_threshold)
+        actual_reversed = find_lcs_length(sentence_second, sentence_first, plagiarism_threshold)
         self.assertEqual(expected, actual)
         self.assertEqual(expected, actual_reversed)
 
@@ -153,15 +156,16 @@ class FindLcsLengthTest(unittest.TestCase):
         actual = find_lcs_length(sentence_first, sentence_second, plagiarism_threshold)
         self.assertNotEqual(not_expected, actual)
 
-    @patch('main.fill_lcs_matrix', side_effect=fill_lcs_matrix)
+    @patch('lab_2.main.fill_lcs_matrix', side_effect=fill_lcs_matrix)
     def test_find_lcs_length_calls_required_function(self, mock):
         """
         Tests that find_lcs_length function
             calls fill_lcs_matrix function
         """
         patches_sentence = ('the', 'dog', 'is', 'running')
+        plagiarism_threshold = 0.3
 
-        find_lcs_length(patches_sentence, patches_sentence)
+        find_lcs_length(patches_sentence, patches_sentence, plagiarism_threshold)
         self.assertTrue(mock.called)
 
 

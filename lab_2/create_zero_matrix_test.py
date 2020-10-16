@@ -78,7 +78,7 @@ class ZeroMatrixTest(unittest.TestCase):
         Tests that create_zero_matrix
             can generate 1x1 matrix correctly
         """
-        expected = [[1]]
+        expected = [[0]]
         actual = create_zero_matrix(1, 1)
         self.assertEqual(expected, actual)
 
