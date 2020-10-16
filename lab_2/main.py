@@ -51,13 +51,11 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     """
     is_not_tuple_fst = not isinstance(first_sentence_tokens, tuple)
     is_not_tuple_sst = not isinstance(second_sentence_tokens, tuple)
-    #  is_not_int_element_fst = not isinstance(first_sentence_tokens[0], int)
-    #  is_not_int_element_sst = not isinstance(second_sentence_tokens[0], int)
 
     if is_not_tuple_fst or is_not_tuple_sst or not first_sentence_tokens or not second_sentence_tokens or \
-            (len(first_sentence_tokens) and first_sentence_tokens[0] is None) \
-            or (len(first_sentence_tokens) and first_sentence_tokens[0] is None):
-        return[]
+            (first_sentence_tokens and first_sentence_tokens[0] is None) or \
+            (second_sentence_tokens and second_sentence_tokens[0] is None):
+        return []
 
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
     for ind_1, elem_1 in enumerate(first_sentence_tokens):
@@ -92,12 +90,15 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     """
     is_not_tuple_fst = not isinstance(first_sentence_tokens, tuple)
     is_not_tuple_sst = not isinstance(second_sentence_tokens, tuple)
-    is_not_good_threshold = not (isinstance(plagiarism_threshold, float) or isinstance(plagiarism_threshold, float))
 
     is_not_fst = not first_sentence_tokens
     is_not_sst = not second_sentence_tokens
-#    or is_not_fst or is_not_sst
-    if is_not_tuple_fst or is_not_tuple_sst or is_not_good_threshold or not 0 < plagiarism_threshold < 1:
+
+    is_not_good_threshold = not (isinstance(plagiarism_threshold, float) or isinstance(plagiarism_threshold, float))
+
+    if is_not_tuple_fst or is_not_tuple_sst or is_not_good_threshold or not 0 < plagiarism_threshold < 1 or \
+            (first_sentence_tokens and first_sentence_tokens[0] is None) or \
+            (second_sentence_tokens and second_sentence_tokens[0] is None):
         return -1
 
     if is_not_fst or is_not_sst:
@@ -121,6 +122,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     """
     pass
 
+
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
     """
     Calculates the plagiarism score
@@ -132,7 +134,8 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     pass
 
 
-def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
+def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
+                                    plagiarism_threshold=0.3) -> float:
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
     The score is the sum of lcs values for each pair divided by the number of tokens in suspicious text
