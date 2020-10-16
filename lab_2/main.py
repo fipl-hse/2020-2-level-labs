@@ -1,7 +1,7 @@
 """
 Longest common subsequence problem
 """
-import tokenizer
+from tokenizer import tokenize
 
 
 def tokenize_by_lines(text: str) -> tuple:
@@ -17,7 +17,7 @@ def tokenize_by_lines(text: str) -> tuple:
         return ()
 
     sentence_list = text.split('\n')
-    tokens_list = [tuple(tokenizer.tokenize(sentence)) for sentence in sentence_list]
+    tokens_list = [tuple(tokenize(sentence)) for sentence in sentence_list if len(tokenize(sentence))]
 
     return tuple(tokens_list)
 
@@ -31,11 +31,12 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-
+    is_bool_rows = isinstance(rows, bool)
+    is_bool_columns = isinstance(columns, bool)
     is_not_int_rows = not isinstance(rows, int)
     is_not_int_columns = not isinstance(columns, int)
 
-    if is_not_int_rows or is_not_int_columns or rows <= 0 or columns <= 0:
+    if is_bool_rows or is_bool_columns or is_not_int_rows or is_not_int_columns or rows <= 0 or columns <= 0:
         return []
 
     return [[0 for _ in range(columns)] for _ in range(rows)]
@@ -50,8 +51,12 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     """
     is_not_tuple_fst = not isinstance(first_sentence_tokens, tuple)
     is_not_tuple_sst = not isinstance(second_sentence_tokens, tuple)
+    #  is_not_int_element_fst = not isinstance(first_sentence_tokens[0], int)
+    #  is_not_int_element_sst = not isinstance(second_sentence_tokens[0], int)
 
-    if is_not_tuple_fst or is_not_tuple_sst or not first_sentence_tokens or not second_sentence_tokens:
+    if is_not_tuple_fst or is_not_tuple_sst or not first_sentence_tokens or not second_sentence_tokens or \
+            (len(first_sentence_tokens) and first_sentence_tokens[0] is None) \
+            or (len(first_sentence_tokens) and first_sentence_tokens[0] is None):
         return[]
 
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
@@ -63,8 +68,13 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
                 else:
                     lcs_matrix[ind_1][ind_2] = lcs_matrix[ind_1 - 1][ind_2 - 1] + 1
             else:
-                if (ind_1 - 1) < 0 or (ind_2 - 1) < 0:
-                    lcs_matrix[ind_1][ind_2] = 1
+                if (ind_1 - 1) < 0 and (ind_2 - 1) > 0:
+                    #  (ind_2 - 1) < 0:
+                    lcs_matrix[ind_1][ind_2] = lcs_matrix[ind_1][ind_2 - 1]
+                elif (ind_1 - 1) > 0 and (ind_2 - 1) < 0:
+                    lcs_matrix[ind_1][ind_2] = lcs_matrix[ind_1 - 1][ind_2]
+                elif (ind_1 - 1) < 0 and (ind_2 - 1) < 0:
+                    lcs_matrix[ind_1][ind_2] = 0
                 else:
                     lcs_matrix[ind_1][ind_2] = max([lcs_matrix[ind_1][ind_2 - 1], lcs_matrix[ind_1 - 1][ind_2]])
 
@@ -82,12 +92,16 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     """
     is_not_tuple_fst = not isinstance(first_sentence_tokens, tuple)
     is_not_tuple_sst = not isinstance(second_sentence_tokens, tuple)
-    is_not_float_threshold = not isinstance(plagiarism_threshold, float)
+    is_not_good_threshold = not (isinstance(plagiarism_threshold, float) or isinstance(plagiarism_threshold, float))
+
     is_not_fst = not first_sentence_tokens
     is_not_sst = not second_sentence_tokens
-
-    if is_not_tuple_fst or is_not_tuple_sst or is_not_float_threshold or is_not_fst or is_not_sst:
+#    or is_not_fst or is_not_sst
+    if is_not_tuple_fst or is_not_tuple_sst or is_not_good_threshold or not 0 < plagiarism_threshold < 1:
         return -1
+
+    if is_not_fst or is_not_sst:
+        return 0
 
     lcs_length = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)[-1][-1]
 
@@ -106,7 +120,6 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :return: the longest common subsequence
     """
     pass
-
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
     """
