@@ -9,9 +9,11 @@ from tokenizer import tokenize
 def input_checker(func):
   @wraps(func)
   def wrapper(*args, **kwargs):
-    if not all(isinstance(arg, instance)
-      for arg, instance in zip(args, func.__annotations__.values())):
-        return default_returns[func.__name__]
+    for arg, instance in zip(args, func.__annotations__.values()):
+        if not isinstance(arg, instance):
+            return default_returns[func.__name__]
+        if isinstance(arg, int) and (isinstance(arg, bool) or arg <= 0):
+            return default_returns[func.__name__]
     return func(*args, **kwargs)
   return wrapper
 
