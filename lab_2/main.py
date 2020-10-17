@@ -88,7 +88,8 @@ def find_lcs(first_sentence_tokens: tuple,
     :return: the longest common subsequence
     """
     if len(first_sentence_tokens) != len(lcs_matrix) or \
-       len(second_sentence_tokens) != len(lcs_matrix[0]) :
+       len(second_sentence_tokens) != len(lcs_matrix[0]) or \
+       lcs_matrix[0][0] not in (0, 1):
         return ()
 
     row = len(first_sentence_tokens) - 1
@@ -110,7 +111,6 @@ def find_lcs(first_sentence_tokens: tuple,
             longest_lcs.append(first_sentence_tokens[0])
     return tuple(longest_lcs[::-1])
 
-
 @input_checker
 def calculate_plagiarism_score(lcs_length: int,
                                suspicious_sentence_tokens: tuple
@@ -122,8 +122,10 @@ def calculate_plagiarism_score(lcs_length: int,
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    return round(lcs_length / len(suspicious_sentence_tokens), 3)
-
+    if lcs_length > len(suspicious_sentence_tokens) or \
+       not all(isinstance(elem, str) for elem in suspicious_sentence_tokens):
+        return -1
+    return lcs_length / len(suspicious_sentence_tokens)
 
 @input_checker
 def calculate_text_plagiarism_score(original_text_tokens: tuple,
@@ -146,10 +148,15 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple,
         lcs_length = find_lcs_length(original_text_tokens[i],
                                      suspicious_text_tokens[i],
                                      plagiarism_threshold)
-        scores.append(calculate_plagiarism_score(
-            lcs_length,
-            suspicious_text_tokens[i]))
-    return round(sum(scores) / len(suspicious_text_tokens), 3)
+        score = calculate_plagiarism_score(lcs_length,
+                                           suspicious_text_tokens[i])
+        if score >= 0:
+            scores.append(score)
+
+    text_score = sum(scores) / len(suspicious_text_tokens)
+    if text_score < plagiarism_threshold:
+        return 0.0
+    return text_score
 
 
 def find_diff(tokens: tuple, lcs: tuple) -> tuple:
