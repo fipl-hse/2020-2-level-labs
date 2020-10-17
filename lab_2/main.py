@@ -14,16 +14,10 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    tokens_list1 = tokenize(text)
-    if not tokens_list1:
+    if not isinstance(text, str) or not text:
         return ()
-    tokens_list2 = []
-    last_words_in_lines = re.findall(r'(?:(?<=\s))[a-zA-z]+(?:(?=\.|$))', text, flags=re.MULTILINE)
-    for i in last_words_in_lines:
-        word_index = tokens_list1.index(i.lower())
-        tokens_list2.append(tokens_list1[:word_index + 1])
-        del tokens_list1[:word_index + 1]
-    return tuple(tuple(sentence) for sentence in tokens_list2)
+    sentences_list = text.split('\n')
+    return tuple([tuple(tokenize(sentence)) for sentence in sentences_list if tokenize(sentence)])
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -57,15 +51,15 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     cols = len(second_sentence_tokens)
     lcs_matrix = create_zero_matrix(rows, cols)
     lcs = 0
-    for i, row in enumerate(lcs_matrix):  # i - индекс строки матрицы
-        for j in range(len(row)):  # j - индекс столбца матрицы
+    for i in range(rows):  # i - индекс строки матрицы
+        for j in range(cols):  # j - индекс столбца матрицы
             if first_sentence_tokens[i] == second_sentence_tokens[j]:
                 lcs += 1
             else:
-                left_cell = row[j-1] if j-1 >= 0 else 0
+                left_cell = lcs_matrix[i][j-1] if j-1 >= 0 else 0
                 top_cell = lcs_matrix[i-1][j] if i-1 >= 0 else 0
                 lcs = max(left_cell, top_cell)
-            row[j] = lcs
+            lcs_matrix[i][j] = lcs
     return lcs_matrix
 
 
