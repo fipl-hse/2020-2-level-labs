@@ -37,7 +37,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
      or isinstance(rows, bool) or isinstance(columns, bool) or rows <= 0 or columns <= 0
     if wrong_circumstances:
         return []
-    zero_matrix = [[0] * columns] * rows
+    zero_matrix = [[0 for index_col in range(columns)] for index_row in range(rows)]
     return zero_matrix
 
 
@@ -48,7 +48,25 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    pass
+    wrong_circumstances = not isinstance(first_sentence_tokens, tuple) \
+                          or not isinstance(second_sentence_tokens, tuple) \
+                          or first_sentence_tokens == () or second_sentence_tokens == () \
+                          or None in first_sentence_tokens or None in second_sentence_tokens \
+                          or isinstance(first_sentence_tokens, bool) \
+                          or isinstance(second_sentence_tokens, bool)
+    if wrong_circumstances:
+        return []
+    lcs_matrix = create_zero_matrix(len(first_sentence_tokens) + 1, len(second_sentence_tokens) + 1)
+    for i in range(len(first_sentence_tokens)):
+        for j in range(len(second_sentence_tokens)):
+            if first_sentence_tokens[i] == second_sentence_tokens[j]:
+                lcs_matrix[i + 1][j + 1] = lcs_matrix[i][j] + 1
+            else:
+                lcs_matrix[i + 1][j + 1] = max(lcs_matrix[i + 1][j], lcs_matrix[i][j + 1])
+    lcs_matrix.remove(lcs_matrix[0]) #удаляем нулевую строку
+    for element in lcs_matrix: #удаляем нулевой столбец
+        element.remove(element[0])
+    return lcs_matrix
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
@@ -60,7 +78,22 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    wrong_circumstances = not isinstance(first_sentence_tokens, tuple) \
+                          or not isinstance(second_sentence_tokens, tuple) \
+                          or isinstance(first_sentence_tokens, bool) \
+                          or isinstance(second_sentence_tokens, bool) \
+                          or not isinstance(plagiarism_threshold, float) \
+                          or isinstance(plagiarism_threshold, bool) \
+                          or plagiarism_threshold < 0 or plagiarism_threshold > 1 \
+                          or first_sentence_tokens == () or second_sentence_tokens == () \
+                          or None in first_sentence_tokens or None in second_sentence_tokens
+    if wrong_circumstances:
+        return -1
+    lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
+    if len(lcs_matrix) / len(second_sentence_tokens) < plagiarism_threshold:
+        return 0
+    else:
+        return lcs_matrix[-1][-1]
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
