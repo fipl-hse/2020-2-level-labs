@@ -12,7 +12,15 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    zero_matrix = []
+    if isinstance(rows, int) and isinstance(columns, int) and not isinstance(rows, bool)\
+        and not isinstance(columns, bool) and columns >= 0 and rows >= 0:
+        zero_matrix = [[0] * columns for i in range(rows)]
+    return zero_matrix
+
+
+
+
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
