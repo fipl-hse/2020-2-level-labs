@@ -12,7 +12,14 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    pass
+    if isinstance(text,str):
+        from lab_2.tokenizer import tokenize
+        text = text.split('\n')
+        result = tuple(tuple(tokenize(x)) for x in text if tokenize(x))
+        return result
+    else:
+        return ()
+
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -24,7 +31,15 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    check_type = [isinstance(rows,int) and isinstance(columns,int) and not isinstance(rows,bool) and not isinstance(columns,bool)]
+    if all(check_type) and rows > 0 and columns > 0:
+        matrix = []
+        for row_index in range(rows):
+            matrix += [[0*i for i in range(columns)]]
+        return matrix
+    else:
+        matrix = []
+        return matrix
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
