@@ -31,6 +31,9 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
+    if columns == 0:
+        return []
+
     return [[0 for _ in range(columns)] for __ in range(rows)]
 
 
