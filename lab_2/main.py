@@ -2,26 +2,8 @@
 Longest common subsequence problem
 """
 
-from functools import wraps
+from decorators import input_checker
 from tokenizer import tokenize
-
-
-def input_checker(func):
-  @wraps(func)
-  def wrapper(*args, **kwargs):
-    for arg, instance in zip(args, func.__annotations__.values()):
-        if not arg:
-            return default_returns[func.__name__]
-        if not isinstance(arg, instance):
-            return default_returns[func.__name__]
-        if isinstance(arg, int) and (isinstance(arg, bool) or arg < 0):
-            return default_returns[func.__name__]
-        if isinstance(arg, float) and (arg < 0 or arg > 1):
-            return default_returns[func.__name__]
-        if arg == (None, None):
-            return default_returns[func.__name__]
-    return func(*args, **kwargs)
-  return wrapper
 
 
 @input_checker
@@ -105,6 +87,9 @@ def find_lcs(first_sentence_tokens: tuple,
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
+    if len(first_sentence_tokens) != len(lcs_matrix) or \
+       len(second_sentence_tokens) != len(lcs_matrix[0]) :
+        return ()
 
     row = len(first_sentence_tokens) - 1
     column = len(second_sentence_tokens) - 1
@@ -314,15 +299,3 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :return: a tuple with ids
     """
     pass
-
-
-default_returns = {'tokenize_by_lines': tuple(),
-                   'create_zero_matrix': list(),
-                   'fill_lcs_matrix': list(),
-                   'find_lcs_length': -1,
-                   'find_lcs': tuple(),
-                   'calculate_plagiarism_score': -1.0,
-                   'calculate_text_plagiarism_score': -1.0,
-                   'find_diff_in_sentence': tuple(),
-                   'accumulate_diff_stats': dict(),
-                   'create_diff_report': str()}
