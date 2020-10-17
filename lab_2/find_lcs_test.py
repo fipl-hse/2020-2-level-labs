@@ -183,3 +183,7 @@ class FindLcsTest(unittest.TestCase):
         expected = ()
         actual = find_lcs(sentence_first, sentence_second, lcs_matrix)
         self.assertEqual(expected, actual)
+
+
+if __name__ == "__main__":
+    unittest.main()
