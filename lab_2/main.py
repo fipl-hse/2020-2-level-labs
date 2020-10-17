@@ -1,7 +1,7 @@
 """
 Longest common subsequence problem
 """
-
+from tokenizer.py import tokenize
 
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
@@ -12,8 +12,15 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    if not isinstance(rows, int) and not isinstance(columns, int):
+        return []
 
+    zero_matrix = []
+    for i in range(rows):
+        zero_matrix.append([0] * columns)
+    print (zero_matrix)
+
+    pass
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
     """
