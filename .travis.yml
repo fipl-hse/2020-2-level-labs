@@ -18,12 +18,20 @@ install:
   - pip3 install -r requirements.txt
 
 stages:
+  - pr_name_check
   - test
   - lint
   - start_py
 
+env:
+  global:
+    - PR_TITLE=$(curl https://github.com/${TRAVIS_REPO_SLUG}/pull/${TRAVIS_PULL_REQUEST} | grep "title" | head -1)
+
 jobs:
   include:
+    - stage: pr_name_check
+      script:
+        - python3 config/check_pr_title.py --pr-name $(echo ${PR_TITLE// /_})
     - stage: test
       script:
         - bash config/run-tests.sh
