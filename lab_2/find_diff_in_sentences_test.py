@@ -150,7 +150,3 @@ class FindDiffInSentence(unittest.TestCase):
         expected = ((0, 1, 5, 7), (0, 1, 5, 7))
         actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
         self.assertEqual(expected, actual)
-
-
-if __name__ == "__main__":
-    unittest.main()
