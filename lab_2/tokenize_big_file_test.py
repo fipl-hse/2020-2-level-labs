@@ -34,7 +34,7 @@ class TokenizeBigFileTest(unittest.TestCase):
         actual = end_time - start_time
         print(f'Actual tokenize_big_file function running time is: {actual}')
         print(f'Reference tokenize_big_file function time is: {expected}')
-        self.assertTrue(expected >= actual)
+        self.assertGreater(expected, actual)
 
     def test_tokenize_big_file_lowest_memory(self):
         """
@@ -48,7 +48,7 @@ class TokenizeBigFileTest(unittest.TestCase):
 
         print(f'Actual tokenize_big_file function memory consuming is: {actual}')
         print(f'Reference tokenize_big_file function memory consuming is: {expected}')
-        self.assertTrue(expected >= actual)
+        self.assertGreater(expected, actual)
 
     @unittest.skip
     def test_tokenize_big_file_ideal(self):

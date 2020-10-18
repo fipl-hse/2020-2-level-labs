@@ -12,12 +12,19 @@ install:
   - pip3 install -r requirements.txt
 
 stages:
+<<<<<<< HEAD
+=======
+  # - pr_name_check
+>>>>>>> 65e0dc7... changed asserTrue to assertGreater, off PR_name_check for now, fixed imports
   - test
   - lint
   - start_py
 
 jobs:
   include:
+    # - stage: pr_name_check
+      # script:
+        # - python3 config/check_pr_title.py --pr-name $(echo ${PR_TITLE// /_})
     - stage: test
       script:
         - bash config/run-tests.sh
