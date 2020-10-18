@@ -50,13 +50,16 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     reqs=[ isinstance(first_sentence_tokens,tuple) , isinstance(second_sentence_tokens,tuple) ,
            all (isinstance(i,str) for i in first_sentence_tokens),all (isinstance(i,str) for i in second_sentence_tokens)]
     if all (reqs):
-        matrix=create_zero_matrix(len(first_sentence_tokens),len(second_sentence_tokens))
-        for index_1, element_1 in enumerate(first_sentence_tokens):
-            for index_2, element_2 in enumerate(second_sentence_tokens,):
+        matrix=create_zero_matrix(len(first_sentence_tokens)+1,len(second_sentence_tokens)+1)
+        for index_1, element_1 in enumerate(first_sentence_tokens,1):
+            for index_2, element_2 in enumerate(second_sentence_tokens,1):
                 if element_1==element_2:
                     matrix[index_1][index_2]=matrix[index_1-1][index_2-1]+1
                 else:
                     matrix[index_1][index_2] = max(matrix[index_1 - 1][index_2 ], matrix[index_1 ][index_2 -1])
+        for element in matrix:
+            del element [0]
+        del martix [0]
         return matrix
     return []
 
