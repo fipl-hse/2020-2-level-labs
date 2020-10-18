@@ -59,7 +59,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
                     matrix[index_1][index_2] = max(matrix[index_1 - 1][index_2 ], matrix[index_1 ][index_2 -1])
         for element in matrix:
             del element [0]
-        del martix [0]
+        del matrix [0]
         return matrix
     return []
 
