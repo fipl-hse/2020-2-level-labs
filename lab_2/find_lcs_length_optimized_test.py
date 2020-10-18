@@ -46,7 +46,7 @@ class FindLcsOptimizedTest(unittest.TestCase):
 
         print(f"Actual find_lcs_length_optimized function running time is: {actual}")
         print(f"Reference find_lcs_length_optimized function running time is: {reference}")
-        self.assertTrue(reference >= actual)
+        self.assertGreater(reference, actual)
 
     def test_find_lcs_length_optimized_lowest_memory(self):
         """
@@ -67,7 +67,7 @@ class FindLcsOptimizedTest(unittest.TestCase):
 
         print(f'Actual find_lcs_length_optimized function memory consuming is: {actual}')
         print(f'Reference find_lcs_length_optimized function memory consuming is: {reference}')
-        self.assertTrue(reference >= actual)
+        self.assertGreater(reference, actual)
 
     @unittest.skip
     def test_find_lcs_length_optimized_works_faster(self):
