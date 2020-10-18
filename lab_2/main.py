@@ -17,7 +17,9 @@ def tokenize_by_lines(text: str) -> tuple:
             lines = []
             new_text = text.split('\n')
             for i in new_text:
-                lines.append(tuple(tokenizer.tokenize(i)))
+                new_line=tuple(tokenizer.tokenize(i))
+                if new_line:
+                    lines.append(new_line)
             return (tuple(lines))
     return ()
 
