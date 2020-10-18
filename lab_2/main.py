@@ -48,7 +48,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :return: a lcs matrix
     """
     reqs=[ isinstance(first_sentence_tokens,tuple) , isinstance(second_sentence_tokens,tuple) ,
-           not None in first_sentence_tokens,not None in second_sentence_tokens,len(first_sentence_tokens),len(second_sentence_tokens)]
+           None not  in first_sentence_tokens, None  not in second_sentence_tokens,len(first_sentence_tokens),len(second_sentence_tokens)]
     if all (reqs):
         matrix=create_zero_matrix(len(first_sentence_tokens)+1,len(second_sentence_tokens)+1)
         for index_1, element_1 in enumerate(first_sentence_tokens,1):
