@@ -8,6 +8,9 @@ dist: xenial
 
 cache: pip
 
+before_install:
+  - git lfs pull
+
 install:
   - pip3 install -r requirements.txt
 
