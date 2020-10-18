@@ -51,7 +51,6 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         or not all(isinstance(word,str) for word in second_sentence_tokens):
         return []
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens),len(second_sentence_tokens))
-    cell = 0
     for i in range(len(first_sentence_tokens)):
         for j in range(len(second_sentence_tokens)):
             if first_sentence_tokens[i] == second_sentence_tokens[j]:
@@ -60,14 +59,14 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
                 else:
                     cell = 1
             else:
-                if not j >= 1 and not i >= 1:
+                if j >= 1 and i >= 1:
+                    cell = max(lcs_matrix[i][j-1], lcs_matrix[i-1][j])
+                elif not j >= 1 and not i >= 1:
                     cell = 0
                 elif j >= 1 and not i >= 1:
                     cell = lcs_matrix[i][j-1]
                 elif not j >= 1 and i >= 1:
                     cell = lcs_matrix[i-1][j]
-                elif j >= 1 and i >= 1:
-                    cell = max(lcs_matrix[i][j-1],lcs_matrix[j][i-1])
             lcs_matrix[i][j] = cell
     return lcs_matrix
 
