@@ -9,6 +9,9 @@ dist: xenial
 cache: pip
 
 before_install:
+  - git lfs install
+
+before_script:
   - git lfs pull
 
 install:
