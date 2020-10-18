@@ -25,6 +25,9 @@ class FindLcsOptimizedTest(unittest.TestCase):
         actual = find_lcs_length_optimized(tuple(sentence_tokens_first_text),
                                            tuple(sentence_tokens_second_text),
                                            plagiarism_threshold)
+        reference = 0
+        print(f"Actual function lcs: {actual}")
+        print(f"Reference function lcs: {reference}")
         self.assertTrue(actual)
 
     def test_find_lcs_length_optimized_quickest_time(self):
@@ -32,7 +35,7 @@ class FindLcsOptimizedTest(unittest.TestCase):
         Tests that find_lcs_length_optimized
             works faster than  time reference
         """
-        reference = 9.101999999927557e-06 + (9.101999999927557e-06 * 0.1)
+        reference = 9.101999999927557e-06 * 1.1
         sentence_tokens_first_text = tokenize_big_file('lab_2/data.txt')
         sentence_tokens_second_text = tokenize_big_file('lab_2/data_2.txt')
         plagiarism_threshold = 0.3
@@ -53,7 +56,7 @@ class FindLcsOptimizedTest(unittest.TestCase):
         Tests that find_lcs_length_optimized
             works efficiently than given memory reference
         """
-        reference = 61.53515625 + (61.53515625 * 0.1)
+        reference = 61.53515625 * 1.1
         sentence_tokens_first_text = tokenize_big_file('lab_2/data.txt')
         sentence_tokens_second_text = tokenize_big_file('lab_2/data_2.txt')
         plagiarism_threshold = 0.3
