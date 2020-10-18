@@ -15,10 +15,10 @@ def tokenize_by_lines(text: str) -> tuple:
 
     tokens = ()
 
-    if isinstance(text, str) and text:
-        sentences = text.split('\n')
-        tokens = tuple([tuple(tokenizer.tokenize(sentence)) for sentence in sentences])
-
+    if not isinstance(text, str):
+        return ()
+    sentences = text.split('\n')
+    tokens = tuple(tuple(tokenizer.tokenize(sentence)) for sentence in sentences if tokenizer.tokenize(sentence))
     return tokens
 
 
@@ -31,13 +31,13 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
+    statements = [isinstance(rows, int) and isinstance(columns, int) and not isinstance(rows, bool) and not isinstance(columns, bool)]
+    if not all(statements) or rows < 1 or columns < 1:
+        return []
 
     matrix = []
-    statements = [isinstance(rows, int), isinstance(columns, int)]
-    if not statements or rows < 1 or columns < 1:
-        return []
-    for i in range(rows):
-        matrix.append([0] * columns)
+    for row in range(rows):
+        matrix.append([0*i for i in range(columns)])
     return matrix
 
 
@@ -49,30 +49,29 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    statements = [isinstance(first_sentence_tokens, tuple), isinstance(second_sentence_tokens, tuple)]
+    statements = [isinstance(first_sentence_tokens, tuple), isinstance(second_sentence_tokens, tuple),
+                  first_sentence_tokens, second_sentence_tokens]
 
-    if statements:
-
-        for i in first_sentence_tokens+second_sentence_tokens:
-            if not isinstance(i, str):
-                return []
+    if statements and all(isinstance(word, str) for word in first_sentence_tokens)\
+            and all(isinstance(word, str) for word in second_sentence_tokens):
 
         matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
+
         for i, xi in enumerate(first_sentence_tokens):
             for j, yj in enumerate(second_sentence_tokens):
                 if xi == yj:
-                    if (i - 1) < 0 or (j -1) < 0:
+                    if i < 0 or j < 0:
                         matrix[i][j] = 1
                     else:
                         matrix[i][j] = matrix[i - 1][j - 1] + 1
                 else:
-                    if (i - 1) < 0 or (j - 1) < 0:
+                    if i < 0 or j < 0:
                         matrix[i][j] = 1
                     else:
                         matrix[i][j] = max(matrix[i][j - 1], matrix[i - 1][j])
-
         return matrix
     return []
+
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
     """
@@ -84,13 +83,13 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :return: a length of the longest common subsequence
     """
 
-    statements = [isinstance(first_sentence_tokens, tuple), isinstance(second_sentence_tokens, tuple), isinstance(plagiarism_threshold, float), first_sentence_tokens, second_sentence_tokens]
-
-    if not statements:
+    lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
+    if lcs_matrix == [] or not isinstance(plagiarism_threshold, float)\
+            or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
-    elif fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)[-1][-1] / len(second_sentence_tokens) < plagiarism_threshold:
+    elif len(lcs_matrix) / len(second_sentence_tokens) < plagiarism_threshold or len(second_sentence_tokens) == 0:
         return 0
-    return fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)[-1][-1]
+    return lcs_matrix[-1][-1]
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
