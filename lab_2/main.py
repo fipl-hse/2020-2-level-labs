@@ -279,7 +279,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
 #calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens, plagiarism_threshold=0.3)
 
 
-original_sentence_tokens = ('itss', 'body', 'is', 'covered', 'with', 'bushy', 'white', 'fur')
+original_sentence_tokens = ('its', 'body', 'is', 'covered', 'with', 'bushy', 'white', 'fur')
 suspicious_sentence_tokens = ('its', 'body', 'is', 'covered', 'with', 'shiny', 'black', 'fur')
 lcs = ('its', 'body', 'is', 'covered', 'with', 'fur')
 
@@ -296,21 +296,21 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     all_indices = []
 
     for index, (original, suspect) in enumerate(zip(original_sentence_tokens, suspicious_sentence_tokens)):
-        if original != suspect and index == 0:
+        if (original != suspect and original_sentence_tokens[index - 1: index] in lcs
+                and original_sentence_tokens[index: index + 1] in lcs):
             orig_indices.append(index)
             susp_indices.append(index)
             orig_indices.append(index + 1)
             susp_indices.append(index + 1)
-        elif original != suspect and original_sentence_tokens[index + 1:] not in lcs:
+
+        elif (original != suspect and tuple(original_sentence_tokens[index + 1:]) != suspect):  # original_sentence_tokens[index + 1:] not in lcs
             orig_indices.append(index)
             susp_indices.append(index)
-        elif (original != suspect and original_sentence_tokens[index + 1:] != -1 and
-              original_sentence_tokens[index + 1:] in lcs):
+        elif (original != suspect and tuple(original_sentence_tokens[index:index + 1]) == suspect):
             orig_indices.append(index + 1)
             susp_indices.append(index + 1)
-        elif (original != suspect and original_sentence_tokens[index + 1:]
-              in lcs and original_sentence_tokens[index + 1:] == -1):   # so this and prev elif - check and think what to do...
             pass
+        print(tuple(original_sentence_tokens[index:index + 1]))
 
 
     all_indices.append(tuple(orig_indices))
