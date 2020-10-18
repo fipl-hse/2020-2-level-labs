@@ -102,7 +102,8 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    if isinstance(lcs_length,int) and isinstance(suspicious_sentence_tokens,tuple):
+    if isinstance(lcs_length,int) and isinstance(suspicious_sentence_tokens,tuple)\
+            and lcs_length>=0 and suspicious_sentence_tokens:
         score=lcs_length/len(suspicious_sentence_tokens)
         return score
     return -1
