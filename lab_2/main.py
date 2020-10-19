@@ -51,19 +51,19 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         or not all(isinstance(word,str) for word in second_sentence_tokens):
         return []
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens),len(second_sentence_tokens))
-    for i in range(len(first_sentence_tokens)):
-        for j in range(len(second_sentence_tokens)):
-            if first_sentence_tokens[i] == second_sentence_tokens[j] and i == j:
-                if lcs_matrix[i-1][j-1] >= 0:
-                    cell = lcs_matrix[i-1][j-1]+1
+    for index_1 in range(len(first_sentence_tokens)):
+        for index_2 in range(len(second_sentence_tokens)):
+            if first_sentence_tokens[index_1] == second_sentence_tokens[index_2] and index_1 == index_2:
+                if lcs_matrix[index_1-1][index_2-1] >= 0:
+                    cell = lcs_matrix[index_1-1][index_2-1]+1
                 else:
                     cell = 1
             else:
-                if j >= 0 and i >= 0:
-                    cell = max(lcs_matrix[i][j-1], lcs_matrix[i-1][j])
-                elif not j >= 0 and not i >= 0:
+                if index_2 >= 0 and index_1 >= 0:
+                    cell = max(lcs_matrix[index_1][index_2-1], lcs_matrix[index_1-1][index_2])
+                elif not index_2 >= 0 and not index_1 >= 0:
                     cell = 0
-            lcs_matrix[i][j] = cell
+            lcs_matrix[index_1][index_2] = cell
     return lcs_matrix
 
 
@@ -81,7 +81,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     if lcs_matrix == [] or not isinstance(plagiarism_threshold,float) or plagiarism_threshold < 0 \
             or plagiarism_threshold > 1:
         return -1
-    if len(second_sentence_tokens) == 0 or len(lcs_matrix) / len(second_sentence_tokens) < plagiarism_threshold:
+    if len(lcs_matrix) / len(second_sentence_tokens) < plagiarism_threshold:
         return 0
     return lcs_matrix[-1][-1]
 

@@ -4,7 +4,6 @@ Checks the first lab dictionary functions
 """
 
 import unittest
-from main import sort_concordance
 from main import tokenize
 from main import read_from_file
 from main import sort_concordance
