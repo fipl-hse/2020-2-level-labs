@@ -9,6 +9,11 @@ for lab in $LABS; do
 	echo "Running tests for lab #${lab}"
 
 	TARGET_SCORE=$(cat lab_"${lab}"/target_score.txt)
+	if [[ ${TARGET_SCORE} == 10 && ${lab} == 2 ]]; then
+	  gdown https://drive.google.com/uc?id=1MJLg8H6SfAoBnOUHqxIRvanSWNb1vm3B -O lab_2/data.txt
+	  gdown https://drive.google.com/uc?id=1dETiLw3yYCLf1R729xlLiCbUZGPBhCYr -O lab_2/data_2.txt
+	fi
+
 	TARGET_TESTS=config/lab_"${lab}"/target_tests_"${TARGET_SCORE}".txt
 
 	while read test_file_name || [[ -n $test_file_name ]]
