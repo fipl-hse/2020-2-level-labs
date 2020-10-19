@@ -104,7 +104,38 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    pass
+    wrong_circumstances = not isinstance(first_sentence_tokens, tuple) \
+                          or not isinstance(second_sentence_tokens, tuple) \
+                          or isinstance(first_sentence_tokens, bool) \
+                          or isinstance(second_sentence_tokens, bool) \
+                          or first_sentence_tokens == () or second_sentence_tokens == () \
+                          or None in first_sentence_tokens or None in second_sentence_tokens \
+                          or not isinstance(lcs_matrix, list) \
+                          or isinstance(lcs_matrix, bool) \
+                          or lcs_matrix == [] or None in lcs_matrix \
+                          or (lcs_matrix[0][0] != 0 and lcs_matrix[0][0] != 1) \
+                          or len(lcs_matrix) != len(first_sentence_tokens) \
+                          or len(lcs_matrix[0]) != len(second_sentence_tokens)
+    if wrong_circumstances:
+        return ()
+    for element in lcs_matrix:
+        element.insert(0, 0)
+    lcs_matrix.insert(0, [0] * (len(second_sentence_tokens) + 1))
+    print(lcs_matrix)
+    lcs = []
+    i = len(first_sentence_tokens)
+    j = len(second_sentence_tokens)
+    while i != 0 and j != 0:
+        if first_sentence_tokens[i - 1] == second_sentence_tokens[j - 1]:
+            lcs.insert(0, first_sentence_tokens[i - 1])
+            i = i - 1
+            j = j - 1
+        elif lcs_matrix[i - 1][j] > lcs_matrix[i][j - 1]:
+            i = i - 1
+        else:
+            j = j - 1
+    lcs = tuple(lcs)
+    return lcs
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
