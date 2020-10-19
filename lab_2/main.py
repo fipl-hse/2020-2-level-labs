@@ -24,8 +24,14 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
-
+    zero_matrix = []
+    for _ in range(0, rows):
+        zero_matrix.append([])
+        for _ in range(0, columns):
+            zero_matrix[-1].append(0)
+    print(zero_matrix)
+    #  return [ [0] * columns for _ in range(rows)]
+    return zero_matrix
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
     """
