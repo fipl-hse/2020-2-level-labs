@@ -32,12 +32,20 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    if isinstance(rows, int) and isinstance(columns, int):
-        matrix = [[0 for column in range(columns)] for row in range(rows)]
+    if (isinstance(rows, bool) or isinstance(columns, bool)) \
+            or (rows == None or columns == None) \
+            or (rows == [] or columns == []) or (rows == () or columns == ()) \
+            or (rows == {} or columns == {}) or (rows == '' or columns == '') \
+            or (isinstance(rows, float) or isinstance(columns, float)) \
+            or (rows <= 0 or columns <= 0):
 
-        return matrix
+        return []
 
-    return []
+    matrix = [[0 for column in range(columns)] for row in range(rows)]
+
+    return matrix
+
+
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
