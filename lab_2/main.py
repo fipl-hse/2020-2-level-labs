@@ -58,6 +58,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         return []
 
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
+
     for ind_1, elem_1 in enumerate(first_sentence_tokens):
         for ind_2, elem_2 in enumerate(second_sentence_tokens):
             if elem_1 == elem_2:
@@ -88,18 +89,18 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    is_not_tuple_fst = not isinstance(first_sentence_tokens, tuple)
-    is_not_tuple_sst = not isinstance(second_sentence_tokens, tuple)
+    is_not_good_fst = not (isinstance(first_sentence_tokens, tuple) and first_sentence_tokens
+                           and first_sentence_tokens[0] is not None)
+    is_not_good_sst = not (isinstance(second_sentence_tokens, tuple) and second_sentence_tokens
+                           and second_sentence_tokens[0] is not None)
+
+    is_not_good_threshold = not (isinstance(plagiarism_threshold, int) or isinstance(plagiarism_threshold, float))
+
+    if is_not_good_fst or is_not_good_sst or is_not_good_threshold:
+        return -1
 
     is_not_fst = not first_sentence_tokens
     is_not_sst = not second_sentence_tokens
-
-    is_not_good_threshold = not (isinstance(plagiarism_threshold, float) or isinstance(plagiarism_threshold, float))
-
-    if is_not_tuple_fst or is_not_tuple_sst or is_not_good_threshold or not 0 < plagiarism_threshold < 1 or \
-            (first_sentence_tokens and first_sentence_tokens[0] is None) or \
-            (second_sentence_tokens and second_sentence_tokens[0] is None):
-        return -1
 
     if is_not_fst or is_not_sst:
         return 0
@@ -120,7 +121,35 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    pass
+    is_not_good_fst = not (isinstance(first_sentence_tokens, tuple) and first_sentence_tokens
+                           and first_sentence_tokens[0] is not None)
+    is_not_good_sst = not (isinstance(second_sentence_tokens, tuple) and second_sentence_tokens
+                           and second_sentence_tokens[0] is not None)
+
+    is_not_good_lcs_matrix = not (isinstance(lcs_matrix, list) or lcs_matrix or isinstance(lcs_matrix[0], int)
+                                  or lcs_matrix[0] >= 0)
+
+    if is_not_good_fst or is_not_good_sst or is_not_good_lcs_matrix:
+        return ()
+
+    lcs = []
+
+    ind_row, ind_col = len(first_sentence_tokens) - 1, len(second_sentence_tokens) - 1
+
+    while ind_row >= 0 and ind_col >= 0:
+        first_token, second_token = first_sentence_tokens[ind_row], second_sentence_tokens[ind_col]
+        if first_token == second_token:
+            lcs.append(first_token)
+            ind_row, ind_col = ind_row - 1, ind_col - 1
+        elif lcs_matrix[ind_row - 1][ind_col] > lcs_matrix[ind_row][ind_col - 1]:
+            ind_row -= 1
+        elif lcs_matrix[ind_row - 1][ind_col] == lcs_matrix[ind_row][ind_col - 1]:
+            ind_row, ind_col = ind_row - 1, ind_col - 1
+        else:
+            ind_col -= 1
+
+    lcs.reverse()
+    return tuple(lcs)
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
