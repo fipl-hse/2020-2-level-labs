@@ -12,8 +12,6 @@ for lab in $LABS; do
 	if [[ ${TARGET_SCORE} == 10 && ${lab} == 2 ]]; then
 	  gdown https://drive.google.com/uc?id=1MJLg8H6SfAoBnOUHqxIRvanSWNb1vm3B -O lab_2/data.txt
 	  gdown https://drive.google.com/uc?id=1dETiLw3yYCLf1R729xlLiCbUZGPBhCYr -O lab_2/data_2.txt
-	  ls -la .
-	  ls -la lab_2
 	fi
 
 	TARGET_TESTS=config/lab_"${lab}"/target_tests_"${TARGET_SCORE}".txt
