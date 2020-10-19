@@ -23,14 +23,14 @@ def input_checker(func):
                 return return_value
 
             # if sequence is empty
-            if isinstance(arg, (tuple, list)) and not len(arg):
+            if isinstance(arg, (tuple, list)) and not arg:
                 return func.__annotations__['return']()
 
             # if any is None
             if isinstance(arg, (tuple, list)):
                 flattened = []
                 to_check = [*arg]
-                while len(to_check):
+                while to_check:
                     for value in to_check[:]:
                         if isinstance(value, str):
                             flattened.append(value)
@@ -43,6 +43,6 @@ def input_checker(func):
 
                 if any(item is None for item in flattened):
                     return return_value
-                
+
         return func(*args, **kwargs)
     return wrapper
