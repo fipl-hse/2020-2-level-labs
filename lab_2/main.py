@@ -2,12 +2,8 @@
 Longest common subsequence problem
 """
 
+import copy
 from tokenizer import tokenize
-
-
-text = """I have a cat.\nHis name is Bruno.\n
-    He is white and beautiful.\n
-"""
 
 
 def tokenize_by_lines(text: str) -> tuple:
@@ -22,19 +18,17 @@ def tokenize_by_lines(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
 
-    list_sentences_output = []
+    list_tokens = []
     sentences = text.split('\n')
     for sentence in sentences:
         sentence = sentence.strip()
         if not isinstance(sentence, str) or not sentence:
             continue
-        tokens = tuple(tokenize(sentence))
-        list_sentences_output.append(tokens)
-        tuple_sentences_output = tuple(list_sentences_output)
-    return tuple_sentences_output
+        tokens_of_sentence = tuple(tokenize(sentence))
+        list_tokens.append(tokens_of_sentence)
+    return tuple(list_tokens)
 
 
-'''
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
     Creates a matrix rows * columns where each element is zero
@@ -44,7 +38,21 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    if not isinstance(rows, int) or not isinstance(columns, int):
+        return []
+    if isinstance(rows, bool) or isinstance(columns, bool):
+        return []
+    if rows < 1 or columns < 1:
+        return []
+
+    row = []
+    while len(row) < columns:
+        row.append(0)
+    zero_matrix = []
+    while len(zero_matrix) < rows:
+        row_copy = copy.deepcopy(row)
+        zero_matrix.append(row_copy)
+    return zero_matrix
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
@@ -54,7 +62,26 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    pass
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
+        return []
+    for element_from_first in first_sentence_tokens:
+        if not isinstance(element_from_first, str):
+            return []
+    for element_from_second in second_sentence_tokens:
+        if not isinstance(element_from_second, str):
+            return []
+
+    lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
+    for i in range(len(first_sentence_tokens)):
+        for j in range(len(second_sentence_tokens)):
+            if first_sentence_tokens[i] == second_sentence_tokens[j]:
+                if i == 0 or j == 0:
+                    lcs_matrix[i][j] = 1
+                else:
+                    lcs_matrix[i][j] = lcs_matrix[i - 1][j - 1] + 1
+            else:
+                lcs_matrix[i][j] = max(lcs_matrix[i - 1][j], lcs_matrix[i][j - 1])
+    return lcs_matrix
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
@@ -66,7 +93,24 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
+        return -1
+    for element_from_first in first_sentence_tokens:
+        if not isinstance(element_from_first, str):
+            return -1
+    for element_from_second in second_sentence_tokens:
+        if not isinstance(element_from_second, str):
+            return -1
+    if not isinstance(plagiarism_threshold, float) or plagiarism_threshold < 0 or plagiarism_threshold > 1:
+        return -1
+    if not first_sentence_tokens or not second_sentence_tokens:
+        return 0
+
+    lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
+    lcs_length = lcs_matrix[-1][-1]
+    if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
+        return 0
+    return lcs_length
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
@@ -77,9 +121,55 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    pass
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
+        return ()
+    for element_from_first in first_sentence_tokens:
+        if not isinstance(element_from_first, str):
+            return ()
+    for element_from_second in second_sentence_tokens:
+        if not isinstance(element_from_second, str):
+            return ()
+    if not isinstance(lcs_matrix, list) or not lcs_matrix:
+        return ()
+    for list_from_matrix in lcs_matrix:
+        if not isinstance(list_from_matrix, list):
+            return ()
+        for element in list_from_matrix:
+            if not isinstance(element, int):
+                return ()
+    if lcs_matrix != fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens):
+        return ()
+    if lcs_matrix[0][0] != 0 and lcs_matrix[0][0] != 1:
+        return ()
+
+    lcs = []
+    # [i,g] - value of the last element
+    i = len(first_sentence_tokens) - 1
+    j = len(second_sentence_tokens) - 1
+    while i >= 0 and j >= 0:
+        if first_sentence_tokens[i] == second_sentence_tokens[j]:
+            lcs.append(second_sentence_tokens[j])
+            # on a diagonal
+            i -= 1
+            j -= 1
+        else:
+            if lcs_matrix[i - 1][j] > lcs_matrix[i][j - 1]:
+                # up
+                i -= 1
+            else:
+                # left
+                j -= 1
+        # if no equal values at all
+        if j < 0:
+            j = 0
+            i -= 1
+        elif i < 0:
+            i = 0
+            j -= 1
+    return tuple(lcs[::-1])
 
 
+'''
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
     """
     Calculates the plagiarism score
