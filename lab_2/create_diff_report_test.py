@@ -23,7 +23,7 @@ class CreateDiffReportTest(unittest.TestCase):
                                   ('its', 'body', 'is', 'covered', 'with', 'shiny', 'black', 'fur'))
         accumulated_diff_stats = accumulate_diff_stats(original_text_tokens, suspicious_text_tokens)
 
-        expected = open('diff_report_example.txt', 'r', errors='coerce').read().split()
+        expected = open('lab_2/diff_report_example.txt', 'r', errors='coerce').read().split()
         actual = create_diff_report(original_text_tokens, suspicious_text_tokens, accumulated_diff_stats).split()
         self.assertEqual(expected, actual)
         self.assertEqual(len(expected), len(actual))
