@@ -105,7 +105,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
             or lcs_length<0 or not all(isinstance (i,str) for i in suspicious_sentence_tokens) \
             or not suspicious_sentence_tokens or  isinstance(lcs_length,bool) or lcs_length>100 :
         return -1
-    if len(suspicious_sentence_tokens)==0:
+    elif not suspicious_sentence_tokens:
         return 0.0
     score=lcs_length/len(suspicious_sentence_tokens)
     return score
