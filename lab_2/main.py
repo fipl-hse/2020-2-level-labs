@@ -2,7 +2,7 @@
 Longest common subsequence problem
 """
 
-
+from lab_2.tokenizer import tokenize
 def tokenize_by_lines(text: str) -> tuple:
     """
     Splits a text into sentences, sentences – into tokens,
@@ -12,7 +12,16 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    pass
+    if isinstance(text, str):
+        tokens = []
+        sentences = text.split('\n')
+        for words in sentences:
+            token_text = tuple(tokenize(words))
+            if token_text:
+                tokens.append(token_text)
+    return tuple(tokens)
+
+
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -24,13 +33,16 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    zero_matrix = []
-    if isinstance(rows, int) and isinstance(columns, int) and not isinstance(rows, bool)\
-        and not isinstance(columns, bool) and columns >= 0 and rows >= 0:
-        zero_matrix = [[0] * columns for i in range(rows)]
+    rows_int = isinstance(rows, int)
+    columns_int = isinstance(columns, int)
+    rows_bool = isinstance(rows, bool)
+    columns_bool = isinstance(columns,bool)
+    if not rows_int and not columns_int and rows_bool and columns_bool:
+        return []
+    if rows < 0 and columns < 0:
+        return []
+    zero_matrix = [[0] * columns for i in range(rows)]
     return zero_matrix
-
-
 
 
 
@@ -42,7 +54,10 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    pass
+
+
+
+
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
