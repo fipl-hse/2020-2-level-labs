@@ -16,8 +16,8 @@ def tokenize_by_lines(text: str) -> tuple:
     if isinstance(text, str):
         text_full = text.split('\n')
         for token in text_full:
-           tokens = tuple(tokenizer.tokenize(token))
-           tokens_tpl.append(tokens)
+            tokens = tuple(tokenizer.tokenize(token))
+            tokens_tpl.append(tokens)
         return tuple(tokens_tpl)
     else:
       return ()
@@ -47,11 +47,11 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :return: a lcs matrix
     """
     lcs = []
-
+    rows = len(first_sentence_tokens)
+    columns = len(second_sentence_tokens)
     if rows <= 0 and columns <= 0:
         return []
     if isinstance(first_sentence_tokens, tuple) and isinstance(second_sentence_tokens, tuple):
-
         lcs = create_zero_matrix(rows, columns)
         for ind_1, token_1 in enumerate(first_sentence_tokens):
             for ind_2, token_2 in enumerate(second_sentence_tokens):
@@ -73,13 +73,21 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     """
     check_first = isinstance(first_sentence_tokens, tuple) and len(first_sentence_tokens) > 0
     check_second = isinstance(second_sentence_tokens, tuple) and len(second_sentence_tokens) > 0
+    check_plagiarism = isinstance(plagiarism_threshold, float) and 0 < plagiarism_threshold < 1
 
-    if check_first and check_second and isinstance(plagiarism_threshold, float):
+    if check_first and check_second and check_plagiarism:
         lcs = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
+        if lcs:
+            lcs_length = lcs[-1][-1]
+        else:
+            return 0
 
+        if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
+            return 0
+    else:
+        return -1
 
-
-
+    return lcs_length
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
@@ -90,7 +98,43 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    pass
+    check_first = isinstance(first_sentence_tokens, tuple) and len(first_sentence_tokens) > 0
+    check_second = isinstance(second_sentence_tokens, tuple) and len(second_sentence_tokens) > 0
+
+    check_str1, check_str2 = False, False
+    list_of_tokens = []
+
+    for token in first_sentence_tokens:
+        if token == str:
+            check_str1 = True
+    for token in second_sentence_tokens:
+        if token == str:
+            check_str2 = True
+
+    zero_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
+    if lcs_matrix == zero_matrix:
+        return ()
+
+    ind_first, ind_second = len(first_sentence_tokens) - 1,  len(second_sentence_tokens) - 1
+
+    while ind_first >= 0 and ind_second >= 0:
+        if check_first and check_second and check_str1 and check_str2:
+           if first_sentence_tokens[ind_first] == second_sentence_tokens[ind_second]:
+               lcs_of_tokens.append(first_sentence_tokens[ind_first])
+               ind_first -= 1
+               ind_second -= 1
+           elif lcs_matrix[ind_first - 1][ind_second] > lcs_matrix[ind_first][ind_second - 1]:
+               ind_first -= 1
+           else:
+               ind_second -= 1
+
+        else:
+           return ()
+
+
+    return tuple(list_of_tokens[::-1])
+
+
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
@@ -101,7 +145,15 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    pass
+    score = lcs_length / len(suspicious_sentence_tokens)
+    return score
+
+
+
+
+
+
+
 
 
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
