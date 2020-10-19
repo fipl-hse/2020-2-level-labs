@@ -75,9 +75,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
               not isinstance(second_sentence_tokens, tuple) or
               not all(isinstance(i, str) for i in first_sentence_tokens) or
               not all(isinstance(i, str) for i in second_sentence_tokens))
-    check2 = (not isinstance(plagiarism_threshold, float) or
-             plagiarism_threshold < 0 or
-             plagiarism_threshold > 1)
+    check2 = (not isinstance(plagiarism_threshold, float) or plagiarism_threshold < 0 or plagiarism_threshold > 1)
     if check1 or check2:
         return -1
     lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
@@ -131,7 +129,13 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    pass
+    check1 = not isinstance(lcs_length, int) or isinstance(lcs_length, bool)
+    check2 = (not isinstance(suspicious_sentence_tokens, tuple) or
+              not suspicious_sentence_tokens or  # ???
+              not all(isinstance(i, str) for i in suspicious_sentence_tokens))
+    if check1 or check2 or not 0 <= lcs_length <= len(suspicious_sentence_tokens):
+        return -1
+    return lcs_length / len(suspicious_sentence_tokens)
 
 
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
