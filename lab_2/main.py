@@ -315,6 +315,8 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
     :param second_sentence_tokens: a list of tokens
     :return: a length of the longest common subsequence
     """
+
+    'hello'
     pass
 
 def tokenize_big_file(path_to_file: str) -> tuple:
