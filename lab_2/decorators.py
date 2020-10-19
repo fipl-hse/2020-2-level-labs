@@ -12,17 +12,37 @@ def input_checker(func):
             return_value =  func.__annotations__['return']()
 
         for arg, instance in zip(args, func.__annotations__.values()):
+            # if type doesn't match
             if not isinstance(arg, instance):
                 return return_value
 
+            # if int or float value is non-valid
             if instance == int and (isinstance(arg, bool) or arg < 0):
                 return return_value
             if instance == float and (arg < 0 or arg > 1):
                 return return_value
 
-            if instance in [tuple, list] and not len(arg):
-                return return_value
-            if arg == (None, None):
-                return return_value
+            # if sequence is empty
+            if isinstance(arg, (tuple, list)) and not len(arg):
+                return func.__annotations__['return']()
+
+            # if any is None
+            if isinstance(arg, (tuple, list)):
+                flattened = []
+                to_check = [*arg]
+                while len(to_check):
+                    for value in to_check[:]:
+                        if isinstance(value, str):
+                            flattened.append(value)
+                        else:
+                            try:
+                                to_check.extend([*value])
+                            except TypeError:
+                                flattened.append(value)
+                        to_check.remove(value)
+
+                if any(item is None for item in flattened):
+                    return return_value
+                
         return func(*args, **kwargs)
     return wrapper

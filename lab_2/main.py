@@ -157,12 +157,13 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple,
             scores.append(score)
 
     text_score = sum(scores) / len(suspicious_text_tokens)
-    if text_score < plagiarism_threshold:
-        return 0.0
+
     return text_score
 
-
-def find_diff(tokens: tuple, lcs: tuple) -> tuple:
+@input_checker
+def find_diff(tokens: tuple,
+              tokens_for_check: tuple,
+              lcs: tuple) -> tuple:
     idx_lcs = 0
     indexes = []
     isnt_previous_match = False
@@ -186,7 +187,6 @@ def find_diff(tokens: tuple, lcs: tuple) -> tuple:
     return tuple(indexes)
 
 
-@input_checker
 def find_diff_in_sentence(original_sentence_tokens: tuple,
                           suspicious_sentence_tokens: tuple,
                           lcs: tuple) -> tuple:
@@ -197,8 +197,26 @@ def find_diff_in_sentence(original_sentence_tokens: tuple,
     :param lcs: a longest common subsequence
     :return: a tuple with tuples of indexes
     """
-    origin_indexes = find_diff(original_sentence_tokens, lcs)
-    susp_indexes = find_diff(suspicious_sentence_tokens, lcs)
+    if isinstance(lcs, tuple) and not lcs:
+        if not original_sentence_tokens:
+            return ((), (0, len(suspicious_sentence_tokens)))
+        else:
+            return ((0, len(original_sentence_tokens)),
+                    (0, len(suspicious_sentence_tokens)))
+
+    if original_sentence_tokens == suspicious_sentence_tokens\
+    and original_sentence_tokens == lcs:
+        return ((), ())
+
+    if not (origin_indexes := find_diff(original_sentence_tokens,
+                                        suspicious_sentence_tokens,
+                                        lcs)):
+            return origin_indexes
+    if not (susp_indexes := find_diff(suspicious_sentence_tokens,
+                                      original_sentence_tokens,
+                                      lcs)):
+            return susp_indexes
+
     return origin_indexes, susp_indexes
 
 
