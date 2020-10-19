@@ -74,6 +74,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :return: a length of the longest common subsequence
     """
     lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
+    print(lcs_matrix)
     if lcs_matrix and isinstance (plagiarism_threshold, float) and plagiarism_threshold>0 and plagiarism_threshold<=1:
         length = lcs_matrix[-1][-1]
         if not first_sentence_tokens or not second_sentence_tokens \
@@ -104,7 +105,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     """
     if isinstance(lcs_length,int) and isinstance(suspicious_sentence_tokens,tuple)\
             and lcs_length>=0 and all(isinstance (i,str) for i in suspicious_sentence_tokens) \
-            and suspicious_sentence_tokens and not isinstance(lcs_length,bool) :
+            and suspicious_sentence_tokens and not isinstance(lcs_length,bool)  :
         if len(suspicious_sentence_tokens)==0:
             return 0.0
         score=lcs_length/len(suspicious_sentence_tokens)
