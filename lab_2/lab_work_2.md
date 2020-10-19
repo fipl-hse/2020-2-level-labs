@@ -79,7 +79,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
 
 Правило заполнения каждой ячейки матрицы:
 
-<img src="https://latex.codecogs.com/gif.latex?LCS-length(X_i,&space;Y_j)&space;=&space;\left\{\begin{matrix}LCS-length(X__{i-1},&space;Y_{j-1})&space;&plus;&space;1&space;&&space;x_i=y_i&space;\\&space;max\left&space;\{LCS-length(X__{i},&space;Y_{j-1}),&space;LCS-length(X__{i-1},&space;Y_{j})&space;\right&space;\}&space;&&space;x_i\neq&space;y_i&space;\end{matrix}\right." title="LCS-length(X_i, Y_j) = \left\{\begin{matrix}LCS-length(X__{i-1}, Y_{j-1}) + 1 & x_i=y_i \\ max\left \{LCS-length(X__{i}, Y_{j-1}), LCS-length(X__{i-1}, Y_{j}) \right \} & x_i\neq y_i \end{matrix}\right." />
+<img src="https://latex.codecogs.com/gif.latex?LCS-length(X_i,&space;Y_j)&space;=&space;\left\{\begin{matrix}LCS-length(X__{i-1},&space;Y_{j-1})&space;&plus;&space;1&space;&&space;x_i=y_j&space;\\&space;max\left&space;\{LCS-length(X__{i},&space;Y_{j-1}),&space;LCS-length(X__{i-1},&space;Y_{j})&space;\right&space;\}&space;&&space;x_i\neq&space;y_j&space;\end{matrix}\right." title="LCS-length(X_i, Y_j) = \left\{\begin{matrix}LCS-length(X__{i-1}, Y_{j-1}) + 1 & x_i=y_j \\ max\left \{LCS-length(X__{i}, Y_{j-1}), LCS-length(X__{i-1}, Y_{j}) \right \} & x_i\neq y_j \end{matrix}\right." />
 > Матрица решений из разбора примера в Разделе "Терминология":
 
 |     |     |     |     |     |
