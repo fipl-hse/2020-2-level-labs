@@ -38,6 +38,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
+
     is_rows_columns_correct = ((not isinstance(rows, bool)) and (not isinstance(columns, bool)) and
                                isinstance(rows, int) and isinstance(columns, int) and (rows > 0) and (columns > 0))
     if not is_rows_columns_correct:
