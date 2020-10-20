@@ -294,7 +294,54 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :param accumulated_diff_stats: a dictionary with statistics for each pair of sentences
     :return: a report
     """
-    pass
+    check1 = (not isinstance(original_text_tokens, tuple) or
+              not all(isinstance(i, tuple) for i in original_text_tokens) or
+              not all(isinstance(i, str) for subtuple in original_text_tokens for i in subtuple))
+
+    check2 = (not isinstance(suspicious_text_tokens, tuple) or
+              not all(isinstance(i, tuple) for i in suspicious_text_tokens) or
+              not all(isinstance(i, str) for subtuple in suspicious_text_tokens for i in subtuple))
+
+    if check1 or check2 or not isinstance(accumulated_diff_stats, dict):
+        return ''
+
+    if len(original_text_tokens) < len(suspicious_text_tokens):
+        original_text_tokens = list(original_text_tokens)
+        for _ in range(len(suspicious_text_tokens) - len(original_text_tokens)):
+            original_text_tokens.append(())
+        original_text_tokens = tuple(original_text_tokens)
+
+    report = ''
+
+    def vertical_lines(sentence_list, indexes_tuple):
+        for i in range(0, len(indexes_tuple), 2):
+            diff_token_ind = indexes_tuple[i]
+            next_diff_token_ind = indexes_tuple[i + 1]
+            if diff_token_ind + 1 == next_diff_token_ind:
+                sentence_list[diff_token_ind] = f'| {sentence_list[diff_token_ind]} |'
+            else:
+                sentence_list[diff_token_ind] = f'| {sentence_list[diff_token_ind]}'
+                sentence_list[next_diff_token_ind - 1] = f'{sentence_list[next_diff_token_ind - 1]} |'
+        return ' '.join(sentence_list)
+
+    for i in range(len(suspicious_text_tokens)):
+        if any(accumulated_diff_stats['difference_indexes'][i]):
+            original_sentence_list = list(original_text_tokens[i])
+            suspicious_sentence_list = list(suspicious_text_tokens[i])
+            original_sentence_inds = accumulated_diff_stats['difference_indexes'][i][0]
+            suspicious_sentence_inds = accumulated_diff_stats['difference_indexes'][i][1]
+            report += f'- {vertical_lines(original_sentence_list, original_sentence_inds)}\n'
+            report += f'+ {vertical_lines(suspicious_sentence_list, suspicious_sentence_inds)}\n'
+        else:
+            report += f"- {' '.join(original_text_tokens[i])}\n+ {' '.join(suspicious_text_tokens[i])}\n"
+        lcs = accumulated_diff_stats['sentence_lcs_length'][i]
+        plagiarism = accumulated_diff_stats['sentence_plagiarism'][i] * 100
+        report += f"\nlcs = {lcs}, plagiarism = {plagiarism}%\n\n"
+
+    text_plagiarism = accumulated_diff_stats['text_plagiarism'] * 100
+    report += f'Text average plagiarism (words): {text_plagiarism}%'
+
+    return report
 
 
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
