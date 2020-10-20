@@ -185,7 +185,8 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     return plagiarism_score
 
 
-def calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens, plagiarism_threshold=0.3) -> float:
+def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
+                                    plagiarism_threshold=0.3) -> float:
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
     The score is the sum of lcs values for each pair divided by the number of tokens in suspicious text
@@ -277,7 +278,6 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     """
     incorrect_input = (not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple)
                        or not isinstance(plagiarism_threshold, float) or not(0 <= plagiarism_threshold <= 1))
-
     if incorrect_input:
         return {}
     if not all(original_text_tokens) or not all(suspicious_text_tokens):
@@ -286,9 +286,6 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     sentence_plagiarism = []
     sentence_lcs_length = []
     difference_indexes = []
-
-    text_plagiarism = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens,
-                                                      plagiarism_threshold)
 
     n_sentences = len(suspicious_text_tokens)
 
@@ -305,7 +302,9 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
         sentence_lcs_length.append(lcs_length)
         difference_indexes.append(diff_in_sentence)
 
-    diff_stats = {'text_plagiarism': text_plagiarism,
+    diff_stats = {'text_plagiarism': calculate_text_plagiarism_score(original_text_tokens,
+                                                                     suspicious_text_tokens,
+                                                                      plagiarism_threshold),
                   'sentence_plagiarism': sentence_plagiarism,
                   'sentence_lcs_length': sentence_lcs_length,
                   'difference_indexes': difference_indexes}
