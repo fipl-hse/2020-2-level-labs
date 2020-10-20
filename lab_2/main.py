@@ -161,13 +161,20 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     """
     is_data_incorrect = not isinstance(suspicious_sentence_tokens, tuple) or not isinstance(lcs_length, int) or \
                         isinstance(lcs_length, bool) or not (lcs_length >= 0)
-    if is_data_incorrect or not suspicious_sentence_tokens or (lcs_length > len(suspicious_sentence_tokens)):
+    if is_data_incorrect:
+        return -1.0
+
+    is_lengths_correspond = (not suspicious_sentence_tokens and lcs_length <= 0) or \
+                            (suspicious_sentence_tokens and lcs_length > len(suspicious_sentence_tokens))
+    if is_lengths_correspond:
         return -1.0
 
     for word in suspicious_sentence_tokens:
         if not isinstance(word, str) or not word:
             return -1.0
 
+    if not suspicious_sentence_tokens:
+        return 0.0
     plagiarism_score = lcs_length / len(suspicious_sentence_tokens)
 
     return plagiarism_score
@@ -191,7 +198,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
         return -1.0
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
-        original_text_tokens += ('',) * (len(suspicious_text_tokens) - len(original_text_tokens))
+        original_text_tokens += ((),) * (len(suspicious_text_tokens) - len(original_text_tokens))
         original_text_length = len(original_text_tokens)
     else:
         original_text_length = len(original_text_tokens[:len(suspicious_text_tokens)])
