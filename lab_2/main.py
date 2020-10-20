@@ -24,7 +24,7 @@ def tokenize_by_lines(text: str) -> tuple:
         sentence_clear = tokenize(sentence)
         if not sentence_clear:
             continue
-        text_tuple += tuple(sentence_clear),
+        text_tuple += (tuple(sentence_clear),)
 
     return text_tuple
 
@@ -160,7 +160,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     is_data_incorrect = not isinstance(suspicious_sentence_tokens, tuple) or not isinstance(lcs_length, int) or \
-                        isinstance(lcs_length, bool) or not (lcs_length >= 0)
+                        isinstance(lcs_length, bool) or not lcs_length >= 0
     if is_data_incorrect:
         return -1.0
 
@@ -232,9 +232,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     is_type_incorrect = not isinstance(original_sentence_tokens, tuple) or \
                         not isinstance(suspicious_sentence_tokens, tuple) or not isinstance(lcs, tuple)
 
-    if is_type_incorrect:
-        return ()
-    elif not all(original_sentence_tokens) or not all(suspicious_sentence_tokens) or not all(lcs):
+    if is_type_incorrect or not all(original_sentence_tokens) or not all(suspicious_sentence_tokens) or not all(lcs):
         return ()
 
     indexes_diff_original = [original_sentence_tokens.index(word) for word in original_sentence_tokens
@@ -275,24 +273,20 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     """
     is_type_incorrect = not isinstance(original_text_tokens, tuple) or \
                         not isinstance(suspicious_text_tokens, tuple) or not isinstance(plagiarism_threshold, float) \
-                        or not(0 <= plagiarism_threshold <= 1)
+                        or not 0 <= plagiarism_threshold <= 1
 
-    if is_type_incorrect:
-        return {}
-    elif not all(original_text_tokens) or not all(suspicious_text_tokens):
+    if is_type_incorrect or not all(original_text_tokens) or not all(suspicious_text_tokens):
         return {}
 
     text_plagiarism = calculate_text_plagiarism_score(original_text_tokens,
                                                       suspicious_text_tokens,
                                                       plagiarism_threshold)
 
-    texts_length = len(original_text_tokens)
-
     sentence_plagiarism = []
     sentence_lcs_length = []
     difference_indexes = []
 
-    for index_sent in range(texts_length):
+    for index_sent in range(len(original_text_tokens)):
         lcs_matrix = fill_lcs_matrix(original_text_tokens[index_sent], suspicious_text_tokens[index_sent])
         lcs_length = find_lcs_length(original_text_tokens[index_sent],
                                      suspicious_text_tokens[index_sent],
