@@ -320,10 +320,9 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :param accumulated_diff_stats: a dictionary with statistics for each pair of sentences
     :return: a report
     """
-    incorrect_input = (not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple) or
-                       not isinstance(accumulated_diff_stats, dict))
+    incorrect_input = (not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple))
 
-    if incorrect_input:
+    if incorrect_input or not isinstance(accumulated_diff_stats, dict):
         return ''
 
     result_stat = ''
