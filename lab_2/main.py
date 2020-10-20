@@ -304,7 +304,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
 
     diff_stats = {'text_plagiarism': calculate_text_plagiarism_score(original_text_tokens,
                                                                      suspicious_text_tokens,
-                                                                      plagiarism_threshold),
+                                                                     plagiarism_threshold),
                   'sentence_plagiarism': sentence_plagiarism,
                   'sentence_lcs_length': sentence_lcs_length,
                   'difference_indexes': difference_indexes}
@@ -320,8 +320,8 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :param accumulated_diff_stats: a dictionary with statistics for each pair of sentences
     :return: a report
     """
-    incorrect_input = (not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple)
-                       or not isinstance(accumulated_diff_stats, dict))
+    incorrect_input = (not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple) or
+                       not isinstance(accumulated_diff_stats, dict))
 
     if incorrect_input:
         return ''
