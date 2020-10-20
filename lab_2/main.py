@@ -167,11 +167,9 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     """
     if (not isinstance(plagiarism_threshold, float) or plagiarism_threshold < 0 or plagiarism_threshold > 1 or
         not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple) or
-        None in original_text_tokens or None in suspicious_text_tokens):
+        None in original_text_tokens[0] or '' in original_text_tokens[0] or None in suspicious_text_tokens[0] or
+        '' in suspicious_text_tokens[0]):
         return -1.0
-
-    if original_text_tokens == suspicious_text_tokens:
-        return 1.0
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
         while len(original_text_tokens) != len(suspicious_text_tokens):
@@ -183,9 +181,12 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
 
     for idx, sentence_in_text_2 in enumerate(suspicious_text_tokens):
         lcs_length = find_lcs_length(original_text_tokens[idx], sentence_in_text_2, plagiarism_threshold)
-        result = (calculate_plagiarism_score(lcs_length, sentence_in_text_2))
-        if result != -1:
-            plagiarism_scores.append(result)
+        plagiarism = calculate_plagiarism_score(lcs_length, sentence_in_text_2)
+
+        if original_text_tokens[idx] == sentence_in_text_2:
+            plagiarism_scores.append(1)
+        elif plagiarism != -1:
+            plagiarism_scores.append(plagiarism)
         else:
             plagiarism_scores.append(0.0)
 
