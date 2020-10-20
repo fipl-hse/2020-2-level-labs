@@ -5,7 +5,7 @@ from copy import deepcopy
 from tokenizer import tokenize
 
 
-def is_inputs_incorrect(first_sentence_tokens, second_sentence_tokens, plagiarism_threshold=-100.7):
+def is_inputs_incorrect(first_sentence_tokens, second_sentence_tokens, plagiarism_threshold=-100):
     first_is_not_tuple = not isinstance(first_sentence_tokens, tuple)
     second_is_not_tuple = not isinstance(second_sentence_tokens, tuple)
     threshold_is_not_float = not isinstance(plagiarism_threshold, float)
