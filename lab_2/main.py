@@ -1,7 +1,8 @@
 """
 Longest common subsequence problem
 """
-from .tokenizer import tokenize
+from tokenizer import tokenize
+from typing import Dict, Callable, List
 
 
 def tokenize_by_lines(text: str) -> tuple:
@@ -31,15 +32,17 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     --> [[0, 0], [0, 0]]
     """
 
-    checks = [
-        isinstance(rows, int),
-        isinstance(columns, int),
-        not isinstance(rows, bool),
-        not isinstance(columns, bool),
+    checks: List[Callable] = [
+        lambda: isinstance(rows, int),
+        lambda: isinstance(columns, int),
+        lambda: not isinstance(rows, bool),
+        lambda: not isinstance(columns, bool),
+        lambda: rows > 0 and columns > 0
     ]
 
-    if not all(checks) or not (rows > 0 and columns > 0):
-        return []
+    for check in checks:
+        if not check():
+            return []
 
     matrix = [[0] * columns for _ in range(rows)]
     return matrix
@@ -52,27 +55,29 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    checks = [
-        isinstance(first_sentence_tokens, tuple),
-        isinstance(second_sentence_tokens, tuple),
-        first_sentence_tokens,
-        second_sentence_tokens,
+    checks: List[Callable] = [
+        lambda: isinstance(first_sentence_tokens, tuple),
+        lambda: isinstance(second_sentence_tokens, tuple),
+        lambda: first_sentence_tokens,
+        lambda: second_sentence_tokens,
+        lambda: all((isinstance(el, str) for el in x + y))
     ]
 
     x, y = first_sentence_tokens, second_sentence_tokens
 
-    if not (all(checks) and all((isinstance(i, str) for i in x + y))):
-        return []
+    for check in checks:
+        if not check():
+            return []
 
-    m, n = len(x), len(y)
-    lcs = create_zero_matrix(m, n)
+    lcs = create_zero_matrix(len(x), len(y))
 
-    for i in range(m):
-        for j in range(n):
-            if x[i] == y[j]:
+    for i, w1 in enumerate(x):
+        for j, w2 in enumerate(y):
+            if w1 == w2:
                 lcs[i][j] = lcs[i - 1][j - 1] + 1
             else:
-                lcs[i][j] = max(lcs[i - 1][j], lcs[i][j - 1])
+                lcs[i][j] = max(lcs[i][j - 1], lcs[i - 1][j])
+
     return lcs
 
 
@@ -85,24 +90,24 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    # raise Exception(f'{first_sentence_tokens} {second_sentence_tokens} {plagiarism_threshold}')
-    # fix and shorten lots of checks, they look horrible rn
-    checks = [
-        isinstance(first_sentence_tokens, tuple),
-        isinstance(second_sentence_tokens, tuple),
-        isinstance(plagiarism_threshold, float),
-    ]
+    # Inspired by Cerberus
+    checks: Dict[Callable, int] = {
+        lambda: isinstance(first_sentence_tokens, tuple): -1,
+        lambda: isinstance(second_sentence_tokens, tuple): -1,
+        lambda: isinstance(plagiarism_threshold, float): -1,
+        lambda: 0 <= plagiarism_threshold <= 1: -1,
+        lambda: first_sentence_tokens: 0,
+        lambda: second_sentence_tokens: 0,
+    }
 
-    if not all(checks) or not 0 <= plagiarism_threshold <= 1:
-        return -1
+    for check, value in checks.items():
+        if not check():
+            return value
 
     x, y = first_sentence_tokens, second_sentence_tokens
 
     if len(x) > len(y):
         x, y = y, x
-
-    if not x or not y:
-        return 0
 
     lcs_matrix = fill_lcs_matrix(x, y)
 
@@ -110,11 +115,8 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
         return -1
 
     lcs_length = lcs_matrix[-1][-1]
-    lcs_ratio = lcs_length / len(y)
 
-    if lcs_ratio < plagiarism_threshold:
-        return 0
-    return lcs_length
+    return lcs_length if (not lcs_length / len(y) < plagiarism_threshold) else 0
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
@@ -125,28 +127,38 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    checks = [
-        isinstance(first_sentence_tokens, tuple),
-        isinstance(second_sentence_tokens, tuple),
-        isinstance(lcs_matrix, list)
+    checks: List[Callable] = [
+        lambda: isinstance(first_sentence_tokens, tuple),
+        lambda: isinstance(second_sentence_tokens, tuple),
+        lambda: isinstance(lcs_matrix, list),
+        lambda: len(lcs_matrix) == len(first_sentence_tokens),
+        lambda: sum(sum(el) for el in lcs_matrix),
+        lambda: lcs_matrix[0][0] in {0, 1}
     ]
 
-    if not all(checks):
-        return ()
+    for check in checks:
+        if not check():
+            return ()
 
     x, y = first_sentence_tokens, second_sentence_tokens
 
-    i, j = len(x), len(y)
+    if len(x) > len(y):
+        x, y = y, x
+
+    i, j = len(x) - 1, len(y) - 1
     lcs = []
 
-    while i > 0 and j > 0:
-        if x[i - 1] == y[j - 1]:
+    while i >= 0 and j >= 0:
+        if x[i] == y[j]:
             lcs.append(x[i])
             i, j = i - 1, j - 1
-        elif lcs_matrix[i][j - 1] == lcs_matrix[i][j]:
-            j -= 1
-        else:
+        elif lcs_matrix[i - 1][j] > lcs_matrix[i][j - 1]:
             i -= 1
+        else:
+            j -= 1
+
+    if lcs_matrix[0][0]:
+        lcs.append(x[0])
 
     return tuple(lcs[::-1])
 
@@ -159,13 +171,18 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    checks = [
-        isinstance(lcs_length, int),
-        isinstance(suspicious_sentence_tokens, tuple)
-    ]
+    checks: Dict[Callable, float] = {
+        lambda: isinstance(lcs_length, int): -1.0,
+        lambda: not isinstance(lcs_length, bool): -1.0,
+        lambda: isinstance(suspicious_sentence_tokens, tuple): -1.0,
+        lambda: suspicious_sentence_tokens: 0.0,
+        lambda: 0 <= lcs_length <= len(suspicious_sentence_tokens): -1.0,
+        lambda: all((isinstance(el, str) for el in suspicious_sentence_tokens)): -1.0,
+    }
 
-    if not all(checks):
-        return 0.0
+    for check, value in checks.items():
+        if not check():
+            return value
 
     return lcs_length / len(suspicious_sentence_tokens)
 
@@ -181,28 +198,30 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    checks = [
-        isinstance(original_text_tokens, tuple),
-        isinstance(suspicious_text_tokens, tuple),
+    checks: List[Callable] = [
+        lambda: isinstance(original_text_tokens, tuple),
+        lambda: isinstance(suspicious_text_tokens, tuple),
+        lambda: isinstance(plagiarism_threshold, float),
+        lambda: 0 <= plagiarism_threshold <= 1,
+        lambda: all(all(sent) for sent in original_text_tokens + suspicious_text_tokens)
     ]
 
-    if not all(checks):
-        return 0.0
+    for check in checks:
+        if not check():
+            return -1.0
 
     origin = original_text_tokens
     suspicious = suspicious_text_tokens
-    length_diff = abs(len(origin) - len(suspicious))
+    length_diff = len(origin) - len(suspicious)
     plagiarism_sum = []
 
-    if not length_diff:
+    if length_diff < 0:
+        origin += tuple('' for _ in range(abs(length_diff)))
         origin, suspicious = suspicious, origin
-
-    if len(suspicious) < len(origin):
-        suspicious += tuple('' for _ in range(length_diff))
 
     for sent_1, sent_2 in zip(origin, suspicious):
         lcs_length = find_lcs_length(sent_1, sent_2, plagiarism_threshold)
-        plagiarism_sum.append(calculate_plagiarism_score(lcs_length, sent_2))
+        plagiarism_sum.append(abs(calculate_plagiarism_score(lcs_length, sent_2)))
 
     return sum(plagiarism_sum) / len(plagiarism_sum)
 
