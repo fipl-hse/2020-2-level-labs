@@ -89,12 +89,14 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    is_not_good_fst = not (isinstance(first_sentence_tokens, tuple) and first_sentence_tokens
-                           and first_sentence_tokens[0] is not None)
-    is_not_good_sst = not (isinstance(second_sentence_tokens, tuple) and second_sentence_tokens
-                           and second_sentence_tokens[0] is not None)
+    is_not_good_fst = not ((isinstance(first_sentence_tokens, tuple) and first_sentence_tokens
+                           and first_sentence_tokens[0] is not None) or isinstance(first_sentence_tokens, tuple))
+    is_not_good_sst = not (isinstance(second_sentence_tokens, tuple) and second_sentence_tokens and
+                           second_sentence_tokens[0] is not None or (isinstance(second_sentence_tokens, tuple)))
 
-    is_not_good_threshold = not (isinstance(plagiarism_threshold, int) or isinstance(plagiarism_threshold, float))
+    is_not_good_threshold = not (not isinstance(plagiarism_threshold, bool) and (isinstance(plagiarism_threshold, int)
+                                 or isinstance(plagiarism_threshold, float))
+                                 and 0 <= plagiarism_threshold <= 1)
 
     if is_not_good_fst or is_not_good_sst or is_not_good_threshold:
         return -1
@@ -113,6 +115,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     return lcs_length
 
 
+
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
     """
     Finds the longest common subsequence itself using the Needleman–Wunsch algorithm
@@ -126,8 +129,8 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     is_not_good_sst = not (isinstance(second_sentence_tokens, tuple) and second_sentence_tokens
                            and second_sentence_tokens[0] is not None)
 
-    is_not_good_lcs_matrix = not (isinstance(lcs_matrix, list) or lcs_matrix or isinstance(lcs_matrix[0], int)
-                                  or lcs_matrix[0] >= 0)
+    is_not_good_lcs_matrix = not ((isinstance(lcs_matrix, list) and lcs_matrix and isinstance(lcs_matrix[0], list)
+                                  and isinstance(lcs_matrix[0][0], int) and lcs_matrix[0][0] >= 0))
 
     if is_not_good_fst or is_not_good_sst or is_not_good_lcs_matrix:
         return ()
@@ -135,6 +138,19 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     lcs = []
 
     ind_row, ind_col = len(first_sentence_tokens) - 1, len(second_sentence_tokens) - 1
+
+    '''zero_row = [[0 for _ in range(len(lcs_matrix[0]))]]
+    zero_row.extend(lcs_matrix)
+
+    first_zero_el = []
+    for row in lcs_matrix:
+        new_row = [0]
+        for el in row:
+            new_row.append(el)
+        first_zero_el.append(new_row)
+
+    full_lcs_matrix = [[0 for _ in range(len(first_zero_el[0]))]]
+    full_lcs_matrix.extend(first_zero_el)'''
 
     while ind_row >= 0 and ind_col >= 0:
         first_token, second_token = first_sentence_tokens[ind_row], second_sentence_tokens[ind_col]
@@ -147,6 +163,9 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
             ind_row, ind_col = ind_row - 1, ind_col - 1
         else:
             ind_col -= 1
+
+    if lcs_matrix[0][0] == 1 and len(lcs) == 0:
+        lcs.append(first_sentence_tokens[0])
 
     lcs.reverse()
     return tuple(lcs)
