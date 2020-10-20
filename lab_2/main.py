@@ -276,8 +276,8 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
      'sentence_lcs_length': list,
      'difference_indexes': list}
     """
-    incorrect_input = (not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple)
-                       or not isinstance(plagiarism_threshold, float) or not(0 <= plagiarism_threshold <= 1))
+    incorrect_input = not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple) \
+                      or not isinstance(plagiarism_threshold, float) or not(0 <= plagiarism_threshold <= 1)
     if incorrect_input:
         return {}
     if not all(original_text_tokens) or not all(suspicious_text_tokens):
