@@ -221,7 +221,69 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :param lcs: a longest common subsequence
     :return: a tuple with tuples of indexes
     """
-    pass
+    orig_sent_not_tuple = not isinstance(original_sentence_tokens, tuple)
+    sus_sent_not_tuple = not isinstance(suspicious_sentence_tokens, tuple)
+    lcs_not_tuple = not isinstance(lcs, tuple)
+    if orig_sent_not_tuple or sus_sent_not_tuple or lcs_not_tuple:
+        return ()
+    if not orig_sent_not_tuple:
+        if not all(isinstance(word, str) for word in original_sentence_tokens):
+            return ()
+    if not sus_sent_not_tuple:
+        if not all(isinstance(word, str) for word in suspicious_sentence_tokens):
+            return ()
+    if not lcs_not_tuple:
+        if not all(isinstance(word, str) for word in lcs):
+            return ()
+
+    org_dif_wds_ind = [original_sentence_tokens.index(word) for word in original_sentence_tokens if word not in lcs]
+    sus_dif_wds_ind = [suspicious_sentence_tokens.index(word) for word in suspicious_sentence_tokens if word not in lcs]
+    changed_ind_list = []
+
+    changed_ind_list_1 = []
+    if org_dif_wds_ind:
+        ind = 0
+        while ind < len(org_dif_wds_ind):
+            if ind == len(org_dif_wds_ind) - 1:
+                changed_ind_list_1.extend((org_dif_wds_ind[ind], org_dif_wds_ind[ind] + 1))
+                break
+            else:
+                if org_dif_wds_ind[ind+1] - org_dif_wds_ind[ind] > 1:
+                    changed_ind_list_1.extend((org_dif_wds_ind[ind], org_dif_wds_ind[ind] + 1))
+                    ind += 1
+                else:
+                    changed_ind_list_1.append(org_dif_wds_ind[ind])
+                    while org_dif_wds_ind[ind+1] - org_dif_wds_ind[ind] == 1:
+                        ind += 1
+                        if ind >= len(org_dif_wds_ind) - 1:
+                            break
+                    changed_ind_list_1.append(org_dif_wds_ind[ind] + 1)
+                    ind += 1
+
+    changed_ind_list_2 = []
+    if sus_dif_wds_ind:
+        ind = 0
+        while ind < len(sus_dif_wds_ind):
+            if ind == len(sus_dif_wds_ind) - 1:
+                changed_ind_list_2.extend((sus_dif_wds_ind[ind], sus_dif_wds_ind[ind] + 1))
+                break
+            else:
+                if sus_dif_wds_ind[ind + 1] - sus_dif_wds_ind[ind] > 1:
+                    changed_ind_list_2.extend((sus_dif_wds_ind[ind], sus_dif_wds_ind[ind] + 1))
+                    ind += 1
+                else:
+                    changed_ind_list_2.append(sus_dif_wds_ind[ind])
+                    while sus_dif_wds_ind[ind + 1] - sus_dif_wds_ind[ind] == 1:
+                        ind += 1
+                        if ind >= len(sus_dif_wds_ind) - 1:
+                            break
+                    changed_ind_list_2.append(sus_dif_wds_ind[ind] + 1)
+                    ind += 1
+
+    changed_ind_list_1 = tuple(changed_ind_list_1)
+    changed_ind_list_2 = tuple(changed_ind_list_2)
+    changed_ind_list.extend((changed_ind_list_1, changed_ind_list_2))
+    return tuple(changed_ind_list)
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
