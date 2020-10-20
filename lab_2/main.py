@@ -131,12 +131,25 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     is_not_good_sst = not (isinstance(second_sentence_tokens, tuple) and second_sentence_tokens
                            and second_sentence_tokens[0] is not None)
 
+    if is_not_good_fst or is_not_good_sst:
+        return ()
+
     is_not_good_lcs_matrix = not (isinstance(lcs_matrix, list) and lcs_matrix and isinstance(lcs_matrix[0], list)
                                    and isinstance(lcs_matrix[0][0], int) and lcs_matrix[0][0] >= 0
                                    and len(first_sentence_tokens) == len(lcs_matrix)
                                    and len(second_sentence_tokens) == len(lcs_matrix[0]))
 
-    if is_not_good_fst or is_not_good_sst or is_not_good_lcs_matrix:
+    if is_not_good_lcs_matrix:
+        return ()
+
+    are_good_matrix_els = True
+    max_el = lcs_matrix[-1][-1]
+    for row in reversed(lcs_matrix):
+        for el in reversed(row):
+            if el > max_el:
+                are_good_matrix_els = False
+
+    if not are_good_matrix_els:
         return ()
 
     lcs = []
