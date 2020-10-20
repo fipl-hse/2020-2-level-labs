@@ -4,7 +4,7 @@ Tests calculate_text_plagiarism_score function
 
 import unittest
 from unittest.mock import patch
-from lab_2.main import calculate_text_plagiarism_score, calculate_plagiarism_score
+from main import calculate_text_plagiarism_score, calculate_plagiarism_score
 
 
 class CalculateTextPlagiarismScoreTest(unittest.TestCase):
@@ -227,7 +227,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                                  plagiarism_threshold)
         self.assertEqual(expected, actual)
 
-    @patch('lab_2.main.calculate_plagiarism_score', side_effect=calculate_plagiarism_score)
+    @patch('main.calculate_plagiarism_score', side_effect=calculate_plagiarism_score)
     def test_calculate_text_plagiarism_score_calls_required_function(self, mock):
         """
         Tests that calculate_text_plagiarism_score function
