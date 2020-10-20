@@ -12,7 +12,7 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    from tokenizer import tokenize
+    from lab_2.tokenizer import tokenize
     tokens = []
     sentences = text.split('\n')
     for sentence in sentences:
@@ -96,7 +96,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     """
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
             None in first_sentence_tokens or None in second_sentence_tokens:
-        return []
+        return ()
     if not isinstance(lcs_matrix, list) or None in lcs_matrix or \
             (isinstance(lcs_matrix, list) and None in lcs_matrix):
         return ()
@@ -135,8 +135,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     """
     if (not isinstance(lcs_length, int) and not isinstance(lcs_length, float)) or isinstance(lcs_length, bool) or \
             not isinstance(suspicious_sentence_tokens, tuple) or None in suspicious_sentence_tokens or \
-            lcs_length > len(suspicious_sentence_tokens) > 0 or 0 > lcs_length or \
-            lcs_length == len(suspicious_sentence_tokens) == 0:
+            lcs_length > len(suspicious_sentence_tokens) > 0 or 0 > lcs_length:
         return -1
     if not suspicious_sentence_tokens:
         plagiarism_score = 0.0
@@ -183,8 +182,6 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
                 else:
                     plagiarism_scores.append(plagiarism_score)
     total_plagiarism_score = calculate_plagiarism_score(sum(plagiarism_scores), suspicious_text_tokens)
-    if total_plagiarism_score < plagiarism_threshold:
-        return 0.0
     return total_plagiarism_score
 
 
@@ -200,11 +197,14 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
             not isinstance(lcs, tuple) or None in original_sentence_tokens or None in suspicious_sentence_tokens or \
             None in lcs:
         return ()
-    if original_sentence_tokens == () or suspicious_sentence_tokens == () or\
+    if (original_sentence_tokens == () and suspicious_sentence_tokens == ()) or\
             original_sentence_tokens == suspicious_sentence_tokens:
         return tuple([(), ()])
     diff_indexes = []
-    changed_words_indexes = [index for index, token in enumerate(original_sentence_tokens) if token not in lcs]
+    if original_sentence_tokens == ():
+        changed_words_indexes = [index for index, token in enumerate(suspicious_sentence_tokens) if token not in lcs]
+    else:
+        changed_words_indexes = [index for index, token in enumerate(original_sentence_tokens) if token not in lcs]
     for number, index in enumerate(changed_words_indexes):
         if len(changed_words_indexes)-1 != number:
             if index + 1 != changed_words_indexes[number + 1]:
@@ -218,7 +218,12 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
                 diff_indexes.extend([index, index + 1])
             elif index - 1 == changed_words_indexes[number - 1]:
                 diff_indexes.append(index + 1)
-    return tuple([tuple(diff_indexes), tuple(diff_indexes)])
+    if original_sentence_tokens == ():
+        return tuple([(), tuple(diff_indexes)])
+    elif suspicious_sentence_tokens == ():
+        return tuple([tuple(diff_indexes), ()])
+    else:
+        return tuple([tuple(diff_indexes), tuple(diff_indexes)])
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple,
@@ -285,11 +290,13 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         changed_original = list(original_text_tokens[number])
         changed_suspicious = list(suspicious_text_tokens[number])
         if diff_indexes != ((), ()):
-            for indexes in diff_indexes:
+            for element, indexes in enumerate(diff_indexes):
                 inserts = 0
                 for insert in indexes:
-                    changed_original.insert(insert + inserts, '|')
-                    changed_suspicious.insert(insert + inserts, '|')
+                    if element == 0:
+                        changed_suspicious.insert(insert + inserts, '|')
+                    elif element == 1:
+                        changed_original.insert(insert + inserts, '|')
                     inserts += 1
         report.append('- ' + ' '.join(changed_original))
         report.append('+ ' + ' '.join(changed_suspicious))
@@ -315,12 +322,38 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
         return 0
     if len(first_sentence_tokens) > len(second_sentence_tokens):
-        lcs_length = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)[len(second_sentence_tokens)-1][-1]
+        len_search = len(second_sentence_tokens)
+    elif len(second_sentence_tokens) > len(first_sentence_tokens):
+        len_search = len(first_sentence_tokens)
     else:
-        lcs_length = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)[-1][-1]
+        len_search = len(second_sentence_tokens)
+    current_row = [0] * len_search
+    for word_1 in first_sentence_tokens[:len_search]:
+        previous_row = current_row[:]
+        for column, word_2 in enumerate(second_sentence_tokens[:len_search]):
+            if word_1 == word_2:
+                current_row[column] = previous_row[column - 1] + 1
+            else:
+                current_row[column] = max((current_row[column - 1], previous_row[column]))
+    lcs_length = current_row[-1]
     if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
         return 0
     return lcs_length
+
+
+def id_dict(identification_number):
+    identification_dict = {}
+
+    def id_number(token):
+        nonlocal identification_number
+        nonlocal identification_dict
+        if token not in identification_dict:
+            identification_dict[token] = identification_number
+            identification_number += 1
+            return identification_number
+        else:
+            return identification_dict[token]
+    return id_number
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -329,20 +362,12 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    from tokenizer import tokenize
-    big_file = open(path_to_file, 'r', encoding='UTF-8').read()
     tokens = []
-    identification_dict = {}
-    identification_number = 1
-    sentences = tuple(big_file.split('\n'))
-    for sentence in sentences:
-        token_sentence = tuple(tokenize(sentence))
-        if token_sentence:
-            numeric_sentence = ()
-            for token in token_sentence:
-                if token not in identification_dict:
-                    identification_dict[token] = identification_number
-                    identification_number += 1
-                    numeric_sentence += tuple([token])
-            tokens.append(numeric_sentence)
+    ids = id_dict(1)
+    with open(path_to_file, 'r', encoding='UTF-8') as f:
+        for line in f:
+            token_sentence = tokenize_by_lines(line)
+            if token_sentence:
+                for token in token_sentence[0]:
+                    tokens.append(ids(token))
     return tuple(tokens)
