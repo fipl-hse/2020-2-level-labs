@@ -211,13 +211,12 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
             return -1.0
 
         plagiarism_score = calculate_plagiarism_score(lcs_length, suspicious_text_tokens[sentence_number])
+        if plagiarism_score == -1:
+            plagiarism_score = 0.0
 
         plagiarism_scores += (plagiarism_score,)
 
     plagiarism_result = sum(plagiarism_scores) / len(suspicious_text_tokens)
-
-    if plagiarism_result < plagiarism_threshold:
-        return 0.0
 
     return plagiarism_result
 
@@ -238,17 +237,25 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     elif not all(original_sentence_tokens) or not all(suspicious_sentence_tokens) or not all(lcs):
         return ()
 
-    indexes_match_words = [original_sentence_tokens.index(word) for word in original_sentence_tokens if word not in lcs]
-    changes_indexes = []
-    for index, diff_word_index in enumerate(indexes_match_words):
-        changes_indexes.append(diff_word_index)
-        if (index != 0) and (diff_word_index - indexes_match_words[index - 1] == 1):
-            del changes_indexes[changes_indexes.index(diff_word_index)]
-        if (diff_word_index != indexes_match_words[-1]) and indexes_match_words[index + 1] - diff_word_index == 1:
-            continue
-        changes_indexes.append(diff_word_index + 1)
-    changes_indexes = tuple(changes_indexes)
-    changes_indexes_both_sent = ((changes_indexes,) * 2)
+    indexes_diff_original = [original_sentence_tokens.index(word) for word in original_sentence_tokens
+                             if word not in lcs]
+    indexes_diff_suspicious = [suspicious_sentence_tokens.index(word) for word in suspicious_sentence_tokens
+                               if word not in lcs]
+
+    def find_diff_indexes(indexes_diff_words):
+        changes_indexes = []
+        for index, diff_word_index in enumerate(indexes_diff_words):
+            changes_indexes.append(diff_word_index)
+            if (index != 0) and (diff_word_index - indexes_diff_words[index - 1] == 1):
+                del changes_indexes[changes_indexes.index(diff_word_index)]
+            if (diff_word_index != indexes_diff_words[-1]) and indexes_diff_words[index + 1] - diff_word_index == 1:
+                continue
+            changes_indexes.append(diff_word_index + 1)
+
+        return changes_indexes
+
+    changes_indexes_both_sent = (tuple(find_diff_indexes(indexes_diff_original)),
+                                 tuple(find_diff_indexes(indexes_diff_suspicious)))
 
     return changes_indexes_both_sent
 
@@ -323,6 +330,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
     texts_length = len(original_text_tokens)
 
+    report = ''
     for index_sent in range(texts_length):
         original_sentence = list(original_text_tokens[index_sent])
         suspicious_sentence = list(suspicious_text_tokens[index_sent])
@@ -339,13 +347,15 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
         lcs = accumulated_diff_stats['sentence_lcs_length'][index_sent]
         sentence_plagiarism = float(accumulated_diff_stats['sentence_plagiarism'][index_sent] * 100)
-        print('- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n'.format(original_sentence,
-                                                                  suspicious_sentence,
-                                                                  lcs,
-                                                                  sentence_plagiarism))
+        report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(original_sentence,
+                                                                      suspicious_sentence,
+                                                                      lcs,
+                                                                      sentence_plagiarism)
 
     text_plagiarism = float(accumulated_diff_stats['text_plagiarism'] * 100)
-    print('Text average plagiarism (words): {} %'.format(text_plagiarism))
+    report += 'Text average plagiarism (words): {}%'.format(text_plagiarism)
+
+    return report
 
 
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
