@@ -214,14 +214,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
             changed_tokens.append(ind)
 
 
-
-
-
     return tuple(changed_tokens)
-
-
-
-
 
 
 
