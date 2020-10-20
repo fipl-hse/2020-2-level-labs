@@ -90,15 +90,15 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :return: a length of the longest common subsequence
     """
     is_not_good_fst = not ((isinstance(first_sentence_tokens, tuple) and first_sentence_tokens
-                            and first_sentence_tokens[0] is not None) or (isinstance(first_sentence_tokens, tuple)
-                                                                          and not first_sentence_tokens))
-    is_not_good_sst = not (isinstance(second_sentence_tokens, tuple) and second_sentence_tokens and
-                           second_sentence_tokens[0] is not None or (isinstance(second_sentence_tokens, tuple)
-                                                                     and not first_sentence_tokens))
+                            and first_sentence_tokens[0] is not None)
+                           or (isinstance(first_sentence_tokens, tuple) and not first_sentence_tokens))
 
-    is_not_good_threshold = not (not isinstance(plagiarism_threshold, bool) and (isinstance(plagiarism_threshold, int)
-                                                                                 or isinstance(plagiarism_threshold,
-                                                                                               float))
+    is_not_good_sst = not ((isinstance(second_sentence_tokens, tuple) and second_sentence_tokens
+                            and second_sentence_tokens[0] is not None)
+                           or (isinstance(second_sentence_tokens, tuple) and not second_sentence_tokens))
+
+    is_not_good_threshold = not (not isinstance(plagiarism_threshold, bool)
+                                 and (isinstance(plagiarism_threshold, int) or isinstance(plagiarism_threshold, float))
                                  and 0 <= plagiarism_threshold <= 1)
 
     if is_not_good_fst or is_not_good_sst or is_not_good_threshold:
@@ -131,13 +131,12 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     is_not_good_sst = not (isinstance(second_sentence_tokens, tuple) and second_sentence_tokens
                            and second_sentence_tokens[0] is not None)
 
-    is_not_good_lcs_matrix = not ((isinstance(lcs_matrix, list) and lcs_matrix and isinstance(lcs_matrix[0], list)
-                                   and isinstance(lcs_matrix[0][0], int) and lcs_matrix[0][0] >= 0))
+    is_not_good_lcs_matrix = not (isinstance(lcs_matrix, list) and lcs_matrix and isinstance(lcs_matrix[0], list)
+                                   and isinstance(lcs_matrix[0][0], int) and lcs_matrix[0][0] >= 0
+                                   and len(first_sentence_tokens) == len(lcs_matrix)
+                                   and len(second_sentence_tokens) == len(lcs_matrix[0]))
 
-    is_not_good_matrix_shape = not (len(first_sentence_tokens) == len(lcs_matrix[0])
-                                    and len(second_sentence_tokens) == len(lcs_matrix))
-
-    if is_not_good_fst or is_not_good_sst or is_not_good_lcs_matrix or is_not_good_matrix_shape:
+    if is_not_good_fst or is_not_good_sst or is_not_good_lcs_matrix:
         return ()
 
     lcs = []
