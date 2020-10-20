@@ -29,16 +29,17 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    is_bool = isinstance(rows, bool) and isinstance(columns, bool)
-    not_int = not isinstance(rows, int) and not isinstance(columns, int)
 
-    if is_bool or not_int or rows <= 0 or columns <= 0:
+    columns_bool = isinstance(columns, bool)
+    rows_bool = isinstance(rows, bool)
+    rows_int = isinstance(rows, int)
+    columns_int = isinstance(columns, int)
+
+    if columns_bool or rows_bool or not rows_int or not columns_int or rows <= 0 or columns <= 0:
         return []
 
-    matrix = []
-    for row_index in range(rows):
-        matrix += [[0 * i for i in range(columns)]]
-    return matrix
+    z_matrix = [[0] * columns for i in range(rows)]
+    return z_matrix
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
@@ -57,20 +58,13 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     cols = len(second_sentence_tokens)
     mtrx = create_zero_matrix(rows, cols)
 
-    for i in range(rows):
-        for j in range(cols):
-            if first_sentence_tokens[i] == second_sentence_tokens[j]:
-                if i < 0 or j < 0:
-                    mtrx[i][j] = 1
-                else:
-                    mtrx[i][j] = mtrx[i - 1][j - 1] + 1
+    for i_1, el_1 in enumerate(first_sentence_tokens):
+        for i_2, el_2 in enumerate(second_sentence_tokens):
+            if el_1 == el_2 and i_1 == i_2:
+                mtrx[i_1][i_2] = mtrx[i_1 - 1][i_2 - 1] + 1
             else:
-                if i < 0 or j < 0:
-                    mtrx[i][j] = 1
-                else:
-                    mtrx[i][j] = max(mtrx[i][j - 1], mtrx[i - 1][j])
-        return mtrx
-    return []
+                mtrx[i_1][i_2] = max(mtrx[i_1][i_2 - 1], mtrx[i_1 - 1][i_2])
+    return mtrx
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
