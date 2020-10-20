@@ -22,6 +22,7 @@ def is_inputs_incorrect(first_sentence_tokens, second_sentence_tokens, plagiaris
         if threshold_is_not_float or not 0 < plagiarism_threshold < 1:
             return True
 
+    return False
 
 def tokenize_by_lines(text: str) -> tuple:
     """
@@ -275,8 +276,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
      'difference_indexes': list}
     """
     incorrect_input = (not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple)
-                       or not isinstance(plagiarism_threshold, float)
-                       or not(0 <= plagiarism_threshold <= 1))
+                       or not isinstance(plagiarism_threshold, float) or not(0 <= plagiarism_threshold <= 1))
 
     if incorrect_input:
         return {}
@@ -290,7 +290,9 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     text_plagiarism = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens,
                                                       plagiarism_threshold)
 
-    for sent_ind in range(len(suspicious_text_tokens)):
+    n_sentences = len(suspicious_text_tokens)
+
+    for sent_ind in range(n_sentences):
         lcs_matrix = fill_lcs_matrix(original_text_tokens[sent_ind], suspicious_text_tokens[sent_ind])
         lcs_length = find_lcs_length(original_text_tokens[sent_ind], suspicious_text_tokens[sent_ind],
                                      plagiarism_threshold)
@@ -326,7 +328,9 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         return ''
 
     result_stat = ''
-    for sent_ind in range(len(suspicious_text_tokens)):
+    n_sentences = len(suspicious_text_tokens)
+
+    for sent_ind in range(n_sentences):
         orig_sentence = list(original_text_tokens[sent_ind])
         susp_sentence = list(suspicious_text_tokens[sent_ind])
         difference_indexes = accumulated_diff_stats['difference_indexes'][sent_ind]
