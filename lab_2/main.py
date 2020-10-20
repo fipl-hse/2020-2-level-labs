@@ -58,12 +58,15 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     cols = len(second_sentence_tokens)
     mtrx = create_zero_matrix(rows, cols)
 
-    for i_1, el_1 in enumerate(first_sentence_tokens):
-        for i_2, el_2 in enumerate(second_sentence_tokens):
-            if el_1 == el_2 and i_1 == i_2:
-                mtrx[i_1][i_2] = mtrx[i_1 - 1][i_2 - 1] + 1
+    for row in range(rows):
+        for col in range(cols):
+            if first_sentence_tokens[row] == second_sentence_tokens[col]:
+                lcs = mtrx[row - 1][col - 1] + 1 if row - 1 >= 0 and col - 1 >= 0 else 1
             else:
-                mtrx[i_1][i_2] = max(mtrx[i_1][i_2 - 1], mtrx[i_1 - 1][i_2])
+                left_cell = mtrx[row][col - 1] if col - 1 >= 0 else 0
+                up_cell = mtrx[row - 1][col] if row - 1 >= 0 else 0
+                lcs = max(left_cell, up_cell)
+            mtrx[row][col] = lcs
     return mtrx
 
 
@@ -85,11 +88,10 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
         return 0
 
     lcs_mtrx = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
-    lcs_length = 0
-    if lcs_mtrx:
-        lcs_length = lcs_mtrx[-1][-1]
-        if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
-            return 0
+    lcs_length = lcs_mtrx[-1][-1] if lcs_mtrx else 0
+
+    if lcs_length and lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
+        return 0
 
     return lcs_length
 
@@ -110,19 +112,19 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     if isinstance(lcs_matrix, list) and len(lcs_matrix) > 0:
         if isinstance(lcs_matrix[0], list) and None in lcs_matrix[0]:
             return ()
+    if not isinstance(lcs_matrix, list) or lcs_matrix == [] or len(first_sentence_tokens) != len(lcs_matrix) \
+            or len(second_sentence_tokens) != len(lcs_matrix[0]) \
+            or (lcs_matrix[0][0] != 0 and lcs_matrix[0][0] != 1):
+        return ()
 
     lcs = []
-    row, col = len(first_sentence_tokens) - 1, len(second_sentence_tokens) - 1
 
-    while row >= 0 and col >= 0:
-        if first_sentence_tokens[row] == second_sentence_tokens[col]:
-            lcs.append(first_sentence_tokens[row])
-            row -= 1
-            col -= 1
-        elif row > col:
-            row -= 1
-        else:
-            col -= 1
+    for ind_r, row in enumerate(lcs_matrix):
+        for ind_col, column in enumerate(row):
+            if not row or not column:
+                return ()
+            if first_sentence_tokens[ind_r] == second_sentence_tokens[ind_col]:
+                lcs.append(second_sentence_tokens[ind_col])
 
     lcs.reverse()
     return tuple(lcs)
@@ -163,37 +165,34 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    if (not isinstance(original_text_tokens, tuple) or
-            not all(isinstance(i, tuple) for i in original_text_tokens) or
-            not all(isinstance(i, str) for subtuple in original_text_tokens for i in subtuple)):
+    if not isinstance(original_text_tokens, tuple) or not all(isinstance(i, tuple) for i in original_text_tokens):
         return -1.0
-
-    if (not isinstance(suspicious_text_tokens, tuple) or
-            not all(isinstance(i, tuple) for i in suspicious_text_tokens) or
-            not all(isinstance(i, str) for subtuple in suspicious_text_tokens for i in subtuple)):
+    if not all(isinstance(i, str) for subtuple in original_text_tokens for i in subtuple):
         return -1.0
-
+    if not isinstance(suspicious_text_tokens, tuple) or not all(isinstance(i, tuple) for i in suspicious_text_tokens):
+        return -1.0
+    if not all(isinstance(i, str) for subtuple in suspicious_text_tokens for i in subtuple):
+        return -1.0
     if not isinstance(plagiarism_threshold, float) or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1.0
 
-    if (isinstance(original_text_tokens, tuple) and not any(original_text_tokens) or
-            isinstance(suspicious_text_tokens, tuple) and not any(suspicious_text_tokens)):
+    if (isinstance(original_text_tokens, tuple) and not any(original_text_tokens)
+            or isinstance(suspicious_text_tokens, tuple) and not any(suspicious_text_tokens)):
         return 0
 
-    original_list = list(original_text_tokens)
-    if len(suspicious_text_tokens) < len(original_text_tokens):
-        original_list = original_list[:len(suspicious_text_tokens)]
-    elif len(original_text_tokens) < len(suspicious_text_tokens):
-        original_list.append(() * (len(suspicious_text_tokens) - len(original_text_tokens)))
-    original_text_tokens = tuple(original_list)
+    original_text_tokens = []
+    if len(original_text_tokens) < len(suspicious_text_tokens):
+        original_text_tokens += tuple([tuple([''])]) * (len(suspicious_text_tokens) - len(original_text_tokens))
+    if len(original_text_tokens) > len(suspicious_text_tokens):
+        original_text_tokens = original_text_tokens[:len(suspicious_text_tokens)]
 
-    p_result_sum = 0
+    pl_result_sum = 0
     for i, suspicious_sentence in enumerate(suspicious_text_tokens):
-        lcs_length = find_lcs_length(original_text_tokens[i], suspicious_sentence, plagiarism_threshold)
-        p_score = calculate_plagiarism_score(lcs_length, suspicious_sentence)
-        p_result_sum += p_score
+        lcs_length = find_lcs_length(original_text_tokens[i], suspicious_text_tokens[i], plagiarism_threshold)
+        pl_score = calculate_plagiarism_score(lcs_length, suspicious_text_tokens[i])
+        pl_result_sum += pl_score
 
-    text_plagiarism_score = p_result_sum / len(suspicious_text_tokens)
+    text_plagiarism_score = pl_result_sum / len(suspicious_text_tokens)
     return text_plagiarism_score
 
 
