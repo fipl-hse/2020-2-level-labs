@@ -239,49 +239,32 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     org_dif_wds_ind = [original_sentence_tokens.index(word) for word in original_sentence_tokens if word not in lcs]
     sus_dif_wds_ind = [suspicious_sentence_tokens.index(word) for word in suspicious_sentence_tokens if word not in lcs]
     changed_ind_list = []
-
     changed_ind_list_1 = []
-    if org_dif_wds_ind:
-        ind = 0
-        while ind < len(org_dif_wds_ind):
-            if ind == len(org_dif_wds_ind) - 1:
-                changed_ind_list_1.extend((org_dif_wds_ind[ind], org_dif_wds_ind[ind] + 1))
-                break
-            else:
-                if org_dif_wds_ind[ind+1] - org_dif_wds_ind[ind] > 1:
-                    changed_ind_list_1.extend((org_dif_wds_ind[ind], org_dif_wds_ind[ind] + 1))
-                    ind += 1
-                else:
-                    changed_ind_list_1.append(org_dif_wds_ind[ind])
-                    while org_dif_wds_ind[ind+1] - org_dif_wds_ind[ind] == 1:
-                        ind += 1
-                        if ind >= len(org_dif_wds_ind) - 1:
-                            break
-                    changed_ind_list_1.append(org_dif_wds_ind[ind] + 1)
-                    ind += 1
-
     changed_ind_list_2 = []
-    if sus_dif_wds_ind:
-        ind = 0
-        while ind < len(sus_dif_wds_ind):
-            if ind == len(sus_dif_wds_ind) - 1:
-                changed_ind_list_2.extend((sus_dif_wds_ind[ind], sus_dif_wds_ind[ind] + 1))
-                break
-            else:
-                if sus_dif_wds_ind[ind + 1] - sus_dif_wds_ind[ind] > 1:
-                    changed_ind_list_2.extend((sus_dif_wds_ind[ind], sus_dif_wds_ind[ind] + 1))
-                    ind += 1
-                else:
-                    changed_ind_list_2.append(sus_dif_wds_ind[ind])
-                    while sus_dif_wds_ind[ind + 1] - sus_dif_wds_ind[ind] == 1:
-                        ind += 1
-                        if ind >= len(sus_dif_wds_ind) - 1:
-                            break
-                    changed_ind_list_2.append(sus_dif_wds_ind[ind] + 1)
-                    ind += 1
 
-    changed_ind_list_1 = tuple(changed_ind_list_1)
-    changed_ind_list_2 = tuple(changed_ind_list_2)
+    def get_changed_list(changed_ind_list, dif_wds_ind):
+        if dif_wds_ind:
+            ind = 0
+            while ind < len(dif_wds_ind):
+                if ind == len(dif_wds_ind) - 1:
+                    changed_ind_list.extend((dif_wds_ind[ind], dif_wds_ind[ind] + 1))
+                    break
+                else:
+                    if dif_wds_ind[ind+1] - dif_wds_ind[ind] > 1:
+                        changed_ind_list.extend((dif_wds_ind[ind], dif_wds_ind[ind] + 1))
+                        ind += 1
+                    else:
+                        changed_ind_list.append(dif_wds_ind[ind])
+                        while dif_wds_ind[ind+1] - dif_wds_ind[ind] == 1:
+                            ind += 1
+                            if ind >= len(dif_wds_ind) - 1:
+                                break
+                        changed_ind_list.append(dif_wds_ind[ind] + 1)
+                        ind += 1
+        return changed_ind_list
+
+    changed_ind_list_1 = tuple(get_changed_list(changed_ind_list_1, org_dif_wds_ind))
+    changed_ind_list_2 = tuple(get_changed_list(changed_ind_list_2, sus_dif_wds_ind))
     changed_ind_list.extend((changed_ind_list_1, changed_ind_list_2))
     return tuple(changed_ind_list)
 
