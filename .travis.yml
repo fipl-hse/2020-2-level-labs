@@ -18,7 +18,11 @@ install:
   - pip3 install -r requirements.txt
 
 stages:
+<<<<<<< HEAD
   - pr_name_check
+=======
+  # - pr_name_check
+>>>>>>> ea073a32e1d8cedb1d4b634d9cc0983e1461b8ef
   - test
   - lint
   - start_py
@@ -31,7 +35,13 @@ jobs:
   include:
     - stage: pr_name_check
       script:
+<<<<<<< HEAD
         - python3 config/check_pr_title.py --pr-name $(echo ${PR_TITLE// /_})
+=======
+        - if [[ ${TRAVIS_PULL_REQUEST} != "false" && $PR_TITLE != *"[skip_name]"* ]]; then
+            python3 config/check_pr_title.py --pr-name $(echo ${PR_TITLE// /_});
+          fi
+>>>>>>> ea073a32e1d8cedb1d4b634d9cc0983e1461b8ef
     - stage: test
       script:
         - bash config/run-tests.sh
