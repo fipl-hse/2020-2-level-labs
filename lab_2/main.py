@@ -278,15 +278,12 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     if is_type_incorrect or not all(original_text_tokens) or not all(suspicious_text_tokens):
         return {}
 
-    text_plagiarism = calculate_text_plagiarism_score(original_text_tokens,
-                                                      suspicious_text_tokens,
-                                                      plagiarism_threshold)
-
     sentence_plagiarism = []
     sentence_lcs_length = []
     difference_indexes = []
 
-    for index_sent in range(len(original_text_tokens)):
+    texts_lengths = len(original_text_tokens)
+    for index_sent in range(texts_lengths):
         lcs_matrix = fill_lcs_matrix(original_text_tokens[index_sent], suspicious_text_tokens[index_sent])
         lcs_length = find_lcs_length(original_text_tokens[index_sent],
                                      suspicious_text_tokens[index_sent],
@@ -300,7 +297,9 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
         sentence_lcs_length.append(lcs_length)
         difference_indexes.append(index_diff_in_sentence)
 
-    diff_stats = {'text_plagiarism': text_plagiarism,
+    diff_stats = {'text_plagiarism': calculate_text_plagiarism_score(original_text_tokens,
+                                                                     suspicious_text_tokens,
+                                                                     plagiarism_threshold),
                   'sentence_plagiarism': sentence_plagiarism,
                   'sentence_lcs_length': sentence_lcs_length,
                   'difference_indexes': difference_indexes}
