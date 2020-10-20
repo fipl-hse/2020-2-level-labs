@@ -1,4 +1,10 @@
+<<<<<<< HEAD
+data.txt
 data_2.txt
+=======
+lab_2/data.txt
+lab_2/data_2.txt
+>>>>>>> 63ea51615c31334979e8873a148f72bea3c21b8c
 
 #PyCharm
 .idea

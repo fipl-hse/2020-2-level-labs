@@ -98,7 +98,7 @@ class FindLcsTest(unittest.TestCase):
         patches_sentence = ('the', 'dog')
         bad_inputs = [[], {}, '', 9.22, -1, 0, -6, None, True, (None, None)]
 
-        expected = []
+        expected = ()
         for bad_input in bad_inputs:
             actual = find_lcs(bad_input, patches_sentence, patches_lcs_matrix)
             actual_second = find_lcs(patches_sentence, bad_input, patches_lcs_matrix)
