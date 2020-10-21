@@ -34,10 +34,11 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     """
     zero_matrix = []
 
-    row_columns_int = isinstance(rows, int), isinstance(columns, int)
-    row_columns_bool = isinstance(rows, bool), isinstance(columns,bool)
-
-    if not row_columns_int and row_columns_bool and (rows > 0 and columns > 0):
+    row_columns_int = isinstance(rows, int) and isinstance(columns, int)
+    row_columns_bool = isinstance(rows, bool) or isinstance(columns,bool)
+    row_colomns_none = rows is not None or columns is not None
+    
+    if row_columns_int and row_colomns_none and not row_columns_bool and (rows > 0 and columns > 0):
         for i in range(rows):
             zeros = [0] * columns
             zero_matrix.append(zeros)
