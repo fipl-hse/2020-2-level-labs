@@ -142,6 +142,11 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
                                                  plagiarism_threshold)
+        suspicious_text_tokens = (('the', 'man', 'arrived'),
+                                  ('the', 'boy', 'left'))
+        original_text_tokens = (('the', 'cat', 'appeared'),
+                                ('the', 'dog', 'disappeared'))
+        plagiarism_threshold = 0.1
         actual_reversed = calculate_text_plagiarism_score(suspicious_text_tokens,
                                                           original_text_tokens,
                                                           plagiarism_threshold)
