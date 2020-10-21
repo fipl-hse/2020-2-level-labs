@@ -351,7 +351,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     text_plagiarism = report_data['text_plagiarism'] * 100
     report += "Text average plagiarism (words): {}%".format(text_plagiarism)
     return report
-
+#C:/Users/appol/2020-2-level-labs/
 
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
                               plagiarism_threshold: float) -> int:
@@ -363,7 +363,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    return 1
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -372,4 +372,4 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    pass
+    return ()
