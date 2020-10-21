@@ -333,7 +333,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     return lcs_length
 
 
-def tokenize_big_file(path_to_file: str, id_dict={}, id_number=1) -> tuple:
+def tokenize_big_file(path_to_file: str, id_number=1) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
     :param path_to_file: a path
@@ -341,14 +341,18 @@ def tokenize_big_file(path_to_file: str, id_dict={}, id_number=1) -> tuple:
     :return: a tuple with ids
     """
     tokens = []
+    id_dict = {}
+
+    def get_id(word):
+        nonlocal id_number
+        if word not in id_dict:
+            id_dict[word] = id_number
+            id_number += 1
+        return id_dict[word]
     with open(path_to_file, encoding='UTF-8') as file:
         for line in file.readlines():
             token_sentence = tokenize(line)
             for token in token_sentence:
-                if token not in id_dict:
-                    id_dict[token] = id_number
-                    tokens.append(id_number)
-                    id_number += 1
-                else:
-                    tokens.append(id_dict[token])
+                tokens.append(get_id(token))
+    print(id_dict)
     return tuple(tokens)
