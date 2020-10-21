@@ -245,20 +245,14 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
             if ind != len(data[0]) - 1:
                 if dif_wds_ind + 1 != data[0][ind + 1]:
                     data[1].extend((dif_wds_ind, dif_wds_ind + 1))
-                if dif_wds_ind - 1 != data[0][ind - 1] and dif_wds_ind + 1 == data[0][ind + 1]:
+                if dif_wds_ind + 1 == data[0][ind + 1] and dif_wds_ind - 1 != data[0][ind - 1]:
                     data[1].append(dif_wds_ind)
-                if dif_wds_ind - 1 == data[0][ind - 1] and dif_wds_ind + 1 != data[0][ind + 1]:
+                if dif_wds_ind + 1 != data[0][ind + 1] and dif_wds_ind - 1 == data[0][ind - 1]:
                     data[1].append(dif_wds_ind + 1)
-            if ind == len(data[0]) - 1:
-                if dif_wds_ind - 1 != data[0][ind - 1]:
-                    data[1].extend((dif_wds_ind, dif_wds_ind + 1))
-                elif dif_wds_ind - 1 == data[0][ind - 1]:
-                    data[1].append(dif_wds_ind + 1)
-
-    if original_sentence_tokens == ():
-        return tuple([(), tuple(changed_ind_list_sus)])
-    if suspicious_sentence_tokens == ():
-        return tuple([tuple(original_sentence_tokens), ()])
+            elif ind == len(data[0]) - 1 and dif_wds_ind - 1 != data[0][ind - 1]:
+                data[1].extend((dif_wds_ind, dif_wds_ind + 1))
+            elif ind == len(data[0]) - 1 and dif_wds_ind - 1 == data[0][ind - 1]:
+                data[1].append(dif_wds_ind + 1)
 
     changed_ind_list.extend((tuple(changed_ind_list_orig), tuple(changed_ind_list_sus)))
     return tuple(changed_ind_list)
