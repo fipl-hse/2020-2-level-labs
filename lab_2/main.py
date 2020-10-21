@@ -124,16 +124,13 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    if not isinstance(lcs_length, int) or not isinstance(suspicious_sentence_tokens, tuple):
-        return -1.0
-    for element in suspicious_sentence_tokens:
-        if not isinstance(element, str):
-            return -1.0
-    if not (not isinstance(lcs_length, bool) and isinstance(lcs_length, int)
-            and 0 <= lcs_length <= len(suspicious_sentence_tokens)):
-        return -1.0
-    if not suspicious_sentence_tokens:
-        return 0.0
+    checker = not isinstance(lcs_length, int) or isinstance(lcs_length, bool)\
+              or not isinstance(suspicious_sentence_tokens, tuple)
+    if isinstance(suspicious_sentence_tokens, tuple) and not suspicious_sentence_tokens:
+        return 0
+    if checker or not all(isinstance(word, str) for word in suspicious_sentence_tokens)\
+            or not 0 <= lcs_length <= len(suspicious_sentence_tokens):
+        return -1
     return lcs_length / len(suspicious_sentence_tokens)
 
 
@@ -148,7 +145,15 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    if not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple):
+    checker1 = (not isinstance(plagiarism_threshold, float)
+                or not (0 < plagiarism_threshold < 1))
+    checker2 = (not isinstance(original_text_tokens, tuple)
+                or not all(isinstance(element, tuple) for element in original_text_tokens)
+                or not all(isinstance(element, str) for tok in original_text_tokens for element in tok))
+    checker3 = (not isinstance(suspicious_text_tokens, tuple)
+                or not all(isinstance(element, tuple) for element in suspicious_text_tokens)
+                or not all(isinstance(element, str) for tok in suspicious_text_tokens for element in tok))
+    if checker1 or checker2 or checker3:
         return -1.0
     plagiarism_score = []
     if len(original_text_tokens) < len(suspicious_text_tokens):
