@@ -6,11 +6,11 @@ import main
 
 
 if __name__ == '__main__':
-    original_text = 'The cat appeared.\nThe dog disappeared.\nHis name is Mike.\nHe has a dog.'
-    suspicious_text = 'The man arrived.\nThe boy disappeared.\nHer name is Jane.\nShe has a cat.'
+    ORIGINAL_TEXT = 'The cat appeared.\nThe dog disappeared.\nHis name is Mike.\nHe has a dog.'
+    SUSPICIOUS_TEXT = 'The man arrived.\nThe boy disappeared.\nHer name is Jane.\nShe has a cat.'
 
-    original_text_tuple = main.tokenize_by_lines(original_text)
-    suspicious_text_tuple = main.tokenize_by_lines(suspicious_text)
+    original_text_tuple = main.tokenize_by_lines(ORIGINAL_TEXT)
+    suspicious_text_tuple = main.tokenize_by_lines(SUSPICIOUS_TEXT)
 
     print('Original text: {}\nSuspicious text: {}\n'.format(original_text_tuple, suspicious_text_tuple))
 
