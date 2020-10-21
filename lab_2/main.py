@@ -70,9 +70,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :return: a lcs matrix
     """
     incorrect_inputs = is_inputs_incorrect(first_sentence_tokens, second_sentence_tokens)
-    if incorrect_inputs:
-        return []
-    if not first_sentence_tokens or not second_sentence_tokens:
+    if incorrect_inputs or not first_sentence_tokens or not second_sentence_tokens:
         return []
 
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens) + 1, len(second_sentence_tokens) + 1)
@@ -124,9 +122,8 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :return: the longest common subsequence
     """
     incorrect_inputs = is_inputs_incorrect(first_sentence_tokens, second_sentence_tokens)
-    if incorrect_inputs or not isinstance(lcs_matrix, list):
-        return ()
-    if not first_sentence_tokens or not second_sentence_tokens:
+    bad_arguments = (not isinstance(lcs_matrix, list) or not first_sentence_tokens or not second_sentence_tokens)
+    if incorrect_inputs or bad_arguments:
         return ()
 
     incorrect_elements = (not all(isinstance(row, list) for row in lcs_matrix) or not lcs_matrix
