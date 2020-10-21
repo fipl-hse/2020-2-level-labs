@@ -80,9 +80,9 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
         return 0
     lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
     if len(first_sentence_tokens) > len(second_sentence_tokens):
-        lcs_length = lcs_matrix[len(second_sentence_tokens) - 1][len(second_sentence_tokens) - 1]
+        lcs_length = max(lcs_matrix[len(second_sentence_tokens)-1])
     else:
-        lcs_length = lcs_matrix[len(first_sentence_tokens) - 1][len(second_sentence_tokens) - 1]
+        lcs_length = max(lcs_matrix[-1])
     if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
         return 0
     return lcs_length
@@ -183,7 +183,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
                 lcs_length = int(find_lcs_length(original_sentence, suspicious_sentence, plagiarism_threshold))
                 plagiarism_score = calculate_plagiarism_score(lcs_length, suspicious_sentence)
                 plagiarism_scores.append(plagiarism_score)
-    total_plagiarism_score = calculate_plagiarism_score(sum(plagiarism_scores), suspicious_text_tokens)
+    total_plagiarism_score = sum(plagiarism_scores) / len(suspicious_text_tokens)
     return total_plagiarism_score
 
 
@@ -204,7 +204,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     changed_words_indexes = [index for index, token in enumerate(suspicious_sentence_tokens) if token not in lcs]
     for number, index in enumerate(changed_words_indexes):
         if len(changed_words_indexes)-1 != number:
-            if index + 1 != changed_words_indexes[number + 1]:
+            if index + 1 != changed_words_indexes[number + 1] and index - 1 not in diff_indexes:
                 diff_indexes.extend([index, index + 1])
             elif index - 1 not in changed_words_indexes and index + 1 in changed_words_indexes:
                 diff_indexes.append(index)
@@ -235,29 +235,22 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
      'sentence_lcs_length': list,
      'difference_indexes': list}
     """
-    total_plagiarism_score = 0
-    lcs_lengths = []
-    plagiarism_scores = []
-    difference_indexes = []
+    diff_stats = {'sentence_plagiarism': [], 'sentence_lcs_length': [], 'difference_indexes': []}
     for original_number, original_sentence in enumerate(original_text_tokens):
         for suspicious_number, suspicious_sentence in enumerate(suspicious_text_tokens):
             if original_number == suspicious_number:
                 lcs_length = int(find_lcs_length(original_sentence, suspicious_sentence, plagiarism_threshold))
                 lcs_matrix = fill_lcs_matrix(original_sentence, suspicious_sentence)
                 lcs = find_lcs(original_sentence, suspicious_sentence, lcs_matrix)
-                lcs_lengths.append(lcs_length)
-                difference_indexes.append(find_diff_in_sentence(original_sentence, suspicious_sentence, lcs))
+                diff_stats['sentence_lcs_length'] += [lcs_length]
+                diff_stats['difference_indexes'] += [find_diff_in_sentence(original_sentence, suspicious_sentence, lcs)]
                 plagiarism_score = calculate_plagiarism_score(lcs_length, suspicious_sentence)
                 if plagiarism_score == -1:
-                    plagiarism_scores.append(0.0)
+                    diff_stats['sentence_plagiarism'] += [0.0]
                 else:
-                    plagiarism_scores.append(plagiarism_score)
-        total_plagiarism_score = calculate_plagiarism_score(sum(plagiarism_scores), suspicious_text_tokens)
-        if total_plagiarism_score < plagiarism_threshold:
-            total_plagiarism_score = 0.0
-    return {'text_plagiarism': total_plagiarism_score,
-            'sentence_plagiarism': plagiarism_scores, 'sentence_lcs_length': lcs_lengths,
-            'difference_indexes': difference_indexes}
+                    diff_stats['sentence_plagiarism'] += [plagiarism_score]
+        diff_stats['text_plagiarism'] = sum(diff_stats['sentence_plagiarism']) / len(suspicious_text_tokens)
+    return diff_stats
 
 
 def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tuple, accumulated_diff_stats: dict) -> str:
@@ -300,6 +293,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     return ' '.join(report)
 
 
+# I tried to do functions for 10 score, but they do not work correctly
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
                               plagiarism_threshold: float) -> int:
     """
@@ -325,11 +319,12 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     else:
         len_search = len(second_sentence_tokens)
     current_row = [0] * len_search
-    for word_1 in first_sentence_tokens[:len_search]:
+    for row, word_1 in enumerate(first_sentence_tokens[:len_search]):
         previous_row = current_row[:]
         for column, word_2 in enumerate(second_sentence_tokens[:len_search]):
-            if word_1 == word_2:
-                current_row[column] = previous_row[column - 1] + 1
+            if row == column:
+                if word_1 == word_2:
+                    current_row[column] = previous_row[column - 1] + 1
             else:
                 current_row[column] = max((current_row[column - 1], previous_row[column]))
     lcs_length = current_row[-1]
@@ -338,32 +333,22 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     return lcs_length
 
 
-def id_dict(identification_number):
-    identification_dict = {}
-
-    def id_number(token):
-        nonlocal identification_number
-        nonlocal identification_dict
-        if token not in identification_dict:
-            identification_dict[token] = identification_number
-            identification_number += 1
-            return identification_number
-        return identification_dict[token]
-    return id_number
-
-
-def tokenize_big_file(path_to_file: str) -> tuple:
+def tokenize_big_file(path_to_file: str, id_dict={}, id_number=1) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
     :param path_to_file: a path
+    :param id_number: an id
     :return: a tuple with ids
     """
     tokens = []
-    ids = id_dict(1)
-    with open(path_to_file, 'r', encoding='UTF-8') as file:
-        for line in file:
-            token_sentence = tokenize_by_lines(line)
-            if token_sentence:
-                for token in token_sentence[0]:
-                    tokens.append(ids(token))
+    with open(path_to_file, encoding='UTF-8') as file:
+        for line in file.readlines():
+            token_sentence = tokenize(line)
+            for token in token_sentence:
+                if token not in id_dict:
+                    id_dict[token] = id_number
+                    tokens.append(id_number)
+                    id_number += 1
+                else:
+                    tokens.append(id_dict[token])
     return tuple(tokens)
