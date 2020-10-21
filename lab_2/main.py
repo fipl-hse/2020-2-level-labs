@@ -34,7 +34,9 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     columns_not_int = not isinstance(columns, int)
     columns_bool = isinstance(columns, bool)
     rows_bool = isinstance(rows, bool)
-    if rows_bool or columns_bool or rows_not_int or columns_not_int or rows <= 0 or columns <= 0:
+    if rows_bool or columns_bool or rows_not_int or columns_not_int:
+        return []
+    if rows <= 0 or columns <= 0:
         return []
     zero_matrix = [[0] * columns for i in range(rows)]
     return zero_matrix
@@ -136,10 +138,13 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
             lcs.append(first_sentence_tokens[ind_r])
             ind_r -= 1
             ind_c -= 1
-        elif ind_r > ind_c:
+        elif lcs_matrix[ind_r - 1][ind_c] > lcs_matrix[ind_r][ind_c - 1]:
             ind_r -= 1
         else:
-            ind_c -= 1
+            if ind_r == 1 or ind_c == 0:
+                ind_r -= 1
+            else:
+                ind_c -= 1
     lcs.reverse()
     return tuple(lcs)
 
@@ -184,20 +189,20 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     plagiarism_not_float = not isinstance(plagiarism_threshold, float)
     if not orig_txt_not_tuple:
         for i in range(len(original_text_tokens)):
-            if type(original_text_tokens[i]) == tuple:
+            if isinstance(original_text_tokens[i], tuple):
                 if not all(isinstance(word, str) for word in original_text_tokens[i]):
                     return -1.0
             else:
                 return -1.0
     if not sus_text_not_tuple:
         for i in range(len(suspicious_text_tokens)):
-            if type(suspicious_text_tokens[i]) == tuple:
+            if isinstance(suspicious_text_tokens[i], tuple):
                 if not all(isinstance(word, str) for word in suspicious_text_tokens[i]):
                     return -1.0
             else:
                 return -1.0
     if orig_txt_not_tuple or sus_text_not_tuple \
-            or plagiarism_not_float or not (0 < plagiarism_threshold < 1):
+            or plagiarism_not_float or 0 > plagiarism_threshold > 1:
         return -1.0
 
     original_list = list(original_text_tokens)
@@ -241,50 +246,43 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     org_dif_wds_ind = [original_sentence_tokens.index(word) for word in original_sentence_tokens if word not in lcs]
     sus_dif_wds_ind = [suspicious_sentence_tokens.index(word) for word in suspicious_sentence_tokens if word not in lcs]
     changed_ind_list = []
+    changed_ind_list_orig = []
+    changed_ind_list_sus = []
 
-    changed_ind_list_1 = []
-    if org_dif_wds_ind:
-        ind = 0
-        while ind < len(org_dif_wds_ind):
-            if ind == len(org_dif_wds_ind) - 1:
-                changed_ind_list_1.extend((org_dif_wds_ind[ind], org_dif_wds_ind[ind] + 1))
-                break
-            else:
-                if org_dif_wds_ind[ind + 1] - org_dif_wds_ind[ind] > 1:
-                    changed_ind_list_1.extend((org_dif_wds_ind[ind], org_dif_wds_ind[ind] + 1))
-                    ind += 1
-                else:
-                    changed_ind_list_1.append(org_dif_wds_ind[ind])
-                    while org_dif_wds_ind[ind + 1] - org_dif_wds_ind[ind] == 1:
-                        ind += 1
-                        if ind >= len(org_dif_wds_ind) - 1:
-                            break
-                    changed_ind_list_1.append(org_dif_wds_ind[ind] + 1)
-                    ind += 1
+    for ind, dif_wds_ind in enumerate(org_dif_wds_ind):
+        if ind != len(org_dif_wds_ind) - 1:
+            if dif_wds_ind + 1 != org_dif_wds_ind[ind + 1]:
+                changed_ind_list_orig.extend((dif_wds_ind, dif_wds_ind + 1))
+            if dif_wds_ind - 1 != org_dif_wds_ind[ind - 1] and dif_wds_ind + 1 == org_dif_wds_ind[ind + 1]:
+                changed_ind_list_orig.append(dif_wds_ind)
+            if dif_wds_ind - 1 == org_dif_wds_ind[ind - 1] and dif_wds_ind + 1 != org_dif_wds_ind[ind + 1]:
+                changed_ind_list_orig.append(dif_wds_ind + 1)
+        if ind == len(org_dif_wds_ind) - 1:
+            if dif_wds_ind - 1 != org_dif_wds_ind[ind - 1]:
+                changed_ind_list_orig.extend((dif_wds_ind, dif_wds_ind + 1))
+            elif dif_wds_ind - 1 == sus_dif_wds_ind[ind - 1]:
+                changed_ind_list_orig.append(dif_wds_ind + 1)
 
-    changed_ind_list_2 = []
-    if sus_dif_wds_ind:
-        ind = 0
-        while ind < len(sus_dif_wds_ind):
-            if ind == len(sus_dif_wds_ind) - 1:
-                changed_ind_list_2.extend((sus_dif_wds_ind[ind], sus_dif_wds_ind[ind] + 1))
-                break
-            else:
-                if sus_dif_wds_ind[ind + 1] - sus_dif_wds_ind[ind] > 1:
-                    changed_ind_list_2.extend((sus_dif_wds_ind[ind], sus_dif_wds_ind[ind] + 1))
-                    ind += 1
-                else:
-                    changed_ind_list_2.append(sus_dif_wds_ind[ind])
-                    while sus_dif_wds_ind[ind + 1] - sus_dif_wds_ind[ind] == 1:
-                        ind += 1
-                        if ind >= len(sus_dif_wds_ind) - 1:
-                            break
-                    changed_ind_list_2.append(sus_dif_wds_ind[ind] + 1)
-                    ind += 1
+    for ind, dif_wds_ind in enumerate(sus_dif_wds_ind):
+        if ind != len(sus_dif_wds_ind) - 1:
+            if dif_wds_ind + 1 != sus_dif_wds_ind[ind + 1]:
+                changed_ind_list_sus.extend((dif_wds_ind, dif_wds_ind + 1))
+            if dif_wds_ind - 1 != sus_dif_wds_ind[ind - 1] and dif_wds_ind + 1 == sus_dif_wds_ind[ind + 1]:
+                changed_ind_list_sus.append(dif_wds_ind)
+            if dif_wds_ind - 1 == sus_dif_wds_ind[ind - 1] and dif_wds_ind + 1 != sus_dif_wds_ind[ind + 1]:
+                changed_ind_list_sus.append(dif_wds_ind + 1)
+        if ind == len(sus_dif_wds_ind) - 1:
+            if dif_wds_ind - 1 != sus_dif_wds_ind[ind - 1]:
+                changed_ind_list_sus.extend((dif_wds_ind, dif_wds_ind + 1))
+            elif dif_wds_ind - 1 == sus_dif_wds_ind[ind - 1]:
+                changed_ind_list_sus.append(dif_wds_ind + 1)
 
-    changed_ind_list_1 = tuple(changed_ind_list_1)
-    changed_ind_list_2 = tuple(changed_ind_list_2)
-    changed_ind_list.extend((changed_ind_list_1, changed_ind_list_2))
+    if original_sentence_tokens == ():
+        return tuple([(), tuple(changed_ind_list_sus)])
+    if suspicious_sentence_tokens == ():
+        return tuple([tuple(original_sentence_tokens), ()])
+
+    changed_ind_list.extend((tuple(changed_ind_list_orig), tuple(changed_ind_list_sus)))
     return tuple(changed_ind_list)
 
 
@@ -304,7 +302,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     orig_text_not_tuple = not isinstance(original_text_tokens, tuple)
     sus_text_not_tuple = not isinstance(suspicious_text_tokens, tuple)
     plag_not_float = not isinstance(plagiarism_threshold, float)
-    if orig_text_not_tuple or sus_text_not_tuple or plag_not_float or not (0 < plagiarism_threshold < 1):
+    if orig_text_not_tuple or sus_text_not_tuple or plag_not_float or 0 > plagiarism_threshold > 1:
         return {}
 
     text_plagiarism = calculate_text_plagiarism_score(original_text_tokens,
