@@ -197,6 +197,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
+
     is_not_good_sentence = not(isinstance(suspicious_sentence_tokens, tuple))
 
     if is_not_good_sentence:
@@ -234,7 +235,51 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    pass
+
+    is_not_good_orig_text = not((isinstance(original_text_tokens, tuple)
+                                 and original_text_tokens
+                                 and isinstance(original_text_tokens[0], tuple)
+                                 and (not original_text_tokens[0]
+                                      or (original_text_tokens[0] and isinstance(original_text_tokens[0][0], str)
+                                      and original_text_tokens[0][0])))
+                                or (isinstance(original_text_tokens, tuple) and not original_text_tokens))
+
+    is_not_good_susp_text = not((isinstance(suspicious_text_tokens, tuple)
+                                 and suspicious_text_tokens
+                                 and isinstance(suspicious_text_tokens[0], tuple)
+                                 and (not suspicious_text_tokens[0]
+                                      or (suspicious_text_tokens[0] and isinstance(suspicious_text_tokens[0][0], str)
+                                      and suspicious_text_tokens[0][0])))
+                                or (isinstance(suspicious_text_tokens, tuple) and not suspicious_text_tokens))
+
+    is_not_good_plag_threshold = not(not isinstance(plagiarism_threshold, bool)
+                                     and (isinstance(plagiarism_threshold, float)
+                                          or isinstance(plagiarism_threshold, int))
+                                     and 0 <= plagiarism_threshold <= 1)
+
+    if is_not_good_orig_text or is_not_good_susp_text or is_not_good_plag_threshold:
+        return -1.0
+
+    length_orig_text = len(original_text_tokens)
+    length_susp_text = len(suspicious_text_tokens)
+
+    if length_orig_text < length_susp_text:
+        for i in range(length_orig_text - length_susp_text):
+            original_text_tokens += ()
+
+    elif length_orig_text > length_susp_text:
+        original_text_tokens = original_text_tokens[:length_susp_text]
+
+    each_plag_score = []
+
+    for ind_sent, sent_1 in enumerate(original_text_tokens):
+        sent_2 = suspicious_text_tokens[ind_sent]
+        lcs_length = find_lcs_length(sent_1, sent_2, 0)
+        each_plag_score.append(calculate_plagiarism_score(lcs_length, sent_2))
+
+    p_result = sum(each_plag_score) / len(suspicious_text_tokens)
+
+    return p_result
 
 
 def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
