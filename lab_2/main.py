@@ -122,10 +122,12 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     """
     if not isinstance(lcs_length, int) or not isinstance(suspicious_sentence_tokens, tuple):
         return -1.0
+    for element in suspicious_sentence_tokens:
+        if not isinstance(element, str):
+            return -1.0
     if not suspicious_sentence_tokens:
         return 0.0
-    plagiarism_score = lcs_length / len(suspicious_sentence_tokens)
-    return plagiarism_score
+    return lcs_length / len(suspicious_sentence_tokens)
 
 
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
@@ -152,8 +154,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
                 lcs_length = find_lcs_length(element1, element2, plagiarism_threshold)
                 plagiarism = calculate_plagiarism_score(lcs_length, element2)
                 plagiarism_score.append(plagiarism)
-    result = sum(plagiarism_score) / len(suspicious_text_tokens)
-    return result
+    return sum(plagiarism_score) / len(suspicious_text_tokens)
 
 
 def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
@@ -165,9 +166,22 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :return: a tuple with tuples of indexes
     """
     if not isinstance(original_sentence_tokens, tuple) or not isinstance(suspicious_sentence_tokens, tuple)\
-            or not isinstance(lcs, tuple):
+            or not all(isinstance(i, str) for i in original_sentence_tokens)\
+            or not all(isinstance(i, str) for i in suspicious_sentence_tokens)\
+            or not isinstance(lcs, tuple) or not all(isinstance(i, str) for i in lcs):
         return ()
-
+    different = []
+    sentence = (original_sentence_tokens, suspicious_sentence_tokens)
+    for element in sentence:
+        dif = []
+        for index, element1 in enumerate(element):
+            if element1 not in lcs:
+                if index == 0 or element[index-1] in lcs:
+                    dif.append(index)
+                if index == len(element) - 1 or element[index+1] in lcs:
+                    dif.append(index + 1)
+        different.append(tuple(dif))
+    return tuple(different)
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
