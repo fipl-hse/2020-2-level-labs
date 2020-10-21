@@ -52,4 +52,3 @@ if __name__ == '__main__':
                       'lcs = 5', 'plagiarism = 71.42857142857143%', '',
                       'Text average plagiarism (words): 73.80952380952381%'], \
         'LCS not working'
-
