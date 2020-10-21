@@ -4,12 +4,12 @@ Longest common subsequence implementation starter
 import main
 
 if __name__ == '__main__':
-    original_text = 'The weather is sunny.\nI am going to meet my friend Liza.\n' \
+    ORIGINAL_TEXT = 'The weather is sunny.\nI am going to meet my friend Liza.\n' \
                     'She is very nice, smart and funny.'
-    suspicious_text = 'The weather is bad.\nI am going to meet my brother Nikita.\n' \
+    SUSPICIOUS_TEXT = 'The weather is bad.\nI am going to meet my brother Nikita.\n' \
                       'He is very nice, clever and funny.'
-    processed_text_orig = main.tokenize_by_lines(original_text)
-    processed_text_sus = main.tokenize_by_lines(suspicious_text)
+    processed_text_orig = main.tokenize_by_lines(ORIGINAL_TEXT)
+    processed_text_sus = main.tokenize_by_lines(SUSPICIOUS_TEXT)
     print(f"Original text tokens: {processed_text_orig}\nSuspicious text tokens: {processed_text_sus}")
 
     sentence_orig = processed_text_orig[1]
@@ -45,7 +45,3 @@ if __name__ == '__main__':
 
     RESULT = plagiarism_report.split("\n")
     assert RESULT, 'LCS not working'
-
-
-
-
