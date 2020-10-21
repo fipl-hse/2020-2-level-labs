@@ -15,8 +15,8 @@ def tokenize_by_lines(text: str) -> tuple:
     text = tokenize(text)
     new_text = []
     for index, sent in enumerate(text):
-        if len(tuple(text[index].split())) != 0:
-            new_text.append(tuple(text[index].split()))
+        if len(tuple(sent.split())) != 0:
+            new_text.append(tuple(sent.split()))
     return tuple(new_text)
 
 
@@ -118,9 +118,9 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    if not isinstance(first_sentence_tokens, tuple) or not isinstance (second_sentence_tokens, tuple)\
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple)\
             or not isinstance(lcs_matrix, list)\
-            or len(lcs_matrix) == 0 or not len(first_sentence_tokens) == len(lcs_matrix)\
+            or not len(first_sentence_tokens) == len(lcs_matrix) != 0\
             or lcs_matrix != fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens):
         return ()
     list_of_words = []
@@ -349,7 +349,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    return []
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -358,4 +358,4 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    pass
+    return []
