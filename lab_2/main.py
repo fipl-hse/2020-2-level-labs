@@ -28,7 +28,7 @@ def tokenize_by_lines(text: str) -> tuple:
         if sent:
             sent_list.append(tuple(sent))
 
-    return sent_list
+    return tuple(sent_list)
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
