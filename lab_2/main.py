@@ -51,25 +51,18 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         return []
 
     matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
-    row_out = False
-    last = False
+
+    last = 0
     for row_i, row_elem in enumerate(first_sentence_tokens):
-        if row_i > len(second_sentence_tokens) - 1:
-            row_out = row_i
-            break
         for column_i, column_elem in enumerate(second_sentence_tokens):
-            if row_elem == column_elem:
+            if row_elem == column_elem and row_i < len(second_sentence_tokens):
                 matrix[row_i][column_i] = matrix[row_i - 1][column_i - 1] + 1
                 last = matrix[row_i - 1][column_i - 1] + 1
             else:
-                matrix[row_i][column_i] = max((matrix[row_i][column_i - 1], matrix[row_i - 1][column_i]))
-                last = max((matrix[row_i][column_i - 1], matrix[row_i - 1][column_i]))
-
-    if row_out and last:
-        for row_ind, row_m in enumerate(matrix[row_out:], row_out):
-            for col_ind, column in enumerate(row_m):
-                if column == 0:
-                    matrix[row_ind][col_ind] = last
+                if row_i > len(second_sentence_tokens) - 1:
+                    matrix[row_i][column_i] = last
+                else:
+                    matrix[row_i][column_i] = max((matrix[row_i][column_i - 1], matrix[row_i - 1][column_i]))
 
     return matrix
 
