@@ -204,7 +204,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     if len(original_text_tokens) < len(suspicious_text_tokens):
         original_list.append(()*(len(suspicious_text_tokens) - len(original_text_tokens)))
     elif len(suspicious_text_tokens) < len(original_text_tokens):
-       original_list = original_list[:len(suspicious_text_tokens)]
+        original_list = original_list[:len(suspicious_text_tokens)]
     original_text_tokens = tuple(original_list)
 
     p_result = 0
