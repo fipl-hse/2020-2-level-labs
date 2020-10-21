@@ -201,12 +201,16 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :param lcs: a longest common subsequence
     :return: a tuple with tuples of indexes
     """
-    check_type = (not isinstance(original_sentence_tokens, tuple), not isinstance(suspicious_sentence_tokens, tuple),
-                  not isinstance(lcs, tuple))
-    if all(check_type):
+    orig_sent_type = not isinstance(original_sentence_tokens, tuple)
+    susp_sent_type = not isinstance(suspicious_sentence_tokens, tuple)
+    lcs_type = not isinstance(lcs, tuple)
+
+    if orig_sent_type or susp_sent_type or lcs_type:
         return ()
-    if not all(original_sentence_tokens) or not all(suspicious_sentence_tokens) or not all(lcs):
-        return ()
+    for function_parameter in (original_sentence_tokens, suspicious_sentence_tokens, lcs):
+        if isinstance(function_parameter, tuple):
+            if not all(isinstance(word, str) for word in function_parameter):
+                return ()
 
     diff_sum = []
     sentences = (original_sentence_tokens, suspicious_sentence_tokens)
