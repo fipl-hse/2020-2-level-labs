@@ -35,4 +35,4 @@ if __name__ == '__main__':
     print(plagiarism_text)
 
     RESULT = plagiarism_sent
-    assert RESULT, 'lcs not working'
+    assert RESULT == 0.75, 'lcs not working'

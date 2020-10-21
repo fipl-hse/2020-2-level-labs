@@ -2,10 +2,7 @@
 Longest common subsequence problem
 """
 
-text = """
-I have a cat.\nHis name is Bruno.\n
-He is white and beautiful.\n
-    """
+from tokenizer import tokenize
 
 def tokenize_by_lines(text: str) -> tuple:
     """
@@ -16,7 +13,6 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    from tokenizer import tokenize
 
     if isinstance(text, str):
 
@@ -77,18 +73,21 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
             if not (isinstance(i, str) and isinstance(j, str)) or is_none:
                 return []
 
+
+
         f = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
         for i, i_elem in enumerate(first_sentence_tokens):
             for j, j_elem in enumerate(second_sentence_tokens):
-
                 if i_elem == j_elem:
                     if (j - 1) >= 0 or (i - 1) >= 0:
                         f[i][j] = f[i - 1][j - 1] + 1
+                    elif i == 0 and j == 0:
+                        f[i][j] = 1
                     else:
                         f[i][j] = 1
                 else:
                     f[i][j] = max(f[i][j - 1], f[i - 1][j])
-
+        print(f)
         return f
 
     return []
@@ -183,8 +182,8 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
                     lcs = tuple(lcs)
 
                     return lcs
-                return ()
-        return ()
+
+
     return ()
 
 
@@ -223,10 +222,8 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    #global new_orig_text
+
     is_tuple = isinstance(original_text_tokens, tuple) and isinstance(suspicious_text_tokens, tuple)
-    # is_bool = bool(original_text_tokens) is True and bool(suspicious_text_tokens) is True
-    # is_int = isinstance(plagiarism_threshold, float) and 0 <= plagiarism_threshold <= 1
 
     if not is_tuple:
         return -1
