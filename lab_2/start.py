@@ -5,12 +5,12 @@ Longest common subsequence implementation starter
 import main
 
 if __name__ == '__main__':
-    original_text = 'I have a parrot.\nHer name is Manya.\n' \
+    ORIGINAL_TEXT = 'I have a parrot.\nHer name is Manya.\n' \
                     'She has green, red and yellow feathers.\nI love her very much.'
-    suspicious_text = 'I have a tiger.\nHis name is Vanya.\n' \
+    SUSPICIOUS_TEXT = 'I have a tiger.\nHis name is Vanya.\n' \
                       'He has green, red and brown feathers.\nI love him very much.'
-    tokenized_orig_text = main.tokenize_by_lines(original_text)
-    tokenized_susp_text = main.tokenize_by_lines(suspicious_text)
+    tokenized_orig_text = main.tokenize_by_lines(ORIGINAL_TEXT)
+    tokenized_susp_text = main.tokenize_by_lines(SUSPICIOUS_TEXT)
     print(f"Original text tokens: {tokenized_orig_text}\nSuspicious text tokens: {tokenized_susp_text}\n")
 
     orig_first_sent = tokenized_orig_text[2]
@@ -41,10 +41,11 @@ if __name__ == '__main__':
     report = main.create_diff_report(tokenized_orig_text, tokenized_susp_text, statistics)
     print(f"The report for two texts:\n{report}")
 
-    RESULT = report
-    assert "- i have a | parrot |\n+ i have a | tiger |\n\nlcs = 3, plagiarism = 75.0%\n\n" \
-           "- | her | name is | manya |\n+ | his | name is | vanya |\n\nlcs = 2, plagiarism = 50.0%\n\n" \
-           "- | she | has green red and | yellow | feathers\n+ | he | has green red and | brown | feathers\n\n" \
-           "lcs = 5, plagiarism = 71.42857142857143%\n\n- i love | her | very much\n+ i love | him | very much\n\n" \
-           "lcs = 4, plagiarism = 80.0%\n\nText average plagiarism (words): 69.10714285714286%", 'LCS not working'
+    RESULT = report.split("\n")
 
+    assert ['- i have a | parrot |', '+ i have a | tiger |', '', 'lcs = 3, plagiarism = 75.0%', '',
+            '- | her | name is | manya |', '+ | his | name is | vanya |', '', 'lcs = 2, plagiarism = 50.0%',
+            '', '- | she | has green red and | yellow | feathers', '+ | he | has green red and | brown | feathers',
+            '', 'lcs = 5, plagiarism = 71.42857142857143%', '', '- i love | her | very much',
+            '+ i love | him | very much', '', 'lcs = 4, plagiarism = 80.0%', '',
+            'Text average plagiarism (words): 69.10714285714286%'], 'LCS not working'
