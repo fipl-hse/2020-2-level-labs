@@ -15,7 +15,7 @@ def tokenize_by_lines(text: str) -> tuple:
     text = tokenize(text)
     new_text = []
     for index, sent in enumerate(text):
-        if len(tuple(sent.split())) != 0:
+        if len(tuple(text[index].split())) != 0:
             new_text.append(tuple(sent.split()))
     return tuple(new_text)
 
