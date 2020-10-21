@@ -3,6 +3,8 @@ Longest common subsequence problem
 """
 
 import csv
+import re
+
 from decorators import input_checker
 from tokenizer import tokenize
 
@@ -327,14 +329,12 @@ def find_lcs_length_optimized(first_sentence_tokens: list,
     :param second_sentence_tokens: a list of tokens
     :return: a length of the longest common subsequence
     """
-    if first_sentence_tokens == second_sentence_tokens:
-        return len(first_sentence_tokens)
-
-    zero_vector = [0 for _ in range(len(second_sentence_tokens) + 1)]
+    #if first_sentence_tokens == second_sentence_tokens:
+    #    return len(first_sentence_tokens)
 
     x_prev_vector = token_and_string_comparison(first_sentence_tokens[0],
                                                 second_sentence_tokens,
-                                                zero_vector)
+                                                [0 for _ in range(len(second_sentence_tokens) + 1)])
     for x_prev, x_curr in zip(first_sentence_tokens[:-1], first_sentence_tokens[1:]):
         x_curr_vector = token_and_string_comparison(x_curr, y, x_prev_vector)
         x_prev_vector = x_curr_vector
@@ -350,10 +350,10 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     """
     with open('lab_2/vocabulary.csv', 'r', encoding='utf-8') as infile:
         reader = csv.reader(infile)
-        vocabulary = {rows[0]:rows[1] for rows in reader}
+        vocabulary = {rows[0]: rows[1] for rows in reader}
 
-    indexes = ()
+    indexes = []
     for line in open(path_to_file, 'r', encoding='utf-8'):
-        tokens = tokenize(line.lower())
-        indexes += tuple(vocabulary[token] for token in tokens)
-    return indexes
+        tokens = re.findall('\w+', text.lower())
+        indexes.extend([vocabulary[token] for token in tokens])
+    return tuple(indexes)
