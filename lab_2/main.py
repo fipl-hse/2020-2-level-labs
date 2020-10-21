@@ -125,8 +125,6 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
                 return ()
             if first_sentence_tokens[ind_r] == second_sentence_tokens[ind_col]:
                 lcs.append(second_sentence_tokens[ind_col])
-
-    lcs.reverse()
     return tuple(lcs)
 
 
