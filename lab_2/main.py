@@ -198,7 +198,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
 
-    is_not_good_sentence = not(isinstance(suspicious_sentence_tokens, tuple))
+    is_not_good_sentence = not (isinstance(suspicious_sentence_tokens, tuple))
 
     if is_not_good_sentence:
         return -1
@@ -236,26 +236,26 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
 
-    is_not_good_orig_text = not((isinstance(original_text_tokens, tuple)
-                                 and original_text_tokens
-                                 and isinstance(original_text_tokens[0], tuple)
-                                 and (not original_text_tokens[0]
-                                      or (original_text_tokens[0] and isinstance(original_text_tokens[0][0], str)
-                                      and original_text_tokens[0][0])))
-                                or (isinstance(original_text_tokens, tuple) and not original_text_tokens))
+    is_not_good_orig_text = not ((isinstance(original_text_tokens, tuple)
+                                  and original_text_tokens
+                                  and isinstance(original_text_tokens[0], tuple)
+                                  and (not original_text_tokens[0]
+                                       or (original_text_tokens[0] and isinstance(original_text_tokens[0][0], str)
+                                           and original_text_tokens[0][0])))
+                                 or (isinstance(original_text_tokens, tuple) and not original_text_tokens))
 
-    is_not_good_susp_text = not((isinstance(suspicious_text_tokens, tuple)
-                                 and suspicious_text_tokens
-                                 and isinstance(suspicious_text_tokens[0], tuple)
-                                 and (not suspicious_text_tokens[0]
-                                      or (suspicious_text_tokens[0] and isinstance(suspicious_text_tokens[0][0], str)
-                                      and suspicious_text_tokens[0][0])))
-                                or (isinstance(suspicious_text_tokens, tuple) and not suspicious_text_tokens))
+    is_not_good_susp_text = not ((isinstance(suspicious_text_tokens, tuple)
+                                  and suspicious_text_tokens
+                                  and isinstance(suspicious_text_tokens[0], tuple)
+                                  and (not suspicious_text_tokens[0]
+                                       or (suspicious_text_tokens[0] and isinstance(suspicious_text_tokens[0][0], str)
+                                           and suspicious_text_tokens[0][0])))
+                                 or (isinstance(suspicious_text_tokens, tuple) and not suspicious_text_tokens))
 
-    is_not_good_plag_threshold = not(not isinstance(plagiarism_threshold, bool)
-                                     and (isinstance(plagiarism_threshold, float)
-                                          or isinstance(plagiarism_threshold, int))
-                                     and 0 <= plagiarism_threshold <= 1)
+    is_not_good_plag_threshold = not (not isinstance(plagiarism_threshold, bool)
+                                      and (isinstance(plagiarism_threshold, float)
+                                           or isinstance(plagiarism_threshold, int))
+                                      and 0 <= plagiarism_threshold <= 1)
 
     if is_not_good_orig_text or is_not_good_susp_text or is_not_good_plag_threshold:
         return -1.0
@@ -282,6 +282,46 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     return p_result
 
 
+def fill_indexes(sentence: tuple, lcs: tuple) -> tuple:
+
+    indexes = []
+    ind = ind_lcs = len_diff = start_seq = 0
+
+    while ind < len(sentence):
+        if ind_lcs >= len(lcs):
+            indexes.extend([ind, len(sentence)])
+            break
+
+        if sentence[ind] != lcs[ind_lcs]:
+            if len_diff:
+                ind += 1
+                len_diff += 1
+            else:
+                start_seq = ind
+                indexes.append(ind)
+                ind += 1
+                len_diff += 1
+        elif sentence[ind] == lcs[ind_lcs]:
+            if len_diff:
+                indexes.append(start_seq + len_diff)
+                len_diff = 0
+
+            ind += 1
+            ind_lcs += 1
+
+            while ind < len(sentence) and ind_lcs < len(lcs):
+                if sentence[ind] == lcs[ind_lcs]:
+                    ind += 1
+                    ind_lcs += 1
+                else:
+                    break
+
+    if len_diff:
+        indexes.append(len(sentence))
+
+    return tuple(indexes)
+
+
 def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
     """
     Finds words not present in lcs.
@@ -290,7 +330,38 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :param lcs: a longest common subsequence
     :return: a tuple with tuples of indexes
     """
-    pass
+    is_not_good_orig_sentence = not ((isinstance(original_sentence_tokens, tuple) and not original_sentence_tokens)
+                                     or (isinstance(original_sentence_tokens, tuple) and original_sentence_tokens
+                                         and isinstance(original_sentence_tokens[0], str)))
+
+    is_not_good_susp_sentence = not ((isinstance(suspicious_sentence_tokens, tuple) and not suspicious_sentence_tokens)
+                                     or (isinstance(suspicious_sentence_tokens, tuple) and suspicious_sentence_tokens
+                                         and isinstance(suspicious_sentence_tokens[0], str)))
+
+    is_not_good_lcs = not ((isinstance(lcs, tuple) and not lcs)
+                           or (isinstance(lcs, tuple) and lcs
+                               and isinstance(lcs[0], str)))
+
+    if is_not_good_orig_sentence or is_not_good_susp_sentence or is_not_good_lcs:
+        return ()
+
+    if not lcs:
+        if original_sentence_tokens:
+            first_sent = (0, len(original_sentence_tokens))
+        else:
+            first_sent = ()
+
+        if suspicious_sentence_tokens:
+            second_sent = (0, len(suspicious_sentence_tokens))
+        else:
+            second_sent = ()
+
+        return first_sent, second_sent
+
+    first_sent_inds = fill_indexes(original_sentence_tokens, lcs)
+    second_sent_inds = fill_indexes(suspicious_sentence_tokens, lcs)
+
+    return first_sent_inds, second_sent_inds
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
