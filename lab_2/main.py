@@ -42,7 +42,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     """
     if not isinstance(rows,int) or not isinstance(columns,int):
         return []
-    if rows < 0 or columns < 0:
+    if rows <= 0 or columns <= 0:
         return []
     return [[0 for j in range(rows)] for i in range(columns)]
 
@@ -74,7 +74,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
             if first_sentence_tokens[i] == second_sentence_tokens[j]:
                 LCS[i + 1][j + 1] = LCS[i][j] + 1
             else:
-                LCS[i + 1][j + 1] = max(LCS[i][j + 1], LCS[i + 1][j])  
+                LCS[i + 1][j + 1] = max(LCS[i][j + 1], LCS[i + 1][j])
     return LCS
 
 
@@ -261,10 +261,11 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
 
     while i < len(second_sentence_tokens):
         if second_sentence_tokens[i] != lcs[j]:
-            og_sent.append(i)
+            sus_sent.append(i)
         else:
             j += 1
         i += 1
+    return (tuple(og_sent), tuple(sus_sent))
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
