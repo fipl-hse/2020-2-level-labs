@@ -55,8 +55,8 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    pass
-
+    lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
+    return lcs_matrix
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
     """
