@@ -219,8 +219,8 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
         origin += tuple(() for _ in range(abs(length_diff)))
 
     for sent_1, sent_2 in zip(suspicious, origin):
-        lcs_length = find_lcs_length(sent_1, sent_2, plagiarism_threshold)
-        plagiarism_sum.append(abs(calculate_plagiarism_score(lcs_length, sent_2)))
+        lcs_length = find_lcs_length_optimized(sent_1, sent_2, plagiarism_threshold)
+        plagiarism_sum.append(calculate_plagiarism_score(lcs_length, sent_2))
 
     return sum(plagiarism_sum) / len(plagiarism_sum)
 
@@ -389,19 +389,18 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    def vectorizer(x):
-        sentences = x.strip().splitlines()
-        tokens = {tuple(tokenize(x)) for x in sentences if x}
-
-        for token in set(tokens):
-            if token
+    tokens = []
+    idx = {}
 
     file = (row for row in open(path_to_file, encoding='utf-8'))
-    hashes = {}
 
-    idx = 0
+    num = 0
     for line in file:
-        for idx, word in enumerate(set(tokenizer(line))):
-            if word not in hashes:
-                hashes[idx] = word
+        for token in tokenize(line):
+            if token not in idx:
+                idx[token] = num
+                num += 1
+            tokens.append(idx[token])
+
+    return tuple(tokens)
 
