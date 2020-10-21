@@ -97,8 +97,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
                         or not isinstance(plagiarism_threshold, float))
     if incorrect_inputs:
         return -1
-    bad_inputs = (None in first_sentence_tokens or None in second_sentence_tokens
-                  or not (0 < plagiarism_threshold < 1))
+    bad_inputs = (None in first_sentence_tokens or None in second_sentence_tokens or not (0 < plagiarism_threshold < 1))
     if bad_inputs:
         return -1
     if len(first_sentence_tokens) > len(second_sentence_tokens):
@@ -393,6 +392,6 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    # with open(path_to_file, encoding="utf-8") as tokenising_file:
-    #     text = tokenising_file.read()
+    # with open(path_to_file, encoding="utf-8") as tokenizing_file:
+    #     text = tokenizing_file.read()
     return ()
