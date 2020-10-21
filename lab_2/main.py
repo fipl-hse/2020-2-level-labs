@@ -18,7 +18,7 @@ def tokenize_by_lines(text: str) -> tuple:
 
     sentences_list = text.split('\n')
 
-    return tuple([tuple(tokenize(sentence)) for sentence in sentences_list if tokenize(sentence)])
+    return tuple(tuple(tokenize(sentence)) for sentence in sentences_list if tokenize(sentence))
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -259,10 +259,10 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
 
     check2 = (not isinstance(suspicious_text_tokens, tuple) or
               not all(isinstance(i, tuple) for i in suspicious_text_tokens) or
-              not all(isinstance(i, str) for subtuple in suspicious_text_tokens for i in subtuple))
+              not all(isinstance(i, str) for subtuple in suspicious_text_tokens for i in subtuple) or
+              plagiarism_threshold < 0 or plagiarism_threshold > 1)
 
-    if (check1 or check2 or not isinstance(plagiarism_threshold, float) or
-            plagiarism_threshold < 0 or plagiarism_threshold > 1):
+    if check1 or check2:
         return {}
 
     text_plagiarism = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens,
