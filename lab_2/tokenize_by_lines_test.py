@@ -17,7 +17,6 @@ class TokenizeByLinesTest(unittest.TestCase):
             can handle ...
         """
         text = 'I have a cat.\nHis name is Bruno'
-
         expected = (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
         actual = tokenize_by_lines(text)
         self.assertEqual(expected, actual)
