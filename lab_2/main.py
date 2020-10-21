@@ -43,7 +43,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     if not isinstance(rows,int) or not isinstance(columns,int):
         return []
     if type(rows) == "<class 'bool'>" or type(columns) == "<class 'bool'>":
-        return [] 
+        return []
     if rows <= 0 or columns <= 0:
         return []
     return [[0 for j in range(columns)] for i in range(rows)]
@@ -77,6 +77,11 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
                 LCS[i + 1][j + 1] = LCS[i][j] + 1
             else:
                 LCS[i + 1][j + 1] = max(LCS[i][j + 1], LCS[i + 1][j])
+    del LCS[0]
+
+    for line in LCS:
+        del line[0]
+        
     return LCS
 
 
