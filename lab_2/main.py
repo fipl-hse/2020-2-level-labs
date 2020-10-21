@@ -64,11 +64,11 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     ]
     if not all(checks) or not first_sentence_tokens or not second_sentence_tokens:
         return []
-    for token in first_sentence_tokens:  # bad check
-        if not isinstance(token, str):
+    for token in first_sentence_tokens:
+        if not isinstance(token, str) and not isinstance(token, int):
             return []
-    for token in second_sentence_tokens:  # bad check
-        if not isinstance(token, str):
+    for token in second_sentence_tokens:
+        if not isinstance(token, str) and not isinstance(token, int):
             return []
 
     matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
@@ -82,7 +82,8 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     return matrix
 
 
-def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:  # +
+def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
+                    plagiarism_threshold: float) -> int:  # +
     """
     Finds a length of the longest common subsequence using the Needleman–Wunsch algorithm
     When a length is less than the threshold, it becomes 0
@@ -100,11 +101,11 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
         return -1
     if not first_sentence_tokens or not second_sentence_tokens:
         return 0
-    for token in first_sentence_tokens:  # bad check
-        if not isinstance(token, str):
+    for token in first_sentence_tokens:
+        if not isinstance(token, str) and not isinstance(token, int):
             return -1
-    for token in second_sentence_tokens:  # bad check
-        if not isinstance(token, str):
+    for token in second_sentence_tokens:
+        if not isinstance(token, str) and not isinstance(token, int):
             return -1
 
     if len(first_sentence_tokens) > len(second_sentence_tokens):
@@ -135,7 +136,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     ]
     if not all(checks) or not first_sentence_tokens or not second_sentence_tokens or not lcs_matrix:
         return ()
-    for row in lcs_matrix:  # bad check
+    for row in lcs_matrix:
         if not isinstance(row, list):
             return ()
         for element in row:
@@ -144,11 +145,11 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     if lcs_matrix[0][0] > lcs_matrix[-1][-1] \
             or len(lcs_matrix) != len(first_sentence_tokens) or len(lcs_matrix[0]) != len(second_sentence_tokens):
         return ()
-    for token in first_sentence_tokens:  # bad check
-        if not isinstance(token, str):
+    for token in first_sentence_tokens:
+        if not isinstance(token, str) and not isinstance(token, int):
             return ()
-    for token in second_sentence_tokens:  # bad check
-        if not isinstance(token, str):
+    for token in second_sentence_tokens:
+        if not isinstance(token, str) and not isinstance(token, int):
             return ()
 
     lcs = []
@@ -186,8 +187,8 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     if not all(checks) or lcs_length < 0 or lcs_length > len(suspicious_sentence_tokens):
         return -1.0
     if suspicious_sentence_tokens:
-        for token in suspicious_sentence_tokens:  # bad check
-            if not isinstance(token, str):
+        for token in suspicious_sentence_tokens:
+            if not isinstance(token, str) and not isinstance(token, int):
                 return -1.0
     else:
         return 0.0
@@ -196,7 +197,8 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     return score
 
 
-def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:  # +
+def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
+                                    plagiarism_threshold=0.3) -> float:  # +
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
     The score is the sum of lcs values for each pair divided by the number of tokens in suspicious text
@@ -211,20 +213,20 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
         isinstance(suspicious_text_tokens, tuple),
         isinstance(plagiarism_threshold, float)
     ]
-    if not all(checks) or plagiarism_threshold > 1 or plagiarism_threshold < 0\
+    if not all(checks) or plagiarism_threshold > 1 or plagiarism_threshold < 0 \
             or not original_text_tokens or not suspicious_text_tokens:
         return -1.0
-    for sentence in original_text_tokens:  # bad check
+    for sentence in original_text_tokens:
         if not isinstance(sentence, tuple):
             return -1.0
         for token in sentence:
-            if not isinstance(token, str):
+            if not isinstance(token, str) and not isinstance(token, int):
                 return -1.0
-    for sentence in suspicious_text_tokens:  # bad check
+    for sentence in suspicious_text_tokens:
         if not isinstance(sentence, tuple):
             return -1.0
         for token in sentence:
-            if not isinstance(token, str):
+            if not isinstance(token, str) and not isinstance(token, int):
                 return -1.0
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
@@ -237,8 +239,12 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
 
     total = 0.0
     for sentence_index in range(len(suspicious_text_tokens)):
-        lcs_length = find_lcs_length(original_text_tokens[sentence_index], suspicious_text_tokens[sentence_index],
-                                     plagiarism_threshold)
+        if len(suspicious_text_tokens) > 100:
+            lcs_length = find_lcs_length_optimized(original_text_tokens[sentence_index],
+                                                   suspicious_text_tokens[sentence_index], plagiarism_threshold)
+        else:
+            lcs_length = find_lcs_length(original_text_tokens[sentence_index], suspicious_text_tokens[sentence_index],
+                                         plagiarism_threshold)
         total += calculate_plagiarism_score(lcs_length, suspicious_text_tokens[sentence_index])
     result = total / len(suspicious_text_tokens)
     if result < 0:
@@ -263,16 +269,16 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     if not all(checks):
         return ()
     if lcs:
-        for token in lcs:  # bad check
-            if not isinstance(token, str):
+        for token in lcs:
+            if not isinstance(token, str) and not isinstance(token, int):
                 return ()
     if original_sentence_tokens:
-        for token in original_sentence_tokens:  # bad check
-            if not isinstance(token, str):
+        for token in original_sentence_tokens:
+            if not isinstance(token, str) and not isinstance(token, int):
                 return ()
     if suspicious_sentence_tokens:
-        for token in suspicious_sentence_tokens:  # bad check
-            if not isinstance(token, str):
+        for token in suspicious_sentence_tokens:
+            if not isinstance(token, str) and not isinstance(token, int):
                 return ()
 
     result = []
@@ -283,7 +289,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
             orig_diff.append(token_index + 1)
     i_orig = 1
     for element in orig_diff:
-        if element == orig_diff[-1]:  # тупая идея, надо переделать
+        if element == orig_diff[-1]:
             pass
         elif element == orig_diff[i_orig]:
             orig_diff.remove(element)
@@ -299,7 +305,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
             susp_diff.append(token_index + 1)
     i_susp = 1
     for element in susp_diff:
-        if element == susp_diff[-1]:  # тупая идея
+        if element == susp_diff[-1]:
             pass
         elif element == susp_diff[i_susp]:
             susp_diff.remove(element)
@@ -332,17 +338,17 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     if not all(checks) or plagiarism_threshold > 1 or plagiarism_threshold < 0 \
             or not original_text_tokens or not suspicious_text_tokens:
         return {}
-    for sentence in original_text_tokens:  # bad check
+    for sentence in original_text_tokens:
         if not isinstance(sentence, tuple):
             return {}
         for token in sentence:
-            if not isinstance(token, str):
+            if not isinstance(token, str) and not isinstance(token, int):
                 return {}
-    for sentence in suspicious_text_tokens:  # bad check
+    for sentence in suspicious_text_tokens:
         if not isinstance(sentence, tuple):
             return {}
         for token in sentence:
-            if not isinstance(token, str):
+            if not isinstance(token, str) and not isinstance(token, int):
                 return {}
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
@@ -394,17 +400,17 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     ]
     if not all(checks) or not original_text_tokens or not suspicious_text_tokens or not accumulated_diff_stats:
         return ''
-    for sentence in original_text_tokens:  # bad check
+    for sentence in original_text_tokens:
         if not isinstance(sentence, tuple):
             return ''
         for token in sentence:
-            if not isinstance(token, str):
+            if not isinstance(token, str) and not isinstance(token, int):
                 return ''
-    for sentence in suspicious_text_tokens:  # bad check
+    for sentence in suspicious_text_tokens:
         if not isinstance(sentence, tuple):
             return ''
         for token in sentence:
-            if not isinstance(token, str):
+            if not isinstance(token, str) and not isinstance(token, int):
                 return ''
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
@@ -461,7 +467,70 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    checks = [
+        isinstance(first_sentence_tokens, tuple),
+        isinstance(second_sentence_tokens, tuple),
+        isinstance(plagiarism_threshold, float)
+    ]
+    if not all(checks) or plagiarism_threshold >= 1 or plagiarism_threshold <= 0:
+        return -1
+    if not first_sentence_tokens or not second_sentence_tokens:
+        return 0
+    for token in first_sentence_tokens:
+        if not isinstance(token, str) and not isinstance(token, int):
+            return -1
+    for token in second_sentence_tokens:
+        if not isinstance(token, str) and not isinstance(token, int):
+            return -1
+
+    if len(first_sentence_tokens) > len(second_sentence_tokens):
+        first_sentence_tokens = tuple(first_sentence_tokens[:len(second_sentence_tokens)])
+
+    current_row = [0] * (len(second_sentence_tokens) + 1)
+    for element_1 in first_sentence_tokens:
+        previous_row = current_row[:]
+        for index_2, element_2 in enumerate(second_sentence_tokens):
+            if element_1 == element_2:
+                current_row[index_2 + 1] = previous_row[index_2] + 1
+            else:
+                current_row[index_2 + 1] = max(current_row[index_2], previous_row[index_2 + 1])
+
+    if not current_row:
+        return 0
+    my_threshold = current_row[-1][-1] / len(second_sentence_tokens)
+    if my_threshold < plagiarism_threshold:
+        return 0
+    else:
+        return current_row[-1][-1]
+
+
+def read_in_parts(path_to_file: str, part_size=1024) -> str:
+    if not isinstance(path_to_file, str):
+        return ()
+
+    with open(path_to_file, 'r', encoding='utf-8') as file_data:
+        while True:
+            part_data = file_data.read(part_size)
+            if '\n' in part_data:  # doesn't work :(
+                part_data.replace('\n', ' ')
+            if not part_data:
+                break
+            yield part_data
+    return part_data
+
+
+def tok(path_to_file: str) -> tuple:
+    if not isinstance(path_to_file, str):
+        return ()
+
+    for part in read_in_parts(path_to_file):
+        tokenized_data = tokenize_by_lines(part)
+        yield tokenized_data
+
+    return tokenized_data
+
+
+cache = {}
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -470,4 +539,20 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    pass
+    if not isinstance(path_to_file, str):
+        return ()
+
+    array = ()
+    for piece in tok(path_to_file):
+        for sentence_index in range(len(piece)):
+            array += piece[sentence_index]
+
+    for token in array:
+        if token not in cache:
+            if cache:
+                token_num = cache[list(cache.keys())[-1]] + 1
+            else:
+                token_num = 0
+            cache[token] = token_num
+    return cache
+
