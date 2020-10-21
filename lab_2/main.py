@@ -343,7 +343,7 @@ def find_lcs_length_optimized(first_sentence_tokens: list,
 
 def make_vocabulary(vocabulary=dict(), index=0):
     for file in ('lab_2/data.txt', 'lab_2/data_2.txt'):
-        for line in open(file, 'r', encoding='utf-8').readlines():
+        for line in open(file, 'r', encoding='utf-8'):
             tokens = tokenize(line.lower())
             for key in tokens:
                 if key not in vocabulary:
