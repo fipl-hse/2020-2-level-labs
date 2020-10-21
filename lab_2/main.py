@@ -44,7 +44,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
         return []
     if rows <= 0 or columns <= 0:
         return []
-    return [[0 for j in range(rows)] for i in range(columns)]
+    return [[0 for j in range(columns)] for i in range(rows)]
 
 
 def create_big_zero_matrix(rows, columns):
