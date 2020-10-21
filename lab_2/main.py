@@ -80,8 +80,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :return: a length of the longest common subsequence
     """
 
-    check_type = (not isinstance(first_sentence_tokens, tuple) or
-                  not isinstance(second_sentence_tokens, tuple) or
+    check_type = (not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or
                   not all(isinstance(i, str) for i in first_sentence_tokens) or
                   not all(isinstance(i, str) for i in second_sentence_tokens))
 
