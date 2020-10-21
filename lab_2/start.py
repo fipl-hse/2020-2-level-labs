@@ -43,4 +43,10 @@ if __name__ == '__main__':
 
     RESULT = report.split("\n")
 
-    assert RESULT, 'LCS not working'
+    assert RESULT == ['- i have a | parrot |', '+ i have a | tiger |', '', 'lcs = 3, plagiarism = 75.0%', '',
+                      '- | her | name is | manya |', '+ | his | name is | vanya |', '', 'lcs = 2, plagiarism = 50.0%',
+                      '', '- | she | has green red and | yellow | feathers',
+                      '+ | he | has green red and | brown | feathers', '',
+                      'lcs = 5, plagiarism = 71.42857142857143%', '', '- i love | her | very much',
+                      '+ i love | him | very much', '', 'lcs = 4, plagiarism = 80.0%', '',
+                      'Text average plagiarism (words): 69.10714285714286%'], 'LCS not working'
