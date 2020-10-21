@@ -13,4 +13,4 @@ def tokenize(text: str) -> tuple:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    return re.findall('\w+', text.lower())
+    return tuple(re.findall('\w+', text.lower()))
