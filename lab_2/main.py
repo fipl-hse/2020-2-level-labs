@@ -244,23 +244,22 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         original_text_tokens += (()) * (len(suspicious_text_tokens) - len(original_text_tokens))
     if len(original_text_tokens) > len(suspicious_text_tokens):
         original_text_tokens = original_text_tokens[:len(suspicious_text_tokens)]
-
-    text_plagiarism = accumulated_diff_stats['text_plagiarism'] * 100
     report = ''
     for element in range(len(suspicious_text_tokens)):
-        difference = accumulated_diff_stats['difference_indexes'][element]
         suspicious = list(suspicious_text_tokens[element])
         original = list(original_text_tokens[element])
+        difference = accumulated_diff_stats['difference_indexes'][element]
         counter = 0
         for index in difference[0]:
             suspicious.insert(index + counter, '|')
             original.insert(index + counter, '|')
             counter += 1
-        suspicious = ''.join(suspicious)
-        original = ''.join(original)
+        suspicious = ' '.join(suspicious)
+        original = ' '.join(original)
         lcs_length = accumulated_diff_stats['sentence_lcs_length'][element]
         plagiat = float(accumulated_diff_stats['sentence_plagiarism'][element] * 100)
         report += f'- {original}\n+ {suspicious}\n\nlcs = {lcs_length}, plagiarism = {plagiat}%\n\n'
+    text_plagiarism = accumulated_diff_stats['text_plagiarism'] * 100
     report += f'Text average plagiarism (words): {text_plagiarism}%'
     return report
 
