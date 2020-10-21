@@ -2,6 +2,10 @@
 Longest common subsequence problem
 """
 
+text = """
+I have a cat.\nHis name is Bruno.\n
+He is white and beautiful.\n
+    """
 
 def tokenize_by_lines(text: str) -> tuple:
     """
@@ -15,16 +19,22 @@ def tokenize_by_lines(text: str) -> tuple:
     from tokenizer import tokenize
 
     if isinstance(text, str):
-        new_textt = []
+
+        text = text.strip()
         new_text = text.split('\n')
-        print(new_text)
-        for i in new_text:
+        without_empty_str = []
+
+        for s in new_text:
+            if s != '':
+                without_empty_str.append(s)
+        splited_text = []
+        for i in without_empty_str:
             token = tokenize(i)
-            new_textt.append(tuple(token))
-        new_tup = tuple(new_textt)
-        return new_tup
+            splited_text.append(tuple(token))
+        return tuple(splited_text)
 
     return ()
+
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
