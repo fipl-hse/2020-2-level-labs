@@ -44,7 +44,13 @@ def create_zero_matrix(rows: int, columns: int) -> list:
         return []
     if rows < 0 or columns < 0:
         return []
-    return [[0 for j in range(rows + 1)] for i in range(columns + 1)]
+    return [[0 for j in range(rows)] for i in range(columns)]
+
+
+def create_big_zero_matrix(rows, columns):
+
+    return create_zero_matrix(rows + 1, columns + 1)
+
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
     """
@@ -62,13 +68,13 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         if not isinstance(token, str) and not isinstance(token, int):
             return []
 
-    LCS = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
+    LCS = create_big_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
     for i in range(len(first_sentence_tokens)):
         for j in range(len(second_sentence_tokens)):
             if first_sentence_tokens[i] == second_sentence_tokens[j]:
-                LCS[i + 1][j + 1] = LCS[i][j] + 1  # ?
+                LCS[i + 1][j + 1] = LCS[i][j] + 1
             else:
-                LCS[i + 1][j + 1] = max(LCS[i][j + 1], LCS[i + 1][j])  # ?
+                LCS[i + 1][j + 1] = max(LCS[i][j + 1], LCS[i + 1][j])  
     return LCS
 
 
