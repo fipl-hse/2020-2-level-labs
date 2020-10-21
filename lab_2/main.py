@@ -345,7 +345,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         sent_lcs_length = accumulated_diff_stats['sentence_lcs_length'][sent_ind]
         sent_plag = float(accumulated_diff_stats['sentence_plagiarism'][sent_ind] * 100)
 
-        result_stat += f"- {orig_sentence}\n+ {susp_sentence}\n\nlcs = {sent_lcs_length}, plagiarism = {sent_plag}%\n"
+        result_stat += f"- {orig_sentence}\n+ {susp_sentence}\n\nlcs = {sent_lcs_length}, plagiarism = {sent_plag}%\n\n"
 
     text_plagiarism = accumulated_diff_stats['text_plagiarism'] * 100
 
