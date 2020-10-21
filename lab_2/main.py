@@ -5,6 +5,19 @@ Longest common subsequence problem
 from tokenizer import tokenize
 
 
+def find_diff_indexes(indexes_diff_words):
+    changes_indexes = []
+    for index, diff_word_index in enumerate(indexes_diff_words):
+        changes_indexes.append(diff_word_index)
+        if index and (diff_word_index - indexes_diff_words[index - 1] == 1):
+            del changes_indexes[changes_indexes.index(diff_word_index)]
+        if (diff_word_index != indexes_diff_words[-1]) and indexes_diff_words[index + 1] - diff_word_index == 1:
+            continue
+        changes_indexes.append(diff_word_index + 1)
+
+    return changes_indexes
+
+
 def tokenize_by_lines(text: str) -> tuple:
     """
     Splits a text into sentences, sentences – into tokens,
@@ -69,20 +82,20 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     rows_first_sent = len(first_sentence_tokens)
     columns_second_sent = len(second_sentence_tokens)
 
-    lcs_matrix = create_zero_matrix(rows_first_sent + 1, columns_second_sent + 1)
+    lcs_matrix = create_zero_matrix(rows_first_sent, columns_second_sent)
 
-    for first_sent_word in range(1, rows_first_sent + 1):
-        for second_sent_word in range(1, columns_second_sent + 1):
-            if first_sentence_tokens[first_sent_word - 1] == second_sentence_tokens[second_sent_word - 1]:
-                lcs_matrix[first_sent_word][second_sent_word] = lcs_matrix[first_sent_word - 1][second_sent_word - 1] \
-                                                                + 1
+    for ind, first_sent_word in enumerate(first_sentence_tokens):
+        for i, second_sent_word in enumerate(second_sentence_tokens):
+            if first_sent_word == second_sent_word:
+                if not ind or not i:
+                    lcs_matrix[ind][i] = 1
+                lcs_matrix[ind][i] = lcs_matrix[ind - 1][i - 1] + 1
             else:
-                lcs_matrix[first_sent_word][second_sent_word] = max(lcs_matrix[first_sent_word - 1][second_sent_word],
-                                                                    lcs_matrix[first_sent_word][second_sent_word - 1])
-
-    del lcs_matrix[0]
-    for row in lcs_matrix:
-        del row[0]
+                if not i:
+                    lcs_matrix[ind][i] = lcs_matrix[ind - 1][i]
+                elif not ind and not i:
+                    lcs_matrix[ind][i] = 1
+                lcs_matrix[ind][i] = max(lcs_matrix[ind - 1][i], lcs_matrix[ind][i - 1])
 
     return lcs_matrix
 
@@ -239,18 +252,6 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
                              if word not in lcs]
     indexes_diff_suspicious = [suspicious_sentence_tokens.index(word) for word in suspicious_sentence_tokens
                                if word not in lcs]
-
-    def find_diff_indexes(indexes_diff_words):
-        changes_indexes = []
-        for index, diff_word_index in enumerate(indexes_diff_words):
-            changes_indexes.append(diff_word_index)
-            if (index != 0) and (diff_word_index - indexes_diff_words[index - 1] == 1):
-                del changes_indexes[changes_indexes.index(diff_word_index)]
-            if (diff_word_index != indexes_diff_words[-1]) and indexes_diff_words[index + 1] - diff_word_index == 1:
-                continue
-            changes_indexes.append(diff_word_index + 1)
-
-        return changes_indexes
 
     changes_indexes_both_sent = (tuple(find_diff_indexes(indexes_diff_original)),
                                  tuple(find_diff_indexes(indexes_diff_suspicious)))
