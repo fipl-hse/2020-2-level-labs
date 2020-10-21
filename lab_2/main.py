@@ -239,7 +239,26 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :param lcs: a longest common subsequence
     :return: a tuple with tuples of indexes
     """
-    pass
+    og_sent = []
+    sus_sent = []
+    i = 0
+    j = 0
+    while i < len(original_sentence_tokens):
+        if original_sentence_tokens[i] != lcs[j]:
+            og_sent.append(i)
+        else:
+            j += 1
+        i += 1
+
+    i = 0
+    j = 0
+
+    while i < len(second_sentence_tokens):
+        if second_sentence_tokens[i] != lcs[j]:
+            og_sent.append(i)
+        else:
+            j += 1
+        i += 1
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
