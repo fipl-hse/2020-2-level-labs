@@ -229,17 +229,13 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     orig_sent_not_tuple = not isinstance(original_sentence_tokens, tuple)
     sus_sent_not_tuple = not isinstance(suspicious_sentence_tokens, tuple)
     lcs_not_tuple = not isinstance(lcs, tuple)
+
     if orig_sent_not_tuple or sus_sent_not_tuple or lcs_not_tuple:
         return ()
-    if not orig_sent_not_tuple:
-        if not all(isinstance(word, str) for word in original_sentence_tokens):
-            return ()
-    if not sus_sent_not_tuple:
-        if not all(isinstance(word, str) for word in suspicious_sentence_tokens):
-            return ()
-    if not lcs_not_tuple:
-        if not all(isinstance(word, str) for word in lcs):
-            return ()
+    for function_parameter in (original_sentence_tokens, suspicious_sentence_tokens, lcs):
+        if isinstance(function_parameter, tuple):
+            if not all(isinstance(word, str) for word in function_parameter):
+                return ()
 
     org_dif_wds_ind = [original_sentence_tokens.index(word) for word in original_sentence_tokens if word not in lcs]
     sus_dif_wds_ind = [suspicious_sentence_tokens.index(word) for word in suspicious_sentence_tokens if word not in lcs]
@@ -247,33 +243,20 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     changed_ind_list_orig = []
     changed_ind_list_sus = []
 
-    for ind, dif_wds_ind in enumerate(org_dif_wds_ind):
-        if ind != len(org_dif_wds_ind) - 1:
-            if dif_wds_ind + 1 != org_dif_wds_ind[ind + 1]:
-                changed_ind_list_orig.extend((dif_wds_ind, dif_wds_ind + 1))
-            if dif_wds_ind - 1 != org_dif_wds_ind[ind - 1] and dif_wds_ind + 1 == org_dif_wds_ind[ind + 1]:
-                changed_ind_list_orig.append(dif_wds_ind)
-            if dif_wds_ind - 1 == org_dif_wds_ind[ind - 1] and dif_wds_ind + 1 != org_dif_wds_ind[ind + 1]:
-                changed_ind_list_orig.append(dif_wds_ind + 1)
-        if ind == len(org_dif_wds_ind) - 1:
-            if dif_wds_ind - 1 != org_dif_wds_ind[ind - 1]:
-                changed_ind_list_orig.extend((dif_wds_ind, dif_wds_ind + 1))
-            elif dif_wds_ind - 1 == sus_dif_wds_ind[ind - 1]:
-                changed_ind_list_orig.append(dif_wds_ind + 1)
-
-    for ind, dif_wds_ind in enumerate(sus_dif_wds_ind):
-        if ind != len(sus_dif_wds_ind) - 1:
-            if dif_wds_ind + 1 != sus_dif_wds_ind[ind + 1]:
-                changed_ind_list_sus.extend((dif_wds_ind, dif_wds_ind + 1))
-            if dif_wds_ind - 1 != sus_dif_wds_ind[ind - 1] and dif_wds_ind + 1 == sus_dif_wds_ind[ind + 1]:
-                changed_ind_list_sus.append(dif_wds_ind)
-            if dif_wds_ind - 1 == sus_dif_wds_ind[ind - 1] and dif_wds_ind + 1 != sus_dif_wds_ind[ind + 1]:
-                changed_ind_list_sus.append(dif_wds_ind + 1)
-        if ind == len(sus_dif_wds_ind) - 1:
-            if dif_wds_ind - 1 != sus_dif_wds_ind[ind - 1]:
-                changed_ind_list_sus.extend((dif_wds_ind, dif_wds_ind + 1))
-            elif dif_wds_ind - 1 == sus_dif_wds_ind[ind - 1]:
-                changed_ind_list_sus.append(dif_wds_ind + 1)
+    for data in ([org_dif_wds_ind, changed_ind_list_orig], [sus_dif_wds_ind, changed_ind_list_sus]):
+        for ind, dif_wds_ind in enumerate(data[0]):
+            if ind != len(data[0]) - 1:
+                if dif_wds_ind + 1 != data[0][ind + 1]:
+                    data[1].extend((dif_wds_ind, dif_wds_ind + 1))
+                if dif_wds_ind - 1 != data[0][ind - 1] and dif_wds_ind + 1 == data[0][ind + 1]:
+                    data[1].append(dif_wds_ind)
+                if dif_wds_ind - 1 == data[0][ind - 1] and dif_wds_ind + 1 != data[0][ind + 1]:
+                    data[1].append(dif_wds_ind + 1)
+            if ind == len(data[0]) - 1:
+                if dif_wds_ind - 1 != data[0][ind - 1]:
+                    data[1].extend((dif_wds_ind, dif_wds_ind + 1))
+                elif dif_wds_ind - 1 == data[0][ind - 1]:
+                    data[1].append(dif_wds_ind + 1)
 
     if original_sentence_tokens == ():
         return tuple([(), tuple(changed_ind_list_sus)])
