@@ -187,7 +187,6 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     sus_text_not_tuple = not isinstance(suspicious_text_tokens, tuple)
     plagiarism_not_float = not isinstance(plagiarism_threshold, float)
 
-    # тут нужно в одно, исп enumerate
     for text_tokens in (original_text_tokens, suspicious_text_tokens):
         if isinstance(text_tokens, tuple):
             for _, token in enumerate(text_tokens):
@@ -209,9 +208,9 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     original_text_tokens = tuple(original_list)
 
     p_result = 0
-    for i in range(len(original_text_tokens)):
-        length = find_lcs_length(original_text_tokens[i], suspicious_text_tokens[i], plagiarism_threshold)
-        p_i = calculate_plagiarism_score(length, suspicious_text_tokens[i])
+    for ind, token in enumerate(original_text_tokens):
+        length = find_lcs_length(token, suspicious_text_tokens[ind], plagiarism_threshold)
+        p_i = calculate_plagiarism_score(length, suspicious_text_tokens[ind])
         p_result += p_i
     return p_result / len(suspicious_text_tokens)
 
