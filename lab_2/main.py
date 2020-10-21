@@ -24,6 +24,7 @@ def is_inputs_incorrect(first_sentence_tokens, second_sentence_tokens, plagiaris
 
     return False
 
+
 def tokenize_by_lines(text: str) -> tuple:
     """
     Splits a text into sentences, sentences – into tokens,
@@ -364,7 +365,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    return 0
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -373,4 +374,4 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    pass
+    return ()
