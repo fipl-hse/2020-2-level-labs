@@ -125,7 +125,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
                 lcs_list.append(token_1)
                 row, column = row - 1, column - 1
             else:
-                if row - 1 > column - 1:
+                if lcs_matrix[row - 1][column] > lcs_matrix[row][column - 1]:
                     row -= 1
                 else:
                     column -= 1
@@ -203,7 +203,37 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :param lcs: a longest common subsequence
     :return: a tuple with tuples of indexes
     """
-    pass
+    is_incorrect_first_sentence = (not isinstance(original_sentence_tokens, tuple) or
+                                   None in original_sentence_tokens)
+    is_incorrect_second_sentence = (not isinstance(suspicious_sentence_tokens, tuple) or
+                                    None in suspicious_sentence_tokens)
+    is_incorrect_lcs = (not isinstance(lcs, tuple) or
+                        None in lcs)
+
+    if is_incorrect_first_sentence or is_incorrect_second_sentence or is_incorrect_lcs:
+        return ()
+
+    tuple_of_sentences = (original_sentence_tokens,) + (suspicious_sentence_tokens,)
+    different_parts = []
+    for sentence in tuple_of_sentences:
+        needed_idxs = [idx for idx, token in enumerate(sentence) if token not in lcs]
+        diffs = []
+        for word_idx in needed_idxs:
+
+            if word_idx == 0:
+                diffs.append(word_idx) if 1 in needed_idxs else diffs.extend([word_idx, word_idx + 1])
+            elif word_idx == len(sentence) - 1:
+                diffs.append(len(sentence)) if word_idx - 1 in needed_idxs else diffs.extend([word_idx, len(sentence)])
+            else:
+                if word_idx - 1 not in needed_idxs:
+                    diffs.append(word_idx) if word_idx + 1 in needed_idxs else diffs.extend([word_idx, word_idx + 1])
+                else:
+                    if word_idx + 1 not in needed_idxs:
+                        diffs.append(word_idx + 1)
+
+        different_parts.append(diffs)
+    different_parts = tuple(tuple(idx) for idx in different_parts)
+    return different_parts
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
