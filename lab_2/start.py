@@ -50,5 +50,3 @@ if __name__ == '__main__':
                       '', '- | she | is very nice | smart | and funny ', '+ | he | is very nice | clever | and funny ',
                       '', 'lcs = 5, plagiarism = 71.42857142857143%', '',
                       'Text average plagiarism (words): 77.97619047619048%'], 'LCS not working'
-
-
