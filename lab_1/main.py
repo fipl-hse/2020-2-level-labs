@@ -159,15 +159,9 @@ def write_to_file(content: list, path_to_file='report.txt'):
     """
     Writes the result in a file
     """
-<<<<<<< HEAD
-    res=[" ".join(concordance) for concordance in content]
-    with open (path_to_file,"w",encoding="utf-8") as concordance_file:
-        concordance_file.write("\n".join(res))
-=======
     list_strings = [' '.join(concordance) for concordance in content]
     with open(path_to_file, 'w') as file:
         file.write('\n'.join(list_strings))
->>>>>>> 635fd2a481208fe741b92c0378a63a3331553acd
 
 
 def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
