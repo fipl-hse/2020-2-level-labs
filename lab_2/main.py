@@ -279,8 +279,3 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
     :return: a length of the longest common subsequence
     """
     pass
-
-
-text1 = (("my", 'dog', "is", "hotdog"), ("my", "cat", "is", "fat"))
-text2 = (("my", 'dog', "is", "colddog"), ("my", "cat", "is", "thin"))
-print(calculate_text_plagiarism_score(text1, text2))
