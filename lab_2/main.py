@@ -63,7 +63,6 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
                 lcs_matrix[index1][index2] = max(lcs_matrix[index1][index2 - 1], lcs_matrix[index1 - 1][index2])
     return lcs_matrix
 
-
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
     """
     Finds a length of the longest common subsequence using the Needleman–Wunsch algorithm
@@ -146,7 +145,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     checker1 = (not isinstance(plagiarism_threshold, float)
-                or not (0 < plagiarism_threshold < 1))
+                or not 0 < plagiarism_threshold < 1)
     checker2 = (not isinstance(original_text_tokens, tuple)
                 or not all(isinstance(element, tuple) for element in original_text_tokens)
                 or not all(isinstance(element, str) for tok in original_text_tokens for element in tok))
