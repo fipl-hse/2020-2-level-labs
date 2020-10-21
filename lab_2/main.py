@@ -204,7 +204,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     if len(original_text_tokens) < len(suspicious_text_tokens):
         original_list.append(()*(len(suspicious_text_tokens) - len(original_text_tokens)))
     elif len(suspicious_text_tokens) < len(original_text_tokens):
-        original_list = original_list[:len(suspicious_text_tokens)]
+       original_list = original_list[:len(suspicious_text_tokens)]
     original_text_tokens = tuple(original_list)
 
     p_result = 0
@@ -303,12 +303,6 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
         ind += 1
     return statistics
 
-    # statistics = {'text_plagiarism': text_plagiarism,
-    #               'sentence_plagiarism': sentence_plagiarism,
-    #               'sentence_lcs_length': sentence_lcs_length,
-    #               'difference_indexes': difference_indexes}
-    # return statistics
-    #убрать две переменные
 
 def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tuple, accumulated_diff_stats: dict) -> str:
     """
@@ -334,15 +328,11 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
             if index in different_indexes[0]:
                 report += "| "
             report += "{} ".format(word)
-        # if len(original_text_tokens[ind]) in different_indexes[0]:
-        #     report += "|"
         report += "\n+ "
         for index, word in enumerate(suspicious_text_tokens[ind]):
             if index in different_indexes[1]:
                 report += "| "
             report += "{} ".format(word)
-        # if len(suspicious_text_tokens[ind]) in different_indexes[1]:
-        #     report += "|"
         report += "\n\n"
         lcs_length = report_data['sentence_lcs_length'][ind]
         plagiarism = report_data['sentence_plagiarism'][ind] * 100
@@ -351,7 +341,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     text_plagiarism = report_data['text_plagiarism'] * 100
     report += "Text average plagiarism (words): {}%".format(text_plagiarism)
     return report
-#C:/Users/appol/2020-2-level-labs/
+
 
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
                               plagiarism_threshold: float) -> int:
