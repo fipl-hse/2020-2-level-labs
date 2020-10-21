@@ -42,6 +42,8 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     """
     if not isinstance(rows,int) or not isinstance(columns,int):
         return []
+    if type(rows) == "<class 'bool'>" or type(columns) == "<class 'bool'>":
+        return [] 
     if rows <= 0 or columns <= 0:
         return []
     return [[0 for j in range(columns)] for i in range(rows)]
