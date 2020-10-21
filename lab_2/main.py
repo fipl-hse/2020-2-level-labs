@@ -306,7 +306,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     """
     res_dict = {}
 
-    text_plagiarism = calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3)
+    text_plagiarism = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens, plagiarism_threshold=0.3)
     res_dict["text_plagiarism"] = text_plagiarism
     sentence_plagiarism = []
     for lines in zip(original_text_tokens, suspicious_text_tokens):
