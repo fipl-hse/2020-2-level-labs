@@ -44,4 +44,12 @@ if __name__ == '__main__':
     print(f'Plagiarism report:\n{plagiarism_report}')
 
     RESULT = plagiarism_report.split("\n")
-    assert RESULT, 'LCS not working'
+    assert RESULT == ['- the weather is | sunny', '+ the weather is | bad', '',
+                      'lcs = 3', 'plagiarism = 75.0%','', '- i am going to meet my | friend liza',
+                      '+ i am going to meet my | brother nikita', '', 'lcs = 6', 'plagiarism = 75.0%', '',
+                      '- | she | is very nice | smart | and funny',
+                      '+ | he | is very nice | clever | and funny', '',
+                      'lcs = 5', 'plagiarism = 71.42857142857143%', '',
+                      'Text average plagiarism (words): 73.80952380952381%'], \
+        'LCS not working'
+
