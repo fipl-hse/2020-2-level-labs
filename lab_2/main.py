@@ -104,23 +104,20 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
+    check_type = (not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple)
+                  or not isinstance(lcs_matrix, list))
+    check_if_empty = not first_sentence_tokens or not second_sentence_tokens or not lcs_matrix
+
+    if check_type or check_if_empty:
         return ()
-    if not isinstance(lcs_matrix, list) or None in lcs_matrix or \
-            (isinstance(lcs_matrix, list) and None in lcs_matrix):
-        return ()
-    if isinstance(lcs_matrix, list) and len(lcs_matrix) > 0:
-        if isinstance(lcs_matrix[0], list) and None in lcs_matrix[0]:
-            return ()
-    if not isinstance(lcs_matrix, list) or lcs_matrix == [] or len(first_sentence_tokens) != len(lcs_matrix) \
-            or len(second_sentence_tokens) != len(lcs_matrix[0]) \
-            or (lcs_matrix[0][0] != 0 and lcs_matrix[0][0] != 1):
+    if (len(lcs_matrix) != len(first_sentence_tokens)) or (len(lcs_matrix[0]) != len(second_sentence_tokens)) or \
+            (lcs_matrix[0][0] > 1):
         return ()
 
     lcs = []
 
-    for ind_r, row in enumerate(lcs_matrix):
-        for ind_col, column in enumerate(row):
+    for ind_r, row in enumerate(reversed(lcs_matrix)):
+        for ind_col, column in enumerate(reversed(row)):
             if not row or not column:
                 return ()
             if first_sentence_tokens[ind_r] == second_sentence_tokens[ind_col]:
