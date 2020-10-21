@@ -103,7 +103,42 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    pass
+    if (
+            not isinstance(first_sentence_tokens, tuple) \
+            or not isinstance(second_sentence_tokens, tuple) \
+            or not isinstance(lcs_matrix, list) \
+            or not first_sentence_tokens or not second_sentence_tokens \
+            or not len(lcs_matrix) == len(first_sentence_tokens) \
+            or not sum(sum(element) for element in lcs_matrix) \
+            or not lcs_matrix[0][0] in {0, 1}
+    ):
+        return tuple()
+
+    first, second = first_sentence_tokens, second_sentence_tokens
+
+    if len(first) > len(second):
+        first, second = second, first
+
+    if not len(first) or not len(second):
+        return 0
+
+    first_index, second_index = len(first) - 1, len(second) - 1
+    lcs = []
+
+    while first_index >= 0 and second_index >= 0:
+        if first[first_index] == second[second_index]:
+            lcs.append(first[first_index])
+            first_index -= 1
+            second_index -= 1
+        elif lcs_matrix[first_index - 1][second_index] > lcs_matrix[first_index][second_index - 1]:
+            first_index -= 1
+        else:
+            second_index -= 1
+
+    if lcs_matrix[0][0]:
+        lcs.append(first[0])
+
+    return tuple(lcs[::-1])
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
@@ -114,7 +149,21 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    pass
+    if (
+            not isinstance(lcs_length, int) or isinstance(lcs_length, bool) \
+            or not isinstance(suspicious_sentence_tokens, tuple) \
+            or any(not isinstance(element, str) for element in suspicious_sentence_tokens) \
+            or suspicious_sentence_tokens in [[], {}]
+    ):
+        return -1.0
+
+    if not suspicious_sentence_tokens:
+        return 0.0
+
+    if not 0 <= lcs_length <= len(suspicious_sentence_tokens):
+        return -1.0
+
+    return lcs_length / len(suspicious_sentence_tokens)
 
 
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
