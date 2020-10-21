@@ -51,12 +51,10 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     """
     frst_sent_not_t = not isinstance(first_sentence_tokens, tuple)
     scd_sent_not_t = not isinstance(second_sentence_tokens, tuple)
-    if not frst_sent_not_t:
-        if not all(isinstance(word, str) for word in first_sentence_tokens):
-            return []
-    if not scd_sent_not_t:
-        if not all(isinstance(word, str) for word in second_sentence_tokens):
-            return []
+    for function_parameter in (first_sentence_tokens, second_sentence_tokens):
+        if isinstance(function_parameter, tuple):
+            if not all(isinstance(word, str) for word in function_parameter):
+                return []
     if frst_sent_not_t or scd_sent_not_t:
         return []
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
@@ -192,7 +190,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     # тут нужно в одно, исп enumerate
     for text_tokens in (original_text_tokens, suspicious_text_tokens):
         if isinstance(text_tokens, tuple):
-            for ind, token in enumerate(text_tokens): # range(len(text_tokens)):
+            for _, token in enumerate(text_tokens):
                 if isinstance(token, tuple):
                     if not all(isinstance(word, str) for word in token):
                         return -1.0
