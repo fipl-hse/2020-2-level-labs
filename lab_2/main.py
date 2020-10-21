@@ -42,9 +42,9 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     """
     if not isinstance(rows,int) or not isinstance(columns,int):
         return []
-    if type(rows) == "<class 'bool'>" or type(columns) == "<class 'bool'>":
+    if str(type(rows)) == "<class 'bool'>" or str(type(columns)) == "<class 'bool'>":
         return []
-    if  rows == None or columns == None:
+    if rows == None or columns == None:
         return []
     if rows <= 0 or columns <= 0:
         return []
