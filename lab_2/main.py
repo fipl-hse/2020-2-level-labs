@@ -363,7 +363,7 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     vocabulary = make_vocabulary()
 
     indexes = ()
-    for line in open(path_to_file, 'r', encoding='utf-8').readlines():
+    for line in open(path_to_file, 'r', encoding='utf-8'):
         tokens = tokenize(line.lower())
         indexes += tuple(vocabulary[token] for token in tokens)
     return indexes
