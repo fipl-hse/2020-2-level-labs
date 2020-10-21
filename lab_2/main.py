@@ -335,12 +335,10 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
             report += f'+ {vertical_lines(suspicious_sentence_list, suspicious_sentence_inds)}\n'
         else:
             report += f"- {' '.join(original_text_tokens[i])}\n+ {' '.join(suspicious_text_tokens[i])}\n"
-        lcs = accumulated_diff_stats['sentence_lcs_length'][i]
-        plagiarism = accumulated_diff_stats['sentence_plagiarism'][i] * 100
-        report += f"\nlcs = {lcs}, plagiarism = {plagiarism}%\n\n"
+        report += f"\nlcs = {accumulated_diff_stats['sentence_lcs_length'][i]}, "
+        report += f"plagiarism = {accumulated_diff_stats['sentence_plagiarism'][i] * 100}%\n\n"
 
-    text_plagiarism = accumulated_diff_stats['text_plagiarism'] * 100
-    report += f'Text average plagiarism (words): {text_plagiarism}%'
+    report += f"Text average plagiarism (words): {accumulated_diff_stats['text_plagiarism'] * 100}%"
 
     return report
 
