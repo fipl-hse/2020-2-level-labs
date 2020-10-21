@@ -246,7 +246,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
                   'difference_indexes': []}
 
     diff_stats['text_plagiarism'] = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens,
-                                                      plagiarism_threshold)
+                                                                    plagiarism_threshold)
 
     for original_sentence, suspicious_sentence in zip(original_text_tokens, suspicious_text_tokens):
         lcs_length = find_lcs_length(original_sentence, suspicious_sentence, plagiarism_threshold)
