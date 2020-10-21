@@ -203,12 +203,9 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     """
     check_type = (not isinstance(original_sentence_tokens, tuple), not isinstance(suspicious_sentence_tokens, tuple),
                   not isinstance(lcs, tuple))
-    check_for_i = (not all(isinstance(i, str) for i in original_sentence_tokens) or
-                   not all(isinstance(i, str) for i in suspicious_sentence_tokens))
-    check_lcs = (not isinstance(lcs, tuple) or
-                 not all(isinstance(i, str) for i in lcs))
-
-    if check_type or check_for_i or check_lcs:
+    if all(check_type):
+        return ()
+    if not all(original_sentence_tokens) or not all(suspicious_sentence_tokens) or not all(lcs):
         return ()
 
     diff_sum = []
@@ -222,7 +219,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
                     diff.append(i)
                 if i == len(sentence) - 1 or sentence[i + 1] in lcs:
                     diff.append(i + 1)
-        diff.append(tuple(diff))
+        diff_sum.append(tuple(diff))
 
     return tuple(diff_sum)
 
