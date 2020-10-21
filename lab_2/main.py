@@ -44,6 +44,8 @@ def create_zero_matrix(rows: int, columns: int) -> list:
         return []
     if type(rows) == "<class 'bool'>" or type(columns) == "<class 'bool'>":
         return []
+    if  rows != None or columns != None:
+        return []
     if rows <= 0 or columns <= 0:
         return []
     return [[0 for j in range(columns)] for i in range(rows)]
@@ -81,7 +83,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
 
     for line in LCS:
         del line[0]
-        
+
     return LCS
 
 
