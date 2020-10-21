@@ -37,10 +37,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
                or isinstance(columns, bool))
     if checker or not rows > 0 or not columns > 0:
         return []
-    zero_matrix = []
-    for element in range(rows):
-        zero_matrix += [[0 * element for element in range(columns)]]
-    return zero_matrix
+    return [[0] * columns for _ in range(rows)]
 
 
 
@@ -243,7 +240,8 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     if len(original_text_tokens) > len(suspicious_text_tokens):
         original_text_tokens = original_text_tokens[:len(suspicious_text_tokens)]
     report = ''
-    for element in range(len(suspicious_text_tokens)):
+    len_susp = len(suspicious_text_tokens)
+    for element in range(len_susp):
         suspicious = list(suspicious_text_tokens[element])
         original = list(original_text_tokens[element])
         difference = accumulated_diff_stats['difference_indexes'][element]
