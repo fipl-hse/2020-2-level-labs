@@ -341,18 +341,6 @@ def find_lcs_length_optimized(first_sentence_tokens: list,
     return x_curr_vector[-1]
 
 
-def make_vocabulary(vocabulary=dict(), index=0):
-    for file in ('lab_2/data.txt', 'lab_2/data_2.txt'):
-        for line in open(file, 'r', encoding='utf-8'):
-            tokens = tokenize(line.lower())
-            for key in tokens:
-                if key not in vocabulary:
-                    vocabulary[key] = index
-                    index = len(vocabulary)
-    return vocabulary
-
-
-
 @input_checker
 def tokenize_big_file(path_to_file: str) -> tuple:
     """
@@ -360,7 +348,9 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    vocabulary = make_vocabulary()
+    with open('lab_2/vocabulary.csv', 'r', encoding='utf-8') as infile:
+        reader = csv.reader(infile)
+        vocabulary = {rows[0]:rows[1] for rows in reader}
 
     indexes = ()
     for line in open(path_to_file, 'r', encoding='utf-8'):
