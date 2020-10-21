@@ -81,13 +81,12 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
                 if i_elem == j_elem:
                     if (j - 1) >= 0 or (i - 1) >= 0:
                         f[i][j] = f[i - 1][j - 1] + 1
-                    elif i == 0 and j == 0:
-                        f[i][j] = 1
                     else:
                         f[i][j] = 1
+
                 else:
                     f[i][j] = max(f[i][j - 1], f[i - 1][j])
-        print(f)
+
         return f
 
     return []
