@@ -12,7 +12,8 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    pass
+    if not isinstance(text, str):
+        return ()
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:

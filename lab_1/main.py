@@ -15,7 +15,7 @@ def tokenize(text: str) -> list:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    if not isinstance(text, str):
+    if not isinstance(text, str): # проверка, является ли входной текст строкой
         return []
     text_output = re.sub('[^a-z \n]', '', text.lower()).split()
     return text_output
@@ -45,6 +45,7 @@ def calculate_frequencies(tokens: list) -> dict:
     e.g. tokens = ['weather', 'sunny', 'man', 'happy']
     --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
     """
+<<<<<<< Updated upstream
     if not isinstance(tokens, list):
         return {}
     if len(tokens) > 0 and not isinstance(tokens[0], str):
@@ -52,6 +53,19 @@ def calculate_frequencies(tokens: list) -> dict:
     set_words = set(tokens.copy())
     dict_freq = {word: tokens.count(word) for word in set_words}
     return dict_freq
+=======
+    frequency_dict = {}
+    if isinstance(tokens, list) and len(tokens) > 0:
+        if isinstance(tokens[0], str):
+            for i in tokens:
+                if i in frequency_dict:
+                    frequency_dict[i] += 1 #если токена нет в словаре, добавляем его в словарь со значением 1
+                else:
+                    frequency_dict[i] = 1 #если токен уже есть в словаре, добавляем к его кол-ву 1
+    return frequency_dict
+
+
+>>>>>>> Stashed changes
 
 
 def get_top_n_words(freq_dict: dict, top_n: int) -> list:
@@ -64,10 +78,19 @@ def get_top_n_words(freq_dict: dict, top_n: int) -> list:
     top_n = 1
     --> ['happy']
     """
+<<<<<<< Updated upstream
     if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
         return []
     list_output = sorted(freq_dict, key=freq_dict.get, reverse=True)
     return list_output[:top_n]
+=======
+    top_words = []
+    if isinstance(freq_dict, dict) and top_n > 0:
+        top_words = sorted(freq_dict, key=freq_dict.get, reverse=True)# создаем осортированный список,где/n
+        # get возвращает значение запращиваемого ключа
+        top_words = top_words[:top_n] #возвращается список top_n наиболее часто встречаемых слов, отсортированный по популярности
+    return top_words
+>>>>>>> Stashed changes
 
 
 def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
@@ -87,6 +110,7 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     right_context_size = 3
     --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
     """
+<<<<<<< Updated upstream
     stop = False
     if not isinstance(tokens, list) or not isinstance(word, str) or len(word) == 0:
         return []
@@ -114,6 +138,31 @@ def get_concordance(tokens: list, word: str, left_context_size: int, right_conte
     else:
         list_output = [tokens[ind - left_context_size:ind + 1 + right_context_size] for ind in indexes]
     return list_output
+=======
+
+    if not isinstance(tokens, list) or not isinstance(word, str):
+        return []
+    if not isinstance(left_context_size, int) and not isinstance(right_context_size, int):
+        return []
+    if left_context_size < 1 and right_context_size < 1:
+        return []
+    if isinstance(left_context_size, bool) and isinstance(right_context_size, bool):
+        return []
+    concordance = []
+    count = 0
+    if left_context_size < 1 or not isinstance(left_context_size, int):
+        left_context_size = 0
+    if right_context_size < 1 or not isinstance(right_context_size, int):
+        right_context_size = 0
+    for token in tokens:
+        count += 1
+        if token == word:
+            if count - left_context_size - 1 >= 0:
+                concordance.append(tokens[count - left_context_size - 1:count + right_context_size])
+            else:
+                concordance.append(tokens[:count + right_context_size])
+    return concordance
+>>>>>>> Stashed changes
 
 
 def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
