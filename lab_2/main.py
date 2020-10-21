@@ -2,6 +2,7 @@
 Longest common subsequence problem
 """
 
+import csv
 from decorators import input_checker
 from tokenizer import tokenize
 
@@ -16,7 +17,7 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    text = text.lower().split('\n')
+    text = text.split('\n')
     sent = (tokenize(sent) for sent in text)
     return tuple(tokens for tokens in sent if tokens)
 
@@ -306,7 +307,18 @@ def create_diff_report(original_text_tokens: tuple,
     return report
 
 
-def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_tokens: list) -> int:
+def token_and_string_comparison(x_word, y, x_prev_vector):
+    x_curr_vector = x_prev_vector[:]
+    for i, y_word in enumerate(y, start=1):
+        if x_word == y_word:
+            x_curr_vector[i] = max(x_prev_vector[i], x_curr_vector[i - 1]) + 1
+        else:
+            x_curr_vector[i] = max(x_prev_vector[i], x_curr_vector[i - 1])
+    return x_curr_vector
+
+
+def find_lcs_length_optimized(first_sentence_tokens: list,
+                              second_sentence_tokens: list) -> int:
     """
     Finds a length of the longest common subsequence using the Hirschberg's algorithm
     At the same time, if the first and last tokens coincide,
@@ -315,14 +327,33 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
     :param second_sentence_tokens: a list of tokens
     :return: a length of the longest common subsequence
     """
+    if first_sentence_tokens == second_sentence_tokens:
+        return len(first_sentence_tokens)
 
-    'hello'
-    pass
+    zero_vector = [0 for _ in range(len(second_sentence_tokens) + 1)]
 
+    x_prev_vector = token_and_string_comparison(first_sentence_tokens[0],
+                                                second_sentence_tokens,
+                                                zero_vector)
+    for x_prev, x_curr in zip(first_sentence_tokens[:-1], first_sentence_tokens[1:]):
+        x_curr_vector = token_and_string_comparison(x_curr, y, x_prev_vector)
+        x_prev_vector = x_curr_vector
+    return x_curr_vector[-1]
+
+
+@input_checker
 def tokenize_big_file(path_to_file: str) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    pass
+    with open('vocabulary.csv', 'r', encoding='utf-8') as infile:
+        reader = csv.reader(infile)
+        vocabulary = {rows[0]:rows[1] for rows in reader}
+
+    indexes = ()
+    for line in open(path_to_file, 'r', encoding='utf-8').readlines():
+        tokens = tokenize(line.lower())
+        indexes += tuple(vocabulary[token] for token in tokens)
+    return indexes

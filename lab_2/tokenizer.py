@@ -2,7 +2,7 @@
 Tokenizer out of lab_1 for usage in lab_2
 """
 
-import string
+import re
 
 
 def tokenize(text: str) -> tuple:
@@ -13,5 +13,4 @@ def tokenize(text: str) -> tuple:
     e.g. text = 'The weather is sunny, the man is happy.'
     --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
     """
-    table = text.maketrans({word: None for word in string.punctuation})
-    return tuple(text.translate(table).split())
+    return re.findall('\w+', text.lower())
