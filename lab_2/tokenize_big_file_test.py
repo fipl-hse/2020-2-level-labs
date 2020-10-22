@@ -7,6 +7,7 @@ import timeit
 from memory_profiler import memory_usage
 from lab_2.main import tokenize_big_file
 
+
 class TokenizeBigFileTest(unittest.TestCase):
     """
     Checks for tokenize_big_file function
@@ -47,7 +48,7 @@ class TokenizeBigFileTest(unittest.TestCase):
         expected = 224.9296875 * 1.1
         actual_memory = memory_usage((tokenize_big_file, ('lab_2/data.txt',)),
                                      interval=2)
-        actual = sum(actual_memory)/len(actual_memory)
+        actual = sum(actual_memory) / len(actual_memory)
 
         print(f'Actual tokenize_big_file function memory consuming is: {actual}')
         print(f'Reference tokenize_big_file function memory consuming is: {expected}')
