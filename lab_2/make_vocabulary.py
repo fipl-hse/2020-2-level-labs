@@ -6,7 +6,7 @@ vocabulary = {'_i': 0}
 def make_vocabulary(path_to_file):
     with open(path_to_file, 'r', encoding='utf-8') as file:
         for line in file:
-            tokens = re.findall(r'\w+', line.lower())
+            tokens = re.sub('[^a-z \n]', '', line.lower()).split()
             for key in tokens:
                 if key not in vocabulary:
                     vocabulary[key] = vocabulary['_i']

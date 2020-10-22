@@ -341,6 +341,8 @@ def find_lcs_length_optimized(first_sentence_tokens: list,
         return lcs_length
     return 0
 
+with open('lab_2/vocabulary.pickle', 'rb') as file:
+        vocabulary = pickle.load(file)
 
 def tokenize_big_file(path_to_file: str) -> tuple:
     """
@@ -348,13 +350,11 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    with open('lab_2/vocabulary.pickle', 'rb') as file:
-        vocabulary = pickle.load(file)
 
     indexes = []
     with open(path_to_file, 'r', encoding='utf-8') as file:
         indexes.extend([vocabulary[token] 
             for token in (token 
                 for line in file
-                    for token in re.findall(r'\w+', line.lower()))])
+                    for token in re.sub('[^a-z \n]', '', line.lower()).split())])
     return tuple(indexes)
