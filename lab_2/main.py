@@ -155,7 +155,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple,
                                      susp_sent,
                                      plagiarism_threshold)
         score = calculate_plagiarism_score(lcs_length,
-                                           susp_sent])
+                                           susp_sent)
         if score >= 0:
             scores.append(score)
 
