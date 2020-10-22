@@ -2,6 +2,7 @@
 Longest common subsequence problem
 """
 from typing import Dict, Callable, List, Tuple
+import json
 from tokenizer import tokenize
 
 
@@ -386,20 +387,26 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
     :param path_to_file: a path
-    :return: a tuple with ids
+    :return: a tuple with vocab
     """
+    file = open(path_to_file, encoding='UTF-8')
     batch = 1000
     tokens = []
-    ids = {}
     num = 0
 
-    file = open(path_to_file, encoding='UTF-8')
+    try:
+        with open('vocab.json') as vocab:
+            vocab = json.load(vocab)
+    except FileNotFoundError:
+        vocab = {}
 
     for chunk in zip(*[iter(file)] * batch):
         for token in tokenize(''.join(chunk)):
-            if token not in ids:
-                ids[token] = num
+            if token not in vocab:
+                vocab[token] = num
                 num += 1
-            tokens.append(ids[token])
+            tokens.append(vocab[token])
+
+    json.dump(vocab, open('vocab.json', 'w'))
 
     return tuple(tokens)
