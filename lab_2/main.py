@@ -348,7 +348,7 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    with open('vocabulary.pickle', 'rb') as file:
+    with open('lab_2/vocabulary.pickle', 'rb') as file:
         vocabulary = pickle.load(file)
 
     indexes = []
