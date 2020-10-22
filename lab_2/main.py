@@ -342,7 +342,7 @@ def find_lcs_length_optimized(first_sentence_tokens: list,
         x_curr_vector = token_and_string_comparison(x_curr,
                                                     second_sentence_tokens,
                                                     x_prev_vector)
-        x_prev_vector = x_curr_vector
+        x_prev_vector = x_curr_vector[:]
 
     lcs_length = x_curr_vector[-1]
     if lcs_length / len(second_sentence_tokens) > plagiarism_threshold:
