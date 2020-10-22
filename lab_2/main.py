@@ -355,6 +355,6 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     with open(path_to_file, 'r', encoding='utf-8') as file:
         indexes.extend([vocabulary[token] 
             for token in (token 
-                for line in file 
-                    for token in re.findall(r'\w+', line.lower()))])
+                for token in re.findall(r'\w+', line.lower())
+                    for line in file)])
     return tuple(indexes)
