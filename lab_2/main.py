@@ -211,7 +211,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
 
     if len(orig) < len(susp):
         orig = list(original_text_tokens)
-        for i in range(len(susps) - len(orig)):
+        for i in range(len(susp) - len(orig)):
             orig.append(())
         orig = tuple(orig)
 
