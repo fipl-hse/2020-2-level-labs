@@ -54,7 +54,10 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     for row, el1 in enumerate(first_sentence_tokens):
         for col, el2 in enumerate(second_sentence_tokens):
             if el1 == el2:
-                lcs_matrix[row][col] = lcs_matrix[row - 1][col - 1] + 1
+                if (row - 1) >= 0 or (col - 1) >= 0:
+                    lcs_matrix[row][col] = lcs_matrix[row - 1][col - 1] + 1
+                elif row == 0 or col == 0 or (row - 1) < 0 or (col - 1) < 0:
+                    lcs_matrix[row][col] = 1
             else:
                 lcs_matrix[row][col] = max(lcs_matrix[row][col - 1], lcs_matrix[row - 1][col])
     return lcs_matrix

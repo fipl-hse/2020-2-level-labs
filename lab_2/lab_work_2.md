@@ -90,7 +90,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
 |**is**|   1|    1|    2|    2|
 |**sleeping**|    1|    1|    2|    2|
 
-
+~~_~~~~_~~
 **Дополнительные требования:**
 
 1. В данной функции ОБЯЗАТЕЛЬНО использовать функцию create_zero_matrix (см. Шаг 2).
