@@ -224,6 +224,28 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     return lcs_length / len(suspicious_sentence_tokens)
 
 
+def find_each_plag_score(original_text, suspicious_text):
+    each_plag_score = []
+
+    for ind_sent, sent_1 in enumerate(original_text):
+        sent_2 = suspicious_text[ind_sent]
+        lcs_length = find_lcs_length(sent_1, sent_2, 0)
+        each_plag_score.append(calculate_plagiarism_score(lcs_length, sent_2))
+
+    return each_plag_score
+
+
+def make_sentences_same_lengths(original_text, length_orig_text, length_susp_text):
+    if length_orig_text < length_susp_text:
+        for i in range(length_orig_text - length_susp_text):
+            original_text += ()
+
+    elif length_orig_text > length_susp_text:
+        original_text = original_text[:length_susp_text]
+
+    return original_text
+
+
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
                                     plagiarism_threshold=0.3) -> float:
     """
@@ -263,19 +285,10 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     length_orig_text = len(original_text_tokens)
     length_susp_text = len(suspicious_text_tokens)
 
-    if length_orig_text < length_susp_text:
-        for i in range(length_orig_text - length_susp_text):
-            original_text_tokens += ()
+    if length_orig_text != length_susp_text:
+        original_text_tokens = make_sentences_same_lengths(original_text_tokens, length_orig_text, length_susp_text)
 
-    elif length_orig_text > length_susp_text:
-        original_text_tokens = original_text_tokens[:length_susp_text]
-
-    each_plag_score = []
-
-    for ind_sent, sent_1 in enumerate(original_text_tokens):
-        sent_2 = suspicious_text_tokens[ind_sent]
-        lcs_length = find_lcs_length(sent_1, sent_2, 0)
-        each_plag_score.append(calculate_plagiarism_score(lcs_length, sent_2))
+    each_plag_score = find_each_plag_score(original_text_tokens, suspicious_text_tokens)
 
     p_result = sum(each_plag_score) / len(suspicious_text_tokens)
 
@@ -301,7 +314,9 @@ def fill_indexes(sentence: tuple, lcs: tuple) -> tuple:
                 indexes.append(ind)
                 ind += 1
                 len_diff += 1
+
         elif sentence[ind] == lcs[ind_lcs]:
+
             if len_diff:
                 indexes.append(start_seq + len_diff)
                 len_diff = 0
@@ -377,7 +392,36 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
      'sentence_lcs_length': list,
      'difference_indexes': list}
     """
-    pass
+
+    orig_text_length = len(original_text_tokens)
+    sus_text_length = len(suspicious_text_tokens)
+
+    if orig_text_length != sus_text_length:
+        original_text_tokens = make_sentences_same_lengths(original_text_tokens, orig_text_length, sus_text_length)
+
+    stats_dict = {}
+
+    stats_dict['text_plagiarism'] = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens,
+                                                                    plagiarism_threshold)
+
+    stats_dict['sentence_plagiarism'] = find_each_plag_score(original_text_tokens, suspicious_text_tokens)
+
+    stats_dict['sentence_lcs_length'] = [find_lcs_length(original_text_tokens[i], suspicious_text_tokens[i],
+                                                         plagiarism_threshold)
+                                         for i in range(sus_text_length)]
+
+    stats_dict['difference_indexes'] = []
+
+    for i in range(len(suspicious_text_tokens)):
+        sent_1 = original_text_tokens[i]
+        sent_2 = suspicious_text_tokens[i]
+
+        lcs_matrix = fill_lcs_matrix(sent_1, sent_2)
+        lcs = find_lcs(sent_1, sent_2, lcs_matrix)
+        differences = find_diff_in_sentence(sent_1, sent_2, lcs)
+        stats_dict['difference_indexes'].append(differences)
+
+    return stats_dict
 
 
 def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tuple, accumulated_diff_stats: dict) -> str:
