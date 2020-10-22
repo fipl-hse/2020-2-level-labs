@@ -51,7 +51,19 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    pass
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
+        return []
+    if not isinstance(first_sentence_tokens[0], str) or not isinstance(second_sentence_tokens[0], str):
+        return []
+    lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
+    for row_i, word_i in enumerate(first_sentence_tokens):
+        for column_j, word_j in enumerate(second_sentence_tokens):
+            if word_i == word_j:
+                lcs_matrix[row_i][column_j] = max(lcs_matrix[row_i - 1][column_j],\
+                                                  lcs_matrix[row_i][column_j - 1]) + 1
+            else:
+            lcs_matrix[row_i][column_j] = max(lcs_matrix[row_i - 1][column_j],lcs_matrix[row_i][column_j - 1])
+    return lcs_matrix
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
