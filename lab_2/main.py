@@ -1,7 +1,6 @@
 """
 Longest common subsequence problem
 """
-import itertools
 from typing import Dict, Callable, List, Tuple
 from tokenizer import tokenize
 
@@ -382,13 +381,12 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     file = open(path_to_file, encoding="utf-8")
     ids = []
 
-    def dict_check(word):
-        if word not in vocab:
-            vocab[word] = vocab['|i|']
-            vocab['|i|'] += 1
-        return vocab[word]
+    for chunk in file:
+        for token in tokenize(chunk):
+            if token not in vocab:
+                vocab[token] = vocab['|i|']
+                vocab['|i|'] += 1
 
-    for line in file:
-        ids.extend(dict_check(i) for i in tokenize(line))
+            ids.append(vocab[token])
 
     return tuple(ids)
