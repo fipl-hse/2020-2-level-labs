@@ -3,11 +3,11 @@ Longest common subsequence implementation starter
 """
 import main
 
-original_text_tokens = "I have a cat.\nIt's body is covered with bushy white fur."
-suspicious_text_tokens = "I have a cat.\nIt's body is covered with shiny black fur."
+ORIGINAL_TEXT = "I have a cat.\nIt's body is covered with bushy white fur."
+SUSPICIOUS_TEXT = "I have a cat.\nIt's body is covered with shiny black fur."
 
-first_sentence_tokens = main.tokenize_by_lines(original_text_tokens)
-second_sentence_tokens = main.tokenize_by_lines(suspicious_text_tokens)
+first_sentence_tokens = main.tokenize_by_lines(ORIGINAL_TEXT)
+second_sentence_tokens = main.tokenize_by_lines(SUSPICIOUS_TEXT)
 print(f'tokens:{first_sentence_tokens}, {second_sentence_tokens}')
 
 matrix = main.create_zero_matrix(len(first_sentence_tokens[1]),len(second_sentence_tokens[1]))
@@ -47,5 +47,3 @@ lcs = 4, plagiarism = 100.0%
 lcs = 6, plagiarism = 75.0%
 
 Text average plagiarism (words): 87.5%'''.split(), 'Lcs not working'
-
-

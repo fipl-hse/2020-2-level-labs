@@ -285,21 +285,18 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     result = ''
     for index, sentence in enumerate(suspicious_text_tokens):
         original_sentence = list(original_text_tokens[index])
-        suspicious_sentence = list(suspicious_text_tokens[index])
+        suspicious_sentence = list(sentence)
         sentence_lcs_length = accumulated_diff_stats['sentence_lcs_length'][index]
         sentence_plagiarism = accumulated_diff_stats['sentence_plagiarism'][index]
         if accumulated_diff_stats['difference_indexes'][index]:
-            counter = 0
             for j in range(len(accumulated_diff_stats['difference_indexes'][index][index])):
-                original_sentence.insert(accumulated_diff_stats['difference_indexes'][index][index][j] + counter, '|')
-                suspicious_sentence.insert(accumulated_diff_stats['difference_indexes'][index][index][j] + counter, '|')
-                counter += 1
+                original_sentence.insert(accumulated_diff_stats['difference_indexes'][index][index][j] + j, '|')
+                suspicious_sentence.insert(accumulated_diff_stats['difference_indexes'][index][index][j] + j, '|')
         result += f' - {" ".join(original_sentence)}\n + {" ".join(suspicious_sentence)}\n'
         result += f'lcs = {sentence_lcs_length}'
         result += f', plagiarism = {sentence_plagiarism * 100}%\n'
         text_plagiarism = accumulated_diff_stats['text_plagiarism']
     result += f'Text average plagiarism (words): {text_plagiarism * 100}%'
-    print(result)
     return result
 
 
@@ -315,7 +312,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    return 0
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -324,4 +321,4 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    pass
+    return ()
