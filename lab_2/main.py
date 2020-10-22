@@ -63,32 +63,33 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens,tuple):
+    if not isinstance(first_sentence_tokens, tuple):
         return []
-    if not first_sentence_tokens or not second_sentence_tokens:
+    if not isinstance(second_sentence_tokens,tuple):
         return []
+    if not first_sentence_tokens:
+        return []
+    if not second_sentence_tokens:
+         return []
     if str(type(first_sentence_tokens)) == "<class 'bool'>" or str(type(second_sentence_tokens)) == "<class 'bool'>":
         return []
     if first_sentence_tokens == None or second_sentence_tokens == None:
         return []
     for token in first_sentence_tokens:
-        if not isinstance(token, str):
+        if not isinstance(token, str) and not isinstance(token, int):
             return []
         if str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>":
             return []
         if token == None:
-            return []
-        if not token:
             return []
     for token in second_sentence_tokens:
-        if not isinstance(token, str):
+        if not isinstance(token, str) and not isinstance(token, int):
             return []
         if str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>":
             return []
         if token == None:
             return []
-        if not token:
-            return []
+
 
     LCS = create_big_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
     for i in range(len(first_sentence_tokens)):
