@@ -334,10 +334,9 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         return ''
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
-        original_text_tokens = list(original_text_tokens)
-        for i in range(len(suspicious_text_tokens) - len(original_text_tokens)):
-            original_text_tokens.append(())
-        original_text_tokens = tuple(original_text_tokens)
+        original_text_tokens += (()) * (len(suspicious_text_tokens) - len(original_text_tokens))
+    if len(original_text_tokens) > len(suspicious_text_tokens):
+        original_text_tokens = original_text_tokens[:len(suspicious_text_tokens)]
 
     def sentence_with_lines(sentences, index):
         for i in range(0, len(index), 2):
@@ -345,15 +344,15 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
                 sentences[index[i]] = f'| {sentences[index[i]]} |'
             else:
                 sentences[index[i]] = f'| {sentences[index[i]]}'
-                sentences[index[i + 1]] = f'{sentences[index[i + 1] - 1]} |'
+                sentences[index[i + 1] - 1] = f'{sentences[index[i + 1] - 1]} |'
         return ' '. join(sentences)
 
     report = ''
 
-    for i, (original_i, suspicious_i) in enumerate(
-            accumulated_diff_stats['difference_indexes']):
-        original = list(original_text_tokens)
-        suspicious = list(suspicious_text_tokens)
+    for i, (original_i, suspicious_i)\
+            in enumerate(accumulated_diff_stats['difference_indexes']):
+        original = list(original_text_tokens[i])
+        suspicious = list(suspicious_text_tokens[i])
         lcs_length = accumulated_diff_stats['sentence_lcs_length'][i]
         plagiarism = accumulated_diff_stats['sentence_plagiarism'][i] * 100
         report += f'- {sentence_with_lines(original, original_i)}\n'
