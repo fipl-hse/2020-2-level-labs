@@ -80,14 +80,16 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    token_check = (not isinstance(first_sentence_tokens, tuple)
-                   or not isinstance(second_sentence_tokens, tuple)
-                   or not all(isinstance(i, str) for i in first_sentence_tokens)
-                   or not all(isinstance(i, str) for i in second_sentence_tokens))
+    sent1_check = not ((isinstance(first_sentence_tokens, tuple) and first_sentence_tokens
+                     and first_sentence_tokens[0] is not None)
+                     or (isinstance(first_sentence_tokens, tuple) and not first_sentence_tokens))
+    sent2_check = not ((isinstance(second_sentence_tokens, tuple) and second_sentence_tokens
+                     and second_sentence_tokens[0] is not None)
+                     or (isinstance(second_sentence_tokens, tuple) and not second_sentence_tokens))
+    threshold_check = ((isinstance(plagiarism_threshold, int) or isinstance(plagiarism_threshold, float))
+                       and not isinstance(plagiarism_threshold, bool) and 0 < plagiarism_threshold < 1)
 
-    float_check = (not isinstance(plagiarism_threshold, float) and not 1 > plagiarism_threshold > 0)
-
-    if token_check or float_check:
+    if sent1_check or sent2_check or not threshold_check:
         return -1
 
     if len(first_sentence_tokens) > len(second_sentence_tokens):
@@ -116,40 +118,42 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :return: the longest common subsequence
     """
 
-    token_check = (not isinstance(first_sentence_tokens, tuple)
-                   or not isinstance(second_sentence_tokens, tuple)
-                   or not all(isinstance(i, str) for i in first_sentence_tokens)
-                   or not all(isinstance(i, str) for i in second_sentence_tokens))
+    sent1_check = (not isinstance(first_sentence_tokens, tuple) or not first_sentence_tokens
+                 or len(first_sentence_tokens) == 0 or first_sentence_tokens[0] is None
+                 or not all(isinstance(word, str) for word in first_sentence_tokens))
+    sent2_check = (not isinstance(second_sentence_tokens, tuple) or not second_sentence_tokens
+                 or len(second_sentence_tokens) == 0 or second_sentence_tokens[0] is None
+                 or not all(isinstance(word, str) for word in second_sentence_tokens))
 
-    list_check = (not isinstance(lcs_matrix, list)
-                  or not lcs_matrix
-                  or not all(isinstance(i, list) for i in lcs_matrix)
-                  or not all(isinstance(i, int) for sublist in lcs_matrix for i in sublist)
-                  or all(isinstance(i, bool) for sublist in lcs_matrix for i in sublist))
-
-    if token_check or list_check or not(lcs_matrix[0][0] == 0 or lcs_matrix[0][0] == 1):
+    if sent1_check or sent2_check:
         return ()
 
-    index_1 = len(first_sentence_tokens) - 1
-    index_2 = len(second_sentence_tokens) - 1
-    lcs = []
+    matrix_check = (not lcs_matrix or not isinstance(lcs_matrix, list)
+                    or not all(isinstance(i, list) for i in lcs_matrix)
+                    or not all(isinstance(i, int) for lists in lcs_matrix for i in lists)
+                    or not lcs_matrix[0][0] in (0, 1)
+                    or not len(lcs_matrix) == len(first_sentence_tokens)
+                    or not len(lcs_matrix[0]) == len(second_sentence_tokens))
 
-    while len(lcs) != lcs_matrix[-1][-1] and index_1 >= 0 and index_2 >= 0:
-        if index_1 > 0:
-            cell_1 = lcs_matrix[index_1 - 1][index_2]
-        if index_2 > 0:
-            cell_2 = lcs_matrix[index_1][index_2 - 1]
-        if index_1 != 0 and index_2 == 0:
-            index_1 = 0
-        if first_sentence_tokens[index_1] == second_sentence_tokens[index_2]:
-            lcs.append(first_sentence_tokens[index_1])
-            index_1 -= 1
-            index_2 -= 1
-        elif cell_1 > cell_2:
-            index_1 -= 1
+    if matrix_check:
+        return ()
+
+    lcs = []
+    index_row, index_col = len(first_sentence_tokens) - 1, len(second_sentence_tokens) - 1
+    while index_row >= 0 and index_col >= 0:
+        if first_sentence_tokens[index_row] == second_sentence_tokens[index_col]:
+            lcs.append(first_sentence_tokens[index_row])
+            index_row, index_col = index_row - 1, index_col - 1  # по диагонали, если слова с
+            # соответствующими индексами равны
+        elif lcs_matrix[index_row - 1][index_col] > lcs_matrix[index_row][index_col - 1]:
+            index_row -= 1  # наверх, если верхний больше левого
         else:
-            index_2 -= 1
-        lcs.reverse()
+            if index_row == 1 or index_col == 0:
+                index_row -= 1  # наверх в нулевую строчку
+            else:
+                index_col -= 1  # налево в остальных случаях
+
+    lcs.reverse()
     return tuple(lcs)
 
 
@@ -317,12 +321,12 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     orig = original_text_tokens
     susp = suspicious_text_tokens
 
-    orig_check = not (isinstance(orig, tuple)
-                          and all(isinstance(i, tuple) for i in orig)
-                          and all(isinstance(i, str) for tokens in orig for i in tokens))
-    susp_check = not (isinstance(susp, tuple)
-                            and all(isinstance(i, tuple) for i in susp)
-                            and all(isinstance(i, str) for tokens in susp for i in tokens))
+    orig_check = not (isinstance(orig, tuple) and
+                      all(isinstance(i, tuple) for i in orig) and
+                      all(isinstance(i, str) for tokens in orig for i in tokens))
+    susp_check = not (isinstance(susp, tuple) and
+                      all(isinstance(i, tuple) for i in susp) and
+                      all(isinstance(i, str) for tokens in susp for i in tokens))
 
     if orig_check or susp_check or not isinstance(accumulated_diff_stats, dict):
         return ''
