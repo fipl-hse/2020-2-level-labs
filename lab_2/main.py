@@ -126,9 +126,17 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :return: the longest common subsequence
     """
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple)\
-            or not isinstance(lcs_matrix, list)\
-            or not len(first_sentence_tokens) == len(lcs_matrix) != 0\
-            or lcs_matrix != fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens):
+            or not isinstance(lcs_matrix, list) or not first_sentence_tokens or not second_sentence_tokens or not lcs_matrix:
+        return ()
+
+    if first_sentence_tokens[0] == None or not all(isinstance(w, str) for w in first_sentence_tokens):
+        return ()
+
+    if second_sentence_tokens[0] == None or not all(isinstance(w, str) for w in second_sentence_tokens):
+        return ()
+
+    if not len(first_sentence_tokens) == len(lcs_matrix) != 0 \
+     or lcs_matrix != fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens):
         return ()
 
 
@@ -137,26 +145,9 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         return ()
 
 
-    for k in lcs_matrix:
-        if not k:
-            return ()
-        if k == None:
-            return ()
-        if not isinstance(k,list):
-            return ()
-        for n in k:
-            if not n:
-                return ()
-            if n == None:
-                return ()
-            if not isinstance(n,int):
-                return ()
-            if not str(type(n)) == "<class 'bool'>":
-                return ()
-            if n == None:
-                return ()
-            if n < 0:
-                return ()
+    if not lcs_matrix or not isinstance(lcs_matrix, list) or not all(isinstance(i, list) for i in lcs_matrix) \
+    or not all(isinstance(i, int) for lists in lcs_matrix for i in lists):
+        return ()
 
 
     i = len(lcs_matrix) - 1
@@ -174,7 +165,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
             else:
                 j -= 1
     return tuple(answer.__reversed__())
-
+print(find_lcs(('the', 'dog', 'sleeps'),('the', 'cat', 'is', 'sleeping'),fill_lcs_matrix(('the', 'dog', 'sleeps'), ('the', 'cat', 'is', 'sleeping'))))
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
     """
