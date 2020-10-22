@@ -267,12 +267,9 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
         diff_in_sentence_2.append(element[-1] + 1)
 
     # соединяем списки в один кортеж
-    diff_in_sentence = []
-    diff_in_sentence.append(tuple(diff_in_sentence_1))
-    diff_in_sentence.append(tuple(diff_in_sentence_2))
-    diff_in_sentence = tuple(diff_in_sentence)
-
-    return diff_in_sentence
+    diff_in_sentence_1 = tuple(diff_in_sentence_1)
+    diff_in_sentence_2 = tuple(diff_in_sentence_2)
+    return (diff_in_sentence_1, diff_in_sentence_2)
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
