@@ -13,7 +13,6 @@ if __name__ == '__main__':
     stop_words = main.read_from_file(os.path.join(current_dir, 'stop_words.txt')).split('\n')
 
     #  here goes your logic: calling methods from concordance.py
-<<<<<<< HEAD
     tokens = main.tokenize(data)
     print('tokens:', tokens[:10])
     print('\n-----------------------------\n')
@@ -45,7 +44,7 @@ if __name__ == '__main__':
     main.write_to_file('report.txt', sorted_concordance_cat)
 
     RESULT = sorted_concordance_cat
-=======
+    
     tokenized_data = main.tokenize(data)
     clean_data = main.remove_stop_words(tokenized_data, stop_words)
 
@@ -80,6 +79,5 @@ if __name__ == '__main__':
             print('\t', concordance)
 
     RESULT = sorted_concordance_left
->>>>>>> e6185a71ca2728a6d2595e436ac0666e48226dfc
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Concordance not working'
