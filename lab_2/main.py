@@ -1,6 +1,8 @@
 """
 Longest common subsequence problem
 """
+# import re
+import csv
 from copy import deepcopy
 from tokenizer import tokenize
 
@@ -366,14 +368,20 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    incorrect_inputs = are_inputs_incorrect(first_sentence_tokens, second_sentence_tokens, plagiarism_threshold)
-    if incorrect_inputs:
-        return -1
+    # incorrect_inputs = (not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple)
+    #                     or not isinstance(plagiarism_threshold, float))
+    # if incorrect_inputs:
+    #     return -1
 
-    current = [0] * (len(second_sentence_tokens) + 1)
-    for word_first in first_sentence_tokens:
+    if len(first_sentence_tokens) < len(second_sentence_tokens):
+        len_need = len(first_sentence_tokens)
+    else:
+        len_need = len(second_sentence_tokens)
+
+    current = [0] * (len_need + 1)
+    for word_first in first_sentence_tokens[:len_need]:
         previous = current[:]
-        for ind_second, word_second in enumerate(second_sentence_tokens):
+        for ind_second, word_second in enumerate(second_sentence_tokens[:len_need]):
             if word_first == word_second:
                 current[ind_second + 1] = previous[ind_second] + 1
             else:
@@ -392,6 +400,15 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    # with open(path_to_file, encoding="utf-8") as tokenizing_file:
-    #     text = tokenizing_file.read()
-    return ()
+    with open('numeric_words.csv', 'r', encoding="utf-8") as file_with_words:
+        reader = csv.reader(file_with_words)
+        words_dict = {row[0]: int(row[1]) for row in reader}
+
+    numeric_tokens = []
+    with open(path_to_file, encoding='utf-8') as big_file:
+        for line in big_file:
+            line_tokens = tokenize(line)
+            numeric_tokens.extend([words_dict[token] for token in line_tokens])
+
+    return tuple(numeric_tokens)
+
