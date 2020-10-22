@@ -361,7 +361,10 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     """
     indexes = []
     with open(path_to_file, 'r', encoding='utf-8') as file:
-        for line in file:
+        for i, line in enumerate(file):
+            if i >= 30000:
+                return tuple(indexes)
+
             #tokens = re.findall(r'\w+', line.lower())
             tokens = re.sub('[^a-z \n]', '', line.lower()).split()
             for key in tokens:
