@@ -5,7 +5,7 @@ Tests tokenize_big_file function
 import unittest
 import timeit
 from memory_profiler import memory_usage
-from lab_2.main import tokenize_big_file
+from lab_2.main import tokenize_big_file, tokenize_by_lines
 
 
 class TokenizeBigFileTest(unittest.TestCase):
@@ -51,6 +51,5 @@ class TokenizeBigFileTest(unittest.TestCase):
         actual = sum(actual_memory)/len(actual_memory)
 
         print(f'Actual tokenize_big_file function memory consuming is: {actual}')
-        print(f'Reference tokenize_big_file functon memory consuming is: {expected}')
+        print(f'Reference tokenize_big_file function memory consuming is: {expected}')
         self.assertGreater(expected, actual)
-
