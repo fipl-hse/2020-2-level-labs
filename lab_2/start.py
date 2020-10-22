@@ -14,13 +14,18 @@ lcs = main.find_lcs(('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'), l
 print(lcs)
 plagiarism_score = main.calculate_plagiarism_score(lcs_length, ('his', 'name', 'is', 'bruno'))
 print(plagiarism_score)
-text_plagiarism_score = main.calculate_text_plagiarism_score((('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno')),(('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'paw')), 0.3)
+text_plagiarism_score = main.calculate_text_plagiarism_score((('i', 'have', 'a', 'cat'),
+                                                              ('his', 'name', 'is', 'bruno')),
+                                                             (('i', 'have', 'a', 'cat'),
+                                                              ('his', 'name', 'is', 'paw')), 0.3)
 print(text_plagiarism_score)
 diff_in_sentence = main.find_diff_in_sentence(('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'), lcs)
 print(diff_in_sentence)
-diff_stats = main.accumulate_diff_stats((('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno')), (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'paw')))
+diff_stats = main.accumulate_diff_stats((('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno')),
+                                        (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'paw')))
 print(diff_stats)
-diff_report = main.create_diff_report((('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno')), (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'paw')), diff_stats)
+diff_report = main.create_diff_report((('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno')),
+                                      (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'paw')), diff_stats)
 print(diff_report)
 RESULT = diff_report
 assert RESULT, 'Program not working'
