@@ -56,7 +56,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     if not is_rows_columns_correct:
         return []
 
-    zero_matrix = [[0] * columns for i in range(rows)]
+    zero_matrix = [[0] * columns for _ in range(rows)]
 
     return zero_matrix
 
@@ -156,9 +156,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
             if first_sentence_tokens[index_r] == second_sentence_tokens[index_col]:
                 lcs.append(second_sentence_tokens[index_col])
 
-    lcs = tuple(lcs)
-
-    return lcs
+    return tuple(lcs)
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
