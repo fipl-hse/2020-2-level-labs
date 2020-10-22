@@ -368,7 +368,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
                     counter += 1
             susp_sentence = ' '.join(susp_sentence)
 
-        report += '- {}\n+ {}\nlcs = {}, plagiarism = {}%\n'.format(
+        report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(
             orig_sentence, susp_sentence, accumulated_diff_stats['sentence_lcs_length'][sent_idx],
             accumulated_diff_stats['sentence_plagiarism'][sent_idx] * 100)
     report += 'Text average plagiarism (words): {}%\n\n'.format(accumulated_diff_stats['text_plagiarism'] * 100)
@@ -386,7 +386,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    return 0
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -395,4 +395,4 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    pass
+    return ()
