@@ -88,9 +88,12 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         for index_col, second_sent_word in enumerate(second_sentence_tokens):
             if first_sent_word == second_sent_word:
                 lcs_matrix[index_row][index_col] = lcs_matrix[index_row - 1][index_col - 1] + 1
+                if not index_row or not index_col:
+                    lcs_matrix[index_row][index_col] = 1
             else:
-                lcs_matrix[index_row][index_col] = max(lcs_matrix[index_row - 1][index_col],
-                                                       lcs_matrix[index_row][index_col - 1])
+                lcs_matrix[index_row][index_col] = max(lcs_matrix[index_row][index_col - 1],
+                                                       lcs_matrix[index_row - 1][index_col])
+
     return lcs_matrix
 
 
@@ -116,7 +119,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
             return -1
 
     lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
-    print(lcs_matrix)
+
     lcs_length = 0
 
     if lcs_matrix:
