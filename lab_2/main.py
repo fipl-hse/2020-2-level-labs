@@ -273,19 +273,18 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
             compare = []
         else:
             compare = list(original_text_tokens[index])
-        sentence_list = list(sentence)
-        inds = accumulated_diff_stats['difference_indexes'][index]
-        if len(inds) > 0:
-            for ind in inds[1][::-1]:
+        sentence = list(sentence)
+        if len(accumulated_diff_stats['difference_indexes'][index]) > 0:
+            for ind in accumulated_diff_stats['difference_indexes'][index][1][::-1]:
                 compare.insert(ind, '|')
-            for ind in inds[0][::-1]:
-                sentence_list.insert(ind, '|')
+            for ind in accumulated_diff_stats['difference_indexes'][index][0][::-1]:
+                sentence.insert(ind, '|')
 
         original_string = '- '+' '.join([str(word) for word in compare])
         output_string += original_string + '\n'
         print(original_string)
 
-        suspicious_string = '+ '+' '.join([str(word) for word in sentence_list])
+        suspicious_string = '+ '+' '.join([str(word) for word in sentence])
         output_string += suspicious_string + '\n'
         print(suspicious_string)
 
@@ -300,7 +299,6 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     print(text_sum_string)
 
     return output_string
-
 
 
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
