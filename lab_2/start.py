@@ -3,8 +3,8 @@ Longest common subsequence implementation starter
 """
 import main
 if __name__ == '__main__':
-    ORIGINAL_TEXT = 'I have a dog. His name is Tom. I bought it yesterday'
-    SUSPICIOUS_TEXT = 'I have a cat. Her name is Mary. I found her yesterday'
+    ORIGINAL_TEXT = 'I have a dog.\nHis name is Tom.\nI bought it yesterday'
+    SUSPICIOUS_TEXT = 'I have a cat.\nHer name is Mary.\nI found her yesterday'
 
     tokenized_orig_text = main.tokenize_by_lines(ORIGINAL_TEXT)
     tokenized_susp_text = main.tokenize_by_lines(SUSPICIOUS_TEXT)
@@ -39,4 +39,3 @@ if __name__ == '__main__':
     print(f"The report for two texts:\n{report}")
 
     RESULT = report.split("\n")
-

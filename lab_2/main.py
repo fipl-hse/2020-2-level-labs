@@ -15,8 +15,8 @@ def tokenize_by_lines(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
     lines = []
-    sentences = text.split('\n')
-    for i in sentences:
+    text = text.split('\n')
+    for i in text:
         line = tuple(tokenize(i))
         if line:
             lines.append(line)
