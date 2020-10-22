@@ -1,7 +1,8 @@
 """
 Longest common subsequence implementation starter
 """
-import main
+
+from lab_2 import main
 
 if __name__ == '__main__':
     ORIGINAL_TEXT = 'The dog is walking.\nThe cat is sleeping.\nThe boy has a cat.\nThe girl has a dog.'
@@ -31,7 +32,5 @@ if __name__ == '__main__':
     score = main.calculate_plagiarism_score(length, SUSPICIOUS_SENTENCE)
     print('Plagiarism score: {}\n'.format(score))
 
-    RESULT = find.lcs.length(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE, 0.3)
+    RESULT = length
     assert RESULT, 'Lcs length not working'
-
-
