@@ -273,7 +273,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     for i, item in enumerate(suspicious_text_tokens):
         lines = []
         try:
-            for number, sentence in enumerate([original_text_tokens[i], suspicious_text_tokens[i]]):
+            for number, sentence in enumerate([original_text_tokens[i], item]):
                 dif = accumulated_diff_stats['difference_indexes'][i][number]
                 line = ''
                 for index, word in enumerate(sentence):
@@ -288,15 +288,13 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
 lcs = {length[i]}, plagiarism = {accumulated_diff_stats['sentence_plagiarism'][i] * 100}%'''
         except IndexError:
-            to_print1 = f'''-
+            result.append(f'''-
 + {' '.join(list(suspicious_text_tokens[i]))}
 
-lcs = {length[i]}, plagiarism = {accumulated_diff_stats['sentence_plagiarism'][i] * 100}%\n'''
-        print(to_print1)
-        result.append(to_print1)
-    to_print2 = f'Text average plagiarism (words): {accumulated_diff_stats["text_plagiarism"] * 100}%'
-    print(to_print2)
-    result.append(to_print2)
+lcs = {length[i]}, plagiarism = {accumulated_diff_stats['sentence_plagiarism'][i] * 100}%\n''')
+        print(result[-1])
+    result.append(f'Text average plagiarism (words): {accumulated_diff_stats["text_plagiarism"] * 100}%')
+    print(result[1])
     return '\n'.join(result)
 
 
