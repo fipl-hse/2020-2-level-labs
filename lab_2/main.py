@@ -351,10 +351,10 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :return: a tuple with ids
     """
 
-    indexes = []
+    indexes = ()
     with open(path_to_file, 'r', encoding='utf-8') as file:
-        indexes.extend([vocabulary[token] 
+        indexes += tuple(vocabulary[token] 
             for token in (token 
                 for line in file
-                    for token in re.sub('[^a-z \n]', '', line.lower()).split())])
-    return tuple(indexes)
+                    for token in re.sub('[^a-z \n]', '', line.lower()).split()))
+    return indexes
