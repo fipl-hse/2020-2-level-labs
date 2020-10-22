@@ -9,7 +9,3 @@ pylint==2.6.0
 six==1.15.0
 toml==0.10.1
 wrapt==1.12.1
-<<<<<<< HEAD
-memory-profiler==0.57.0
-=======
->>>>>>> ea073a32e1d8cedb1d4b634d9cc0983e1461b8ef
