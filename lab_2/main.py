@@ -223,6 +223,9 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
+    if str(type(lcs_length)) == "<class 'bool'>":
+        return -1
+
     if not isinstance(lcs_length, int):
         return -1
 
@@ -231,7 +234,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
 
     if not isinstance(suspicious_sentence_tokens, tuple):
         return -1
-        
+
     if suspicious_sentence_tokens is None:
         return -1
 
@@ -370,16 +373,3 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
     :return: a length of the longest common subsequence
     """
     pass
-
-first_sentence = ('the', 'cat', 'is', 'sleeping')
-second_sentence = ('the', 'dog', 'is', 'sleeping')
-lcs_matrix = [[1, 1, 1, 1],
-              [1, 1, 1, 1],
-              [1, 1, 2, 2],
-              [1, 1, 2, 3]]
-
-expected = ('the', 'is', 'sleeping')
-actual = find_lcs(first_sentence, second_sentence, lcs_matrix)
-actual_reversed = find_lcs(second_sentence, first_sentence, lcs_matrix)
-print(actual)
-print(actual_reversed)
