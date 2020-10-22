@@ -1,3 +1,6 @@
+"""
+Create a dictionary with words and corresponding numbers
+"""
 import re
 
 
@@ -19,8 +22,5 @@ words_numeric_second_text = make_words_numeric('data_2.txt')
 words_numeric_text.update(words_numeric_second_text)
 
 with open('numeric_words.csv', 'w', encoding='utf-8') as file_dict:
-    for key in words_numeric_text.keys():
+    for key in words_numeric_text:
         file_dict.write(f"{key},{words_numeric_text[key]}\n")
-
-
-

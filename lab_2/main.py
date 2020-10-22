@@ -411,4 +411,3 @@ def tokenize_big_file(path_to_file: str) -> tuple:
             numeric_tokens.extend([words_dict[token] for token in line_tokens])
 
     return tuple(numeric_tokens)
-
