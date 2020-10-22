@@ -31,7 +31,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    are_bools = isinstance(rows, bool) and isinstance(columns, bool)
+    are_bools = isinstance(rows, bool) or isinstance(columns, bool)
     are_not_ints = not (isinstance(rows, int) and isinstance(columns, int))
 
     if are_bools or are_not_ints or rows <= 0 or columns <= 0:
@@ -47,12 +47,15 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    are_not_tuples = not (isinstance(first_sentence_tokens, tuple) and isinstance(second_sentence_tokens, tuple))
-    are_empty_sent = not (first_sentence_tokens and second_sentence_tokens)
-    are_none_elements = (first_sentence_tokens and first_sentence_tokens[0] is None) or\
-                        (second_sentence_tokens and second_sentence_tokens[0] is None)
+    is_not_good_fst = not ((isinstance(first_sentence_tokens, tuple) and not first_sentence_tokens)
+                           or (isinstance(first_sentence_tokens, tuple) and first_sentence_tokens
+                               and first_sentence_tokens[0] is not None))
 
-    if are_not_tuples or are_empty_sent or are_none_elements:
+    is_not_good_sst = not ((isinstance(second_sentence_tokens, tuple) and not second_sentence_tokens)
+                           or (isinstance(second_sentence_tokens, tuple) and second_sentence_tokens
+                               and second_sentence_tokens[0] is not None))
+
+    if is_not_good_fst or is_not_good_sst:
         return []
 
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
