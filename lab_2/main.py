@@ -13,13 +13,15 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    output = []
     if not isinstance(text, str):
         return ()
+
+    output = []
     text_devided = text.split('\n')
     for sentence in text_devided:
         tokens = tuple(tokenize(sentence))
-        output.append(tokens)
+        if tokens:
+            output.append(tokens)
 
     return tuple(output)
 
@@ -71,6 +73,10 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     """
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
             not isinstance(plagiarism_threshold, float):
+        return -1
+    if None in first_sentence_tokens or None in second_sentence_tokens or \
+            plagiarism_threshold < 0 or plagiarism_threshold > 1:
+        return -1
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
@@ -91,7 +97,6 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    pass
 
 
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
