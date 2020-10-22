@@ -47,10 +47,10 @@ if __name__ == '__main__':
 
     RESULT = diff_report.split('\n')
 
-    assert RESULT == ['- i have a | dog |','+ i have a | cat |', '',
+    assert RESULT == ['- i have a | dog |', '+ i have a | cat |', '',
                       'lcs = 3, plagiarism = 75.0%', '',
-                      '- | his name is nemo |','+ | her name is anny |','',
+                      '- | his | name is | nemo |', '+ | her | name is | anny |', '',
                       'lcs = 2, plagiarism = 50.0%', '',
-                      '- i | found him | yesterday','+ i | met her | yesterday','',
+                      '- i | found him | yesterday', '+ i | met her | yesterday', '',
                       'lcs = 2, plagiarism = 50.0%', '',
-                      'Text average plagiarism (words): 58.333333333333336%'],'LCS not working'
+                      'Text average plagiarism (words): 58.333333333333336%'], 'LCS not working'
