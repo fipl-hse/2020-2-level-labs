@@ -1,7 +1,7 @@
 """
 Longest common subsequence problem
 """
-import re
+
 from tokenizer import tokenize
 
 
@@ -171,7 +171,8 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     return plagiarism_score
 
 
-def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
+def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
+                                    plagiarism_threshold = 0.3) -> float:
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
     The score is the sum of lcs values for each pair divided by the number of tokens in suspicious text
@@ -240,13 +241,25 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
         needed_idxs = [idx for idx, token in enumerate(sentence) if token not in lcs]
         diffs = []
         for word_idx in needed_idxs:
+
             if word_idx == 0:
-                diffs.append(word_idx) if 1 in needed_idxs else diffs.extend([word_idx, word_idx + 1])
+                if 1 in needed_idxs:
+                    diffs.append(word_idx)
+                else:
+                    diffs.extend([word_idx, word_idx + 1])
+
             elif word_idx == len(sentence) - 1:
-                diffs.append(len(sentence)) if word_idx - 1 in needed_idxs else diffs.extend([word_idx, len(sentence)])
+                if word_idx - 1 in needed_idxs:
+                    diffs.append(len(sentence))
+                else:
+                    diffs.extend([word_idx, len(sentence)])
+
             else:
                 if word_idx - 1 not in needed_idxs:
-                    diffs.append(word_idx) if word_idx + 1 in needed_idxs else diffs.extend([word_idx, word_idx + 1])
+                    if word_idx + 1 in needed_idxs:
+                        diffs.append(word_idx)
+                    else:
+                        diffs.extend([word_idx, word_idx + 1])
                 else:
                     if word_idx + 1 not in needed_idxs:
                         diffs.append(word_idx + 1)
@@ -278,7 +291,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
                  'difference_indexes': []
                  }
 
-    for idx in range(len(suspicious)):
+    for idx, token in enumerate(suspicious):
         statistics['sentence_lcs_length'].append(find_lcs_length(original[idx], suspicious[idx], plagiarism_threshold))
         statistics['sentence_plagiarism'].append(calculate_plagiarism_score(statistics['sentence_lcs_length'][idx],
                                                                             suspicious[idx]))
@@ -300,16 +313,18 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     suspicious = suspicious_text_tokens
     stat = accumulated_diff_stats
     report = ''
-    is_incorrect_input = (not isinstance(original, tuple) or
-                          not isinstance(suspicious, tuple) or
+    is_incorrect_input = (not isinstance(original_text_tokens, tuple) or
+                          not isinstance(suspicious_text_tokens, tuple) or
                           not isinstance(stat, dict))
 
     if is_incorrect_input:
         return ''
 
-    for idx in range(len(suspicious)):
-        original_sent_list = list(original[idx])
-        suspicious_sent_list = list(suspicious[idx])
+    num_of_sentences = len(suspicious_text_tokens)
+
+    for idx in range(num_of_sentences):
+        original_sent_list = list(original_text_tokens[idx])
+        suspicious_sent_list = list(suspicious_text_tokens[idx])
         difference_idxs = stat['difference_indexes'][idx]
 
         counter = 0
@@ -342,7 +357,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    return 0
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -351,4 +366,4 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    pass
+    return ()

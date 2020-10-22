@@ -2,14 +2,14 @@
 Longest common subsequence implementation starter
 """
 
-import os
 import main
 
 if __name__ == '__main__':
 
-    pair_of_sentences = 'The weather is sunny and good! //\n The man is happy and satisfied.'
-
-    sentence_1, sentence_2 = main.tokenize_by_lines(pair_of_sentences)
+    PAIR_OF_SENTENCES = 'The weather is sunny and good! //\n The man is happy and satisfied.'
+    res_of_tokenize = main.tokenize_by_lines(PAIR_OF_SENTENCES)
+    sentence_1 = res_of_tokenize[0]
+    sentence_2 = res_of_tokenize[1]
     print('\nFIRST SENTENCE: ', sentence_1, '\n\nSECOND SENTENCE: ', sentence_2)
 
     lcs_matrix = main.fill_lcs_matrix(sentence_1, sentence_2)
@@ -26,4 +26,3 @@ if __name__ == '__main__':
 
     RESULT = plagiarism_score
     assert RESULT == 0.5, 'Plagiarism score is not working'
-
