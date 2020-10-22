@@ -3,11 +3,11 @@ Longest common subsequence implementation starter
 """
 import main
 
-original_text = 'Her cats are big and nice.\nThey love eating Whiskas.'
-suspicious_text = 'His dogs are big and cute.\nThey love eating Pegigri!'
+ORIGINAL_TEXT = 'Her cats are big and nice.\nThey love eating Whiskas.'
+SUSPICIOUS_TEXT = 'His dogs are big and cute.\nThey love eating Pegigri!'
 
-orig_tokens = main.tokenize_by_lines(original_text)
-susp_tokens = main.tokenize_by_lines(suspicious_text)
+orig_tokens = main.tokenize_by_lines(ORIGINAL_TEXT)
+susp_tokens = main.tokenize_by_lines(SUSPICIOUS_TEXT)
 
 print(f"Original text tokens: {orig_tokens}\nSuspicious text tokens: {susp_tokens}\n")
 print('=================================\n')
