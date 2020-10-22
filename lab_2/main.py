@@ -150,7 +150,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     i = len(lcs_matrix) - 1
     j = len(lcs_matrix[0]) - 1
 
-    while i >= 0 and j >= 0:
+    while i >= 1 and j >= 1:
         if first_sentence_tokens[i - 1] == second_sentence_tokens[j - 1]:
             answer.append(first_sentence_tokens[i - 1])
             i -= 1
@@ -359,5 +359,15 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
     """
     pass
 
-print(find_lcs(('the', 'dog', 'sleeps'), ('the', 'cat', 'is', 'sleeping'),
-               fill_lcs_matrix(('the', 'dog', 'sleeps'), ('the', 'cat', 'is', 'sleeping'))))
+first_sentence = ('the', 'cat', 'is', 'sleeping')
+second_sentence = ('the', 'dog', 'is', 'sleeping')
+lcs_matrix = [[1, 1, 1, 1],
+              [1, 1, 1, 1],
+              [1, 1, 2, 2],
+              [1, 1, 2, 3]]
+
+expected = ('the', 'is', 'sleeping')
+actual = find_lcs(first_sentence, second_sentence, lcs_matrix)
+actual_reversed = find_lcs(second_sentence, first_sentence, lcs_matrix)
+print(actual)
+print(actual_reversed)
