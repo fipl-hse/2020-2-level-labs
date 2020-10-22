@@ -3,14 +3,12 @@ Longest common subsequence implementation starter
 """
 import main
 
-Original_text = '''I have a cat.
-It has eight limbs.
-Its name is Octocat.'''
-Suspicious_text = '''I have a lizard.
-He has a long tail.
-His name is Mister Lizard.'''
-orig_tokens = main.tokenize_by_lines(Original_text)
-susp_tokens = main.tokenize_by_lines(Suspicious_text)
+ORIGINAL_TEXT = '''The dog is barking.
+It has black nose and big teeth.'''
+SUSPICIOUS_TEXT = '''The big dog is sleeping.
+He has black nose and lovely paws.'''
+orig_tokens = main.tokenize_by_lines(ORIGINAL_TEXT)
+susp_tokens = main.tokenize_by_lines(SUSPICIOUS_TEXT)
 
 print("Here is tokenized original text:", orig_tokens)
 print("Here is tokenized suspicious text:", susp_tokens)
