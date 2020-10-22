@@ -1,6 +1,7 @@
 """
 Longest common subsequence problem
 """
+import os
 from typing import Dict, Callable, List, Tuple
 import json
 from tokenizer import tokenize
@@ -352,31 +353,18 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    checks: Dict[Callable[[], bool], int] = {
-        lambda: isinstance(first_sentence_tokens, tuple): -1,
-        lambda: isinstance(second_sentence_tokens, tuple): -1,
-        lambda: isinstance(plagiarism_threshold, float): -1,
-        lambda: 0 <= plagiarism_threshold <= 1: -1,
-        lambda: first_sentence_tokens: 0,
-        lambda: second_sentence_tokens: 0,
-    }
-
-    for check, value in checks.items():
-        if not check():
-            return value
-
     s_1, s_2 = first_sentence_tokens, second_sentence_tokens
     max_len = min(len(s_1), len(s_2))
 
-    i = [0] * max_len
+    i = [0] * (max_len + 1)
     for w_1 in s_1[:max_len]:
         prev_i = i[:]
         for j, w_2 in enumerate(s_2[:max_len]):
 
             if w_1 == w_2:
-                i[j] = prev_i[j - 1] + 1
+                i[j + 1] = prev_i[j] + 1
             else:
-                i[j] = max((i[j - 1], prev_i[j]))
+                i[j + 1] = max((i[j], prev_i[j + 1]))
 
     lcs_length: int = i[-1]
 
@@ -390,23 +378,22 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :return: a tuple with vocab
     """
     file = open(path_to_file, encoding='UTF-8')
-    batch = 1000
     tokens = []
-    num = 0
 
-    try:
-        with open('vocab.json') as vocab:
-            vocab = json.load(vocab)
-    except FileNotFoundError:
-        vocab = {}
+    if os.path.exists('vocab.json'):
+        vocab = json.load(open('vocab.json'))
+    else:
+        vocab = {'|i|': 0}
 
-    for chunk in zip(*[iter(file)] * batch):
-        for token in tokenize(''.join(chunk)):
+    for chunk in file:
+        for token in tokenize(chunk):
             if token not in vocab:
-                vocab[token] = num
-                num += 1
+                vocab[token] = vocab['|i|']
+                vocab['|i|'] += 1
+
             tokens.append(vocab[token])
 
-    json.dump(vocab, open('vocab.json', 'w'))
+    with open('vocab.json', 'w') as out:
+        json.dump(vocab, out)
 
     return tuple(tokens)
