@@ -18,7 +18,8 @@ def tokenize_by_lines(text: str) -> tuple:
     tokens = []
     sentences = text.split('.')
     for sentence in sentences:
-        tokenized = [item for item in tokenize(sentence)]
+        # tokenized = [item for item in tokenize(sentence)]
+        tokenized = list(tokenize(sentence))
         token = tuple(tokenized)
         if len(token) > 1:
             tokens.append(token)
@@ -53,22 +54,24 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    if isinstance(first_sentence_tokens, tuple) and isinstance(second_sentence_tokens, tuple):
-        if len(first_sentence_tokens) > 1 and len(second_sentence_tokens) > 1:
-            if isinstance(first_sentence_tokens[0], str) and isinstance(second_sentence_tokens[0], str):
-                rows = len(first_sentence_tokens)
-                columns = len(second_sentence_tokens)
-                matrix = create_zero_matrix(rows, columns)
-                if len(matrix) < 1:
-                    return []
-                for row in range(rows):
-                    for column in range(columns):
-                        common = first_sentence_tokens[row] == second_sentence_tokens[column]
-                        matrix[row][column] = max(matrix[row-1][column], matrix[row][column-1])
-                        if common:
-                            matrix[row][column] += 1
-                return matrix
-    return []
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
+        return []
+    if not len(first_sentence_tokens) > 1 or not len(second_sentence_tokens) > 1:
+        return []
+    if not isinstance(first_sentence_tokens[0], str) or not isinstance(second_sentence_tokens[0], str):
+        return []
+    rows = len(first_sentence_tokens)
+    columns = len(second_sentence_tokens)
+    matrix = create_zero_matrix(rows, columns)
+    if len(matrix) < 1:
+        return []
+    for row in range(rows):
+        for column in range(columns):
+            common = first_sentence_tokens[row] == second_sentence_tokens[column]
+            matrix[row][column] = max(matrix[row-1][column], matrix[row][column-1])
+            if common:
+                matrix[row][column] += 1
+    return matrix
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
@@ -104,17 +107,17 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     """
     row = -1
     column = -1
-    cs = []
+    c_s = []
     inputs = [(first_sentence_tokens, tuple, str, str),
               (second_sentence_tokens, tuple, str, str), (lcs_matrix, list, list, int)]
-    for input in inputs:
-        if not isinstance(input[0], input[1]):
+    for given_input in inputs:
+        if not isinstance(given_input[0], given_input[1]):
             return ()
-        if not len(input[0]) > 0:
+        if not len(given_input[0]) > 0:
             return ()
-        if not isinstance(input[0][0], input[2]):
+        if not isinstance(given_input[0][0], given_input[2]):
             return ()
-        if not isinstance(input[0][0][0], input[3]):
+        if not isinstance(given_input[0][0][0], given_input[3]):
             return ()
     if lcs_matrix[-1][-1] == 0 or not(lcs_matrix[0][0] == 1 or lcs_matrix[0][0] == 0):
         return ()
@@ -127,10 +130,10 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
             if lcs_matrix[row][column] == lcs_matrix[row - 1][column]:
                 row = row - 1
                 continue
-        cs.append(first_sentence_tokens[row])
+        c_s.append(first_sentence_tokens[row])
         row = row - 1
         column = column - 1
-    return tuple(cs[::-1])
+    return tuple(c_s[::-1])
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
@@ -167,7 +170,8 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple,
     if not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple):
         return -1
     if len(original_text_tokens) < len(suspicious_text_tokens):
-        original = [line for line in original_text_tokens]
+        # original = [line for line in original_text_tokens]
+        original = list(original_text_tokens)
         for _ in range(len(suspicious_text_tokens) - len(original_text_tokens)):
             original.append('')
         original_text_tokens = tuple(original)
