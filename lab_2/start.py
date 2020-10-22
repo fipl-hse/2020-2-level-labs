@@ -20,4 +20,4 @@ if __name__ == '__main__':
     RESULT = text_plagiarism_score
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == , 'Checking not working'
+    assert RESULT == 0.345679976433, 'Checking not working'
