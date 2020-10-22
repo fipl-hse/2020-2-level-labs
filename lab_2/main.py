@@ -61,24 +61,13 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
 
         matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
 
-        for i, x_i in enumerate(first_sentence_tokens):
-            for j, y_j in enumerate(second_sentence_tokens):
+        for i, word_i in enumerate(first_sentence_tokens):
+            for j, word_j in enumerate(second_sentence_tokens):
 
-                if x_i == y_j:
-                    if (i - 1) < 0 or (j - 1) < 0:
-                        matrix[i][j] = 1
-                    else:
-                        matrix[i][j] = matrix[i - 1][j - 1] + 1
-
+                if word_i == word_j:
+                    matrix[i][j] = max(matrix[i - 1][j], matrix[i][j - 1]) + 1
                 else:
-                    if (i - 1) < 0 and (i - 1) > 0:
-                        matrix[i][j] = matrix[i][j - 1]
-                    elif (i - 1) > 0 and (j - 1) < 0:
-                        matrix[i][j] = matrix[i - 1][j]
-                    elif (i - 1) < 0:
-                        matrix[i][j] = 0
-                    else:
-                        matrix[i][j] = max(matrix[i][j - 1], matrix[i - 1][j])
+                    matrix[i][j] = max(matrix[i - 1][j], matrix[i][j - 1])
 
         return matrix
     return []
