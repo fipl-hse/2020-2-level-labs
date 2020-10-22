@@ -7,25 +7,50 @@ ORIGINAL_TEXT = '''The dog is barking.
 It has black nose and big teeth.'''
 SUSPICIOUS_TEXT = '''The big dog is sleeping.
 He has black nose and lovely paws.'''
+
 orig_tokens = main.tokenize_by_lines(ORIGINAL_TEXT)
 susp_tokens = main.tokenize_by_lines(SUSPICIOUS_TEXT)
 
-print("Here is tokenized original text:", orig_tokens)
-print("Here is tokenized suspicious text:", susp_tokens)
+print(f"Here are original text tokens: {orig_tokens}\n Here are suspicious text tokens: {susp_tokens}\n")
 
-lcs_length = main.find_lcs_length(orig_tokens, susp_tokens, plagiarism_threshold=0.0)
-print("Here is the length of the longest common subsequence:", lcs_length)
+orig_first_sent = orig_tokens[1]
+susp_first_sent = susp_tokens[1]
 
-matrix = main.fill_lcs_matrix(orig_tokens, susp_tokens)
+zero_matrix_first = main.create_zero_matrix(len(orig_first_sent), len(susp_first_sent))
+lcs_matrix = main.fill_lcs_matrix(orig_first_sent, susp_first_sent)
+print(f" Here is LCS matrix: {lcs_matrix}\n")
 
-lcs = main.find_lcs(orig_tokens, susp_tokens, matrix)
-print("Here is the longest common subsequence:", lcs)
+lcs_len = main.find_lcs_length(orig_first_sent, susp_first_sent, 0.3)
+print(f" Here is LCS  {lcs_len}\n")
 
-plagiarism_score = main.calculate_plagiarism_score(lcs_length, susp_tokens)
-print("The plagiarism score:", plagiarism_score)
+lcs = main.find_lcs(orig_first_sent, susp_first_sent, lcs_matrix)
+print(f"LCS for first sentences: {lcs}\n")
 
-text_plagiarism_score = main.calculate_text_plagiarism_score(orig_tokens, susp_tokens, plagiarism_score)
-print("Text average percent of plagiarism:", text_plagiarism_score)
+plagiarism_score = main.calculate_plagiarism_score(lcs_length, susp_first_sent)
+print(f"THere is the plagiarism score: {plagiarism_score}\n")
 
-RESULT = text_plagiarism_score
-assert RESULT, 'Not working'
+plagiarism_text = main.calculate_text_plagiarism_score(orig_tokens, susp_tokens)
+print(f"The plagiarism score for the text: {plagiarism_text}\n")
+
+diff_in_sent = main.find_diff_in_sentence(orig_first_sent, susp_first_sent, lcs)
+print(f" Here is the difference in sentences: {diff_in_sent}\n")
+
+stats = main.accumulate_diff_stats(orig_tokens, susp_tokens)
+print(f"Here are some statistics:\n{stats}\n")
+
+report = main.create_diff_report(orig_tokens, susp_tokens, stats)
+print(f"The report for two texts:\n{report}")
+
+RESULT = report
+assert RESULT == """The report for two texts:
+- the dog is | barking |
++ the | big | | dog | is sleeping
+
+lcs = 3, plagiarism = 60.0%
+
+- | it | has black | nose and | big teeth
++ | he | has black | nose and | lovely paws
+
+lcs = 4, plagiarism = 57.14285714285714%
+
+Text average plagiarism (words): 58.57142857142856%""", 'Not working'
