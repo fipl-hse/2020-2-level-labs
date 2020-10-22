@@ -32,14 +32,15 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    check = [isinstance(rows, int) and isinstance(columns, int) and not isinstance(rows, bool) and not isinstance(columns, bool)]
+    check = [isinstance(rows, int) and isinstance(columns, int)
+             and not isinstance(rows, bool) and not isinstance(columns, bool)]
 
     if not all(check) or rows < 1 or columns < 1:
         return []
 
     matrix = []
 
-    for row in range(rows):
+    for _ in range(rows):
         matrix.append([0*i for i in range(columns)])
 
     return matrix
@@ -60,10 +61,10 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
 
         matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
 
-        for i, xi in enumerate(first_sentence_tokens):
-            for j, yj in enumerate(second_sentence_tokens):
+        for i, x_i in enumerate(first_sentence_tokens):
+            for j, y_j in enumerate(second_sentence_tokens):
 
-                if xi == yj:
+                if x_i == y_j:
                     if (i - 1) < 0 or (j - 1) < 0:
                         matrix[i][j] = 1
                     else:
@@ -74,7 +75,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
                         matrix[i][j] = matrix[i][j - 1]
                     elif (i - 1) > 0 and (j - 1) < 0:
                         matrix[i][j] = matrix[i - 1][j]
-                    elif (i - 1) < 0 and (j - 1) < 0:
+                    elif (i - 1) < 0:
                         matrix[i][j] = 0
                     else:
                         matrix[i][j] = max(matrix[i][j - 1], matrix[i - 1][j])
@@ -99,7 +100,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     sst_check = not ((isinstance(second_sentence_tokens, tuple) and second_sentence_tokens
                      and second_sentence_tokens[0] is not None)
                      or (isinstance(second_sentence_tokens, tuple) and not second_sentence_tokens))
-    threshold_check = ((isinstance(plagiarism_threshold, int) or isinstance(plagiarism_threshold, float))
+    threshold_check = (isinstance(plagiarism_threshold, (int, float))
                        and not isinstance(plagiarism_threshold, bool) and 0 < plagiarism_threshold < 1)
 
     lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
@@ -191,7 +192,8 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     return lcs_length / len(suspicious_sentence_tokens)
 
 
-def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
+def calculate_text_plagiarism_score(original_text_tokens: tuple,
+                                    suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
     The score is the sum of lcs values for each pair divided by the number of tokens in suspicious text
@@ -300,7 +302,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
         original_text_tokens = list(original_text_tokens)
-        for i in range(len(suspicious_text_tokens) - len(original_text_tokens)):
+        for _ in range(len(suspicious_text_tokens) - len(original_text_tokens)):
             original_text_tokens.append(())
         original_text_tokens = tuple(original_text_tokens)
 
@@ -373,7 +375,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    return 0
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -382,6 +384,4 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    if not isinstance(path_to_file, str):
-        return ()
-
+    return ()
