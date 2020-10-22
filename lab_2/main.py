@@ -3,6 +3,7 @@ Longest common subsequence problem
 """
 import tokenizer
 
+
 def tokenize_by_lines(text: str) -> tuple:
     """
     Splits a text into sentences, sentences – into tokens,
@@ -23,6 +24,7 @@ def tokenize_by_lines(text: str) -> tuple:
     else:
       return ()
 
+
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
     Creates a matrix rows * columns where each element is zero
@@ -37,9 +39,10 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     if not is_rows or not is_columns:
         return []
 
-    matrix = [[0] * columns for i in range(rows)]
+    matrix = [[0] * columns for _ in range(rows)]
 
     return matrix
+
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
     """
@@ -54,15 +57,13 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
             not isinstance(first_sentence_tokens[0], str) or not isinstance(second_sentence_tokens[0], str):
         return []
 
-    lcs = create_zero_matrix(len(first_sentence_tokens),len(second_sentence_tokens))
+    lcs = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
     for ind_1, token_1 in enumerate(first_sentence_tokens):
         for ind_2, token_2 in enumerate(second_sentence_tokens):
             if token_1 == token_2:
                 lcs[ind_1][ind_2] = lcs[ind_1 - 1][ind_2 - 1] + 1
             else:
                 lcs[ind_1][ind_2] = max(lcs[ind_1 - 1][ind_2], lcs[ind_1][ind_2 - 1])
-
-
     return lcs
 
 
@@ -82,6 +83,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
             not isinstance(plagiarism_threshold, float):
         return -1
+
     if None in first_sentence_tokens or None in second_sentence_tokens or \
             plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
@@ -89,11 +91,12 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
         return 0
 
+    if len(first_sentence_tokens) > len(second_sentence_tokens):
+        first_sentence_tokens = first_sentence_tokens[:len(second_sentence_tokens)]
+
     lcs = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
-    if lcs:
-        lcs_length = lcs[-1][-1]
-    else:
-        return 0
+
+    lcs_length = lcs[-1][-1]
 
     if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
         return 0
@@ -147,7 +150,6 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     if first_sentence_tokens[0] == second_sentence_tokens[0]:
         list_of_tokens.append(first_sentence_tokens[0])
 
-
     return tuple(list_of_tokens[::-1])
 
 
@@ -178,7 +180,6 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     return score
 
 
-
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
@@ -189,18 +190,10 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-
-    if not isinstance(original_text_tokens, tuple) or\
-            not all(isinstance(i, tuple) for i in original_text_tokens) or\
-            not all(isinstance(i, str) for token in original_text_tokens for i in token):
-        return -1
-
     if not isinstance(suspicious_text_tokens, tuple) or\
             not all(isinstance(i, tuple) for i in suspicious_text_tokens) or\
             not all(isinstance(i, str) for token in suspicious_text_tokens for i in token):
         return -1
-
-
     if len(suspicious_text_tokens) > len(original_text_tokens):
         original_text_tokens = list(original_text_tokens)
         while len(suspicious_text_tokens) > len(original_text_tokens):
