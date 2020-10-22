@@ -3,11 +3,11 @@ Longest common subsequence implementation starter
 """
 import main
 
-original_text = 'the cat is sleeping'
-suspicious_text = 'the little cat is running'
+ORIGINAL_TEXT = 'the cat is sleeping'
+SUSPICIOUS_TEXT = 'the little cat is running'
 
-original_tokens = main.tokenize_by_lines(original_text)
-suspicious_tokens = main.tokenize_by_lines(suspicious_text)
+original_tokens = main.tokenize_by_lines(ORIGINAL_TEXT)
+suspicious_tokens = main.tokenize_by_lines(SUSPICIOUS_TEXT)
 
 print("Tokenized original text:", original_tokens)
 print("Tokenized suspicious text:", suspicious_tokens)
@@ -28,4 +28,3 @@ print("Text average plagiarism:", text_plagiarism_score)
 
 RESULT = text_plagiarism_score
 assert RESULT, 'Not working'
-

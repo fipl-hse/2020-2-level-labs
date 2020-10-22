@@ -201,7 +201,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple,
                         or not all(isinstance(i, str) for tokens in suspicious_text_tokens for i in tokens))
 
     threshold_check = (not isinstance(plagiarism_threshold, float)
-                       or not (0 < plagiarism_threshold < 1))
+                       or not 0 < plagiarism_threshold < 1)
 
     if ((isinstance(original_text_tokens, tuple) and not any(original_text_tokens))
             or (isinstance(suspicious_text_tokens, tuple) and not any(suspicious_text_tokens))):
@@ -286,8 +286,10 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
             or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return {}
 
-    text_plagiarism = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens, plagiarism_threshold)
-    stats = {'text_plagiarism': text_plagiarism, 'sentence_plagiarism': [], 'sentence_lcs_length': [], 'difference_indexes': []}
+    text_plagiarism = calculate_text_plagiarism_score(original_text_tokens,
+                                                      suspicious_text_tokens, plagiarism_threshold)
+    stats = {'text_plagiarism': text_plagiarism, 'sentence_plagiarism': [],
+             'sentence_lcs_length': [], 'difference_indexes': []}
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
         original_text_tokens = list(original_text_tokens)
