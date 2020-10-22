@@ -4,7 +4,7 @@ Longest common subsequence problem
 from tokenizer import tokenize
 
 
-def tokenize_by_lines(text: str) -> tuple:  # +
+def tokenize_by_lines(text: str) -> tuple:
     """
     Splits a text into sentences, sentences – into tokens,
     converts the tokens into lowercase, removes punctuation
@@ -26,7 +26,7 @@ def tokenize_by_lines(text: str) -> tuple:  # +
     return tuple(tokens)
 
 
-def create_zero_matrix(rows: int, columns: int) -> list:  # +
+def create_zero_matrix(rows: int, columns: int) -> list:
     """
     Creates a matrix rows * columns where each element is zero
     :param rows: a number of rows
@@ -51,7 +51,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:  # +
     return matrix
 
 
-def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:  # +
+def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
     """
     Fills a longest common subsequence matrix using the Needleman–Wunsch algorithm
     :param first_sentence_tokens: a tuple of tokens
@@ -83,7 +83,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
-                    plagiarism_threshold: float) -> int:  # +
+                    plagiarism_threshold: float) -> int:
     """
     Finds a length of the longest common subsequence using the Needleman–Wunsch algorithm
     When a length is less than the threshold, it becomes 0
@@ -117,11 +117,11 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     my_threshold = matrix[-1][-1] / len(second_sentence_tokens)
     if my_threshold < plagiarism_threshold:
         return 0
-    else:
-        return matrix[-1][-1]
+
+    return matrix[-1][-1]
 
 
-def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:  # +
+def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
     """
     Finds the longest common subsequence itself using the Needleman–Wunsch algorithm
     :param first_sentence_tokens: a tuple of tokens
@@ -157,21 +157,20 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     while index_row >= 0 and index_col >= 0:
         if first_sentence_tokens[index_row] == second_sentence_tokens[index_col]:
             lcs.append(first_sentence_tokens[index_row])
-            index_row, index_col = index_row - 1, index_col - 1  # по диагонали, если слова с
-            # соответствующими индексами равны
+            index_row, index_col = index_row - 1, index_col - 1
         elif lcs_matrix[index_row - 1][index_col] > lcs_matrix[index_row][index_col - 1]:
-            index_row -= 1  # наверх, если верхний больше левого
+            index_row -= 1
         else:
             if index_row == 1 or index_col == 0:
-                index_row -= 1  # наверх в нулевую строчку
+                index_row -= 1
             else:
-                index_col -= 1  # налево в остальных случаях
+                index_col -= 1
 
     lcs.reverse()
     return tuple(lcs)
 
 
-def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:  # empty sentence
+def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
     """
     Calculates the plagiarism score
     The score is the lcs length divided by the number of tokens in a suspicious sentence
@@ -198,7 +197,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
 
 
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
-                                    plagiarism_threshold=0.3) -> float:  # +
+                                    plagiarism_threshold=0.3) -> float:
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
     The score is the sum of lcs values for each pair divided by the number of tokens in suspicious text
@@ -239,12 +238,8 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
 
     total = 0.0
     for sentence_index in range(len(suspicious_text_tokens)):
-        if len(suspicious_text_tokens) > 100:
-            lcs_length = find_lcs_length_optimized(original_text_tokens[sentence_index],
-                                                   suspicious_text_tokens[sentence_index], plagiarism_threshold)
-        else:
-            lcs_length = find_lcs_length(original_text_tokens[sentence_index], suspicious_text_tokens[sentence_index],
-                                         plagiarism_threshold)
+        lcs_length = find_lcs_length(original_text_tokens[sentence_index], suspicious_text_tokens[sentence_index],
+                                     plagiarism_threshold)
         total += calculate_plagiarism_score(lcs_length, suspicious_text_tokens[sentence_index])
     result = total / len(suspicious_text_tokens)
     if result < 0:
@@ -253,7 +248,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
         return result
 
 
-def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:  # +
+def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
     """
     Finds words not present in lcs.
     :param original_sentence_tokens: a tuple of tokens
@@ -511,8 +506,6 @@ def read_in_parts(path_to_file: str, part_size=1024) -> str:
     with open(path_to_file, 'r', encoding='utf-8') as file_data:
         while True:
             part_data = file_data.read(part_size)
-            if '\n' in part_data:  # doesn't work :(
-                part_data.replace('\n', ' ')
             if not part_data:
                 break
             yield part_data
@@ -530,9 +523,6 @@ def tok(path_to_file: str) -> tuple:
     return tokenized_data
 
 
-cache = {}
-
-
 def tokenize_big_file(path_to_file: str) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
@@ -543,6 +533,7 @@ def tokenize_big_file(path_to_file: str) -> tuple:
         return ()
 
     array = ()
+    cache = {}
     for piece in tok(path_to_file):
         for sentence_index in range(len(piece)):
             array += piece[sentence_index]

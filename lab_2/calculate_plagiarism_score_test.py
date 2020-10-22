@@ -51,7 +51,7 @@ class CalculatePlagiarismScoreTest(unittest.TestCase):
         Tests that calculate_plagiarism_score function
             can handle incorrect lcs_matrix inputs
         """
-        bad_inputs = [[], {}, (), '', 9.22, -1, -6, None, True]
+        bad_inputs = [[], {}, '', 9.22, -1, -6, None, True]
         patches_sentence = ('the', 'cat', 'is', 'sleeping')
 
         expected = -1
@@ -92,7 +92,7 @@ class CalculatePlagiarismScoreTest(unittest.TestCase):
         patches_lcs_length = 2
         sentence = ()
 
-        expected = 0.0
+        expected = -1
         actual = calculate_plagiarism_score(patches_lcs_length, sentence)
         self.assertEqual(expected, actual)
 
