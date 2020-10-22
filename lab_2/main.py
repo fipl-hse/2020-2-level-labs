@@ -4,6 +4,13 @@ Longest common subsequence problem
 from tokenizer import tokenize
 
 
+def tokenize_by_lines(text: str) -> tuple:
+    text = text.split("\n")
+    tokenized_text = [tuple(tokenize(sent)) for sent in text]
+    tokenized_text = [sent for sent in tokenized_text if sent != ()]
+    return tuple(tokenized_text)
+
+
 def checker(object_to_check, expected_type):
     expectations = [False]
     if expected_type is int and isinstance(object_to_check, int):
@@ -291,13 +298,16 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     """
     for sent_ind in range(len(original_text_tokens)):
         # here prepare the sentence
+        differences = accumulated_diff_stats['difference_indexes']
+        first_sentence = original_text_tokens[sent_ind]
+        first_sentence = []
         print(f"+{original_text_tokens[sent_ind]}/n-{suspicious_text_tokens[sent_ind]}")
         print(f"lcs = {accumulated_diff_stats['sentence_lcs_length'][sent_ind]}, "
               f"plagiarism = {accumulated_diff_stats['sentence_plagiarism'][sent_ind]}")
     pass
 
 
-def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_tokens: list) -> int:
+def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_tokens: list, plagiarism_threshold: float) -> int:
     """
     Finds a length of the longest common subsequence using the Hirschberg's algorithm
     At the same time, if the first and last tokens coincide,
@@ -306,30 +316,21 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
     :param second_sentence_tokens: a list of tokens
     :return: a length of the longest common subsequence
     """
+    # row that we create based on the previous
+    counted_row = [0] * len(second_sentence_tokens)
 
-    lcs = []
-    # conditions to find the subsequence
-    conditions = [
-                  checker(first_sentence_tokens, tuple),
-                  checker(second_sentence_tokens, tuple)]
-    if not all(conditions):
-        return ()
+    for row in range(len(first_sentence_tokens)):
+        # to update new row we create a copy (previous)
+        previous = counted_row.copy()
+        # the same logic as in usual, but save only the row
+        for column in range(len(second_sentence_tokens)):
+            if first_sentence_tokens[row] == second_sentence_tokens[column]:
+                counted_row[column] = previous[column - 1] + 1
+            else:
+                counted_row[column] = max(previous[column], counted_row[column - 1])
+    length = counted_row[-1]
+    if length / len(second_sentence_tokens) < plagiarism_threshold:
+        return 0
 
-    row, column = len(first_sentence_tokens) - 1, len(second_sentence_tokens) - 1
-    while row >= 0:
-        if column <= 0:  # условие на перемещение
-            row -= 1
+    return length
 
-        if first_sentence_tokens[row] == second_sentence_tokens[column]:
-            lcs.append(first_sentence_tokens[row])
-
-            row -= 1
-            column -= 1
-        elif lcs_matrix[row - 1][column] > lcs_matrix[row][column - 1]:
-            row -= 1
-        else:
-            if column != 0:
-                column -= 1
-
-    lcs.reverse()
-    return tuple(lcs)
