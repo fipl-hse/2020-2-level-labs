@@ -2,7 +2,7 @@
 Longest common subsequence problem
 """
 
-import csv
+import pickle
 import re
 
 from decorators import input_checker
@@ -350,26 +350,18 @@ def find_lcs_length_optimized(first_sentence_tokens: list,
     return 0
 
 
-vocabulary = {'_i': 0}
-
-
 def tokenize_big_file(path_to_file: str) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
     :param path_to_file: a path
     :return: a tuple with ids
     """
+    with open('vocabulary.pickle', 'rb') as file:
+        vocabulary = pickle.load(file)
+
     indexes = []
     with open(path_to_file, 'r', encoding='utf-8') as file:
-        for i, line in enumerate(file):
-            if i >= 30000:
-                return tuple(indexes)
-
-            #tokens = re.findall(r'\w+', line.lower())
+        for line in file:
             tokens = re.sub('[^a-z \n]', '', line.lower()).split()
-            for key in tokens:
-                if key not in vocabulary:
-                    vocabulary[key] = vocabulary['_i']
-                    vocabulary['_i'] += 1
             indexes.extend([vocabulary[token] for token in tokens])
     return tuple(indexes)
