@@ -253,7 +253,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
 
                 if not i or sent[i - 1] in lcs:
                     diff.append(i)
-                if sent[i + 1] or i == len(sent) - 1 in lcs:
+                if i == len(sent) - 1 or sent[i + 1] in lcs:
                     diff.append(i + 1)
 
         diff_report.append(tuple(diff))
@@ -369,7 +369,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
 
     i = [0] * max_len
     for w_1 in s_1[:max_len]:
-        prev_i = i.copy()
+        prev_i = i[:]
         for j, w_2 in enumerate(s_2[:max_len]):
 
             if w_1 == w_2:
