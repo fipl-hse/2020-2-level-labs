@@ -1,9 +1,8 @@
 """
 Longest common subsequence problem
 """
-import os
+import itertools
 from typing import Dict, Callable, List, Tuple
-import json
 from tokenizer import tokenize
 
 
@@ -371,29 +370,25 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     return lcs_length if (not lcs_length / len(s_2) < plagiarism_threshold) else 0
 
 
+vocab = {'|i|': 0}
+
+
 def tokenize_big_file(path_to_file: str) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
     :param path_to_file: a path
     :return: a tuple with vocab
     """
-    file = open(path_to_file, encoding='UTF-8')
-    tokens = []
+    file = open(path_to_file, encoding="utf-8")
+    ids = []
 
-    if os.path.exists('vocab.json'):
-        vocab = json.load(open('vocab.json'))
-    else:
-        vocab = {'|i|': 0}
+    def dict_check(word):
+        if word not in vocab:
+            vocab[word] = vocab['|i|']
+            vocab['|i|'] += 1
+        return vocab[word]
 
-    for chunk in file:
-        for token in tokenize(chunk):
-            if token not in vocab:
-                vocab[token] = vocab['|i|']
-                vocab['|i|'] += 1
+    for line in file:
+        ids.extend(dict_check(i) for i in tokenize(line))
 
-            tokens.append(vocab[token])
-
-    with open('vocab.json', 'w') as out:
-        json.dump(vocab, out)
-
-    return tuple(tokens)
+    return tuple(ids)
