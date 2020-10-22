@@ -312,7 +312,7 @@ def create_diff_report(original_text_tokens: tuple,
 
 def token_and_string_comparison(x_word, y_vector, x_prev_vector):
     x_curr_vector = x_prev_vector[:]
-    for i, y_word in enumerate(y_vector[:length], start=1):
+    for i, y_word in enumerate(y_vector, start=1):
         if x_word == y_word:
             x_curr_vector[i] = max(x_prev_vector[i], x_curr_vector[i - 1]) + 1
         else:
@@ -339,12 +339,12 @@ def find_lcs_length_optimized(first_sentence_tokens: list,
     length = max(len(first_sentence_tokens), len(second_sentence_tokens))
     zero_vector = [0 for _ in range(len(second_sentence_tokens) + 1)]
     x_prev_vector = token_and_string_comparison(first_sentence_tokens[0],
-                                                second_sentence_tokens,
+                                                second_sentence_tokens[:length],
                                                 zero_vector)
 
     for x_curr in first_sentence_tokens[1:]:
         x_curr_vector = token_and_string_comparison(x_curr,
-                                                    second_sentence_tokens,
+                                                    second_sentence_tokens[:length],
                                                     x_prev_vector)
         x_prev_vector = x_curr_vector[:]
 
