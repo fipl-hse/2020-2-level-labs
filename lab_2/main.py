@@ -342,17 +342,17 @@ def tokenize_big_file(path_to_file: str, id_number=1) -> tuple:
     """
     tokens = []
     id_dict = {}
-
-    def get_id(word):
-        nonlocal id_number
-        if word not in id_dict:
-            id_dict[word] = id_number
-            id_number += 1
-        return id_dict[word]
     with open(path_to_file, encoding='UTF-8') as file:
-        for line in file.readlines():
-            token_sentence = tokenize(line)
-            for token in token_sentence:
-                tokens.append(get_id(token))
-    print(id_dict)
+        while 1:
+            for line in (file.readline() for _ in range(1000)):
+                token_sentence = tokenize(line)
+                for token in token_sentence:
+                    if token not in id_dict:
+                        id_dict[token] = id_number
+                        tokens.append(id_number)
+                        id_number += 1
+                    else:
+                        tokens.append(id_dict[token])
+            if not line:
+                break
     return tuple(tokens)
