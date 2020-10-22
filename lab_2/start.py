@@ -16,8 +16,9 @@ def text_plagiarism_score_for_big_files():
     score = lcs_length / len(sentence_tokens_second_text)
 
     print(f'The text plagiarism score for big files: {score:.2f}\n\n')
+    return score
 
-    RESULT = score
-    assert RESULT, 'Plagiarism checker not working'
 
-#text_plagiarism_score_for_big_files()
+#if __name__ == '__main__':
+#    RESULT = text_plagiarism_score_for_big_files()
+#    assert RESULT, 'Plagiarism checker not working'
