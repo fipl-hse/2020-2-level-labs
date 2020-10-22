@@ -41,10 +41,10 @@ if __name__ == '__main__':
     print('sorted concordance for "cat" left = 2, right = 3:', sorted_concordance_cat[:5])
     print('\n-----------------------------\n')
 
-    main.write_to_file('report.txt', sorted_concordance_cat)
+    #  main.write_to_file('report.txt', sorted_concordance_cat)
 
     RESULT = sorted_concordance_cat
-    
+
     tokenized_data = main.tokenize(data)
     clean_data = main.remove_stop_words(tokenized_data, stop_words)
 
