@@ -141,6 +141,9 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         isinstance(i, int) for lists in lcs_matrix for i in lists):
         return ()
 
+    if lcs_matrix != fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens):
+        return ()
+        
     answer = []
 
     lcs_matrix.insert(0, [0 for i in range(len(lcs_matrix))])
