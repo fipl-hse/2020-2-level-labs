@@ -89,12 +89,15 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     if isinstance(first_sentence_tokens, tuple) \
             and isinstance(second_sentence_tokens, tuple) \
             and (first_sentence_tokens != (None, None) and second_sentence_tokens != (None, None)) \
-            and isinstance(plagiarism_threshold, float):
+            and isinstance(plagiarism_threshold, float)  and (plagiarism_threshold > 0):
 
         if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
             return 0
 
-        max_length = (fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens))[-1][-1]
+        if len(first_sentence_tokens) < len(second_sentence_tokens):
+            max_length = (fill_lcs_matrix(second_sentence_tokens, first_sentence_tokens))[-1][-1]
+        else:
+            max_length = (fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens))[-1][-1]
 
         fraction = max_length / len(second_sentence_tokens)
         if fraction < plagiarism_threshold:
