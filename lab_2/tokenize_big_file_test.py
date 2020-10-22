@@ -2,6 +2,10 @@
 Tests tokenize_big_file function
 """
 
+import unittest
+import timeit
+from memory_profiler import memory_usage
+from lab_2.main import tokenize_big_file
 
 
 class TokenizeBigFileTest(unittest.TestCase):
