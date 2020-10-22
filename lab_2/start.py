@@ -27,5 +27,5 @@ print("The plagiarism score:", plagiarism_score)
 text_plagiarism_score = main.calculate_text_plagiarism_score(orig_tokens, susp_tokens, plagiarism_score)
 print("Text average percent of plagiarism:", text_plagiarism_score)
 
-Result = text_plagiarism_score
-assert Result, 'Not working'
+RESULT = text_plagiarism_score
+assert RESULT, 'Not working'
