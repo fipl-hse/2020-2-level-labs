@@ -14,7 +14,7 @@ if __name__ == '__main__':
     plagiarism_score = main.calculate_plagiarism_score(lcs_length, suspicious_text_tokens)
     text_plagiarism_score = main.calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens, plagiarism_threshold)
 
-    RESULT = lcs_length
+    RESULT = text_plagiarism_score
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Checking not working'
