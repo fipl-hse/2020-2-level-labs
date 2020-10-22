@@ -263,6 +263,9 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
+    if str(type(original_text_tokens)) == "<class 'bool'>" or str(type(suspicious_text_tokens)) == "<class 'bool'>":
+        return -1
+
     if not isinstance(original_text_tokens, tuple) or not original_text_tokens or not isinstance(suspicious_text_tokens,
                                                                                                  tuple) or not suspicious_text_tokens:
         return -1
