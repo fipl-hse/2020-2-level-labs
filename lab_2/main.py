@@ -400,7 +400,7 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    with open('numeric_words.csv', 'r', encoding="utf-8") as file_with_words:
+    with open('lab_2/numeric_words.csv', 'r', encoding="utf-8") as file_with_words:
         reader = csv.reader(file_with_words)
         words_dict = {row[0]: int(row[1]) for row in reader}
 
