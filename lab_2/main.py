@@ -62,7 +62,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         matrix.remove(matrix [0])
         return matrix
     return []
-fill_lcs_matrix(('the', 'dog', 'is', 'running'),('the', 'cat', 'is', 'sleeping'))
+
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
     """
