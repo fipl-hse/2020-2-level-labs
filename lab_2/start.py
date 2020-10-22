@@ -24,8 +24,10 @@ if __name__ == '__main__':
     print('\n...Checking on plagiarism...\n')
     plagiarism_result = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens,
                                                         plagiarism_threshold=0.3)
+    print(plagiarism_result)
     print('The result is: {}% of plagiarism.'.format(round(plagiarism_result * 100, 2)))
 
     RESULT = plagiarism_result
+
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Checking not working'
+    assert RESULT == 0.35416666666666663, 'Checking not working'

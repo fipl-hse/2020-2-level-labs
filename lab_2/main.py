@@ -64,9 +64,9 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
             return []
 
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
-    for ind_row in range(len(first_sentence_tokens)):
-        for ind_column in range(len(second_sentence_tokens)):
-            if first_sentence_tokens[ind_row] == second_sentence_tokens[ind_column] and\
+    for ind_row, element_from_first in enumerate(first_sentence_tokens):
+        for ind_column, element_from_second in enumerate(second_sentence_tokens):
+            if element_from_first == element_from_second and\
                     ind_row == ind_column:
                 lcs_matrix[ind_row][ind_column] = lcs_matrix[ind_row - 1][ind_column - 1] + 1
             else:
