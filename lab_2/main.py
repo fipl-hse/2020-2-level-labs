@@ -319,18 +319,21 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     else:
         len_search = len(second_sentence_tokens)
     current_row = [0] * len_search
-    for row, word_1 in enumerate(first_sentence_tokens[:len_search]):
+    for row, word_1 in enumerate(second_sentence_tokens[:len_search]):
         previous_row = current_row[:]
-        for column, word_2 in enumerate(second_sentence_tokens[:len_search]):
+        for column, word_2 in enumerate(first_sentence_tokens[:len_search]):
             if row == column:
                 if word_1 == word_2:
                     current_row[column] = previous_row[column - 1] + 1
-            else:
-                current_row[column] = max((current_row[column - 1], previous_row[column]))
+                else:
+                    current_row[column] = max((current_row[column - 1], previous_row[column]))
     lcs_length = current_row[-1]
     if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
         return 0
     return lcs_length
+
+
+id_cache = {}
 
 
 def tokenize_big_file(path_to_file: str, id_number=1) -> tuple:
@@ -340,8 +343,9 @@ def tokenize_big_file(path_to_file: str, id_number=1) -> tuple:
     :param id_number: an id
     :return: a tuple with ids
     """
+    global id_cache
+    id_dict = id_cache
     tokens = []
-    id_dict = {}
     with open(path_to_file, encoding='UTF-8') as file:
         while 1:
             for line in (file.readline() for _ in range(1000)):
@@ -355,4 +359,5 @@ def tokenize_big_file(path_to_file: str, id_number=1) -> tuple:
                         tokens.append(id_dict[token])
             if not line:
                 break
+    id_cache = id_dict
     return tuple(tokens)
