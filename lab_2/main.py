@@ -61,13 +61,6 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
 
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
 
-    # for i in range(len(lcs_matrix)):
-    #    for j in range(len(lcs_matrix[0])):
-    #        print(lcs_matrix[i][j], end=' ')
-    #    print()
-    # print(len(lcs_matrix))
-    # print(len(lcs_matrix[0]))
-
     for i, token1 in enumerate(first_sentence_tokens):
         for j, token2 in enumerate(second_sentence_tokens):
             if token1 == token2 and i == j:
@@ -139,11 +132,20 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         return ()
 
     lcs = []
-    for token1 in first_sentence_tokens:
-        for token2 in second_sentence_tokens:
-            if token1 == token2:
-                lcs.append(token1)
-    return tuple(lcs)
+    i = len(first_sentence_tokens) - 1
+    j = len(second_sentence_tokens) - 1
+    while i >= 0 and j >= 0:
+        if first_sentence_tokens[i] == second_sentence_tokens[j]:
+            lcs.append(first_sentence_tokens[i])
+            i -= 1
+            j -= 1
+        elif lcs_matrix[i-1][j] > lcs_matrix[i][j-1]:
+            i -= 1
+        else:
+            j -= 1
+    if lcs_matrix[0][0] != 0:
+        lcs.append(first_sentence_tokens[0])
+    return tuple(lcs[::-1])
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
