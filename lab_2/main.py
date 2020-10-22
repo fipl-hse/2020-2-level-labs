@@ -283,18 +283,17 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
                 if len(sentence) in dif:
                     line += ' |'
                 lines.append(line)
-            to_print1 = f'''- {lines[0]}
+            result.append(f'''- {lines[0]}
 + {lines[1]}
 
-lcs = {length[i]}, plagiarism = {accumulated_diff_stats['sentence_plagiarism'][i] * 100}%'''
+lcs = {length[i]}, plagiarism = {accumulated_diff_stats['sentence_plagiarism'][i] * 100}%''')
         except IndexError:
             result.append(f'''-
 + {' '.join(list(suspicious_text_tokens[i]))}
 
 lcs = {length[i]}, plagiarism = {accumulated_diff_stats['sentence_plagiarism'][i] * 100}%\n''')
-        print(result[-1])
     result.append(f'Text average plagiarism (words): {accumulated_diff_stats["text_plagiarism"] * 100}%')
-    print(result[1])
+    print('\n'.join(result))
     return '\n'.join(result)
 
 
