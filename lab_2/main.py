@@ -80,7 +80,8 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
             or None in second_sentence_tokens or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
 
-    if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
+    if len(first_sentence_tokens) == 0 or not first_sentence_tokens \
+            or len(second_sentence_tokens) == 0 or not second_sentence_tokens:
         return 0
 
     lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
@@ -135,12 +136,12 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     for word in suspicious_sentence_tokens:
         if not isinstance(word, str):
             return -1.0
-    if not isinstance(lcs_length, int) or isinstance(lcs_length, bool) or lcs_length < 0:
+    if not isinstance(lcs_length, int) or isinstance(lcs_length, bool) or lcs_length <= 0:
         return -1.0
     if lcs_length > len(suspicious_sentence_tokens):
         return -1.0
 
-    plagiarism_score = lcs_length/len(suspicious_sentence_tokens)
+    plagiarism_score = lcs_length / len(suspicious_sentence_tokens)
     return plagiarism_score
 
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
@@ -179,10 +180,10 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
         original_text_tokens = tuple(original_text_tokens)
 
     plagiarism_sum = 0.0
-    for plagiarism_n in range(len(suspicious_text_tokens)):
-        lcs_length = find_lcs_length(original_text_tokens[plagiarism_n],
-                                     suspicious_text_tokens[plagiarism_n], plagiarism_threshold)
-        plagiarism_score = calculate_plagiarism_score(lcs_length, suspicious_text_tokens[plagiarism_n])
+    for plagiarism in range(len(suspicious_text_tokens)):
+        lcs_length = find_lcs_length(original_text_tokens[plagiarism],
+                                     suspicious_text_tokens[plagiarism], plagiarism_threshold)
+        plagiarism_score = calculate_plagiarism_score(lcs_length, suspicious_text_tokens[plagiarism])
         plagiarism_sum += plagiarism_score
     return plagiarism_sum / len(suspicious_text_tokens)
 
