@@ -138,18 +138,18 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         return ()
 
     for token in first_sentence_tokens:
-        if not isinstance(token, str):
+        if not isinstance(token, str) and not isinstance(token, int):
             return ()
 
     for token in second_sentence_tokens:
-        if not isinstance(token, str):
+        if not isinstance(token, str) and not isinstance(token, int):
             return ()
 
 
     if not isinstance(lcs_matrix, list):
         return ()
 
-    if not lcs_matrix or not lcs_matrix[0][0] in (0, 1) or not len(lcs_matrix) == len(first_sentence_tokens) or not len(lcs_matrix[0]) == len(second_sentence_tokens):
+    if not lcs_matrix or not lcs_matrix[0][0] in (0, 1) or  len(lcs_matrix) != len(first_sentence_tokens) or len(lcs_matrix[0]) != len(second_sentence_tokens):
         return ()
 
 
@@ -160,10 +160,15 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
             return ()
         for n in k:
             if not n:
-                return ()                
+                return ()
             if not isinstance(n,int):
                 return ()
-
+            if not str(type(n)) == "<class 'bool'>":
+                return ()
+            if n == None:
+                return ()
+            if n < 0:
+                return ()
 
 
     i = len(lcs_matrix) - 1
