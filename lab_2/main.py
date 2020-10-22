@@ -65,28 +65,39 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     """
     if not isinstance(first_sentence_tokens, tuple):
         return []
+
     if not isinstance(second_sentence_tokens,tuple):
         return []
+
     if not first_sentence_tokens:
         return []
+
     if not second_sentence_tokens:
          return []
+
     if str(type(first_sentence_tokens)) == "<class 'bool'>" or str(type(second_sentence_tokens)) == "<class 'bool'>":
         return []
+
     if first_sentence_tokens == None or second_sentence_tokens == None:
         return []
+
     for token in first_sentence_tokens:
         if not isinstance(token, str) and not isinstance(token, int):
             return []
+
         if str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>":
             return []
+
         if token == None:
             return []
+
     for token in second_sentence_tokens:
         if not isinstance(token, str) and not isinstance(token, int):
             return []
+
         if str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>":
             return []
+
         if token == None:
             return []
 
@@ -177,22 +188,25 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     """
     LCS = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
 
-    if not isinstance(first_sentence_tokens,tuple) or not isinstance(second_sentence_tokens,tuple) or not isinstance(plagiarism_threshold,float):
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or not isinstance(plagiarism_threshold, float):
         return -1
 
-    if not 0 < plagiarism_threshold < 1:
-        return -1
-
-    if len(LCS) / len(second_sentence_tokens) < plagiarism_threshold:
+    if not first_sentence_tokens or not second_sentence_tokens or not plagiarism_threshold:
         return 0
 
+    if not 0 <= plagiarism_threshold <= 1:
+        return -1
+
     for token in first_sentence_tokens:
-        if not isinstance(token,str):
+        if not isinstance(token, str) and not isinstance(token, int):
             return -1
 
     for token in second_sentence_tokens:
-        if not isinstance(token,str):
+        if not isinstance(token, str) and not isinstance(token, int):
             return -1
+
+    if len(LCS) / len(second_sentence_tokens) < plagiarism_threshold:
+        return 0
 
     i = len(LCS) - 1
     j = len(LCS[0]) - 1
