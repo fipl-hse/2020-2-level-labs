@@ -2,38 +2,21 @@
 Longest common subsequence implementation starter
 """
 
+'''
 import main
-from tokenizer import tokenize
-
 
 if __name__ == "__main__":
-        origin_text = 'the big cat is sleeping'
-    susp_text = 'the cat is big'
+    sentence_tokens_first_text = main.tokenize_big_file('data.txt')
+    sentence_tokens_second_text = main.tokenize_big_file('data_2.txt')
+    plagiarism_threshold = 0.0001
 
-    origin_tokens = tokenize(origin_text)
-    susp_tokens = tokenize(susp_text)
+    lcs_length = main.find_lcs_length_optimized(sentence_tokens_first_text,
+                                                sentence_tokens_second_text,
+                                                plagiarism_threshold)
+    score = lcs_length / len(sentence_tokens_second_text)
 
-    print(f'Raw text: {origin_text}')
-    print(f'Tokenized text: {origin_tokens}\n\n')
-
-    lcs_lenght = main.find_lcs_length(origin_tokens,
-                                      susp_tokens,
-                                      plagiarism_threshold=0.0)
-    print('A length of the longest common subsequence for \n\n'
-        f'{origin_text} \n\n'
-        f'and \n\n'
-        f'{susp_text}: \n\n'
-        f'{lcs_lenght} \n')
-
-    matrix = main.fill_lcs_matrix(origin_tokens, susp_tokens)
-    print(f'A matrix:')
-    print(*matrix, sep='\n', end='\n\n')
-
-    longest_lcs = main.find_lcs(origin_tokens, susp_tokens, matrix)
-    print(f'The longest common subsequence: {longest_lcs}')
-
-    score = main.calculate_plagiarism_score(lcs_lenght, susp_tokens)
-    print(f'The plagiarism score: {score:.2f}\n')
+    print(f'The text plagiarism score for big files: {score:.2f}\n\n')
     
     RESULT = score
     assert RESULT, 'Plagiarism checker not working'
+'''

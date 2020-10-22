@@ -320,7 +320,8 @@ def token_and_string_comparison(x_word, y, x_prev_vector):
 
 
 def find_lcs_length_optimized(first_sentence_tokens: list,
-                              second_sentence_tokens: list) -> int:
+                              second_sentence_tokens: list,
+                              plagiarism_threshold: float) -> int:
     """
     Finds a length of the longest common subsequence using the Hirschberg's algorithm
     At the same time, if the first and last tokens coincide,
@@ -334,14 +335,20 @@ def find_lcs_length_optimized(first_sentence_tokens: list,
 
     x_prev_vector = token_and_string_comparison(first_sentence_tokens[0],
                                                 second_sentence_tokens,
-                                                [0 for _ in range(len(second_sentence_tokens) + 1)])
-    for x_prev, x_curr in zip(first_sentence_tokens[:-1], first_sentence_tokens[1:]):
-        x_curr_vector = token_and_string_comparison(x_curr, y, x_prev_vector)
+                        [0 for _ in range(len(second_sentence_tokens) + 1)])
+
+    for x_curr in first_sentence_tokens[1:]:
+        x_curr_vector = token_and_string_comparison(x_curr,
+                                                    second_sentence_tokens,
+                                                    x_prev_vector)
         x_prev_vector = x_curr_vector
-    return x_curr_vector[-1]
+    
+    lcs_length = x_curr_vector[-1]
+    if lcs_length / len(second_sentence_tokens) > plagiarism_threshold:
+            return lcs_length
+    return 0
 
 
-@input_checker
 def tokenize_big_file(path_to_file: str) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
@@ -353,7 +360,8 @@ def tokenize_big_file(path_to_file: str) -> tuple:
         vocabulary = {rows[0]: rows[1] for rows in reader}
 
     indexes = []
-    for line in open(path_to_file, 'r', encoding='utf-8'):
-        tokens = re.findall('\w+', text.lower())
-        indexes.extend([vocabulary[token] for token in tokens])
+    with open(path_to_file, 'r', encoding='utf-8') as file:
+        for line in file:
+            tokens = re.sub('[^a-z \n]', '', line.lower()).split()
+            indexes.extend([vocabulary[token] for token in tokens])
     return tuple(indexes)
