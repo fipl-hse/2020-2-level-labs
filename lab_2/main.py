@@ -51,9 +51,8 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    if not isinstance (first_sentence_tokens, tuple) or not isinstance (second_sentence_tokens, tuple):
-        return []
-    if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
+    if not isinstance (first_sentence_tokens, tuple) or not isinstance (second_sentence_tokens, tuple)\
+            or len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
         return []
     list_of_tuples = [first_sentence_tokens, second_sentence_tokens]
     for current_tuple in list_of_tuples:
