@@ -2,10 +2,11 @@
 Tests find_lcs_optimized function
 """
 
+from memory_profiler import memory_usage
 import timeit
 import unittest
+
 from lab_2.main import find_lcs_length_optimized, tokenize_big_file
-from memory_profiler import memory_usage
 
 
 class FindLcsOptimizedTest(unittest.TestCase):

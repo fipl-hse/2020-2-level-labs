@@ -2,6 +2,26 @@
 A module of decorators for checking in lab_2
 """
 
+
+def None_check(arg, return_value):
+    flattened = []
+    to_check = [*arg]
+    while to_check:
+        for value in to_check[:]:
+            if isinstance(value, str):
+                flattened.append(value)
+            else:
+                try:
+                    to_check.extend([*value])
+                except TypeError:
+                    flattened.append(value)
+            to_check.remove(value)
+
+    if any(item is None for item in flattened):
+        return return_value
+    return 1
+
+
 def input_checker(func):
     def wrapper(*args, **kwargs):
         if func.__annotations__['return'] == int:
@@ -28,20 +48,8 @@ def input_checker(func):
 
             # if any is None
             if isinstance(arg, (tuple, list)):
-                flattened = []
-                to_check = [*arg]
-                while to_check:
-                    for value in to_check[:]:
-                        if isinstance(value, str):
-                            flattened.append(value)
-                        else:
-                            try:
-                                to_check.extend([*value])
-                            except TypeError:
-                                flattened.append(value)
-                        to_check.remove(value)
-
-                if any(item is None for item in flattened):
+                res = None_check(arg, return_value)
+                if not res:
                     return return_value
 
         return func(*args, **kwargs)

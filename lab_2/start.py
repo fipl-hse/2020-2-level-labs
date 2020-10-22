@@ -16,7 +16,7 @@ if __name__ == "__main__":
     score = lcs_length / len(sentence_tokens_second_text)
 
     print(f'The text plagiarism score for big files: {score:.2f}\n\n')
-    
+
     RESULT = score
     assert RESULT, 'Plagiarism checker not working'
 '''

@@ -309,9 +309,9 @@ def create_diff_report(original_text_tokens: tuple,
     return report
 
 
-def token_and_string_comparison(x_word, y, x_prev_vector):
+def token_and_string_comparison(x_word, y_vector, x_prev_vector):
     x_curr_vector = x_prev_vector[:]
-    for i, y_word in enumerate(y, start=1):
+    for i, y_word in enumerate(y_vector, start=1):
         if x_word == y_word:
             x_curr_vector[i] = max(x_prev_vector[i], x_curr_vector[i - 1]) + 1
         else:
@@ -342,10 +342,10 @@ def find_lcs_length_optimized(first_sentence_tokens: list,
                                                     second_sentence_tokens,
                                                     x_prev_vector)
         x_prev_vector = x_curr_vector
-    
+
     lcs_length = x_curr_vector[-1]
     if lcs_length / len(second_sentence_tokens) > plagiarism_threshold:
-            return lcs_length
+        return lcs_length
     return 0
 
 
