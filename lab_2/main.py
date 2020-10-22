@@ -65,6 +65,8 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     """
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens,tuple):
         return []
+    if not first_sentence_tokens or not second_sentence_tokens:
+        return []
     if str(type(first_sentence_tokens)) == "<class 'bool'>" or str(type(second_sentence_tokens)) == "<class 'bool'>":
         return []
     if first_sentence_tokens == None or second_sentence_tokens == None:
@@ -74,16 +76,18 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
             return []
         if str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>":
             return []
-        if token == None or token == None:
+        if token == None:
+            return []
+        if not token:
             return []
     for token in second_sentence_tokens:
         if not isinstance(token, str) and not isinstance(token, int):
             return []
-        if not isinstance(token, str) and not isinstance(token, int):
-            return []
         if str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>":
             return []
-        if token == None or token == None:
+        if token == None:
+            return []
+        if not token:
             return []
 
     LCS = create_big_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
@@ -191,7 +195,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
 
     i = len(LCS) - 1
     j = len(LCS[0]) - 1
-    return LCS[i][j]  # 1скобка - длина строки, 2скобка - длина столбца
+    return LCS[i][j]
 
 
 def plagiarism(first_line: tuple, second_line: tuple) -> float:
@@ -322,7 +326,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     # for lines in zip(original_text_tokens, suspicious_text_tokens):
     #     difference_indexes.append(find_diff_in_sentence(lines[0],lines[1]))
     # res_dict[difference_indexes] = difference_indexes
-    pass 
+    pass
 
 def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tuple, accumulated_diff_stats: dict) -> str:
     """
