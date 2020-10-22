@@ -3,7 +3,7 @@ A module of decorators for checking in lab_2
 """
 
 
-def None_check(arg, return_value):
+def none_check(arg, return_value):
     flattened = []
     to_check = [*arg]
     while to_check:
@@ -48,7 +48,7 @@ def input_checker(func):
 
             # if any is None
             if isinstance(arg, (tuple, list)):
-                res = None_check(arg, return_value)
+                res = none_check(arg, return_value)
                 if res == return_value:
                     return return_value
 
