@@ -125,17 +125,32 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
+    if not first_sentence_tokens:
+        return ()
+
+
+    if first_sentence_tokens == None:
+        return ()
+
+
+    if not second_sentence_tokens:
+        return ()
+
+    if second_sentence_tokens == None:
+        return ()
+
+    if not lcs_matrix:
+        return ()
+
+    if lcs_matrix == None:
+        return ()
+
     if not isinstance(first_sentence_tokens, tuple) or len(first_sentence_tokens) == 0:
         return ()
 
     if not isinstance(second_sentence_tokens, tuple) or len(second_sentence_tokens) == 0:
         return ()
 
-    if not first_sentence_tokens:
-        return ()
-
-    if not second_sentence_tokens:
-        return ()
 
     for token in first_sentence_tokens:
         if not isinstance(token, str) and not isinstance(token, int):
@@ -149,17 +164,22 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     if not isinstance(lcs_matrix, list):
         return ()
 
-    if not lcs_matrix or not lcs_matrix[0][0] in (0, 1) or  len(lcs_matrix) != len(first_sentence_tokens) or len(lcs_matrix[0]) != len(second_sentence_tokens) or lcs_matrix == None or first_sentence_tokens == None or second_sentence_tokens == None:
+    if not lcs_matrix[0][0] in (0, 1) or  len(lcs_matrix) != len(first_sentence_tokens) \
+     or len(lcs_matrix[0]) != len(second_sentence_tokens):
         return ()
 
 
     for k in lcs_matrix:
         if not k:
             return ()
+        if k == None:
+            return ()
         if not isinstance(k,list):
             return ()
         for n in k:
             if not n:
+                return ()
+            if n == None:
                 return ()
             if not isinstance(n,int):
                 return ()
@@ -181,7 +201,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
             i -= 1
             j -= 1
         else:
-            if lcs_matrix[i - 1][j] > lcs_matrix[i][j - 1]:  # ? что за условия
+            if lcs_matrix[i - 1][j] > lcs_matrix[i][j - 1]:
                 i -= 1
             else:
                 j -= 1
