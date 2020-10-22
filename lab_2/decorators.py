@@ -2,7 +2,6 @@
 A module of decorators for checking in lab_2
 """
 
-
 def none_check(arg, return_value):
     flattened = []
     to_check = [*arg]
