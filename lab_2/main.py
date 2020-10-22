@@ -2,6 +2,7 @@
 Longest common subsequence problem
 """
 # import re
+import pickle
 import csv
 from copy import deepcopy
 from tokenizer import tokenize
@@ -355,6 +356,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
     result_stat += f"Text average plagiarism (words): {text_plagiarism}%"
 
+
     return result_stat
 
 
@@ -400,14 +402,18 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    with open('lab_2/numeric_words.csv', 'r', encoding="utf-8") as file_with_words:
-        reader = csv.reader(file_with_words)
-        words_dict = {row[0]: int(row[1]) for row in reader}
+    with open('numeric_words.csv', 'rb') as pickled_file:
+        numeric_words_dict = pickle.load(pickled_file)
 
     numeric_tokens = []
-    with open(path_to_file, encoding='utf-8') as big_file:
-        for line in big_file:
-            line_tokens = tokenize(line)
-            numeric_tokens.extend([words_dict[token] for token in line_tokens])
+    with open(path_to_file, encoding='utf-8') as data_file:
+        for line in data_file:
+            tokenized_sent = tokenize(line)
+            numeric_tokens.extend([numeric_words_dict[token] for token in tokenized_sent])
 
     return tuple(numeric_tokens)
+
+
+
+
+
