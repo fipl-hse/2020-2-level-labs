@@ -2,10 +2,10 @@
 Longest common subsequence implementation starter
 """
 
-'''
+
 import main
 
-if __name__ == "__main__":
+def text_plagiarism_score_for_big_files():
     sentence_tokens_first_text = main.tokenize_big_file('data.txt')
     sentence_tokens_second_text = main.tokenize_big_file('data_2.txt')
     plagiarism_threshold = 0.0001
@@ -19,4 +19,5 @@ if __name__ == "__main__":
 
     RESULT = score
     assert RESULT, 'Plagiarism checker not working'
-'''
+
+#text_plagiarism_score_for_big_files()

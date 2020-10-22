@@ -149,12 +149,13 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple,
         original_text_tokens += ('',)
 
     scores = []
-    for i in range(len(suspicious_text_tokens)):
-        lcs_length = find_lcs_length(original_text_tokens[i],
-                                     suspicious_text_tokens[i],
+    for susp_sent, orig_sent in zip(suspicious_text_tokens,
+                                    original_sentence_tokens):
+        lcs_length = find_lcs_length(orig_sent,
+                                     susp_sent,
                                      plagiarism_threshold)
         score = calculate_plagiarism_score(lcs_length,
-                                           suspicious_text_tokens[i])
+                                           susp_sent])
         if score >= 0:
             scores.append(score)
 
@@ -171,7 +172,7 @@ def find_diff(tokens: tuple,
     indexes = []
     isnt_previous_match = False
 
-    for idx in range(len(tokens)):
+    for idx, _ in enumerate(tokens):
         if idx_lcs == len(lcs):
             indexes.extend([idx, len(tokens)])
             break
