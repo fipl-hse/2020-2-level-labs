@@ -17,9 +17,9 @@ def tokenize_by_lines(text: str) -> tuple:
         return ()
 
     sentence_list = text.split('\n')
-    tokens_list = [tuple(tokenize(sentence)) for sentence in sentence_list if len(tokenize(sentence))]
+    tokens = tuple([tuple(tokenize(sentence)) for sentence in sentence_list if len(tokenize(sentence))])
 
-    return tuple(tokens_list)
+    return tokens
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -495,7 +495,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    return
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -504,4 +504,4 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    pass
+    return
