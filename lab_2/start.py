@@ -26,7 +26,7 @@ print(f" Here is LCS  {lcs_len}\n")
 lcs = main.find_lcs(orig_first_sent, susp_first_sent, lcs_matrix)
 print(f"LCS for first sentences: {lcs}\n")
 
-plagiarism_score = main.calculate_plagiarism_score(lcs_length, susp_first_sent)
+plagiarism_score = main.calculate_plagiarism_score(lcs_len, susp_first_sent)
 print(f"THere is the plagiarism score: {plagiarism_score}\n")
 
 plagiarism_text = main.calculate_text_plagiarism_score(orig_tokens, susp_tokens)
