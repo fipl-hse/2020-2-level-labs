@@ -11,8 +11,8 @@ if __name__ == '__main__':
     lcs_length = main.find_lcs_length_optimized(origin, suspicious, plagiarism_threshold=0.3)
     print(f"Longest common subsequence consists of {lcs_length} words.")
     actual = main.calculate_plagiarism_score(lcs_length, suspicious)
+    print(f"Plagiarism score: {actual:.1f}%")
     RESULT = actual
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Concordance not working'
-

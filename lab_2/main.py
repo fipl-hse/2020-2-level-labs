@@ -63,11 +63,11 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         lambda: all((isinstance(el, str) for el in first_sentence_tokens + second_sentence_tokens))
     ]
 
-    s_1, s_2 = first_sentence_tokens, second_sentence_tokens
-
     for check in checks:
         if not check():
             return []
+
+    s_1, s_2 = first_sentence_tokens, second_sentence_tokens
 
     lcs: List[list] = create_zero_matrix(len(s_1), len(s_2))
 
