@@ -16,13 +16,12 @@ def tokenize_by_lines(text: str) -> tuple:
     output = []
     if not isinstance(text, str):
         return ()
-    text_podgotov = text.split('\n')
-    for element in text_podgotov:
-        element = tuple(tokenize(element))
-        output.append(element)
+    text_devided = text.split('\n')
+    for sentence in text_devided:
+        sentence = tuple(tokenize(sentence))
+        output.append(sentence)
 
     return(tuple(output))
-
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -34,9 +33,11 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    if isinstance(rows, int) and isinstance(columns, int):
-        multilist = [[0 for column in range(columns)] for row in range(rows)]
-        print(multilist)
+    if (not isinstance(rows, int) or isinstance(rows, bool) or rows < 1) or \
+            (not isinstance(columns, int) or isinstance(columns, bool) or columns < 1):
+        return []
+    multilist = [[0 for column in range(columns)] for row in range(rows)]
+    return(multilist)
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
