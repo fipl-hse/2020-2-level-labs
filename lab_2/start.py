@@ -21,7 +21,7 @@ original = tokenized_text1[0]
 suspicious = tokenized_text2[0]
 
 zero_matrix = create_zero_matrix(len(original), len(suspicious))
-print('Матрица из нулей: ')
+print('Нулевая матрица: ')
 for i in range(len(zero_matrix)):
     for j in range(len(zero_matrix[0])):
         print(zero_matrix[i][j], end=' ')
@@ -35,13 +35,13 @@ for i in range(len(lcs_matrix)):
     print()
 
 length = find_lcs_length(original, suspicious, 0.3)
-print('Length of the longest common subsequence: ', length)
+print('Длина наибольшей общей подпоследовательности: ', length)
 
 lcs = find_lcs(original, suspicious, lcs_matrix)
-print('The longest common subsequence itself: ', lcs)
+print('Наибольшая общая подпоследовательность: ', lcs)
 
 plagiarism_score = calculate_plagiarism_score(length, suspicious)
-print('the plagiarism score: ', plagiarism_score)
+print('Количество плагиата: ', plagiarism_score)
 
 score = calculate_text_plagiarism_score(tokenized_text1, tokenized_text2, 0.3)
 print(score)
