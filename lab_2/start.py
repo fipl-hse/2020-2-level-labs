@@ -8,44 +8,39 @@ if __name__ == '__main__':
     ORIGINAL_TEXT = 'I have a dog.\nHis name is Nemo.\nI found him yesterday'
     SUSPICIOUS_TEXT = 'I have a cat.\nHer name is Anny.\nI met her yesterday'
 
-    original_text_tuple = main.tokenize_by_lines(ORIGINAL_TEXT)
-    suspicious_text_tuple = main.tokenize_by_lines(SUSPICIOUS_TEXT)
+    tokenized_orig_text = main.tokenize_by_lines(ORIGINAL_TEXT)
+    tokenized_susp_text = main.tokenize_by_lines(SUSPICIOUS_TEXT)
+    print(f"Original text tokens: {tokenized_orig_text}\nSuspicious text tokens: {tokenized_susp_text}\n")
 
-    print('Original text: {}\nSuspicious text: {}\n'.format(original_text_tuple, suspicious_text_tuple))
+    orig_first_sent = tokenized_orig_text[2]
+    susp_first_sent = tokenized_susp_text[2]
 
-    ORIGINAL_SENTENCE = original_text_tuple[1]
-    SUSPICIOUS_SENTENCE = suspicious_text_tuple[1]
-    print('Original sentence: {}\nSuspicious sentence: {}\n'.format(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE))
+    zero_matrix_first = main.create_zero_matrix(len(orig_first_sent), len(susp_first_sent))
+    lcs_matrix = main.fill_lcs_matrix(orig_first_sent, susp_first_sent)
+    print(f"Filled LCS matrix for first sentences: {lcs_matrix}\n")
 
-    zero_matrix = main.create_zero_matrix(len(ORIGINAL_SENTENCE), len(SUSPICIOUS_SENTENCE))
-    print('Zero matrix: {}\n'.format(zero_matrix))
+    lcs_length = main.find_lcs_length(orig_first_sent, susp_first_sent, 0.3)
+    print(f"LCS length for first sentences: {lcs_length}\n")
 
-    lcs_matrix = main.fill_lcs_matrix(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE)
-    print('LCS matrix: {}\n'.format(lcs_matrix))
+    lcs = main.find_lcs(orig_first_sent, susp_first_sent, lcs_matrix)
+    print(f"LCS for first sentences: {lcs}\n")
 
-    lcs_length = main.find_lcs_length(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE, 0.3)
-    print('LCS length: {}\n'.format(lcs_length))
+    plagiarism_score = main.calculate_plagiarism_score(lcs_length, susp_first_sent)
+    print(f"The plagiarism score for first sentences: {plagiarism_score}\n")
 
-    lcs = main.find_lcs(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE, lcs_matrix)
-    print('LCS: {}\n'.format(lcs))
+    plagiarism_text = main.calculate_text_plagiarism_score(tokenized_orig_text, tokenized_susp_text)
+    print(f"The plagiarism score for the text: {plagiarism_text}\n")
 
-    plagiarism_score = main.calculate_plagiarism_score(lcs_length, SUSPICIOUS_SENTENCE)
-    print('Plagiarism score: {}\n'.format(plagiarism_score))
+    diff_in_sent = main.find_diff_in_sentence(orig_first_sent, susp_first_sent, lcs)
+    print(f"Indexes of differences in first sentences: {diff_in_sent}\n")
 
-    text_plagiarism_score = main.calculate_text_plagiarism_score(original_text_tuple, suspicious_text_tuple,
-                                                                 plagiarism_threshold=0.3)
-    print('Text plagiarism score: {}\n'.format(text_plagiarism_score))
+    statistics = main.accumulate_diff_stats(tokenized_orig_text, tokenized_susp_text)
+    print(f"The main statistics for pairs of sentences in texts:\n{statistics}\n")
 
-    diff_in_sentence = main.find_diff_in_sentence(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE, lcs)
-    print('Difference-indexes in sentences: {}\n'.format(diff_in_sentence))
+    report = main.create_diff_report(tokenized_orig_text, tokenized_susp_text, statistics)
+    print(f"The report for two texts:\n{report}")
 
-    diff_stats = main.accumulate_diff_stats(original_text_tuple, suspicious_text_tuple, plagiarism_threshold=0.3)
-    print('Difference-statistics: {}\n'.format(diff_stats))
-
-    diff_report = main.create_diff_report(original_text_tuple, suspicious_text_tuple, diff_stats)
-    print('Plagiarism report:\n{}\n'.format(diff_report))
-
-    RESULT = diff_report.split('\n')
+    RESULT = report.split("\n")
 
     assert RESULT == ['- i have a | dog |', '+ i have a | cat |', '',
                       'lcs = 3, plagiarism = 75.0%', '',

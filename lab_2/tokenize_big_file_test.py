@@ -51,5 +51,6 @@ class TokenizeBigFileTest(unittest.TestCase):
         actual = sum(actual_memory)/len(actual_memory)
 
         print(f'Actual tokenize_big_file function memory consuming is: {actual}')
-        print(f'Reference tokenize_big_file function memory consuming is: {expected}')
+        print(f'Reference tokenize_big_file functon memory consuming is: {expected}')
         self.assertGreater(expected, actual)
+
