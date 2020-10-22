@@ -342,7 +342,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
     report = ''
 
-    for sent_idx in range(len(susp)):
+    for sent_idx, _ in enumerate(susp):
         if accumulated_diff_stats['difference_indexes'][sent_idx] == ((), ()):
             orig_sentence = ' '.join(orig[sent_idx])
             susp_sentence = ' '.join(susp[sent_idx])
