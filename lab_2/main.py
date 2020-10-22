@@ -143,7 +143,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
 
     if lcs_matrix != fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens):
         return ()
-        
+
     answer = []
 
     lcs_matrix.insert(0, [0 for i in range(len(lcs_matrix))])
@@ -223,7 +223,16 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
+    if not isinstance(lcs_length, int):
+        return -1
+
+    if lcs_length is None:
+        return -1
+
     if not isinstance(suspicious_sentence_tokens, tuple):
+        return -1
+        
+    if suspicious_sentence_tokens is None:
         return -1
 
     for token in suspicious_sentence_tokens:
