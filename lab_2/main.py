@@ -74,7 +74,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
                or None in second_sentence_tokens)
     if checker or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
-    if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
+    if not len(first_sentence_tokens) or not len(second_sentence_tokens):
         return 0
     lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
     if len(first_sentence_tokens) > len(second_sentence_tokens):
@@ -211,16 +211,20 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
         original_text_tokens += (()) * (len(suspicious_text_tokens) - len(original_text_tokens))
     if len(original_text_tokens) > len(suspicious_text_tokens):
         original_text_tokens = original_text_tokens[:len(suspicious_text_tokens)]
-    diff_stats = {'text_plagiarism': calculate_text_plagiarism_score(original_text_tokens,
-                                                                     suspicious_text_tokens, plagiarism_threshold),
-                  'sentence_plagiarism': [], 'sentence_lcs_length': [], 'difference_indexes': []}
+    sentence_lcs_length = []
+    sentence_plagiarism = []
+    difference_indexes = []
     for element1, element2 in zip(original_text_tokens, suspicious_text_tokens):
         lcs_length = find_lcs_length(element1, element2, plagiarism_threshold)
         lcs_matrix = fill_lcs_matrix(element1, element2)
         lcs = find_lcs(element1, element2, lcs_matrix)
-        diff_stats['sentence_lcs_length'].append(lcs_length)
-        diff_stats['sentence_plagiarism'].append(calculate_plagiarism_score(lcs_length, element2))
-        diff_stats['difference_indexes'].append(find_diff_in_sentence(element1, element2, lcs))
+        sentence_lcs_length.append(lcs_length)
+        sentence_plagiarism.append(calculate_plagiarism_score(lcs_length, element2))
+        difference_indexes.append(find_diff_in_sentence(element1, element2, lcs))
+    diff_stats = {'text_plagiarism': calculate_text_plagiarism_score(original_text_tokens,
+                                                                     suspicious_text_tokens, plagiarism_threshold),
+                  'sentence_plagiarism': sentence_plagiarism, 'sentence_lcs_length': sentence_lcs_length,
+                  'difference_indexes': difference_indexes}
     return diff_stats
 
 
