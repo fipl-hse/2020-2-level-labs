@@ -1,7 +1,6 @@
 """
 Longest common subsequence implementation starter
 """
-from tokenizer import tokenize
 from main import create_zero_matrix
 from main import fill_lcs_matrix
 from main import find_lcs_length
