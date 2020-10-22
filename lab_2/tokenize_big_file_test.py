@@ -23,7 +23,7 @@ class TokenizeBigFileTest(unittest.TestCase):
         print(f"Actual tokenize_big_file function length: {len(actual)}")
         print(f"Reference tokenize_big_file function length: {reference_len}")
         self.assertTrue(actual)
-        self.assertEqual(reference_len, len(actual))
+        self.assertAlmostEqual(reference_len, len(actual))
 
     def test_tokenize_big_file_quickest_time(self):
         """

@@ -29,7 +29,7 @@ class FindLcsOptimizedTest(unittest.TestCase):
         print(f"Actual find_lcs_length_optimized function lcs is {actual}")
         print(f"Reference find_lcs_length_optimized function lcs is {reference_lcs}")
         self.assertTrue(actual)
-        self.assertEqual(reference_lcs, actual)
+        self.assertAlmostEqual(reference_lcs, actual)
 
     def test_find_lcs_length_optimized_quickest_time(self):
         """
