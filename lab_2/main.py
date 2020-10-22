@@ -150,7 +150,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple,
 
     scores = []
     for susp_sent, orig_sent in zip(suspicious_text_tokens,
-                                    original_sentence_tokens):
+                                    original_text_tokens):
         lcs_length = find_lcs_length(orig_sent,
                                      susp_sent,
                                      plagiarism_threshold)
