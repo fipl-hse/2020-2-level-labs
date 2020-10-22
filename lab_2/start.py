@@ -5,13 +5,12 @@ import main
 
 
 if __name__ == '__main__':
-    origin = main.tokenize_big_file('data.txt')
-    suspicious = main.tokenize_big_file('data_2.txt')
+    origin = main.tokenize_big_file('lab_2/data.txt')
+    suspicious = main.tokenize_big_file('lab_2/data_2.txt')
 
-    # I've changed `find_lcs_length` function to the optimized version in the `calculate_text_plagiarism_score`
-    # function to demonstrate usage of the optimized function from the step #11
-
-    actual = main.calculate_text_plagiarism_score(origin, suspicious)
+    lcs_length = main.find_lcs_length_optimized(origin, suspicious, plagiarism_threshold=0.3)
+    print(f"Longest common subsequence consists of {lcs_length} words.")
+    actual = main.calculate_plagiarism_score(lcs_length, suspicious)
     RESULT = actual
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
