@@ -49,7 +49,7 @@ def input_checker(func):
             # if any is None
             if isinstance(arg, (tuple, list)):
                 res = None_check(arg, return_value)
-                if not res:
+                if res == return_value:
                     return return_value
 
         return func(*args, **kwargs)
