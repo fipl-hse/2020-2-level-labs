@@ -15,8 +15,12 @@ def tokenize_by_lines(text: str) -> tuple:
     if not isinstance(text,str):
         return ()
     text = text.split('\n')
-    result = tuple(tuple(tokenize(x)) for x in text if tokenize(x))
-    return result
+    result = []
+    for sentence in text:
+        token = tokenize(sentence)
+        if token:
+            result.append(tuple(token))
+    return tuple(result)
 
 
 
@@ -110,22 +114,19 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     index_1 = len(first_sentence_tokens) - 1
     index_2 = len(second_sentence_tokens) - 1
     lcs = []
-    while len(lcs) != lcs_matrix[-1][-1] and index_1 >= 0 and index_2 >= 0:
-        if index_1 > 0:
-            cell_1 = lcs_matrix[index_1-1][index_2]
-        if index_2 > 0:
-            cell_2 = lcs_matrix[index_1][index_2-1]
-        if index_1 != 0 and index_2 == 0:
-            index_1 = 0
+    while index_1 >= 0 and index_2 >= 0:
         if first_sentence_tokens[index_1] == second_sentence_tokens[index_2]:
             lcs.append(first_sentence_tokens[index_1])
             index_1 -= 1
             index_2 -= 1
-        elif cell_1 > cell_2:
+        elif lcs_matrix[index_1 - 1][index_2] > lcs_matrix[index_1][index_2 - 1]:
             index_1 -= 1
         else:
-            index_2 -= 1
-        lcs.reverse()
+            if index_2 == 0:
+                index_1 -= 1
+            else:
+                index_2 -= 1
+    lcs.reverse()
     return tuple(lcs)
 
 
