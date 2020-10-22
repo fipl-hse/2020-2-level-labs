@@ -39,8 +39,20 @@ if __name__ == '__main__':
     report = main.create_diff_report(tokenized_orig_text, tokenized_susp_text, statistics)
     print(f"The report for two texts:\n{report}")
 
-    RESULT = report.split('\n')
-    assert RESULT == ['- i have a | dog |', '+ i have a | cat |', '', 'lcs = 3, plagiarism = 75.0%', '',
-                      '- his name is | tom |', '+ her name is | mary |', '', 'lcs = 2, plagiarism = 50.0%', '',
-                      '- i | bought it | yesterday', '+ i | found her | today', '', 'lcs = 2, plagiarism = 0.0%', '',
-                      'Text average plagiarism (words): 41.66666666666667%']
+    RESULT = report
+    assert RESULT == ''' - i have a | dog |
+    + i have a | cat |
+
+    lcs = 3, plagiarism = 75.0%
+    
+    - | his | name is | tom |
+    + | her | name is | mary |
+    
+    lcs = 2, plagiarism = 50.0%
+    
+    - i | bought it yesterday |
+    + i | found her today |
+    
+    lcs = 0, plagiarism = 0.0%
+    
+    Text average plagiarism (words): 41.66666666666667%''', 'Not working'
