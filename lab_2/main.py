@@ -318,15 +318,15 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
         len_search = len(first_sentence_tokens)
     else:
         len_search = len(second_sentence_tokens)
-    current_row = [0] * len_search
+    current_row = [0] * (len_search + 1)
     for row, word_1 in enumerate(second_sentence_tokens[:len_search]):
         previous_row = current_row[:]
         for column, word_2 in enumerate(first_sentence_tokens[:len_search]):
             if row == column:
                 if word_1 == word_2:
-                    current_row[column] = previous_row[column - 1] + 1
-                else:
-                    current_row[column] = max((current_row[column - 1], previous_row[column]))
+                    current_row[column + 1] = previous_row[column] + 1
+            else:
+                current_row[column + 1] = max((current_row[column], previous_row[column + 1]))
     lcs_length = current_row[-1]
     if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
         return 0
