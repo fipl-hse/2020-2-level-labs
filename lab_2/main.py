@@ -81,7 +81,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
                 if i_elem == j_elem:
                     if (j - 1) >= 0 or (i - 1) >= 0:
                         f[i][j] = f[i - 1][j - 1] + 1
-                    else:
+                    elif i == 0 or j == 0 or (j - 1) < 0 or (i - 1) < 0:
                         f[i][j] = 1
 
                 else:
