@@ -13,11 +13,11 @@ if __name__ == '__main__':
     lcs = main.find_lcs(original_text_tokens, suspicious_text_tokens, lcs_matrix)
     plagiarism_score = main.calculate_plagiarism_score(lcs_length, suspicious_text_tokens)
     text_plagiarism_score = main.calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens, plagiarism_threshold)
-    expected = expected = (1 / 3 + 1 / 3) / 2
-    actual = text_plagiarism_score
 
-    RESULT = actual
+    print(text_plagiarism_score)
+    print('The result is: {}% of plagiarism.'.format(round(text_plagiarism_score * 100, 2)))
+
+    RESULT = text_plagiarism_score
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == expected, 'Not working'
-
+    assert RESULT == , 'Checking not working'
