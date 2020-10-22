@@ -38,12 +38,8 @@ RESULT = report.split()
 
 assert RESULT == '''- i have a cat
 + i have a cat
-
 lcs = 4, plagiarism = 100.0%
-
 - its body is covered with | bushy white | fur
 + its body is covered with | shiny black | fur
-
 lcs = 6, plagiarism = 75.0%
-
 Text average plagiarism (words): 87.5%'''.split(), 'Lcs not working'
