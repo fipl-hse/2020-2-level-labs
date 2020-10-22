@@ -143,15 +143,14 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     while index_row >= 0 and index_col >= 0:
         if first_sentence_tokens[index_row] == second_sentence_tokens[index_col]:
             lcs.append(first_sentence_tokens[index_row])
-            index_row, index_col = index_row - 1, index_col - 1  # по диагонали, если слова с
-            # соответствующими индексами равны
+            index_row, index_col = index_row - 1, index_col - 1
         elif lcs_matrix[index_row - 1][index_col] > lcs_matrix[index_row][index_col - 1]:
-            index_row -= 1  # наверх, если верхний больше левого
+            index_row -= 1
         else:
             if index_row == 1 or index_col == 0:
-                index_row -= 1  # наверх в нулевую строчку
+                index_row -= 1
             else:
-                index_col -= 1  # налево в остальных случаях
+                index_col -= 1
 
     lcs.reverse()
     return tuple(lcs)
