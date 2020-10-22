@@ -134,7 +134,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     lcs = []
     i = len(first_sentence_tokens) - 1
     j = len(second_sentence_tokens) - 1
-    while i >= 0 and j >= 0:
+    while i > 0 and j > 0:
         if first_sentence_tokens[i] == second_sentence_tokens[j]:
             lcs.append(first_sentence_tokens[i])
             i -= 1
