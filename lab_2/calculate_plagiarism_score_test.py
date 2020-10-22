@@ -3,7 +3,7 @@ Tests calculate_plagiarism_score function
 """
 
 import unittest
-from lab_2.main import calculate_plagiarism_score
+from main import calculate_plagiarism_score
 
 
 class CalculatePlagiarismScoreTest(unittest.TestCase):
@@ -65,7 +65,7 @@ class CalculatePlagiarismScoreTest(unittest.TestCase):
             can handle incorrect suspicious_sentence_tokens inputs
         """
         patches_lcs_length = 0
-        bad_inputs = [[], {}, 9.22, -1, 0, -6, None, True]
+        bad_inputs = [[], {}, (), 9.22, -1, 0, -6, None, True]
 
         expected = -1
         for bad_input in bad_inputs:
@@ -92,7 +92,7 @@ class CalculatePlagiarismScoreTest(unittest.TestCase):
         patches_lcs_length = 2
         sentence = ()
 
-        expected = 0.0
+        expected = -1
         actual = calculate_plagiarism_score(patches_lcs_length, sentence)
         self.assertEqual(expected, actual)
 
