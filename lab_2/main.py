@@ -31,12 +31,10 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    is_bool_rows = isinstance(rows, bool)
-    is_bool_columns = isinstance(columns, bool)
-    is_not_int_rows = not isinstance(rows, int)
-    is_not_int_columns = not isinstance(columns, int)
+    are_bools = isinstance(rows, bool) and isinstance(columns, bool)
+    are_not_ints = not (isinstance(rows, int) and isinstance(columns, int))
 
-    if is_bool_rows or is_bool_columns or is_not_int_rows or is_not_int_columns or rows <= 0 or columns <= 0:
+    if are_bools or are_not_ints or rows <= 0 or columns <= 0:
         return []
 
     return [[0 for _ in range(columns)] for _ in range(rows)]
@@ -49,12 +47,12 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    is_not_tuple_fst = not isinstance(first_sentence_tokens, tuple)
-    is_not_tuple_sst = not isinstance(second_sentence_tokens, tuple)
+    are_not_tuples = not (isinstance(first_sentence_tokens, tuple) and isinstance(second_sentence_tokens, tuple))
+    are_empty_sent = not (first_sentence_tokens and second_sentence_tokens)
+    are_none_elements = (first_sentence_tokens and first_sentence_tokens[0] is None) or\
+                        (second_sentence_tokens and second_sentence_tokens[0] is None)
 
-    if is_not_tuple_fst or is_not_tuple_sst or not first_sentence_tokens or not second_sentence_tokens or \
-            (first_sentence_tokens and first_sentence_tokens[0] is None) or \
-            (second_sentence_tokens and second_sentence_tokens[0] is None):
+    if are_not_tuples or are_empty_sent or are_none_elements:
         return []
 
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
@@ -64,16 +62,20 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
             if elem_1 == elem_2:
                 if (ind_1 - 1) < 0 or (ind_2 - 1) < 0:
                     lcs_matrix[ind_1][ind_2] = 1
+
                 else:
                     lcs_matrix[ind_1][ind_2] = lcs_matrix[ind_1 - 1][ind_2 - 1] + 1
+
             else:
-                if (ind_1 - 1) < 0 and (ind_2 - 1) > 0:
-                    #  (ind_2 - 1) < 0:
+                if (ind_1 - 1) < 0 < (ind_2 - 1):
                     lcs_matrix[ind_1][ind_2] = lcs_matrix[ind_1][ind_2 - 1]
-                elif (ind_1 - 1) > 0 and (ind_2 - 1) < 0:
+
+                elif (ind_2 - 1) < 0 < (ind_1 - 1):
                     lcs_matrix[ind_1][ind_2] = lcs_matrix[ind_1 - 1][ind_2]
+
                 elif (ind_1 - 1) < 0 and (ind_2 - 1) < 0:
                     lcs_matrix[ind_1][ind_2] = 0
+
                 else:
                     lcs_matrix[ind_1][ind_2] = max([lcs_matrix[ind_1][ind_2 - 1], lcs_matrix[ind_1 - 1][ind_2]])
 
@@ -98,7 +100,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
                            or (isinstance(second_sentence_tokens, tuple) and not second_sentence_tokens))
 
     is_not_good_threshold = not (not isinstance(plagiarism_threshold, bool)
-                                 and (isinstance(plagiarism_threshold, int) or isinstance(plagiarism_threshold, float))
+                                 and (isinstance(plagiarism_threshold, (int, float)))
                                  and 0 <= plagiarism_threshold <= 1)
 
     if is_not_good_fst or is_not_good_sst or is_not_good_threshold:
@@ -145,8 +147,8 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     are_good_matrix_els = True
     max_el = lcs_matrix[-1][-1]
     for row in reversed(lcs_matrix):
-        for el in reversed(row):
-            if el > max_el:
+        for element in reversed(row):
+            if element > max_el:
                 are_good_matrix_els = False
                 break
 
@@ -156,19 +158,6 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     lcs = []
 
     ind_row, ind_col = len(first_sentence_tokens) - 1, len(second_sentence_tokens) - 1
-
-    '''zero_row = [[0 for _ in range(len(lcs_matrix[0]))]]
-    zero_row.extend(lcs_matrix)
-
-    first_zero_el = []
-    for row in lcs_matrix:
-        new_row = [0]
-        for el in row:
-            new_row.append(el)
-        first_zero_el.append(new_row)
-
-    full_lcs_matrix = [[0 for _ in range(len(first_zero_el[0]))]]
-    full_lcs_matrix.extend(first_zero_el)'''
 
     while ind_row >= 0 and ind_col >= 0:
         first_token, second_token = first_sentence_tokens[ind_row], second_sentence_tokens[ind_col]
@@ -198,7 +187,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
 
-    is_not_good_sentence = not (isinstance(suspicious_sentence_tokens, tuple))
+    is_not_good_sentence = not isinstance(suspicious_sentence_tokens, tuple)
 
     if is_not_good_sentence:
         return -1
@@ -237,7 +226,7 @@ def find_each_plag_score(original_text, suspicious_text):
 
 def make_sentences_same_lengths(original_text, length_orig_text, length_susp_text):
     if length_orig_text < length_susp_text:
-        for i in range(length_orig_text - length_susp_text):
+        for _ in range(length_orig_text - length_susp_text):
             original_text += ()
 
     elif length_orig_text > length_susp_text:
@@ -275,8 +264,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
                                  or (isinstance(suspicious_text_tokens, tuple) and not suspicious_text_tokens))
 
     is_not_good_plag_threshold = not (not isinstance(plagiarism_threshold, bool)
-                                      and (isinstance(plagiarism_threshold, float)
-                                           or isinstance(plagiarism_threshold, int))
+                                      and (isinstance(plagiarism_threshold, (float, int)))
                                       and 0 <= plagiarism_threshold <= 1)
 
     if is_not_good_orig_text or is_not_good_susp_text or is_not_good_plag_threshold:
@@ -380,9 +368,8 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
 
 def find_each_diff_indexes(original_text, suspicious_text):
     indexes = []
-    for i in range(len(suspicious_text)):
+    for i, sent_2 in enumerate(suspicious_text):
         sent_1 = original_text[i]
-        sent_2 = suspicious_text[i]
 
         lcs_matrix = fill_lcs_matrix(sent_1, sent_2)
         lcs = find_lcs(sent_1, sent_2, lcs_matrix)
@@ -466,8 +453,8 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :param accumulated_diff_stats: a dictionary with statistics for each pair of sentences
     :return: a report
     """
-    is_not_good_orig_text = not (isinstance(original_text_tokens, tuple))
-    is_not_good_susp_text = not (isinstance(suspicious_text_tokens, tuple))
+    is_not_good_orig_text = not isinstance(original_text_tokens, tuple)
+    is_not_good_susp_text = not isinstance(suspicious_text_tokens, tuple)
 
     if is_not_good_orig_text or is_not_good_susp_text:
         return ''
@@ -486,9 +473,9 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
     del accumulated_diff_stats['text_plagiarism'], accumulated_diff_stats['difference_indexes']
 
-    for s in accumulated_diff_stats.values():
+    for info in accumulated_diff_stats.values():
         for i in range(susp_text_length):
-            report_info[i].append(s[i])
+            report_info[i].append(info[i])
 
     output = form_output(report_info) + f'\nText average plagiarism (words): {total_plag_score * 100}%'
 
