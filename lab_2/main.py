@@ -72,7 +72,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     if first_sentence_tokens == None or second_sentence_tokens == None:
         return []
     for token in first_sentence_tokens:
-        if not isinstance(token, str) and not isinstance(token, int):
+        if not isinstance(token, str):
             return []
         if str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>":
             return []
@@ -81,7 +81,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         if not token:
             return []
     for token in second_sentence_tokens:
-        if not isinstance(token, str) and not isinstance(token, int):
+        if not isinstance(token, str):
             return []
         if str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>":
             return []
