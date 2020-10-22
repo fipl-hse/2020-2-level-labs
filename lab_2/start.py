@@ -13,4 +13,6 @@ accumulated_diff_stats = main.accumulate_diff_stats(original_text_tokens, suspic
 actual = main.create_diff_report(original_text_tokens, suspicious_text_tokens, accumulated_diff_stats).split()
 RESULT = main.create_diff_report(original_text_tokens, suspicious_text_tokens, accumulated_diff_stats).split()
 
+RESULT == open('lab_2/diff_report_example.txt', 'r', errors='coerce').read().split()
+
 assert RESULT

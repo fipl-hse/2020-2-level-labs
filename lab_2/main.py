@@ -60,24 +60,29 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         for word in current_tuple:
             if not isinstance(word, str):
                 return []
-    matrix = create_zero_matrix(len(first_sentence_tokens) + 1, len(second_sentence_tokens) + 1)
-    new_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
+    matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
     row_counter = 0
     for row in matrix:
-        if row_counter != 0:
-            column_counter = 0
-            while column_counter < len(row):
-                if column_counter != 0:
-                    if first_sentence_tokens[row_counter - 1] == second_sentence_tokens[column_counter - 1]:
-                        matrix[row_counter][column_counter] = matrix[row_counter - 1][column_counter - 1] + 1
-                        new_matrix[row_counter - 1][column_counter - 1] = matrix[row_counter][column_counter]
-                    else:
-                        matrix[row_counter][column_counter] = (max(matrix[row_counter][column_counter - 1],
-                            matrix[row_counter - 1][column_counter]))
-                        new_matrix[row_counter - 1][column_counter - 1] = matrix[row_counter][column_counter]
-                column_counter += 1
+        column_counter = 0
+        while column_counter < len(row):
+            if row_counter == 0:
+                row_limit = 0
+            else:
+                row_limit = 1
+            if column_counter == 0:
+                column_limit = 0
+            else:
+                column_limit = 1
+            if first_sentence_tokens[row_counter] == second_sentence_tokens[column_counter]:
+                matrix[row_counter][column_counter] = row_limit * column_limit * \
+                matrix[row_counter - 1 * row_limit][column_counter - 1 * column_limit] + 1
+            else:
+                matrix[row_counter][column_counter] = \
+                    (max(column_limit * matrix[row_counter][column_counter - 1 * column_limit],
+                    row_limit * matrix[row_counter - 1 * row_limit][column_counter]))
+            column_counter += 1
         row_counter += 1
-    return new_matrix
+    return matrix
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
     """
@@ -234,10 +239,10 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     flag = 0
     for current_list, current_tuple in zip(list_of_lists, list_of_tuples):
         for word in current_tuple:
-            if word not in lcs and flag == 0:
+            if word not in lcs and not flag:
                 current_list.append(current_tuple.index(word))
                 flag = 1
-            elif word in lcs and flag == 1:
+            elif word in lcs and flag:
                 current_list.append(current_tuple.index(word))
                 flag = 0
             if word not in lcs and current_tuple.index(word) == len(current_tuple) - 1:
@@ -333,7 +338,6 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     current_result = ' '.join(current_result)
     result.append(current_result)
     result = ''.join(result)
-    print(result)
     return result
 
 
