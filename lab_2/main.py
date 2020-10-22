@@ -492,11 +492,11 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
 
     if not current_row:
         return 0
-    my_threshold = current_row[-1][-1] / len(second_sentence_tokens)
+    my_threshold = current_row[-1] / len(second_sentence_tokens)
     if my_threshold < plagiarism_threshold:
         return 0
     else:
-        return current_row[-1][-1]
+        return current_row[-1]
 
 
 def read_in_parts(path_to_file: str, part_size=1024) -> str:
@@ -513,6 +513,7 @@ def read_in_parts(path_to_file: str, part_size=1024) -> str:
 
 
 def tok(path_to_file: str) -> tuple:
+    global tokenized_data
     if not isinstance(path_to_file, str):
         return ()
 
@@ -521,6 +522,9 @@ def tok(path_to_file: str) -> tuple:
         yield tokenized_data
 
     return tokenized_data
+
+
+cache = {}
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -533,7 +537,7 @@ def tokenize_big_file(path_to_file: str) -> tuple:
         return ()
 
     array = ()
-    cache = {}
+    tokens_dict = {}
     for piece in tok(path_to_file):
         for sentence_index in range(len(piece)):
             array += piece[sentence_index]
@@ -545,5 +549,9 @@ def tokenize_big_file(path_to_file: str) -> tuple:
             else:
                 token_num = 0
             cache[token] = token_num
-    return cache
+
+    for token_index, token in enumerate(array):
+        tokens_dict[token_index] = cache[token]
+
+    return tokens_dict
 
