@@ -125,46 +125,14 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    if not first_sentence_tokens:
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple)\
+            or not isinstance(lcs_matrix, list)\
+            or not len(first_sentence_tokens) == len(lcs_matrix) != 0\
+            or lcs_matrix != fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens):
         return ()
 
 
-    if first_sentence_tokens == None:
-        return ()
-
-
-    if not second_sentence_tokens:
-        return ()
-
-    if second_sentence_tokens == None:
-        return ()
-
-    if not lcs_matrix:
-        return ()
-
-    if lcs_matrix == None:
-        return ()
-
-    if not isinstance(first_sentence_tokens, tuple) or len(first_sentence_tokens) == 0:
-        return ()
-
-    if not isinstance(second_sentence_tokens, tuple) or len(second_sentence_tokens) == 0:
-        return ()
-
-
-    for token in first_sentence_tokens:
-        if not isinstance(token, str) and not isinstance(token, int):
-            return ()
-
-    for token in second_sentence_tokens:
-        if not isinstance(token, str) and not isinstance(token, int):
-            return ()
-
-
-    if not isinstance(lcs_matrix, list):
-        return ()
-
-    if not lcs_matrix[0][0] in (0, 1) or  len(lcs_matrix) != len(first_sentence_tokens) \
+    if not lcs_matrix[0][0] in (0, 1) or len(lcs_matrix) != len(first_sentence_tokens) \
      or len(lcs_matrix[0]) != len(second_sentence_tokens):
         return ()
 
