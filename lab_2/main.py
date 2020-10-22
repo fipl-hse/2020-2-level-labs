@@ -2,6 +2,8 @@
 Longest common subsequence problem
 """
 from typing import Dict, Callable, List, Tuple
+import pickle
+import os
 from tokenizer import tokenize
 
 
@@ -171,12 +173,12 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     checks: Dict[Callable[[], bool], float] = {
-        lambda: isinstance(lcs_length, int): -1.0,
         lambda: not isinstance(lcs_length, bool): -1.0,
+        lambda: isinstance(lcs_length, int): -1.0,
         lambda: isinstance(suspicious_sentence_tokens, tuple): -1.0,
         lambda: suspicious_sentence_tokens: 0.0,
         lambda: 0 <= lcs_length <= len(suspicious_sentence_tokens): -1.0,
-        lambda: all((isinstance(el, str) for el in suspicious_sentence_tokens)): -1.0,
+        lambda: any(suspicious_sentence_tokens): -1.0,
     }
 
     for check, value in checks.items():
@@ -369,24 +371,31 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     return lcs_length if (not lcs_length / len(s_2) < plagiarism_threshold) else 0
 
 
-vocab = {'|i|': 0}
-
-
 def tokenize_big_file(path_to_file: str) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
     :param path_to_file: a path
     :return: a tuple with vocab
     """
-    file = open(path_to_file, encoding="utf-8")
-    ids = []
+    file = open(path_to_file, encoding='UTF-8')
+    tokens = []
+
+    if os.path.exists('vocab.pkl'):
+        with open('vocab.pkl', 'rb') as obj:
+            vocab = pickle.load(obj)
+    else:
+        vocab = {'|i|': 0}
 
     for chunk in file:
+        chunk = tuple(chunk)
         for token in tokenize(chunk):
             if token not in vocab:
                 vocab[token] = vocab['|i|']
                 vocab['|i|'] += 1
 
-            ids.append(vocab[token])
+            tokens.append(vocab[token])
 
-    return tuple(ids)
+    with open('vocab.json', 'wb') as out:
+        pickle.dump(vocab, out)
+
+    return tuple(tokens)
