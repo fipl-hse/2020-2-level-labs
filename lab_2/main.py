@@ -304,25 +304,25 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
      'sentence_lcs_length': list,
      'difference_indexes': list}
     """
-    res_dict = {}
-
-    text_plagiarism = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens, plagiarism_threshold=0.3)
-    res_dict["text_plagiarism"] = text_plagiarism
-    sentence_plagiarism = []
-    for lines in zip(original_text_tokens, suspicious_text_tokens):
-        sentence_plagiarism.append(plagiarism(lines[0], lines[1]))
-    res_dict["sentence_plagiarism"] = sentence_plagiarism
-
-    sentence_lcs_length = []
-    for lines in zip(original_text_tokens, suspicious_text_tokens):
-        sentence_lcs_length.append(find_lcs_length(lines[0],lines[1]))
-    res_dict['sentence_lcs_length'] = sentence_lcs_length
-
-    difference_indexes = []
-    for lines in zip(original_text_tokens, suspicious_text_tokens):
-        difference_indexes.append(find_diff_in_sentence(lines[0],lines[1]))
-    res_dict[difference_indexes] = difference_indexes
-
+    # res_dict = {}
+    #
+    # text_plagiarism = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens, plagiarism_threshold=0.3)
+    # res_dict["text_plagiarism"] = text_plagiarism
+    # sentence_plagiarism = []
+    # for lines in zip(original_text_tokens, suspicious_text_tokens):
+    #     sentence_plagiarism.append(plagiarism(lines[0], lines[1]))
+    # res_dict["sentence_plagiarism"] = sentence_plagiarism
+    #
+    # sentence_lcs_length = []
+    # for lines in zip(original_text_tokens, suspicious_text_tokens):
+    #     sentence_lcs_length.append(find_lcs_length(lines[0],lines[1]))
+    # res_dict['sentence_lcs_length'] = sentence_lcs_length
+    #
+    # difference_indexes = []
+    # for lines in zip(original_text_tokens, suspicious_text_tokens):
+    #     difference_indexes.append(find_diff_in_sentence(lines[0],lines[1]))
+    # res_dict[difference_indexes] = difference_indexes
+    pass 
 
 def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tuple, accumulated_diff_stats: dict) -> str:
     """
