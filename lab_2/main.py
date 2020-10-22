@@ -86,11 +86,13 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     if check_type or check_plg_thr:
         return -1
 
-    lcs_mtrx = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
-    lcs_length = lcs_mtrx[-1][-1] if lcs_mtrx else 0
+    lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
+    lcs_length = 0
 
-    if lcs_length and lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
-        return 0
+    if lcs_matrix:
+        lcs_length = lcs_matrix[-1][-1]
+        if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
+            return 0
 
     return lcs_length
 

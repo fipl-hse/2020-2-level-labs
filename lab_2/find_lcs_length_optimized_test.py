@@ -2,10 +2,6 @@
 Tests find_lcs_optimized function
 """
 
-import timeit
-import unittest
-from memory_profiler import memory_usage
-from lab_2.main import find_lcs_length_optimized, tokenize_big_file
 
 
 class FindLcsOptimizedTest(unittest.TestCase):
