@@ -149,7 +149,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     if not isinstance(lcs_matrix, list):
         return ()
 
-    if not lcs_matrix or not lcs_matrix[0][0] in (0, 1) or  len(lcs_matrix) != len(first_sentence_tokens) or len(lcs_matrix[0]) != len(second_sentence_tokens):
+    if not lcs_matrix or not lcs_matrix[0][0] in (0, 1) or  len(lcs_matrix) != len(first_sentence_tokens) or len(lcs_matrix[0]) != len(second_sentence_tokens) or lcs_matrix == None:
         return ()
 
 
