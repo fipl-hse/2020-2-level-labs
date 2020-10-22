@@ -388,17 +388,18 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
+    batch = 1000
     tokens = []
-    idx = {}
-
-    file = (tokenize(row) for row in open(path_to_file, encoding='utf-8'))
-
+    ids = {}
     num = 0
-    for line in file:
-        for token in line:
-            if token not in idx:
-                idx[token] = num
+
+    file = open(path_to_file, encoding='UTF-8')
+
+    for chunk in zip(*[iter(file)] * batch):
+        for token in tokenize(''.join(chunk)):
+            if token not in ids:
+                ids[token] = num
                 num += 1
-            tokens.append(idx[token])
+            tokens.append(ids[token])
 
     return tuple(tokens)
