@@ -42,7 +42,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
         return []
 
     zero_matrix = []
-    for i in range(rows):
+    for _ in range(rows):
         zero_matrix.append([0] * columns)
     return zero_matrix
 
@@ -86,7 +86,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     sent2_check = not ((isinstance(second_sentence_tokens, tuple) and second_sentence_tokens
                      and second_sentence_tokens[0] is not None)
                      or (isinstance(second_sentence_tokens, tuple) and not second_sentence_tokens))
-    threshold_check = ((isinstance(plagiarism_threshold, int) or isinstance(plagiarism_threshold, float))
+    threshold_check = (isinstance(plagiarism_threshold, (float, int))
                        and not isinstance(plagiarism_threshold, bool) and 0 < plagiarism_threshold < 1)
 
     if sent1_check or sent2_check or not threshold_check:
@@ -105,8 +105,8 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
 
     if divide < plagiarism_threshold:
         return 0
-    else:
-        return lcs_len
+
+    return lcs_len
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
@@ -179,7 +179,8 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     return lcs_length / len(suspicious_sentence_tokens)
 
 
-def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
+def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
+                                    plagiarism_threshold=0.3) -> float:
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
     The score is the sum of lcs values for each pair divided by the number of tokens in suspicious text
@@ -298,7 +299,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
 
     if len(orig) < len(susp):
         orig = list(orig)
-        for i in range(len(susp) - len(orig)):
+        for _ in range(len(susp) - len(orig)):
             orig.append(())
         orig = tuple(orig)
 
