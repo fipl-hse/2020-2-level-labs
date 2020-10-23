@@ -1,6 +1,9 @@
 """
 Longest common subsequence problem
 """
+import pickle
+import os
+import re
 from lab_2.tokenizer import tokenize
 
 
@@ -303,8 +306,6 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    global id_cache
-    id_cache = {}
     len_search = min(len(first_sentence_tokens), len(second_sentence_tokens))
     cur_row = [0] * (len_search + 1)
     for word_1 in first_sentence_tokens:
@@ -318,9 +319,6 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     return lcs_len if not lcs_len / len(second_sentence_tokens) < plagiarism_threshold else 0
 
 
-id_cache = {}
-
-
 def tokenize_big_file(path_to_file: str, id_number=0) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
@@ -328,21 +326,22 @@ def tokenize_big_file(path_to_file: str, id_number=0) -> tuple:
     :param id_number: an id
     :return: a tuple with ids
     """
-    global id_cache
-    id_dict = id_cache
     tokens = []
+    if os.path.exists('id_dict.pkl'):
+        with open('id_dict.pkl', 'rb') as read:
+            id_dict = pickle.load(read)
+    else:
+        id_dict = {}
     with open(path_to_file, encoding='UTF-8') as file:
-        while 1:
-            for line in (file.readline() for _ in range(1000)):
-                token_sentence = tokenize(line)
-                for token in token_sentence:
-                    if token not in id_dict:
-                        id_dict[token] = id_number
-                        tokens.append(id_number)
-                        id_number += 1
-                    else:
-                        tokens.append(id_dict[token])
-            if not line:
-                break
-    id_cache = id_dict
+        for line in file:
+            token_sentence = re.sub('[^a-z \n]', '', line.lower()).split()
+            for token in token_sentence:
+                if token not in id_dict:
+                    id_dict[token] = id_number
+                    tokens.append(id_number)
+                    id_number += 1
+                else:
+                    tokens.append(id_dict[token])
+    with open('id_dict.pkl', 'wb') as write:
+        pickle.dump(id_dict, write)
     return tuple(tokens)
