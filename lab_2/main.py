@@ -314,7 +314,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         susp_sent = ' '.join(sent_2)
     
         matrix = accumulated_diff_stats['sentence_lcs_length'][ind]
-        plag_score = float(accumulated_diff_stats['sentence_plagiarism'][index_sent] * 100)
+        plag_score = float(accumulated_diff_stats['sentence_plagiarism'][ind] * 100)
 
         report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(orig_sent,susp_sent,matrix,plag_score)
     
