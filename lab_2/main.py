@@ -82,6 +82,8 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     criterion = [not isinstance(first_sentence_tokens, tuple), not isinstance(second_sentence_tokens, tuple), not isinstance(plagiarism_threshold, float)]
     if any(criterion):
         return -1
+    if None in first_sentence_tokens or None in second_sentence_tokens:
+        return -1
     for token1 in first_sentence_tokens:
         if not isinstance(token1, str):
             return -1
