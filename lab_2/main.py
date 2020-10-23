@@ -205,7 +205,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple,
         original_text_tokens = tuple(original_text_tokens)
 
     list_lcs_text = []
-    for index in range(0, len(suspicious_text_tokens)):
+    for index, element in enumerate(suspicious_text_tokens):
         lcs = find_lcs_length(original_text_tokens[index],
                               suspicious_text_tokens[index],
                               plagiarism_threshold)
@@ -239,7 +239,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     # main logic
     indices_first = []
     indices_second = []
-    for index in range(0, len(original_sentence_tokens)):
+    for index, element in enumerate(original_sentence_tokens):
         if original_sentence_tokens[index] not in lcs:
             if original_sentence_tokens[index-1] in lcs or index == 0:
                 indices_first.append(index)
@@ -285,7 +285,7 @@ def accumulate_diff_stats(original_text_tokens: tuple,
             original_text_tokens.append(())
         original_text_tokens = tuple(original_text_tokens)
 
-    for index in range(0, len(suspicious_text_tokens)):
+    for index, element in enumerate(suspicious_text_tokens):
         # find_lcs_length, calculate_plagiarism_score, find diff in sentence
         lcs = find_lcs_length(original_text_tokens[index],
                               suspicious_text_tokens[index],
@@ -326,7 +326,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         original_text_tokens = tuple(original_text_tokens)
 
     report = """"""
-    for index in range(0, len(suspicious_text_tokens)):
+    for index, element in enumerate(suspicious_text_tokens):
         report += '-'
         for index_token in range(0, len(original_text_tokens[index])):
             if index_token in accumulated_diff_stats['difference_indexes'][index][0]:
