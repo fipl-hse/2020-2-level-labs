@@ -163,7 +163,8 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     is_orig = not isinstance(original_text_tokens,tuple) or original_text_tokens is None
     is_text = not isinstance(suspicious_text_tokens,tuple) or suspicious_text_tokens is None
 
-    if is_orig or is_text:
+   
+    if is_orig or is_text or isinstance(plagiarism_threshold, float) and (0 <= plagiarism_threshold <= 1):
         return -1
 
     while len(original_text_tokens) < len(suspicious_text_tokens):
@@ -172,6 +173,8 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     score_all = []
     for i in range(len(suspicious_text_tokens)):
         lcs_length = find_lcs_length(original_text_tokens[i],suspicious_text_tokens[i], plagiarism_threshold) #отношение к длине
+        if lcs_length == -1:
+          return -1.0
 
         score = calculate_plagiarism_score(lcs_length,suspicious_text_tokens[i])    #колво плагиата построчно
 
@@ -286,8 +289,8 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     length = len(suspicious_text_tokens)
     while len(original_text_tokens) < length:
         original_text_tokens += ('',)
-
     report = ''
+
     for ind in range(length):
         sent_1 = list(original_text_tokens[ind])
         sent_2 = list(suspicious_text_tokens[ind])
