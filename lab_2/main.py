@@ -37,7 +37,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     """
     criterion = [isinstance(rows,int) and isinstance(columns,int) and not isinstance(rows,bool) and
           not isinstance(columns,bool) and (rows > 0) and (columns > 0)]
-    if criterion:
+    if all (criterion):
         i = 0
         zero_matrix = [[0 for i in range(columns)] for j in range(rows)]
         return zero_matrix
