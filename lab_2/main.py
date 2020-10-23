@@ -121,8 +121,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         return ()
     if None in lcs_matrix:
         return ()
-    if lcs_matrix[0][0] != 0 and lcs_matrix[0][0] != 1:
-        return ()
+    
     lcs = []
     for row, elmt1 in reversed(list(enumerate(first_sentence_tokens))):
         for column, elmt2 in reversed(list(enumerate(second_sentence_tokens))):
