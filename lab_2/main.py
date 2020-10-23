@@ -395,28 +395,24 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    file = open(path_to_file, encoding='UTF-8')
-
-    def ind_dict(file):
-        tok = []
-        i = 0
-        if os.path.exists('nw.pkl'):
-            with open('lab_2/nw.pkl', 'rb') as pkl:
-                nw_dict = pickle.load(pkl)
-        else:
-            nw_dict = {}
-
+    tok = []
+    num = 0
+    if os.path.exists('nw.pkl'):
+        with open('nw.pkl', 'rb') as pkl:
+            nw_dict = pickle.load(pkl)
+    else:
+        nw_dict = {}
+    with open(path_to_file, encoding='utf-8') as file:
         for line in file:
             tok_line = re.sub('[^a-z \n]', '', line.lower()).split()
             for token in tok_line:
                 if token not in nw_dict:
-                    nw_dict[token] = i
-                    tok.append(i)
-                    i += 1
+                    nw_dict[token] = num
+                    tok.append(num)
+                    num += 1
                 else:
                     tok.append(nw_dict[token])
-        with open('lab_2/num_w.pkl', 'wb') as nw:
-            pickle.dump(nw_dict, nw)
-            file.close()
-        return tuple(tok)
-    return ind_dict(file)
+    with open('nw.pkl', 'wb') as nw:
+        pickle.dump(nw_dict, nw)
+
+    return tuple(tok)
