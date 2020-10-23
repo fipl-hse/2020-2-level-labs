@@ -328,12 +328,13 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple,
     length = max(len(first_sentence_tokens), len(second_sentence_tokens))
     x_vector = [0 for _ in range(len(second_sentence_tokens))]
     for x_word in first_sentence_tokens[:length]:
+        if x_word not in second_sentence_tokens[:length]:
+            continue
         for i, y_word in enumerate(second_sentence_tokens[:length]):
             if x_word == y_word:
                 x_vector[i] += 1
             else:
                 x_vector[i] = max(x_vector[i - 1], x_vector[i])
-        print(x_word, x_vector)
     
     lcs_length = x_vector[-1]
     if lcs_length / len(second_sentence_tokens) > plagiarism_threshold:
@@ -355,5 +356,5 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     with open(path_to_file, 'r', encoding='utf-8') as file:
         for line in file:
             tokens = re.sub('[^a-z \n]', '', line.lower()).split()
-            indexes += tuple(vocabulary[token] for token in tokens)
+            indexes += *(vocabulary[token] for token in tokens),
     return indexes
