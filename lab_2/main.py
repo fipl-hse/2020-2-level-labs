@@ -290,7 +290,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     report = ''
     for ind in range(length):
         sent_1 = list(original_text_tokens[ind])
-        sent-2 = list(suspicious_text_tokens[ind])
+        sent_2 = list(suspicious_text_tokens[ind])
         diff_indexes = accumulated_diff_stats['difference_indexes'][ind]
 
 
