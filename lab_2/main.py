@@ -399,20 +399,19 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     num = 0
     if os.path.exists('nw.pkl'):
         with open('nw.pkl', 'rb') as pkl:
-            nw_dict = pickle.load(pkl)
+            nw_d = pickle.load(pkl)
     else:
-        nw_dict = {}
+        nw_d = {}
     with open(path_to_file, encoding='utf-8') as file:
         for line in file:
-            tok_line = re.sub('[^a-z \n]', '', line.lower()).split()
-            for token in tok_line:
-                if token not in nw_dict:
-                    nw_dict[token] = num
+            #tok_line = re.sub('[^a-z \n]', '', line.lower()).split()
+            for token in re.sub('[^a-z \n]', '', line.lower()).split():
+                if token not in nw_d:
+                    nw_d[token] = num
                     tok.append(num)
                     num += 1
                 else:
-                    tok.append(nw_dict[token])
+                    tok.append(nw_d[token])
     with open('nw.pkl', 'wb') as nw:
-        pickle.dump(nw_dict, nw)
-
+        pickle.dump(nw_d, nw)
     return tuple(tok)
