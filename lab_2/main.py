@@ -119,6 +119,8 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
                 return ()
     if lcs_matrix != fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens):
         return ()
+    if None in lcs_matrix:
+        return ()
     if lcs_matrix[0][0] != 0 and lcs_matrix[0][0] != 1:
         return ()
     lcs = []
