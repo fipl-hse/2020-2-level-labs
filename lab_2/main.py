@@ -304,13 +304,8 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :return: a length of the longest common subsequence
     """
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
-            not isinstance(plagiarism_threshold, float):
+            not isinstance(plagiarism_threshold, float) or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
-    if None in first_sentence_tokens or None in second_sentence_tokens or \
-            plagiarism_threshold < 0 or plagiarism_threshold > 1:
-        return -1
-    if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
-        return 0
     len_search = min(len(first_sentence_tokens), len(second_sentence_tokens))
     current_row = [0] * (len_search + 1)
     for word_1 in first_sentence_tokens:
@@ -329,7 +324,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
 id_cache = {}
 
 
-def tokenize_big_file(path_to_file: str, id_number=1) -> tuple:
+def tokenize_big_file(path_to_file: str, id_number=0) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
     :param path_to_file: a path
