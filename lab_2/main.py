@@ -19,7 +19,8 @@ def tokenize_by_lines(text: str) -> tuple:
 
     separate_sentences = []
     for sentence in sentences_in_text:
-        separate_sentences.append(tuple(tokenize(sentence)))
+        if len(sentence) > 0:
+            separate_sentences.append(tuple(tokenize(sentence)))
     separate_sentences = tuple(separate_sentences)
 
     return separate_sentences
@@ -116,7 +117,34 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    pass
+    if not isinstance(first_sentence_tokens, tuple) \
+            or not isinstance(second_sentence_tokens, tuple) \
+            or not isinstance(lcs_matrix, list):
+        return ()
+
+    new_matrix = [[0] * len(lcs_matrix)]
+    for elements_in_row in lcs_matrix:
+        new_matrix.append([0] + elements_in_row)
+
+    LCS = []
+    row_index = len(first_sentence_tokens)
+    column_index = len(second_sentence_tokens)
+
+    while row_index >= 1 and column_index >= 1:
+
+        if first_sentence_tokens[row_index - 1] == second_sentence_tokens[column_index - 1]:
+            LCS.append(first_sentence_tokens[row_index - 1])
+            row_index = row_index - 1
+            column_index = column_index - 1
+
+        elif new_matrix[row_index - 1][column_index] > new_matrix[row_index][column_index - 1]:
+            row_index -= 1
+
+        else:
+            column_index -= 1
+    LCS.reverse()
+
+    return tuple(LCS)
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
