@@ -20,8 +20,7 @@ def tokenize_by_lines(text: str) -> tuple:
     text_devided = text.split('\n')
     for sentence in text_devided:
         tokens = tuple(tokenize(sentence))
-        if tokens:
-            output.append(tokens)
+        output.append(tokens)
 
     return tuple(output)
 
@@ -71,12 +70,24 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
-            not isinstance(plagiarism_threshold, float):
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
         return -1
-    if None in first_sentence_tokens or None in second_sentence_tokens or \
-            plagiarism_threshold < 0 or plagiarism_threshold > 1:
+    for token_from_first in first_sentence_tokens:
+        if not isinstance(token_from_first, str):
+            return -1
+    for token_from_second in second_sentence_tokens:
+        if not isinstance(token_from_second, str):
+            return -1
+    if not isinstance(plagiarism_threshold, float) or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
+    if not first_sentence_tokens or not second_sentence_tokens:
+        return 0
+
+    lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
+    lcs_length = lcs_matrix[-1][-1]
+    if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
+        return 0
+    return lcs_length
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
