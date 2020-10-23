@@ -3,17 +3,26 @@ Longest common subsequence implementation starter
 """
 from lab_2 import main
 
-if __name__ == '__main__':
-    original_text_tokens = ('the', 'black', 'dog', 'is', 'running')
-    suspicious_text_tokens = ('the', 'black', 'cat', 'is', 'sleeping')
+if __name__ == "__main__":
+     original_text = '''The horse is running.
+      It is fast.'''
+     second_text = '''The cow is eating. 
+     It is low.'''
 
-    plagiarism_threshold = 0.2
-    lcs_matrix = main.fill_lcs_matrix(original_text_tokens, suspicious_text_tokens)
-    lcs_length = main.find_lcs_length(original_text_tokens, suspicious_text_tokens,plagiarism_threshold)
-    lcs = main.find_lcs(original_text_tokens, suspicious_text_tokens, lcs_matrix)
+     original_tokens = main.tokenize_by_lines(original_text)
+     print('Original tokens: ', original_tokens)
 
-    RESULT = lcs_length
+     second_tokens = main.tokenize_by_lines(second_text)
+     print('Second tokens: ', second_tokens)
 
-    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Checking not working'
+     plagiarism_threshold = 0.3
+     zero_matrix = main.create_zero_matrix(len(original_tokens), len(second_tokens))
+
+     lcs_matrix = main.fill_lcs_matrix(original_tokens[0], second_tokens[0])
+     print('LCS matrix: ', lcs_matrix)
+
+     RESULT = lcs_matrix
+     assert RESULT == lcs_matrix, "Not working"
+
+
 
