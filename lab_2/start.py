@@ -4,7 +4,6 @@ Longest common subsequence implementation starter
 
 
 from lab_2.main import tokenize_by_lines, accumulate_diff_stats, create_diff_report
-from lab_2.tokenizer import tokenize
 
 
 if __name__ == '__main__':
