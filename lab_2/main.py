@@ -19,7 +19,7 @@ def tokenize_by_lines(text: str) -> tuple:
 
     separate_sentences = []
     for sentence in sentences_in_text:
-        if len(sentence) > 0:
+        if len(sentence.strip()) > 0:
             separate_sentences.append(tuple(tokenize(sentence)))
 
     return tuple(separate_sentences)
@@ -91,19 +91,19 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
             and (first_sentence_tokens != (None, None) and second_sentence_tokens != (None, None)) \
             and isinstance(plagiarism_threshold, float)  and (0 < plagiarism_threshold < 1):
 
-        if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
-            return 0
+        if len(first_sentence_tokens) != 0 and len(second_sentence_tokens) != 0:
 
-        if len(first_sentence_tokens) > len(second_sentence_tokens):
-            max_length = (fill_lcs_matrix(second_sentence_tokens, first_sentence_tokens))[-1][-1]
-        else:
-            max_length = (fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens))[-1][-1]
+            if len(first_sentence_tokens) > len(second_sentence_tokens):
+                max_length = (fill_lcs_matrix(second_sentence_tokens, first_sentence_tokens))[-1][-1]
+            else:
+                max_length = (fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens))[-1][-1]
 
-        fraction = max_length / len(second_sentence_tokens)
-        if fraction < plagiarism_threshold:
-            return 0
+            fraction = max_length / len(second_sentence_tokens)
+            if fraction < plagiarism_threshold:
+                return 0
 
-        return max_length
+            return max_length
+        return 0
 
     return -1
 
@@ -118,7 +118,10 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     """
     if not isinstance(first_sentence_tokens, tuple) \
             or not isinstance(second_sentence_tokens, tuple) \
-            or not isinstance(lcs_matrix, list):
+            or not isinstance(lcs_matrix, list) \
+            or lcs_matrix == [[None, None]] \
+            or lcs_matrix == [None] \
+            or lcs_matrix == (None, None):
         return ()
 
     if lcs_matrix == []:
