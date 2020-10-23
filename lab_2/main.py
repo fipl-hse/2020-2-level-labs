@@ -364,4 +364,5 @@ def tokenize_big_file(path_to_file: str) -> tuple:
                 yield vocabulary[token]
         with open('vocabulary.pickle', 'wb') as outfile:
             pickle.dump(vocabulary, outfile)
+            file.close()
     return tuple(generate_indexes(file))
