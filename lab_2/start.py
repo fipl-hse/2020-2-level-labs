@@ -7,7 +7,6 @@ from lab_2.main import tokenize_by_lines, accumulate_diff_stats, create_diff_rep
 
 
 if __name__ == '__main__':
-    # my texts here
     ORIGINAL_TEXT = """
     Stephanie recently took a weekend trip to Los Angeles, California. 
     Los Angeles is a coastal city situated along the Pacific Ocean. 
