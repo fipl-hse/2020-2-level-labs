@@ -412,6 +412,6 @@ def tokenize_big_file(path_to_file: str) -> tuple:
                     num += 1
                 else:
                     tok.append(nw_d[token])
-    with open('nw.pkl', 'wb') as nw:
-        pickle.dump(nw_d, nw)
+    with open('nw.pkl', 'wb') as num_w:
+        pickle.dump(nw_d, num_w)
     return tuple(tok)
