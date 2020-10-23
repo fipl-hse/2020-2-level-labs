@@ -79,29 +79,14 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    criterion = [not isinstance(first_sentence_tokens, tuple), not isinstance(second_sentence_tokens, tuple), not isinstance(plagiarism_threshold, float)]
-    if any(criterion):
-        return -1
-    if None in first_sentence_tokens or None in second_sentence_tokens:
-        return -1
-    for token1 in first_sentence_tokens:
-        if not isinstance(token1, str):
-            return -1
-    for token2 in second_sentence_tokens:
-        if not isinstance(token2, str):
-            return -1
-    if plagiarism_threshold < 0 or plagiarism_threshold > 1:
-        return -1
-    if not first_sentence_tokens or not second_sentence_tokens:
-        return 0
+    criterion = [isinstance(plagiarism_threshold, float), plagiarism_threshold > 0, plagiarism_threshold <= 1, isinstance(first_sentence_tokens, tuple), isinstance(second_sentence_tokens, tuple), None not in first_sentence_tokens, None not in second_sentence_tokens]
     lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
-    if len(first_sentence_tokens) > len(second_sentence_tokens):
-        lcs_length = max(lcs_matrix[len(second_sentence_tokens) - 1])
-    else:
-        lcs_length = max(lcs_matrix[-1])
-    if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
-        return 0
-    return lcs_length
+    if all(criterion):
+        if not first_sentence_tokens or not second_sentence_tokens or len(second_sentence_tokens) < plagiarism_threshold:
+            return 0
+        length = lcs_matrix[-1][-1]
+        return length
+    return -1
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
