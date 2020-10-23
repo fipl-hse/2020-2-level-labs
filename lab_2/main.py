@@ -3,7 +3,7 @@ Longest common subsequence problem
 """
 import re
 import pickle
-import csv
+import os
 from copy import deepcopy
 from tokenizer import tokenize
 
@@ -369,24 +369,24 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    incorrect_inputs = (not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple)
-                        or not isinstance(plagiarism_threshold, float))
-    if incorrect_inputs:
-        return -1
+    # incorrect_inputs = (not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple)
+    #                     or not isinstance(plagiarism_threshold, float))
+    # if incorrect_inputs:
+    #     return -1
 
     len_need = min(len(first_sentence_tokens), len(second_sentence_tokens))
 
-    current = [0] * (len_need + 1)
-    for word_first in first_sentence_tokens[:len_need]:
-        previous = current[:]
-        for ind_second, word_second in enumerate(second_sentence_tokens[:len_need]):
-            if word_first == word_second:
-                current[ind_second + 1] = previous[ind_second] + 1
+    cur = [0] * (len_need + 1)
+    for t_1 in first_sentence_tokens:
+        prev = cur[:]
+        for i_2, t_2 in enumerate(second_sentence_tokens):
+            if t_1 == t_2:
+                cur[i_2 + 1] = prev[i_2] + 1
             else:
-                current[ind_second + 1] = max(current[ind_second], previous[ind_second + 1])
-    length_lcs = current[-1]
+                cur[i_2 + 1] = max(cur[i_2], prev[i_2 + 1])
+    len_lcs = cur[-1]
 
-    return length_lcs if not (length_lcs / len(second_sentence_tokens)) < plagiarism_threshold else 0
+    return len_lcs if not len_lcs / len(second_sentence_tokens) < plagiarism_threshold else 0
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -395,21 +395,28 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    # file = open('numeric_words.csv', 'rb')
-    with open('numeric_words.csv', 'rb') as pickled_file:
-        numeric_words_dict = pickle.load(pickled_file)
-    # numeric_words_dict = pickle.load(open('numeric_words.csv'))
+    file = open(path_to_file, encoding='UTF-8')
 
-    numeric_tokens = []
-    with open(path_to_file, encoding='utf-8') as data_file:
-        while True:
-            for line in (data_file.readline() for _ in range(1500)):
-        # for line in data_file:
-                tokenized_sent = re.sub('[^a-z \n]', '', line.lower()).split()
-                numeric_tokens.extend([numeric_words_dict[token] for token in tokenized_sent])
-            if not line:
-                break
+    def ind_dict(file):
+        tok = []
+        i = 0
+        if os.path.exists('nw.pkl'):
+            with open('lab_2/nw.pkl', 'rb') as pkl:
+                nw_dict = pickle.load(pkl)
+        else:
+            nw_dict = {}
 
-    return tuple(numeric_tokens)
-
-
+        for line in file:
+            tok_line = re.sub('[^a-z \n]', '', line.lower()).split()
+            for token in tok_line:
+                if token not in nw_dict:
+                    nw_dict[token] = i
+                    tok.append(i)
+                    i += 1
+                else:
+                    tok.append(nw_dict[token])
+        with open('lab_2/num_w.pkl', 'wb') as nw:
+            pickle.dump(nw_dict, nw)
+            file.close()
+        return tuple(tok)
+    return ind_dict(file)

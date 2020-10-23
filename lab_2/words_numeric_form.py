@@ -19,8 +19,7 @@ def make_words_numeric(path_to_file):
 
 
 words_numeric_text = make_words_numeric('lab_2/data.txt')
-words_numeric_second_text = make_words_numeric('lab_2/data_2.txt')
-words_numeric_text.update(words_numeric_second_text)
+words_numeric_text = make_words_numeric('lab_2/data_2.txt')
 
-file = open('lab_2/numeric_words.csv', 'wb')
-pickle.dump(words_numeric_text, file)
+with open('lab_2/nw.pkl', 'wb') as pickle_file:
+    pickle.dump(words_numeric_text, pickle_file)
