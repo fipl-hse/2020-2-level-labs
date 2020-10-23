@@ -252,11 +252,9 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
 
     orig = original_text_tokens
     susp = suspicious_text_tokens
-    pl_thr = plagiarism_threshold
     all_states['text_plagiarism'] = calculate_text_plagiarism_score(orig, susp, pl_thr)
     for i in range(length):
-        lcs_length = find_lcs_length(orig[i], susp[i],  pl_thr=0.0)      #предложений несколько/ посдчет заиствований в отдельных ключах
-
+        lcs_length = find_lcs_length(orig[i], susp[i],  plagiarism_threshold=0.0)      
         all_states['sentence_plagiarism'][i] = calculate_plagiarism_score(lcs_length, susp[i])
         all_states ['sentence_lcs_length'] [i]= lcs_length
 
