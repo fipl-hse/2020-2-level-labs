@@ -29,9 +29,11 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
+    if not (isinstance(rows, int) and isinstance(columns, int)):
+        return []
+    
     if (
-            isinstance(rows, int) and isinstance(columns, int) \
-            and (rows > 0 and columns > 0) \
+            (rows > 0 and columns > 0) \
             and (not isinstance(rows, bool) and not isinstance(columns, bool))
     ):
         return [[0 for col in range(columns)] for row in range(rows)]
@@ -51,7 +53,6 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         or any(not isinstance(token, str) for token in second_sentence_tokens) \
     ):
         return []
-    
     if not first_sentence_tokens or not second_sentence_tokens:
         return []
 
@@ -85,7 +86,6 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
         or not 0 < plagiarism_threshold < 1
     ):
         return -1
-    
     if (
         any(not isinstance(word, str) for word in first_sentence_tokens) \
         or any(not isinstance(word, str) for word in second_sentence_tokens) \
@@ -93,7 +93,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
         return -1
 
     first, second = first_sentence_tokens, second_sentence_tokens
-    if not len(first) or not len(second):
+    if not first or not second:
         return 0
 
     if len(first) > len(second):
@@ -123,8 +123,11 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         not isinstance(first_sentence_tokens, tuple) \
         or not isinstance(second_sentence_tokens, tuple) \
         or not isinstance(lcs_matrix, list) \
-        or not first_sentence_tokens or not second_sentence_tokens \
-        or not len(lcs_matrix) == len(first_sentence_tokens) \
+        or not first_sentence_tokens or not second_sentence_tokens
+    ):
+        return tuple()
+    if (
+        not len(lcs_matrix) == len(first_sentence_tokens) \
         or not sum(sum(element) for element in lcs_matrix) \
         or not lcs_matrix[0][0] in {0, 1}
     ):
@@ -181,7 +184,10 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     return lcs_length / len(suspicious_sentence_tokens)
 
 
-def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
+def calculate_text_plagiarism_score(
+    original_text_tokens: tuple, 
+    suspicious_text_tokens: tuple, 
+    plagiarism_threshold=0.3) -> float:
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
     The score is the sum of lcs values for each pair divided by the number of tokens in suspicious text
@@ -300,29 +306,23 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     original, suspicious = original_text_tokens, suspicious_text_tokens
     text_length = len(original)
     report = ''
-    
     for sentence_index in range(text_length):
         original_sentence = list(original[sentence_index])
         suspicious_sentence = list(suspicious[sentence_index])
         difference_indexes = accumulated_diff_stats["difference_indexes"][sentence_index]
-        
         current_insertion = 0
         for difference_index in difference_indexes[0]:
             original_sentence.insert(difference_index + current_insertion, '|')
             suspicious_sentence.insert(difference_index + current_insertion, '|')            
             current_insertion += 1
-
         original_sentence = ' '.join(original_sentence)
         suspicious_sentence = ' '.join(suspicious_sentence)
-
         lcs_length = accumulated_diff_stats["sentence_lcs_length"][sentence_index]
         plagiarism = accumulated_diff_stats["sentence_plagiarism"][sentence_index]
 
         report += """- {}
         + {}
-
         lcs = {}, plagiarism = {}%
-
         """.format(original_sentence, suspicious_sentence, lcs_length, plagiarism * 100)
 
     report += "Text average plagiarism (words): {}%".format(accumulated_diff_stats["text_plagiarism"] * 100)
