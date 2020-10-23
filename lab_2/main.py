@@ -160,24 +160,34 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    is_orig = not isinstance(original_text_tokens,tuple) or original_text_tokens is None
-    is_text = not isinstance(suspicious_text_tokens,tuple) or suspicious_text_tokens is None
+    check_orig = (not isinstance(original_text_tokens, tuple)
+                      or not all(isinstance(i, tuple) for i in original_text_tokens)
+                      or not all(isinstance(i, str) for tokens in original_text_tokens for i in tokens))
 
-   
-    if is_orig or is_text or isinstance(plagiarism_threshold, float) and (0 <= plagiarism_threshold <= 1):
+    check_susp = (not isinstance(suspicious_text_tokens, tuple)
+                        or not all(isinstance(i, tuple) for i in suspicious_text_tokens)
+                        or not all(isinstance(i, str) for tokens in suspicious_text_tokens for i in tokens))
+
+    check_threshold = (not isinstance(plagiarism_threshold, float)
+                       or not 0 < plagiarism_threshold < 1)
+
+    if check_orig or check_susp or check_threshold:
         return -1
 
+    if ((isinstance(original_text_tokens, tuple) and not any(original_text_tokens))
+            or (isinstance(suspicious_text_tokens, tuple) and not any(suspicious_text_tokens))):
+        return 0
+
+        
     while len(original_text_tokens) < len(suspicious_text_tokens):
         original_text_tokens += ('',)
 
     score_all = 0
     for i, susp_sent in enumerate(suspicious_text_tokens):
         lcs_length = find_lcs_length(original_text_tokens[i],susp_sent, plagiarism_threshold) #отношение к длине
-        if lcs_length == -1:
-          return -1.0
+        
         score = calculate_plagiarism_score(lcs_length,susp_sent)    #колво плагиата построчно
-        if score == -1:
-          score = 0.0
+       
         score_all += score
        
     
