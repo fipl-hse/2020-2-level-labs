@@ -202,8 +202,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     for word in suspicious_sentence_tokens:
         if word not in lcs:
             suspicious_sentence_tokens.index(word) 
-                               ]
-
+                               
     changes_indexes_both_sent = (tuple(find_diff_indexes(indexes_diff_original)),
                                  tuple(find_diff_indexes(indexes_diff_suspicious)))
 
