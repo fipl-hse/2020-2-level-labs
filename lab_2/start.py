@@ -3,7 +3,7 @@ Longest common subsequence implementation starter
 """
 from lab_2 import main
 if __name__ == "__main__":
-    origignal_text = "The cat is sleeping. So do Sam"
+    original_text = "The cat is sleeping. So do Sam"
     suspicious_text = "The dog is eating. So do I"
 
     first_sentence_tokens = main.tokenize_by_lines(original_text)
