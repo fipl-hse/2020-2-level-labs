@@ -266,7 +266,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         return ''
 
     length = len(original_text_tokens)
-    while len(length) < length:
+    while len(suspicious_text_tokens) > length:
         original_text_tokens += ('',)
 
     report = ''
