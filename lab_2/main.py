@@ -102,7 +102,39 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    pass
+    criterion = [not isinstance(first_sentence_tokens, tuple), not isinstance(second_sentence_tokens, tuple), not isinstance(lcs_matrix, list)]
+    if any(criterion):
+        return ()
+    for token1 in first_sentence_tokens:
+        if not isinstance(toke1, str):
+            return ()
+    for token2 in second_sentence_tokens:
+        if not isinstance(token2, str):
+            return ()
+    for list_of_cs in lcs_matrix:
+        if not isinstance(list_of_cs, list):
+            return ()
+        for number in list_of_cs:
+            if not isinstance(number, int):
+                return ()
+    if lcs_matrix != fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens):
+        return ()
+    if lcs_matrix[0][0] != 0 and lcs_matrix[0][0] != 1:
+        return ()
+    lcs = []
+    for row, elmt1 in reversed(list(enumerate(first_sentence_tokens))):
+        for column, elmt2 in reversed(list(enumerate(second_sentence_tokens))):
+            if elmt1 == elmt2:
+                lcs.append(elmt1)
+                row -= 1
+                column -= 1
+            else:
+                if lcs_matrix[row - 1][column] > lcs_matrix[row][column - 1]:
+                    row -= 1
+                else:
+                    column -= 1
+    lcs.reverse()
+    return tuple(lcs)
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
