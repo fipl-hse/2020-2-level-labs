@@ -1,7 +1,7 @@
 """
 Longest common subsequence problem
 """
-import re
+
 
 def tokenize_by_lines(text: str) -> tuple:
     """
@@ -12,10 +12,16 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    if not isinstance(text, str):
+    if not isinstance(f, str):
         return []
-    text_output = re.sub('[^a-z \n]', '', text.lower()).split()
-    text_output = tuple(text_output)
+    tokens = []
+    for token in f.lower().split():
+        variable = ''
+        for character in token:
+            if character.isalpha():
+                variable += character
+        if len(variable) != 0:
+            tokens.append(variable)
     return text_output
 
 
