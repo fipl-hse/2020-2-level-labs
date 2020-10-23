@@ -19,7 +19,6 @@ def tokenize_by_lines(text: str) -> tuple:
     lines = ["".join(char for char in line.lower() if char not in separators) for line in text.split('\n')]
 
     return tuple(tuple(line.split()) for line in lines if tuple(line.split()))
-    
 
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
@@ -50,14 +49,16 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) \
         or any(not isinstance(token, str) for token in first_sentence_tokens) \
         or any(not isinstance(token, str) for token in second_sentence_tokens) \
-        or not len(first_sentence_tokens) or not len(second_sentence_tokens)
     ):
+        return []
+    
+    if not first_sentence_tokens or not second_sentence_tokens:
         return []
 
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
     for first_i, first in enumerate(first_sentence_tokens):
         for second_i, second in enumerate(second_sentence_tokens):
-            if (first == second):
+            if first == second:
                 lcs_matrix[first_i][second_i] = lcs_matrix[first_i - 1][second_i - 1] + 1
             else:
                 lcs_matrix[first_i][second_i] = max(
@@ -78,9 +79,15 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :return: a length of the longest common subsequence
     """
     if (
-        not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) \
-        or not isinstance(plagiarism_threshold, float) or not 0 < plagiarism_threshold < 1 \
-        or any(not isinstance(word, str) for word in first_sentence_tokens) \
+        not isinstance(first_sentence_tokens, tuple) \
+        or not isinstance(second_sentence_tokens, tuple) \
+        or not isinstance(plagiarism_threshold, float) \
+        or not 0 < plagiarism_threshold < 1
+    ):
+        return -1
+    
+    if (
+        any(not isinstance(word, str) for word in first_sentence_tokens) \
         or any(not isinstance(word, str) for word in second_sentence_tokens) \
     ):
         return -1
@@ -128,7 +135,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     if len(first) > len(second):
         first, second = second, first
 
-    if not len(first) or not len(second):
+    if not first or not second:
         return 0
 
     first_index, second_index = len(first) - 1, len(second) - 1
@@ -165,7 +172,6 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
         or suspicious_sentence_tokens in [[], {}]
     ):
         return -1.0
-    
     if not suspicious_sentence_tokens:
         return 0.0
 
@@ -194,7 +200,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
         original_list = list(original_text_tokens)
-        for original_cell in range(len(suspicious_text_tokens) - len(original_text_tokens)):
+        for _ in range(len(suspicious_text_tokens) - len(original_text_tokens)):
             original_list.append("")
 
         original_text_tokens = tuple(original_list)
@@ -292,7 +298,6 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         return ""
     
     original, suspicious = original_text_tokens, suspicious_text_tokens
-
     text_length = len(original)
     report = ''
     
@@ -300,13 +305,11 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         original_sentence = list(original[sentence_index])
         suspicious_sentence = list(suspicious[sentence_index])
         difference_indexes = accumulated_diff_stats["difference_indexes"][sentence_index]
-
+        
         current_insertion = 0
-
         for difference_index in difference_indexes[0]:
             original_sentence.insert(difference_index + current_insertion, '|')
-            suspicious_sentence.insert(difference_index + current_insertion, '|')
-            
+            suspicious_sentence.insert(difference_index + current_insertion, '|')            
             current_insertion += 1
 
         original_sentence = ' '.join(original_sentence)
