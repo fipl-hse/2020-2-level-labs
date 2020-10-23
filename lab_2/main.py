@@ -251,7 +251,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
             'difference_indexes': [0] * length}
 
     orig = original_text_tokens
-    susp = suspicious_sentence_tokens
+    susp = suspicious_text_tokens
     pl_thr = plagiarism_threshold
     all_states['text_plagiarism'] = calculate_text_plagiarism_score(orig, susp, pl_thr)
     for i in range(length):
