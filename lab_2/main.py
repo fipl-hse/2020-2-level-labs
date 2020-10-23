@@ -3,6 +3,7 @@ Longest common subsequence problem
 """
 from typing import Dict, Callable, List, Tuple
 import pickle
+import re
 import os
 from tokenizer import tokenize
 
@@ -368,7 +369,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
 
     lcs_length: int = i[-1]
 
-    return lcs_length if (not lcs_length / len(s_2) < plagiarism_threshold) else 0
+    return lcs_length if not lcs_length / len(s_2) < plagiarism_threshold else 0
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -378,7 +379,6 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :return: a tuple with vocab
     """
     file = open(path_to_file, encoding='UTF-8')
-    tokens = []
 
     if os.path.exists('vocab.pkl'):
         with open('vocab.pkl', 'rb') as obj:
@@ -386,16 +386,14 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     else:
         vocab = {'|i|': 0}
 
-    for chunk in file:
-        chunk = tuple(chunk)
-        for token in tokenize(chunk):
-            if token not in vocab:
-                vocab[token] = vocab['|i|']
-                vocab['|i|'] += 1
+    def transform(text):
+        for chunk in text:
+            for token in re.sub('[^a-z \n]', '', chunk.lower()).split():
+                if token not in vocab:
+                    vocab[token] = vocab['|i|']
+                    vocab['|i|'] += 1
+                yield vocab[token]
 
-            tokens.append(vocab[token])
-
-    with open('vocab.json', 'wb') as out:
+    with open('vocab.pkl', 'wb') as out:
         pickle.dump(vocab, out)
-
-    return tuple(tokens)
+    return tuple(transform(file))
