@@ -164,16 +164,6 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     return tuple(lcs)
 
 
-first_sentence = ('the', 'dog', 'is', 'running')
-second_sentence = ('the', 'cat', 'is', 'sleeping')
-lcs_matrix = [[1, 1, 1, 1],
-              [1, 1, 1, 1],
-              [1, 1, 2, 2],
-              [1, 1, 2, 2]]
-
-expected = ('the', 'is')
-actual = find_lcs(first_sentence, second_sentence, lcs_matrix)
-
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
     """
     Calculates the plagiarism score
@@ -232,8 +222,8 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
 
     # decision about the score
     p_result = lcs / len(original_text_tokens)
-    if p_result < plagiarism_threshold:
-        return 0.0
+    #if p_result < plagiarism_threshold:
+        #return 0.0
     return p_result
 
 
