@@ -42,8 +42,8 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     if not check:
         return []
 
-    new_matrix = [[0] * columns for _ in range(rows)]
-    return new_matrix
+    zero_matrix = [[0] * columns for _ in range(rows)]
+    return zero_matrix
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:

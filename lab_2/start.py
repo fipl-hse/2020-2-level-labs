@@ -17,19 +17,19 @@ if __name__ == '__main__':
     SUSPICIOUS_SENTENCE = suspicious_text_tuple[1]
     print('Original sentence: {}\nSuspicious sentence: {}\n'.format(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE))
 
-    new_matrix = main.create_zero_matrix(len(ORIGINAL_SENTENCE), len(SUSPICIOUS_SENTENCE))
-    print('Zero matrix: {}\n'.format(new_matrix))
+    zero_matrix = main.create_zero_matrix(len(ORIGINAL_SENTENCE), len(SUSPICIOUS_SENTENCE))
+    print('Zero matrix: {}\n'.format(zero_matrix))
 
     matrix = main.fill_lcs_matrix(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE)
     print('Lcs matrix: {}\n'.format(matrix))
 
-    length = main.find_lcs_length(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE, 0.3)
-    print('Lcs length: {}\n'.format(length))
+    lcs_length = main.find_lcs_length(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE, 0.3)
+    print('Lcs length: {}\n'.format(lcs_length))
 
     lcs = main.find_lcs(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE, matrix)
     print('Lcs: {}\n'.format(lcs))
 
-    score = main.calculate_plagiarism_score(length, SUSPICIOUS_SENTENCE)
+    score = main.calculate_plagiarism_score(lcs_length, SUSPICIOUS_SENTENCE)
     print('Plagiarism score: {}\n'.format(score))
 
     text_plagiarism = main.calculate_text_plagiarism_score(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE, 0.3)
