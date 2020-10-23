@@ -352,9 +352,9 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    indexes = tuple()
+    indexes = []
     with open(path_to_file, 'r', encoding='utf-8') as file:
         for line in file:
             tokens = re.sub('[^a-z \n]', '', line.lower()).split()
-            indexes += tuple(vocabulary[token] for token in tokens)
-    return indexes
+            indexes.extend([vocabulary[token] for token in tokens])
+    return tuple(indexes)
