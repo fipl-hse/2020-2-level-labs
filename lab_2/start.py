@@ -2,8 +2,9 @@
 Longest common subsequence implementation starter
 """
 import main
+
 if __name__ == '__main__':
-    ORIGINAL_TEXT = 'I have a fish.\nHis name is Nemo.\nI bought him yesterday'
+    ORIGINAL_TEXT = 'I have a dog.\nHis name is Nemo.\nI found him yesterday'
     SUSPICIOUS_TEXT = 'I have a cat.\nHer name is Anny.\nI met her yesterday'
 
     tokenized_orig_text = main.tokenize_by_lines(ORIGINAL_TEXT)
