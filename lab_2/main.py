@@ -51,12 +51,10 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    is_not_tuple_fst = not isinstance(first_sentence_tokens, tuple)
-    is_not_tuple_sst = not isinstance(second_sentence_tokens, tuple)
-
-    if is_not_tuple_fst or is_not_tuple_sst or not first_sentence_tokens or not second_sentence_tokens or \
-            (first_sentence_tokens and first_sentence_tokens[0] is None) or \
-            (second_sentence_tokens and second_sentence_tokens[0] is None):
+    if (not isinstance(first_sentence_tokens, tuple)
+            or not isinstance(second_sentence_tokens, tuple)
+            or not all(isinstance(i, str) for i in first_sentence_tokens)
+            or not all(isinstance(i, str) for i in second_sentence_tokens)):
         return []
 
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))  # r & c  по длинам
