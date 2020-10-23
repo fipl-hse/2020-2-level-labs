@@ -23,7 +23,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                   ('the', 'boy', 'left'))
         plagiarism_threshold = 0.3
 
-        expected = (1/3+1/3)/2
+        expected = (1 / 3 + 1 / 3) / 2
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
                                                  plagiarism_threshold)
@@ -38,7 +38,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                     ('the', 'dog', 'disappeared'))
         plagiarism_threshold = 0.3
 
-        expected = ((3/3+3/3)/2)
+        expected = ((3 / 3 + 3 / 3) / 2)
         actual = calculate_text_plagiarism_score(sentence, sentence, plagiarism_threshold)
         self.assertEqual(expected, actual)
 
@@ -132,18 +132,18 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
         Tests that calculate_text_plagiarism_score function
             can generate correct behaviour if replace texts with each other
         """
-        original_text_tokens = (('the', 'cat', 'appeared'),
-                                ('the', 'dog', 'disappeared'))
-        suspicious_text_tokens = (('the', 'man', 'arrived'),
-                                  ('the', 'boy', 'left'))
+        origin = (('the', 'cat', 'appeared'),
+                  ('the', 'dog', 'disappeared'))
+        suspicious = (('the', 'man', 'arrived'),
+                      ('the', 'boy', 'left'))
         plagiarism_threshold = 0.1
 
-        expected = (1/3+1/3)/2
-        actual = calculate_text_plagiarism_score(original_text_tokens,
-                                                 suspicious_text_tokens,
+        expected = (1 / 3 + 1 / 3) / 2
+        actual = calculate_text_plagiarism_score(origin,
+                                                 suspicious,
                                                  plagiarism_threshold)
-        actual_reversed = calculate_text_plagiarism_score(original_text_tokens,
-                                                          suspicious_text_tokens,
+        actual_reversed = calculate_text_plagiarism_score(suspicious,
+                                                          origin,
                                                           plagiarism_threshold)
         self.assertEqual(expected, actual)
         self.assertEqual(expected, actual_reversed)
@@ -161,7 +161,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                   ('the', 'boy', 'left'))
         plagiarism_threshold = 0.1
 
-        expected = (1/3+1/3)/2
+        expected = (1 / 3 + 1 / 3) / 2
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
                                                  plagiarism_threshold)
@@ -181,7 +181,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                   ('the', 'boy', 'left'))
         plagiarism_threshold = 0.3
 
-        expected = (0+1/3+0)/3
+        expected = (0 + 1 / 3 + 0) / 3
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
                                                  plagiarism_threshold)
@@ -200,7 +200,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                   (),
                                   ())
         plagiarism_threshold = 0.3
-        expected = (0+1/3+0+0)/4
+        expected = (0 + 1 / 3 + 0 + 0) / 4
 
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
@@ -221,7 +221,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                   ('the', 'boy', 'left'))
         plagiarism_threshold = 0.3
 
-        expected = (0+1/3+0)/3
+        expected = (0 + 1 / 3 + 0) / 3
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
                                                  plagiarism_threshold)
