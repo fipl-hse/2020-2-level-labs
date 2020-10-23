@@ -127,34 +127,34 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     if lcs_matrix == []:
         return ()
 
-    if lcs_matrix[0][0] != 1 or lcs_matrix[0][0] != 0:
-        return ()
+    if lcs_matrix[0][0] == 1 or lcs_matrix[0][0] == 0:
 
+        if fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens) != lcs_matrix:
+            return ()
 
-    if fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens) != lcs_matrix:
-        return ()
+        new_matrix = [[0] * len(lcs_matrix)]
+        for elements_in_row in lcs_matrix:
+            new_matrix.append([0] + elements_in_row)
 
-    new_matrix = [[0] * len(lcs_matrix)]
-    for elements_in_row in lcs_matrix:
-        new_matrix.append([0] + elements_in_row)
+        LCS = []
+        row_index = len(first_sentence_tokens)
+        column_index = len(second_sentence_tokens)
 
-    LCS = []
-    row_index = len(first_sentence_tokens)
-    column_index = len(second_sentence_tokens)
+        while row_index >= 1 and column_index >= 1:
 
-    while row_index >= 1 and column_index >= 1:
+            if first_sentence_tokens[row_index - 1] == second_sentence_tokens[column_index - 1]:
+                LCS.append(first_sentence_tokens[row_index - 1])
+                row_index = row_index - 1
+                column_index = column_index - 1
 
-        if first_sentence_tokens[row_index - 1] == second_sentence_tokens[column_index - 1]:
-            LCS.append(first_sentence_tokens[row_index - 1])
-            row_index = row_index - 1
-            column_index = column_index - 1
+            elif new_matrix[row_index - 1][column_index] > new_matrix[row_index][column_index - 1]:
+                row_index -= 1
 
-        elif new_matrix[row_index - 1][column_index] > new_matrix[row_index][column_index - 1]:
-            row_index -= 1
+            else:
+                column_index -= 1
+        LCS.reverse()
 
-        else:
-            column_index -= 1
-    LCS.reverse()
+    return ()
 
     return tuple(LCS)
 
