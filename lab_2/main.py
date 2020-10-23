@@ -170,19 +170,18 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     while len(original_text_tokens) < len(suspicious_text_tokens):
         original_text_tokens += ('',)
 
-    score_all = []
-    for i in range(len(suspicious_text_tokens)):
-        lcs_length = find_lcs_length(original_text_tokens[i],suspicious_text_tokens[i], plagiarism_threshold) #отношение к длине
+    score_all = 0
+    for i, susp_sent in enumerate(suspicious_text_tokens):
+        lcs_length = find_lcs_length(original_text_tokens[i],susp_sent, plagiarism_threshold) #отношение к длине
         if lcs_length == -1:
           return -1.0
-
-        score = calculate_plagiarism_score(lcs_length,suspicious_text_tokens[i])    #колво плагиата построчно
-
-        if score >= 0:
-            score_all.append(score)
-
+        score = calculate_plagiarism_score(lcs_length,susp_sent)    #колво плагиата построчно
+        if score == -1:
+          score = 0.0
+        score_all += score
+       
     
-    return sum(score_all) / len(suspicious_text_tokens)
+    return score_all / len(suspicious_text_tokens)
 
 
 
