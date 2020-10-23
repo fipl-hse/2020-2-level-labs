@@ -18,7 +18,7 @@ def tokenize_by_lines(text: str) -> tuple:
     sentences = text.split('\n')
     list_lines = []
     for sentence in sentences:
-        if sentence != '' and len(tokenize(sentence)):
+        if sentence != '':
             tokens = tuple (tokenize (sentence))
             list_lines.append (tokens)
     return tuple(list_lines)
@@ -244,8 +244,10 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
             'sentence_lcs_length': [0] * length,
             'difference_indexes': [0] * length}
 
-    states['text_plagiarism'] = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens, plagiarism_threshold)
-    for i in range(length):
+    states['text_plagiarism'] = calculate_text_plagiarism_score(original_text_tokens,
+            suspicious_text_tokens,plagiarism_threshold)
+    for i in range(length): 
+
         lcs_length = find_lcs_length(original_text_tokens[i], suspicious_text_tokens[i],  plagiarism_threshold=0.0)      
         states['sentence_plagiarism'][i] = calculate_plagiarism_score(lcs_length, suspicious_text_tokens[i])
         states ['sentence_lcs_length'] [i]= lcs_length
@@ -286,7 +288,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         orig_sent = ' '.join(sent_1)
         susp_sent = ' '.join(sent_2)
         matrix = accumulated_diff_stats['sentence_lcs_length'][ind]
-        plag_score = float(accumulated_diff_stats['sentence_plagiarism'][ind] * 100)
+        plag_score = float (accumulated_diff_stats ['sentence_plagiarism'][ind] * 100) 
 
         report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(orig_sent,susp_sent,matrix,plag_score)    
     text_plagiarism = float(accumulated_diff_stats['text_plagiarism'] * 100)
