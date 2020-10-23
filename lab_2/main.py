@@ -179,12 +179,13 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
         return -1
     if not lcs_length:
         return 0.0
-    if not lcs_length and len(suspicious_sentence_tokens) or (not(lcs_length <= len(suspicious_sentence_tokens))):
+    if not lcs_length and len(suspicious_sentence_tokens) or not(lcs_length <= len(suspicious_sentence_tokens)):
         return -1
     return lcs_length / len(suspicious_sentence_tokens)
 
 
-def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
+def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
+                                    plagiarism_threshold=0.3) -> float:
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
     The score is the sum of lcs values for each pair divided by the number of tokens in suspicious text
@@ -206,7 +207,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     # preparation to count the score
     if len(original_text_tokens) < len(suspicious_text_tokens):
         changed_sent_tokens = list(original_text_tokens)
-        for i in range(len(suspicious_text_tokens) - len(original_text_tokens)):
+        for _ in range(len(suspicious_text_tokens) - len(original_text_tokens)):
             changed_sent_tokens.append(())
         original_text_tokens = tuple(changed_sent_tokens)
     elif len(suspicious_text_tokens) < len(original_text_tokens):
@@ -215,7 +216,8 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     lcs = 0
     # counting
     for l_index in range(len(original_text_tokens)):
-        lcs_length = find_lcs_length(original_text_tokens[l_index], suspicious_text_tokens[l_index], plagiarism_threshold)
+        lcs_length = find_lcs_length(original_text_tokens[l_index], suspicious_text_tokens[l_index],
+                                     plagiarism_threshold)
         score = calculate_plagiarism_score(lcs_length, suspicious_text_tokens[l_index])
         if score > 0:
             lcs += score
@@ -238,7 +240,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     conditions = [check_object_type(original_sentence_tokens, tuple),
                   check_object_type(suspicious_sentence_tokens, tuple),
                   check_object_type(lcs, tuple)]
-    if not(all(conditions)):
+    if not all(conditions):
         return ()
 
     def count_difference(tokens):
@@ -282,7 +284,8 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
      'difference_indexes': list}
     """
     length = len(original_text_tokens)
-    sentence_lcs_length = [find_lcs_length(original_text_tokens[sent], suspicious_text_tokens[sent], plagiarism_threshold)
+    sentence_lcs_length = [find_lcs_length(original_text_tokens[sent], suspicious_text_tokens[sent],
+                                           plagiarism_threshold)
                            for sent in range(length)]
 
     sentence_plagiarism = [calculate_plagiarism_score(length, suspicious_text_tokens[sent])
@@ -328,7 +331,8 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     return "\n".join(result)
 
 
-def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_tokens: list, plagiarism_threshold: float) -> int:
+def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_tokens: list,
+                              plagiarism_threshold: float) -> int:
     """
        Finds a length of the longest common subsequence using an optimized algorithm
        When a length is less than the threshold, it becomes 0
@@ -361,10 +365,9 @@ def tokenize_big_file(path_to_file: str) -> tuple:
         first_lines = (tokenize_by_lines(line_1) for line_1 in first_file)
         second_lines = (tokenize_by_lines(line_2) for line_2 in second_file)
 
-        lengths = (find_lcs_length_optimized(first_line, second_line, plagiarism_threshold)
+        lengths = (find_lcs_length_optimized(first_line, second_line)
                    for first_line, second_line in zip(first_lines, second_lines))
 
         scores = [calculate_plagiarism_score(length, line_2) for length, line_2 in zip(lengths, second_lines)]
 
     return tuple(scores)
-
