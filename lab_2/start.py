@@ -7,7 +7,7 @@ if __name__ == "__main__":
      original_text = '''The horse is running.
       It is fast.'''
      second_text = '''The cow is eating. 
-     It is low.'''
+     It is slow.'''
 
      original_tokens = main.tokenize_by_lines(original_text)
      print('Original tokens: ', original_tokens)
