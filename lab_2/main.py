@@ -310,8 +310,8 @@ def create_diff_report(original_text_tokens: tuple,
     return report
 
 
-def find_lcs_length_optimized(first_sentence_tokens: tuple,
-                              second_sentence_tokens: tuple,
+def find_lcs_length_optimized(first_sentence_tokens: list,
+                              second_sentence_tokens: list,
                               plagiarism_threshold: float) -> int:
     """
     Finds a length of the longest common subsequence using the Hirschberg's algorithm
@@ -321,12 +321,9 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple,
     :param second_sentence_tokens: a list of tokens
     :return: a length of the longest common subsequence
     """
-    
-    #if first_sentence_tokens == second_sentence_tokens:
-    #    return len(first_sentence_tokens)
+    length = min(len(first_sentence_tokens), len(second_sentence_tokens))
+    x_curr_vector = [0] * (length + 1)
 
-    length = max(len(first_sentence_tokens), len(second_sentence_tokens))
-    x_curr_vector = [0 for _ in range(len(second_sentence_tokens) + 1)]
     for x_word in first_sentence_tokens[:length]:
         x_prev_vector = x_curr_vector[:]
         if x_word not in second_sentence_tokens[:length]:
@@ -336,16 +333,11 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple,
                 x_curr_vector[i + 1] = x_prev_vector[i] + 1
             else:
                 x_curr_vector[i + 1] = max(x_curr_vector[i], x_prev_vector[i + 1])
-    
+
     lcs_length = x_curr_vector[-1]
     if lcs_length / len(second_sentence_tokens) > plagiarism_threshold:
         return lcs_length
     return 0
-
-
-with open('lab_2/vocabulary.pickle', 'rb') as file:
-    vocabulary = pickle.load(file)
-
 
 def tokenize_big_file(path_to_file: str) -> tuple:
     """
@@ -353,9 +345,22 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    indexes = []
-    with open(path_to_file, 'r', encoding='utf-8') as file:
+    file = open(path_to_file, encoding='utf-8')
+    
+    def generate_indexes(file):
+        if os.path.exists('vocabulary.pickle'):
+            with open('vocabulary.pickle', 'rb') as vocab:
+                vocabulary = pickle.load(vocab)
+        else:
+            vocabulary = {'_i': 0}
+
         for line in file:
             tokens = re.sub('[^a-z \n]', '', line.lower()).split()
-            indexes.extend([vocabulary[token] for token in tokens])
-    return tuple(indexes)
+            for token in tokens:
+                if token not in vocabulary:
+                    vocabulary[token] = vocabulary['_i']
+                    vocabulary['_i'] += 1
+                yield vocabulary[token]
+        with open('vocabulary.pickle', 'wb') as outfile:
+            pickle.dump(vocabulary, outfile)
+    return tuple(generate_indexes(file))
