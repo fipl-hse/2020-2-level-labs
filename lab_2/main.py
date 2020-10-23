@@ -347,7 +347,7 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :return: a tuple with ids
     """
     file = open(path_to_file, encoding='utf-8')
-    
+
     def generate_indexes(file):
         if os.path.exists('vocabulary.pickle'):
             with open('vocabulary.pickle', 'rb') as vocab:
