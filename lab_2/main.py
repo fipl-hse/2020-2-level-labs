@@ -55,6 +55,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     cols = len(second_sentence_tokens)
     mtrx = create_zero_matrix(rows, cols)
 
+
     for row in range(rows):
         for col in range(cols):
             if first_sentence_tokens[row] == second_sentence_tokens[col]:
