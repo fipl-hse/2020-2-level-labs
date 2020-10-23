@@ -303,8 +303,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
-            not isinstance(plagiarism_threshold, float) or plagiarism_threshold < 0 or plagiarism_threshold > 1:
+    if not isinstance(plagiarism_threshold, float) or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
     len_search = min(len(first_sentence_tokens), len(second_sentence_tokens))
     current_row = [0] * (len_search + 1)
