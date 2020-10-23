@@ -1,6 +1,7 @@
 """
 Longest common subsequence problem
 """
+from lab_2.tokenizer import tokenize
 
 
 def tokenize_by_lines(text: str) -> tuple:
@@ -14,6 +15,13 @@ def tokenize_by_lines(text: str) -> tuple:
     """
     if not isinstance(text, str):
         return ()
+    sentences_list = []
+    text = text.split('\n')
+    for element in text:
+        tokens = tuple(tokenize(element))
+        if tokens:
+            sentences_list.append(tokens)
+    return tuple(sentences_list)
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
