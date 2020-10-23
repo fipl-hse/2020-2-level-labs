@@ -133,8 +133,8 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
             row_ind -= 1
         else:
             column_ind -= 1
-    lcs_tokens.reverse()
-    return tuple(lcs_tokens)
+
+    return tuple(lcs_tokens[::-1])
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
@@ -184,7 +184,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple,
             compare = original_text_tokens[index]
         lcs_length = find_lcs_length(sentence, compare, plagiarism_threshold)
         plagiarism_score += calculate_plagiarism_score(lcs_length, sentence)
-    print(original_text_tokens, suspicious_text_tokens, plagiarism_score, plagiarism_score/len(suspicious_text_tokens))
+
     return plagiarism_score/len(suspicious_text_tokens)
 
 
