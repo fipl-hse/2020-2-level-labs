@@ -98,8 +98,6 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
 
 
     
-
-
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
     """
     Finds the longest common subsequence itself using the Needleman–Wunsch algorithm
