@@ -32,5 +32,9 @@ if __name__ == '__main__':
     score = main.calculate_plagiarism_score(length, SUSPICIOUS_SENTENCE)
     print('Plagiarism score: {}\n'.format(score))
 
-    RESULT = length
-    assert RESULT, 'Lcs length not working'
+    text_plagiarism = main.calculate_text_plagiarism_score(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE, 0.3)
+    expected = (1 / 3 + 1 / 3) / 2
+    actual = text_plagiarism
+
+    RESULT = actual
+    assert RESULT == expected, 'Calculate plagiarism score not working'
