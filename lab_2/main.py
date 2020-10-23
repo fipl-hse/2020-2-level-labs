@@ -37,7 +37,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     r_c_bool = isinstance(rows, bool), isinstance(columns,bool)
     if not r_c_int and r_c_bool:
         return []
-    if rows < 0 and columns < 0:
+    if (rows < 0) and (columns < 0):
         return []
     zero_matrix = [[0] * columns for i in range(rows)]
     return zero_matrix
@@ -92,7 +92,8 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     for second_token in second_sentence_tokens:
         if not isinstance(second_token, str) or not second_token:
             return -1
-    length_lcs = 0
+    if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
+        return 0
     lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
     if lcs_matrix:
         length_lcs = lcs_matrix[-1][-1]
@@ -192,7 +193,36 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    pass
+
+    if not isinstance(original_text_tokens, tuple) or not original_text_tokens \
+            or not isinstance(suspicious_text_tokens, tuple) or not suspicious_text_tokens:
+        return -1.0
+    for original_sentence in original_text_tokens:
+        if not isinstance(original_sentence, tuple):
+            return -1.0
+        for tokens in original_sentence:
+            if not isinstance(tokens, str):
+                return -1.0
+    for suspicious_sentence in suspicious_text_tokens:
+        if not isinstance(suspicious_sentence, tuple):
+            return -1.0
+        for tokens in suspicious_sentence:
+            if not isinstance(tokens, str):
+                return -1.0
+    if len(original_text_tokens) < len(suspicious_text_tokens):
+        original_text_tokens = list(original_text_tokens)
+        for i in range(len(suspicious_text_tokens) - len(original_text_tokens)):
+            original_text_tokens.append(())
+        original_text_tokens = tuple(original_text_tokens)
+
+    plagiarism = 0
+
+    for i, suspicious_sentence in enumerate(suspicious_text_tokens):
+        lcs_length = find_lcs_length(original_text_tokens[i], suspicious_sentence, plagiarism_threshold)
+        plagiarism_score = calculate_plagiarism_score(lcs_length, suspicious_sentence)
+        plagiarism += plagiarism_score
+
+    return plagiarism / len(suspicious_text_tokens)
 
 
 def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
