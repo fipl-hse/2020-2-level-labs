@@ -5,10 +5,8 @@ import main
 
 
 if __name__ == '__main__':
-    original_tokens_num = main.tokenize_big_file('lab_2/data.txt'[:3000])
-    original_tokens = tuple(original_tokens_num.values())
-    suspicious_tokens_num = main.tokenize_big_file('lab_2/data_2.txt'[:3000])
-    suspicious_tokens = tuple(suspicious_tokens_num.values())
+    original_tokens = main.tokenize_big_file('lab_2/data.txt'[:3000])
+    suspicious_tokens = main.tokenize_big_file('lab_2/data_2.txt'[:3000])
     lcs_length = main.find_lcs_length_optimized(original_tokens, suspicious_tokens, 0.0001)
     print('Longest common subsequence consists of {} words.'.format(lcs_length))
     actual = main.calculate_plagiarism_score(lcs_length, suspicious_tokens)
