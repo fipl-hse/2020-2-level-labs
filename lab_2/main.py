@@ -15,13 +15,14 @@ def tokenize_by_lines(text: str) -> tuple:
     """
     if not isinstance(text, str) or not text:
         return ()
-    sentences = text.split('\n')
-    list_lines = []
-    for sentence in sentences:
-        if sentence != '':
-            tokens = tuple (tokenize (sentence))
-            list_lines.append (tokens)
-    return tuple(list_lines)
+    text = text.split('\n')
+    text_tuple = ()
+    for sentence in text:
+        sentence_clear = tokenize(sentence)
+        if not sentence_clear:
+            continue
+        text_tuple += (tuple(sentence_clear),)
+    return text_tuple
 
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
