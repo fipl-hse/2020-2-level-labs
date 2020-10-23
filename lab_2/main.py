@@ -12,16 +12,17 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    if not isinstance(f, str):
-        return []
-    tokens = []
-    for token in f.lower().split():
+    if not isinstance(text, str):
+        return ()
+    text_output = []
+    for token in text.lower().split():
         variable = ''
         for character in token:
             if character.isalpha():
                 variable += character
         if len(variable) != 0:
-            tokens.append(variable)
+            text_output.append(variable)
+    text_output = tuple(text_output)
     return text_output
 
 
