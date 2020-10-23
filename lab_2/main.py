@@ -35,9 +35,14 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    i = 0
-    zero_matrix = [[0 for i in range(columns)] for j in range(rows)]
-    return zero_matrix
+    criterion = [isinstance(rows,int) and isinstance(columns,int) and not isinstance(rows,bool) and
+          not isinstance(columns,bool) and (rows > 0) and (columns > 0)]
+    if criterion:
+        i = 0
+        zero_matrix = [[0 for i in range(columns)] for j in range(rows)]
+        return zero_matrix
+    else:
+        return []
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
