@@ -293,7 +293,6 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     return ' '.join(report)
 
 
-# I tried to do functions for 10 score, but they do not work correctly
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
                               plagiarism_threshold: float) -> int:
     """
@@ -312,19 +311,13 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
         return -1
     if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
         return 0
-    if len(first_sentence_tokens) > len(second_sentence_tokens):
-        len_search = len(second_sentence_tokens)
-    elif len(second_sentence_tokens) > len(first_sentence_tokens):
-        len_search = len(first_sentence_tokens)
-    else:
-        len_search = len(second_sentence_tokens)
+    len_search = min(len(first_sentence_tokens), len(second_sentence_tokens))
     current_row = [0] * (len_search + 1)
-    for row, word_1 in enumerate(second_sentence_tokens[:len_search]):
+    for word_1 in first_sentence_tokens:
         previous_row = current_row[:]
-        for column, word_2 in enumerate(first_sentence_tokens[:len_search]):
-            if row == column:
-                if word_1 == word_2:
-                    current_row[column + 1] = previous_row[column] + 1
+        for column, word_2 in enumerate(second_sentence_tokens):
+            if word_1 == word_2:
+                current_row[column + 1] = previous_row[column] + 1
             else:
                 current_row[column + 1] = max((current_row[column], previous_row[column + 1]))
     lcs_length = current_row[-1]
