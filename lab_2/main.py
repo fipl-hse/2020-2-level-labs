@@ -15,7 +15,7 @@ def tokenize_by_lines(text: str) -> tuple:
     """
     text = text.split("\n")
     tokenized_text = [tuple(tokenize(sent)) for sent in text]
-    tokenized_text = [sent for sent in tokenized_text if sent != ()]
+    tokenized_text = [sent for sent in tokenized_text if sent]
     return tuple(tokenized_text)
 
 
@@ -136,7 +136,10 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
                   check_object_type(second_sentence_tokens, tuple)]
     if not lcs_matrix or not all(conditions):
         return ()
-    elif not len(lcs_matrix[0]) == len(second_sentence_tokens) and not len(lcs_matrix) == len(first_sentence_tokens):
+    if lcs_matrix[0][0] not in (1, 0):
+        return ()
+    elif not len(lcs_matrix[0]) == len(second_sentence_tokens) and \
+            not len(lcs_matrix) == len(first_sentence_tokens):
         return ()
 
     row, column = len(first_sentence_tokens) - 1, len(second_sentence_tokens) - 1
@@ -154,10 +157,22 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         else:
             if column != 0:
                 column -= 1
+            elif column == 0:
+                row -= 1
 
     lcs.reverse()
     return tuple(lcs)
 
+
+first_sentence = ('the', 'dog', 'is', 'running')
+second_sentence = ('the', 'cat', 'is', 'sleeping')
+lcs_matrix = [[1, 1, 1, 1],
+              [1, 1, 1, 1],
+              [1, 1, 2, 2],
+              [1, 1, 2, 2]]
+
+expected = ('the', 'is')
+actual = find_lcs(first_sentence, second_sentence, lcs_matrix)
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
     """
@@ -325,12 +340,12 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
 def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_tokens: list, plagiarism_threshold: float) -> int:
     """
-    Finds a length of the longest common subsequence using the Hirschberg's algorithm
-    At the same time, if the first and last tokens coincide,
-    they are immediately added to lcs and not analyzed
-    :param first_sentence_tokens: a list of tokens
-    :param second_sentence_tokens: a list of tokens
-    :return: a length of the longest common subsequence
+       Finds a length of the longest common subsequence using an optimized algorithm
+       When a length is less than the threshold, it becomes 0
+       :param first_sentence_tokens: a tuple of tokens
+       :param second_sentence_tokens: a tuple of tokens
+       :param plagiarism_threshold: a threshold
+       :return: a length of the longest common subsequence
     """
     # row that we create based on the previous
     counted_row = [0] * len(second_sentence_tokens)
@@ -352,7 +367,7 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
-    with open("data.txt") as first_file, open("data_2.txt") as second_file:
+    with open(path_to_file) as first_file, open(path_to_file) as second_file:
         first_lines = (tokenize_by_lines(line_1) for line_1 in first_file)
         second_lines = (tokenize_by_lines(line_2) for line_2 in second_file)
 
