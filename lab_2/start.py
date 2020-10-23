@@ -20,13 +20,10 @@ def test_till_calculate_plagiarism_score():
                                       susp_tokens,
                                       plagiarism_threshold=0.0)
     print('A length of the longest common subsequence for \n\n'
-        f'{origin_text} \n\n'
-        f'and \n\n'
-        f'{susp_text}: \n\n'
-        f'{lcs_lenght} \n')
+        f'{origin_text} \n\nand \n\n{susp_text}: \n\n{lcs_lenght} \n')
 
     matrix = main.fill_lcs_matrix(origin_tokens, susp_tokens)
-    print(f'A matrix:')
+    print('A matrix:')
     print(*matrix, sep='\n', end='\n\n')
 
     longest_lcs = main.find_lcs(origin_tokens, susp_tokens, matrix)
@@ -51,11 +48,8 @@ a blue moon will rise'''
     score = main.calculate_text_plagiarism_score(origin_tokens,
                                                  susp_tokens)
 
-    print(f'The text plagiarism score for \n\n'
-        f'{origin_text} \n'
-        f'\n and \n\n'
-        f'{susp_text}: \n\n'
-        f'{score:.2f}\n\n')
+    print('The text plagiarism score for \n\n'
+        f'{origin_text} \n\n and \n\n{susp_text}: \n\n{score:.2f}\n\n')
     return score
 
 def test_find_diff():
@@ -71,11 +65,8 @@ def test_find_diff():
 
     difference = main.find_diff_in_sentence(origin_tokens, susp_tokens, lcs)
 
-    print(f'The difference indexes between \n\n'
-        f'{origin_text} \n'
-        f'\n and \n\n'
-        f'{susp_text}: \n\n'
-        f'{difference}')
+    print('The difference indexes between \n\n'
+        f'{origin_text} \n\n and \n\n{susp_text}: \n\n{difference})
     return difference
 
 def test_accumulated_stat_and_report():
@@ -92,10 +83,8 @@ a blue moon will rise'''
 
     stat = main.accumulate_diff_stats(origin_tokens, susp_tokens)
 
-    print(f'The accumulated main statistics for pairs of sentences in texts: \n\n'
-        f'{origin_text} \n'
-        f'\n and \n\n'
-        f'{susp_text}: \n')
+    print('The accumulated main statistics for pairs of sentences in texts: \n\n'
+        f'{origin_text} \n\n and \n\n{susp_text}: \n')
     print(*stat.items(), sep='\n', end='\n\n')
 
     report = main.create_diff_report(origin_tokens,
