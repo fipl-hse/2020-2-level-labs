@@ -326,17 +326,18 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple,
     #    return len(first_sentence_tokens)
 
     length = max(len(first_sentence_tokens), len(second_sentence_tokens))
-    x_vector = [0 for _ in range(len(second_sentence_tokens))]
+    x_curr_vector = [0 for _ in range(len(second_sentence_tokens) + 1)]
     for x_word in first_sentence_tokens[:length]:
+        x_prev_vector = x_curr_vector[:]
         if x_word not in second_sentence_tokens[:length]:
             continue
         for i, y_word in enumerate(second_sentence_tokens[:length]):
             if x_word == y_word:
-                x_vector[i] += 1
+                x_curr_vector[i + 1] = x_prev_vector[i] + 1
             else:
-                x_vector[i] = max(x_vector[i - 1], x_vector[i])
+                x_curr_vector[i + 1] = max(x_curr_vector[i], x_prev_vector[i + 1])
     
-    lcs_length = x_vector[-1]
+    lcs_length = x_curr_vector[-1]
     if lcs_length / len(second_sentence_tokens) > plagiarism_threshold:
         return lcs_length
     return 0
