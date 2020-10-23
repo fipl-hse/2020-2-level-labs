@@ -201,13 +201,13 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     diff_index_original = []
     diff_index_suspicious = []
     for index, word in enumerate(original_sentence_tokens):
-        if word not in lcs and (index == 0 or original_sentence_tokens[index - 1] in lcs):
+        if word not in lcs and (not index or original_sentence_tokens[index - 1] in lcs):
             diff_index_original.append(index)
         if word not in lcs \
                 and (index == len(original_sentence_tokens) - 1 or original_sentence_tokens[index + 1] in lcs):
             diff_index_original.append(index + 1)
     for index, word in enumerate(suspicious_sentence_tokens):
-        if word not in lcs and (index == 0 or suspicious_sentence_tokens[index - 1] in lcs):
+        if word not in lcs and (not index or suspicious_sentence_tokens[index - 1] in lcs):
             diff_index_suspicious.append(index)
         if word not in lcs \
                 and (index == len(suspicious_sentence_tokens) - 1 or suspicious_sentence_tokens[index + 1] in lcs):
