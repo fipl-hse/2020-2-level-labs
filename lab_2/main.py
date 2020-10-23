@@ -21,9 +21,8 @@ def tokenize_by_lines(text: str) -> tuple:
     for sentence in sentences_in_text:
         if len(sentence) > 0:
             separate_sentences.append(tuple(tokenize(sentence)))
-    separate_sentences = tuple(separate_sentences)
 
-    return separate_sentences
+    return tuple(separate_sentences)
 
 
 
@@ -155,7 +154,16 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    pass
+    if not isinstance(lcs_length, int) \
+            or not isinstance(suspicious_sentence_tokens, tuple) \
+            or suspicious_sentence_tokens == (None, None):
+        return -1.0
+
+    if lcs_length > len(suspicious_sentence_tokens):
+        return -1.0
+
+    plagiarism = lcs_length / len(suspicious_sentence_tokens)
+    return plagiarism
 
 
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
