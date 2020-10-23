@@ -17,10 +17,10 @@ def tokenize_by_lines(text: str) -> tuple:
 
     sentences_list = []
     text = text.split('\n')
-    for element in text:
-        tokens = tuple(tokenize(element))
-        if tokens:
-            sentences_list.append(tokens)
+    for sentence in text:
+        sentence_tokenize = tokenize(sentence)
+        if sentence_tokenize:
+            sentences_list.append(tuple(sentence_tokenize))
     return tuple(sentences_list)
 
 
