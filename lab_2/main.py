@@ -367,13 +367,14 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
-    with open(path_to_file) as first_file, open(path_to_file) as second_file:
+    with open(path_to_file, encoding="utf-8") as first_file, open(path_to_file, encoding="utf-8") as second_file:
         first_lines = (tokenize_by_lines(line_1) for line_1 in first_file)
         second_lines = (tokenize_by_lines(line_2) for line_2 in second_file)
 
-        lengths = (find_lcs_length_optimized(first_line, second_line)
+        lengths = (find_lcs_length_optimized(first_line, second_line, plagiarism_threshold)
                    for first_line, second_line in zip(first_lines, second_lines))
 
-        scores = (calculate_plagiarism_score(length, line_2) for length, line_2 in zip(lengths, second_lines))
-    return scores
+        scores = [calculate_plagiarism_score(length, line_2) for length, line_2 in zip(lengths, second_lines)]
+
+    return tuple(scores)
 
