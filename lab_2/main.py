@@ -71,20 +71,17 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) \
-          or not isinstance(plagiarism_threshold, float) or None in first_sentence_tokens \
-          or None in second_sentence_tokens or plagiarism_threshold < 0 or plagiarism_threshold > 1:
+    check_type = (not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or
+                  not all(isinstance(i, str) for i in first_sentence_tokens) or
+                  not all(isinstance(i, str) for i in second_sentence_tokens))
+
+    check_plg_thr = not isinstance(plagiarism_threshold, float) or plagiarism_threshold < 0 or plagiarism_threshold > 1
+
+    if check_type or check_plg_thr:
         return -1
 
-    if len(first_sentence_tokens) == 0 or not first_sentence_tokens \
-            or len(second_sentence_tokens) == 0 or not second_sentence_tokens:
-        return 0
+    lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)[-1][-1]
 
-    lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
-    if len(first_sentence_tokens) > len(second_sentence_tokens):
-        lcs_matrix = lcs_matrix[len(second_sentence_tokens) - 1][len(second_sentence_tokens) - 1]
-    else:
-        lcs_matrix = lcs_matrix[-1][-1]
     if lcs_matrix / len(second_sentence_tokens) < plagiarism_threshold:
         return 0
     return lcs_matrix
@@ -241,11 +238,10 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
             'sentence_lcs_length': [0] * length,
             'difference_indexes': [0] * length}
 
-    states['text_plagiarism'] = calculate_text_plagiarism_score(original_text_tokens, 
-                                                                suspicious_text_tokens,plagiarism_threshold)
+    states['text_plagiarism'] = calculate_text_plagiarism_score (original_text_tokens,                                                                suspicious_text_tokens,plagiarism_threshold) 
     for i in range(length):
-        lcs_length = find_lcs_length(original_text_tokens[i], suspicious_text_tokens[i],  plagiarism_threshold=0.0)      
-        states['sentence_plagiarism'][i] = calculate_plagiarism_score(lcs_length, suspicious_text_tokens[i])
+        lcs_length = find_lcs_length(original_text_tokens[i], suspicious_text_tokens[i],plagiarism_threshold=0.0)      
+        states['sentence_plagiarism'][i] = calculate_plagiarism_score(lcs_length, suspicious_text_tokens[i]) 
         states ['sentence_lcs_length'] [i]= lcs_length
         lcs_matrix = fill_lcs_matrix(original_text_tokens[i], suspicious_text_tokens[i])
         lcs = find_lcs(original_text_tokens[i], suspicious_text_tokens[i], lcs_matrix)
@@ -285,7 +281,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         matrix = accumulated_diff_stats['sentence_lcs_length'][ind]
         plag_score = float(accumulated_diff_stats['sentence_plagiarism'][ind] * 100)
         report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(orig_sent,susp_sent,matrix,plag_score)    
-    text_plagiarism = float(accumulated_diff_stats['text_plagiarism'] * 100)
+    text_plagiarism = float (accumulated_diff_stats['text_plagiarism'] * 100) 
     report += 'Text average plagiarism (words): {}%'.format(text_plagiarism)
     return report
 
