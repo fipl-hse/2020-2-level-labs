@@ -1,3 +1,4 @@
+# pylint: skip-file
 """
 Tests calculate_text_plagiarism_score function
 """

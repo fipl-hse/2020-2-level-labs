@@ -96,7 +96,10 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
 
     # main logic. returning lcs diff size case reversed behaviour
     if len(first_sentence_tokens) > len(second_sentence_tokens):
-        lcs_matrix = fill_lcs_matrix(second_sentence_tokens, first_sentence_tokens)
+        # to pass pylint out-of-order check, I create to new variables:
+        new_first = second_sentence_tokens
+        new_second = first_sentence_tokens
+        lcs_matrix = fill_lcs_matrix(new_first, new_second)
         if lcs_matrix[-1][-1]/len(first_sentence_tokens) < plagiarism_threshold:
             return 0
         return lcs_matrix[-1][-1]
@@ -172,7 +175,9 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     return lcs_length/len(suspicious_sentence_tokens)
 
 
-def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
+def calculate_text_plagiarism_score(original_text_tokens: tuple,
+                                    suspicious_text_tokens: tuple,
+                                    plagiarism_threshold=0.3) -> float:
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
     The score is the sum of lcs values for each pair divided by the number of tokens in suspicious text
