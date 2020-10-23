@@ -100,6 +100,22 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
+            not isinstance(plagiarism_threshold, float):
+        return -1
+    if None in first_sentence_tokens or None in second_sentence_tokens or \
+            plagiarism_threshold < 0 or plagiarism_threshold > 1:
+        return -1
+    if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
+        return 0
+    lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
+    if len(first_sentence_tokens) > len(second_sentence_tokens):
+        lcs_length = max(lcs_matrix[len(second_sentence_tokens) - 1])
+    else:
+        lcs_length = max(lcs_matrix[-1])
+    if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
+        return 0
+    return lcs_length
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
@@ -110,6 +126,20 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
+    if not isinstance(suspicious_sentence_tokens, tuple):
+        return -1.0
+    if not suspicious_sentence_tokens:
+        return 0.0
+    for token_from_sentence in suspicious_sentence_tokens:
+        if not isinstance(token_from_sentence, str):
+            return -1.0
+    if not isinstance(lcs_length, int) or isinstance(lcs_length, bool) or lcs_length < 0:
+        return -1.0
+    if lcs_length > len(suspicious_sentence_tokens):
+        return -1.0
+
+    length_of_sentence = len(suspicious_sentence_tokens)
+    return lcs_length / length_of_sentence
 
 
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
