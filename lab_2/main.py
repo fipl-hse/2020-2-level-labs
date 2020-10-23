@@ -178,7 +178,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
             or (isinstance(suspicious_text_tokens, tuple) and not any(suspicious_text_tokens))):
         return 0
 
-        
+
     while len(original_text_tokens) < len(suspicious_text_tokens):
         original_text_tokens += ('',)
 
@@ -291,8 +291,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :param accumulated_diff_stats: a dictionary with statistics for each pair of sentences
     :return: a report
     """
-    if not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple) or \
-            not isinstance(accumulated_diff_stats, dict):
+    if not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple) or not isinstance(accumulated_diff_stats, dict):
         return ''
 
     length = len(suspicious_text_tokens)
@@ -300,7 +299,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         original_text_tokens += ('',)
     report = ''
 
-    for ind in range(length):
+    for ind in range(len(original_sentence_tokens)):
         sent_1 = list(original_text_tokens[ind])
         sent_2 = list(suspicious_text_tokens[ind])
         diff_indexes = accumulated_diff_stats['difference_indexes'][ind]
@@ -315,7 +314,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         susp_sent = ' '.join(sent_2)
     
         matrix = accumulated_diff_stats['sentence_lcs_length'][ind]
-        plag_score = accumulated_diff_stats['text_plagiarism'][ind]
+        plag_score = float(accumulated_diff_stats['sentence_plagiarism'][index_sent] * 100)
 
         report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(orig_sent,susp_sent,matrix,plag_score)
     
