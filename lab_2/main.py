@@ -116,7 +116,37 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    pass
+    # checks for sentences
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or\
+            None in first_sentence_tokens or None in second_sentence_tokens:
+        return ()
+    # checks for matrix
+    if not lcs_matrix or not isinstance(lcs_matrix, list) or\
+            None in lcs_matrix or None in lcs_matrix[0] or\
+            lcs_matrix[0][0] not in (0, 1):
+        return ()
+    # checks for matrix shape
+    if not len(lcs_matrix) == len(first_sentence_tokens) and\
+            not len(lcs_matrix[0]) == len(second_sentence_tokens):
+        return ()
+
+    # main logic
+    lcs_tokens = []
+    row_start, column_start = len(first_sentence_tokens)-1, len(second_sentence_tokens)-1
+    while row_start >= 0 and column_start >= 0:
+        if first_sentence_tokens[row_start] == second_sentence_tokens[row_start]:
+            lcs_tokens.append(first_sentence_tokens[row_start])
+            row_start -= 1
+            column_start -= 1
+        elif lcs_matrix[row_start-1][column_start] > lcs_matrix[row_start][column_start-1] and row_start:
+            row_start -= 1
+        elif lcs_matrix[row_start-1][column_start] <= lcs_matrix[row_start][column_start-1] and column_start:
+            column_start -= 1
+        elif not column_start and row_start:
+            row_start -= 1
+        else:
+            column_start -= 1
+    return tuple(lcs_tokens)[::-1]
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
@@ -127,7 +157,19 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    pass
+    # checks
+    if not isinstance(suspicious_sentence_tokens, tuple) or\
+            None in suspicious_sentence_tokens:
+        return -1
+    if not suspicious_sentence_tokens:
+        return 0.0
+    if lcs_length is True or not isinstance(lcs_length, int):
+        return -1
+    if lcs_length < 0 or lcs_length > len(suspicious_sentence_tokens):
+        return -1
+
+    # main logic
+    return lcs_length/len(suspicious_sentence_tokens)
 
 
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
@@ -140,7 +182,30 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    pass
+    # checks
+    if not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple):
+        return -1
+    if None in original_text_tokens or None in suspicious_text_tokens or\
+            None in original_text_tokens[0] or None in suspicious_text_tokens[0]:
+        return -1
+    if plagiarism_threshold is True or not isinstance(plagiarism_threshold, float):
+        return -1
+
+    # main logic
+    if len(original_text_tokens) < len(suspicious_text_tokens):
+        to_update = len(suspicious_text_tokens) - len(original_text_tokens)
+        original_text_tokens = list(original_text_tokens)
+        for _ in range(to_update):
+            original_text_tokens.append('')
+        original_text_tokens = tuple(original_text_tokens)
+
+    list_lcs_text = []
+    for index in range(0, len(suspicious_text_tokens)):
+        lcs = find_lcs_length(original_text_tokens[index],
+                              suspicious_text_tokens[index],
+                              plagiarism_threshold)
+        list_lcs_text.append(calculate_plagiarism_score(lcs, suspicious_text_tokens[index]))
+    return sum(list_lcs_text)/len(suspicious_text_tokens)
 
 
 def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
@@ -151,10 +216,42 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :param lcs: a longest common subsequence
     :return: a tuple with tuples of indexes
     """
-    pass
+    # checks
+    if not isinstance(original_sentence_tokens, tuple) or\
+            not isinstance(suspicious_sentence_tokens, tuple) or\
+            not isinstance(lcs, tuple):
+        return ()
+    if None in original_sentence_tokens or\
+            None in suspicious_sentence_tokens or\
+            None in lcs:
+        return ()
+
+    if not original_sentence_tokens and suspicious_sentence_tokens and not lcs:
+        return (), (0, len(suspicious_sentence_tokens))
+    if not suspicious_sentence_tokens and original_sentence_tokens and not lcs:
+        return (0, len(original_sentence_tokens)), ()
+
+    # main logic
+    indices_first = []
+    indices_second = []
+    for index in range(0, len(original_sentence_tokens)):
+        if original_sentence_tokens[index] not in lcs:
+            if original_sentence_tokens[index-1] in lcs or index == 0:
+                indices_first.append(index)
+                indices_second.append(index)
+            try:
+                if original_sentence_tokens[index+1] in lcs:
+                    indices_first.append(index+1)
+                    indices_second.append(index+1)
+            except IndexError:
+                indices_first.append(len(original_sentence_tokens))
+                indices_second.append(len(suspicious_sentence_tokens))
+    return tuple(indices_first), tuple(indices_second)
 
 
-def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
+def accumulate_diff_stats(original_text_tokens: tuple,
+                          suspicious_text_tokens: tuple,
+                          plagiarism_threshold=0.3) -> dict:
     """
     Accumulates the main statistics for pairs of sentences in texts:
             lcs_length, plagiarism_score and indexes of differences
@@ -167,7 +264,43 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
      'sentence_lcs_length': list,
      'difference_indexes': list}
     """
-    pass
+    # main logic
+    stats = {
+        'text_plagiarism': 0,
+        'sentence_plagiarism': [],
+        'sentence_lcs_length': [],
+        'difference_indexes': []
+    }
+
+    # if original text tokens length less
+    if len(original_text_tokens) < len(suspicious_text_tokens):
+        to_update = len(suspicious_text_tokens) - len(original_text_tokens)
+        original_text_tokens = list(original_text_tokens)
+        for _ in range(to_update):
+            original_text_tokens.append(())
+        original_text_tokens = tuple(original_text_tokens)
+
+    for index in range(0, len(suspicious_text_tokens)):
+        # find_lcs_length, calculate_plagiarism_score, find diff in sentence
+        lcs = find_lcs_length(original_text_tokens[index],
+                              suspicious_text_tokens[index],
+                              plagiarism_threshold)
+        score = calculate_plagiarism_score(lcs, suspicious_text_tokens[index])
+        lcs_matrix = fill_lcs_matrix(original_text_tokens[index],
+                                     suspicious_text_tokens[index])
+        lcs_tokens = find_lcs(original_text_tokens[index],
+                              suspicious_text_tokens[index],
+                              lcs_matrix)
+        diff_indexes = find_diff_in_sentence(original_text_tokens[index],
+                                             suspicious_text_tokens[index],
+                                             lcs_tokens)
+        stats['sentence_plagiarism'].append(score)
+        stats['sentence_lcs_length'].append(lcs)
+        stats['difference_indexes'].append(diff_indexes)
+    stats['text_plagiarism'] = calculate_text_plagiarism_score(original_text_tokens,
+                                                               suspicious_text_tokens,
+                                                               plagiarism_threshold)
+    return stats
 
 
 def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tuple, accumulated_diff_stats: dict) -> str:
@@ -178,7 +311,34 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :param accumulated_diff_stats: a dictionary with statistics for each pair of sentences
     :return: a report
     """
-    pass
+    # main logic
+    # if original text tokens length less
+    if len(original_text_tokens) < len(suspicious_text_tokens):
+        to_update = len(suspicious_text_tokens) - len(original_text_tokens)
+        original_text_tokens = list(original_text_tokens)
+        for _ in range(to_update):
+            original_text_tokens.append(())
+        original_text_tokens = tuple(original_text_tokens)
+
+    report = """"""
+    for index in range(0, len(suspicious_text_tokens)):
+        report += '-'
+        for index_token in range(0, len(original_text_tokens[index])):
+            if index_token in accumulated_diff_stats['difference_indexes'][index][0]:
+                report += ' |'
+            report += ' ' + original_text_tokens[index][index_token]
+        report += '\n'
+        report += '+ '
+        for index_token_second in range(0, len(suspicious_text_tokens[index])):
+            if index_token_second in accumulated_diff_stats['difference_indexes'][index][1]:
+                report += ' |'
+            report += ' ' + suspicious_text_tokens[index][index_token_second]
+        report += '\r\n'
+        report += 'lcs = {}, plagiarism = {}%'.format(accumulated_diff_stats['sentence_lcs_length'][index],
+                                                      accumulated_diff_stats['sentence_plagiarism'][index]*100)
+        report += '\r\n'
+    report += 'Text average plagiarism (words): {}%'.format(accumulated_diff_stats['text_plagiarism']*100)
+    return report
 
 
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
