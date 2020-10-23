@@ -162,7 +162,6 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     length_of_sentence = len(suspicious_sentence_tokens)
     plagiarism_score = lcs_length / length_of_sentence
     return plagiarism_score
-    pass
 
 
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
