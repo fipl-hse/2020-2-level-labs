@@ -15,11 +15,11 @@ if __name__ == "__main__":
      plagiarism_threshold = 0.3
      zero_matrix = main.create_zero_matrix(len(original_tokens), len(suspicious_tokens))
 
-     lcs_matrix = main.fill_lcs_matrix(original_tokens[0], suspicious_tokens[0])
-     print('LCS matrix: ', lcs_matrix)
+     m_lcs = main.fill_lcs_matrix(original_tokens[0], suspicious_tokens[0])
+     print('LCS matrix: ', m_lcs)
 
-     lcs_length = main.find_lcs_length(original_tokens[0], suspicious_tokens[0], plagiarism_threshold)
-     print('LCS is', lcs_length)
+     len_lcs = main.find_lcs_length(original_tokens[0], suspicious_tokens[0], plagiarism_threshold)
+     print('LCS is', len_lcs)
 
-     RESULT = lcs_length
-     assert RESULT == lcs_lenght, "Not working"
+     RESULT = len_lcs
+     assert RESULT == len_lcs, "Not working"
