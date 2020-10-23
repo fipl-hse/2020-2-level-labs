@@ -54,7 +54,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
         return []
     """
-    criteriion = [isinstance(first_sentence_tokens, tuple), isinstance(second_sentence_tokens, tuple)]
+    criterion = [ isinstance(first_sentence_tokens, tuple), isinstance(second_sentence_tokens, tuple)]
     if all(criterion) and (not None in first_sentence_tokens) and (not None in second_sentence_tokens):
         rows = len(first_sentence_tokens)
         columns = len(second_sentence_tokens)
