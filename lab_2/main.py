@@ -1,7 +1,7 @@
 """
 Longest common subsequence problem
 """
-
+import tokenizer
 
 def tokenize_by_lines(text: str) -> tuple:
     """
@@ -11,19 +11,18 @@ def tokenize_by_lines(text: str) -> tuple:
     :return: a list of sentences with lowercase tokens without punctuation
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
+    tuple(text_output)
     """
-    if not isinstance(text, str):
-        return ()
-    text_output = []
-    for token in text.lower().split():
-        variable = ''
-        for character in token:
-            if character.isalpha():
-                variable += character
-        if len(variable) != 0:
-            text_output.append(variable)
-    text_output = tuple(text_output)
-    return text_output
+    if isinstance(text, str):
+        text = text.split('\n')
+        text_output = []
+        for line in text:
+            tuple_of_tokens = tuple(tokenizer.tokenize(line))
+            if tuple_of_tokens:
+                text_output.append(new_line)
+        return (tuple(text_output))
+
+    return ()
 
 
 
