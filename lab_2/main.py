@@ -380,13 +380,13 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     """
     file = open(path_to_file, encoding='UTF-8')
 
-    if os.path.exists('vocab.pkl'):
-        with open('vocab.pkl', 'rb') as obj:
-            vocab = pickle.load(obj)
-    else:
-        vocab = {'|i|': 0}
-
     def transform(text):
+        if os.path.exists('vocab.pkl'):
+            with open('vocab.pkl', 'rb') as obj:
+                vocab = pickle.load(obj)
+        else:
+            vocab = {'|i|': 0}
+
         for chunk in text:
             for token in re.sub('[^a-z \n]', '', chunk.lower()).split():
                 if token not in vocab:
@@ -394,6 +394,7 @@ def tokenize_big_file(path_to_file: str) -> tuple:
                     vocab['|i|'] += 1
                 yield vocab[token]
 
-    with open('vocab.pkl', 'wb') as out:
-        pickle.dump(vocab, out)
+        with open('vocab.pkl', 'wb') as out:
+            pickle.dump(vocab, out)
+
     return tuple(transform(file))
