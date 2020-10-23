@@ -33,9 +33,9 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    r_c_int = isinstance(rows, int), isinstance(columns, int)
-    r_c_bool = isinstance(rows, bool), isinstance(columns,bool)
-    if not r_c_int or r_c_bool:
+    check_rows = not isinstance(rows, bool) and isinstance(rows, int)
+    check_columns = not isinstance(columns, bool) and isinstance(columns, int)
+    if not check_rows or not check_columns:
         return []
     if rows <= 0 or columns <= 0:
         return []
@@ -78,29 +78,22 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    type_check = not isinstance(first_sentence_tokens, tuple), not isinstance(second_sentence_tokens, tuple), \
-                  not isinstance(plagiarism_threshold, float)
-    if type_check:
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
+            not isinstance(plagiarism_threshold, float):
         return -1
-    if plagiarism_threshold < 0 or plagiarism_threshold > 1:
+    if None in first_sentence_tokens or None in second_sentence_tokens or \
+            plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
-    for first_token in first_sentence_tokens:
-        if not isinstance(first_token, str) or not first_token:
-            return -1
-    for second_token in second_sentence_tokens:
-        if not isinstance(second_token, str) or not second_token:
-            return -1
     if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
         return 0
-    lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
-    if len(first_sentence_tokens) > len(second_sentence_tokens):
-        length_lcs = lcs_matrix[len(second_sentence_tokens) - 1][len(second_sentence_tokens) - 1]
+    lcs = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
+    if lcs:
+        lcs_length = lcs[-1][-1]
     else:
-        length_lcs = lcs_matrix[-1][-1]
-    if (length_lcs / len(second_sentence_tokens)) < plagiarism_threshold:
         return 0
-    return length_lcs
-
+    if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
+        return 0
+    return lcs_length
 
 
     
