@@ -35,7 +35,9 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     """
     r_c_int = isinstance(rows, int), isinstance(columns, int)
     r_c_bool = isinstance(rows, bool), isinstance(columns,bool)
-    if not r_c_int and r_c_bool:
+    if not r_c_int or not r_c_bool:
+        return []
+    if rows <= 0 or columns <= 0:
         return []
     zero_matrix = [[0] * columns for i in range(rows)]
     return zero_matrix
@@ -53,14 +55,15 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     rows = len(first_sentence_tokens)
     columns = len(second_sentence_tokens)
     lcs_matrix = create_zero_matrix(len(first_sentence_tokens),len(second_sentence_tokens))
-    if isinstance(first_sentence_tokens, tuple) and isinstance(second_sentence_tokens, tuple) and \
-            rows >= 0 and columns >= 0:
-        for index_1, element_1 in enumerate(first_sentence_tokens):
-            for index_2, element_2 in enumerate(second_sentence_tokens):
-                if element_1 == element_2:
-                    lcs_matrix[index_1][index_2] = lcs_matrix[index_1 - 1][index_2 - 1] + 1
-                else:
-                    lcs_matrix[index_1][index_2] = max(lcs_matrix[index_1 - 1][index_2], lcs_matrix[index_1][index_2 - 1])
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
+            rows <= 0 or columns <= 0:
+        return []
+    for index_1, element_1 in enumerate(first_sentence_tokens):
+        for index_2, element_2 in enumerate(second_sentence_tokens):
+            if element_1 == element_2:
+                lcs_matrix[index_1][index_2] = lcs_matrix[index_1 - 1][index_2 - 1] + 1
+            else:
+                lcs_matrix[index_1][index_2] = max(lcs_matrix[index_1 - 1][index_2], lcs_matrix[index_1][index_2 - 1])
     return lcs_matrix
 
 
@@ -97,7 +100,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
         length_lcs = lcs_matrix[-1][-1]
     else:
         return 0
-    if (length_lcs / len(second_sentence_tokens)) < plagiarism_threshold:
+    if length_lcs / len(second_sentence_tokens) < plagiarism_threshold:
         return 0
     return length_lcs
 
