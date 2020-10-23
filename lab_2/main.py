@@ -19,7 +19,7 @@ def tokenize_by_lines(text: str) -> tuple:
         for line in text:
             tuple_of_tokens = tuple(tokenizer.tokenize(line))
             if tuple_of_tokens:
-                text_output.append(new_line)
+                text_output.append(tuple_of_tokens)
         return (tuple(text_output))
 
     return ()
