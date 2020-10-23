@@ -135,14 +135,16 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     if not isinstance(suspicious_sentence_tokens, tuple):
-      return -1.0
-    if not isinstance(lcs_length, int) or isinstance(lcs_length, bool) or lcs_length < 0 or lcs_length > len(suspicious_sentence_tokens):
-      return -1.0
+        return -1.0
     if not suspicious_sentence_tokens:
         return 0.0
     for word in suspicious_sentence_tokens:
         if not isinstance(word, str):
-            return -1.0    
+            return -1.0
+    if not isinstance(lcs_length, int) or isinstance(lcs_length, bool) or lcs_length < 0:
+        return -1.0
+    if lcs_length > len(suspicious_sentence_tokens):
+        return -1.0
 
     return lcs_length / len(suspicious_sentence_tokens)
 
@@ -176,10 +178,8 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
         if score >= 0:
             score_all.append(score)
 
-    plag_score = sum(score_all) / len(suspicious_text_tokens)
-    if plag_score < plagiarism_threshold:
-        return 0.0
-    return plag_score
+    
+    return sum(score_all) / len(suspicious_text_tokens)
 
 
 
@@ -250,7 +250,10 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     while len(original_text_tokens) < length:   #equal length
         original_text_tokens += ('',)
 
-    all_states = {}
+    all_states = {'text_plagiarism': 0,
+            'sentence_plagiarism': [0] * length,
+            'sentence_lcs_length': [0] * length,
+            'difference_indexes': [0] * length}
 
     all_states['text_plagiarism'] = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens,       #first full score plagiarizm
                                                                     plagiarism_threshold)
@@ -258,7 +261,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
         lcs_length = find_lcs_length(original_text_tokens[i], suspicious_text_tokens[i],  plagiarism_threshold=0.0)      #предложений несколько/ посдчет заиствований в отдельных ключах
 
         all_states['sentence_plagiarism'][i] = calculate_plagiarism_score(lcs_length, suspicious_text_tokens[i])
-        all_states ['sentence_lcs_length']= lcs_length
+        all_states ['sentence_lcs_length'] [i]= lcs_length
 
 
         lcs_matrix = fill_lcs_matrix(original_text_tokens[i], suspicious_text_tokens[i])
@@ -321,7 +324,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    return 0
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -330,4 +333,4 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    pass
+    return ()
