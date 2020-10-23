@@ -187,26 +187,32 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :param lcs: a longest common subsequence
     :return: a tuple with tuples of indexes
     """
-    if not isinstance(original_sentence_tokens, tuple) or not isinstance(suspicious_sentence_tokens, tuple) or \
-            not isinstance(lcs, tuple):
-        return ()
-    if None in original_sentence_tokens or None in suspicious_sentence_tokens or None in lcs:
-        return ()
+    orig_sent_type = not isinstance(original_sentence_tokens, tuple)
+    susp_sent_type = not isinstance(suspicious_sentence_tokens, tuple)
+    lcs_type = not isinstance(lcs, tuple)
 
-    indexes_diff_original = []
-    for word in original_sentence_tokens:
-        if word not in lcs:
-            original_sentence_tokens.index(word) 
-                             
-    indexes_diff_suspicious = []
-    for word in suspicious_sentence_tokens:
-        if word not in lcs:
-            suspicious_sentence_tokens.index(word) 
-                               
-    changes_indexes_both_sent = (tuple(find_diff_indexes(indexes_diff_original)),
-                                 tuple(find_diff_indexes(indexes_diff_suspicious)))
+    if orig_sent_type or susp_sent_type or lcs_type:
+        return ()
+    for function_parameter in (original_sentence_tokens, suspicious_sentence_tokens, lcs):
+        if isinstance(function_parameter, tuple):
+            if not all(isinstance(word, str) for word in function_parameter):
+                return ()
 
-    return changes_indexes_both_sent
+    diff_sum = []
+    sentences = (original_sentence_tokens, suspicious_sentence_tokens)
+
+    for sentence in sentences:
+        diff = []
+        for i, token in enumerate(sentence):
+            if token not in lcs:
+                if i == 0 or sentence[i - 1] in lcs:
+                    diff.append(i)
+                if i == len(sentence) - 1 or sentence[i + 1] in lcs:
+                    diff.append(i + 1)
+        diff_sum.append(tuple(diff))
+
+    return tuple(diff_sum)
+
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
     """
