@@ -319,7 +319,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(orig_sent,susp_sent,matrix,plag_score)
     
     text_plagiarism = float(accumulated_diff_stats['text_plagiarism'] * 100)
-    report += 'Text average plagiarism : {}%'.format(text_plagiarism)
+    report += 'Text average plagiarism (words): {}%'.format(text_plagiarism)
 
     return report
 
