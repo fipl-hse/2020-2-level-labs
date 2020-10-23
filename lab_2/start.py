@@ -66,7 +66,7 @@ def test_find_diff():
     difference = main.find_diff_in_sentence(origin_tokens, susp_tokens, lcs)
 
     print('The difference indexes between \n\n'
-        f'{origin_text} \n\n and \n\n{susp_text}: \n\n{difference})
+        f'{origin_text} \n\n and \n\n{susp_text}: \n\n{difference}')
     return difference
 
 def test_accumulated_stat_and_report():
