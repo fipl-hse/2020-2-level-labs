@@ -283,6 +283,36 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
             not isinstance(accumulated_diff_stats, dict):
         return ''
 
+    length = len(suspicious_text_tokens)
+    while len(original_text_tokens) < length:
+        original_text_tokens += ('',)
+
+    report = ''
+    for ind in range(length):
+        sent_1 = list(original_text_tokens[ind])
+        sent-2 = list(suspicious_text_tokens[ind])
+        diff_indexes = accumulated_diff_stats['difference_indexes'][ind]
+
+
+        index = 0
+        for i in diff_indexes[0]:
+            sent_1.insert(i + index, '|')
+            sent_2.insert(i + index, '|')
+            index += 1
+        orig_sent = ' '.join(sent_1)
+        susp_sent = ' '.join(sent_2)
+    
+        matrix = accumulated_diff_stats['sentence_lcs_length'][ind]
+        plag_score = accumulated_diff_stats['text_plagiarism'][ind]
+
+        report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(orig_sent,susp_sent,matrix,plag_score)
+    
+    text_plagiarism = float(accumulated_diff_stats['text_plagiarism'] * 100)
+    report += 'Text average plagiarism: {}%'.format(text_plagiarism)
+
+    return report
+
+
 
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
                               plagiarism_threshold: float) -> int:
