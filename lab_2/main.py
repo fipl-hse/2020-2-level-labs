@@ -19,8 +19,8 @@ def tokenize_by_lines(text: str) -> tuple:
     output = []
     text_devided = text.split('\n')
     for sentence in text_devided:
-        tokens = tuple(tokenize(sentence))
-        output.append(tokens)
+        if len(sentence.strip()) > 0:
+            output.append(tuple(tokenize(sentence)))
 
     return tuple(output)
 
