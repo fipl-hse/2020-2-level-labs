@@ -121,7 +121,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         return ()
     if None in lcs_matrix:
         return ()
-    
+
     lcs = []
     for row, elmt1 in reversed(list(enumerate(first_sentence_tokens))):
         for column, elmt2 in reversed(list(enumerate(second_sentence_tokens))):
@@ -146,6 +146,22 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
+    criterion = [not isinstance(suspicious_sentence_tokens, tuple),not isinstance(lcs_length, int)]
+    if any(criterion):
+        return -1.0
+    if not suspicious_sentence_tokens:
+        return 0.0
+    for token_from_sentence in suspicious_sentence_tokens:
+        if not isinstance(token_from_sentence, str):
+            return -1.0
+    if isinstance(lcs_length, bool) or lcs_length < 0:
+        return -1.0
+    if lcs_length > len(suspicious_sentence_tokens):
+        return -1.0
+
+    length_of_sentence = len(suspicious_sentence_tokens)
+    plagiarism_score = lcs_length / length_of_sentence
+    return plagiarism_score
     pass
 
 
