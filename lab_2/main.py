@@ -106,7 +106,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     if any(criterion):
         return ()
     for token1 in first_sentence_tokens:
-        if not isinstance(toke1, str):
+        if not isinstance(token1, str):
             return ()
     for token2 in second_sentence_tokens:
         if not isinstance(token2, str):
