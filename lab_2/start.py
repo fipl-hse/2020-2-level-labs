@@ -40,7 +40,6 @@ if __name__ == '__main__':
     print(f"The report for two texts:\n{report}")
 
     RESULT = report.split("\n")
-
     assert RESULT == ['- i have a | dog |', '+ i have a | cat |', '',
                       'lcs = 3, plagiarism = 75.0%', '',
                       '- | his | name is | nemo |', '+ | her | name is | anny |', '',
