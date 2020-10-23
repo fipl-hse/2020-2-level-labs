@@ -148,6 +148,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
         self.assertEqual(expected, actual)
         self.assertEqual(expected, actual_reversed)
 
+
     def test_calculate_text_plagiarism_score_bigger_first_text(self):
         """
         Tests that calculate_text_plagiarism_score function
