@@ -14,9 +14,16 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    if not isinstance(text, str):
+    if not isinstance(text, str):  # проверка условий
         return ()
-    return tuple(tuple(i.split()) for i in 'I have a cat.\nHis name is Bruno'.lower().replace('.', '').split('\n'))
+    text_sentences = text.split('\n')  # разделяем текст на предложения
+    text_sentences_tokenize = []
+    for sentence in text_sentences:  # добавляем в список кортежи предложений
+        sentence_tokenize = tokenizer.tokenize(sentence)  # применяем функцию к одному предложению
+        if sentence_tokenize:  # исключаем ошибку с пробелами и пустыми списками
+            text_sentences_tokenize.append(tuple(sentence_tokenize))
+    text_sentences_tokenize = tuple(text_sentences_tokenize)  # делаем из списка кортеж
+    return text_sentences_tokenize
 
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
