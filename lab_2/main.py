@@ -13,7 +13,7 @@ def tokenize_by_lines(text: str) -> tuple:
     """
     import tokenizer
     if not isinstance(text, str):
-        return None
+        return ()
     else:
         all_lines = []
         text2 = text.split('\n')
@@ -67,7 +67,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         for j, el_2 in enumerate(second_sentence_tokens):
             if el_1 == el_2 and i == j:
                 lcs_matrix[i][j] = lcs_matrix[i - 1][j - 1] + 1
-            elif el_1 != el_2:
+            else:
                 lcs_matrix[i][j] = max(lcs_matrix[i - 1][j], lcs_matrix[i][j - 1])
     return lcs_matrix
 
