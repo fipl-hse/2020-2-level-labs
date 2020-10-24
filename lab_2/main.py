@@ -16,7 +16,7 @@ def tokenize_by_lines(text: str) -> tuple:
     """
     if not isinstance(text, str):
         return ()
-    return tuple(tuple(i.split()) for i in sentence.lower().replace('.', '').split('\n'))
+    return tuple(tuple(i.split()) for i in str.lower().replace('.', '').split('\n'))
 
 def create_zero_matrix(rows: int, columns: int) -> list:
     """
