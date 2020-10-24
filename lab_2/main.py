@@ -172,11 +172,12 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
 
     for original_index, original_sentence in enumerate(original_text_tokens):
         for suspicious_index, suspicious_sentence in enumerate(suspicious_text_tokens):
-            if original_number == suspicious_number:
+            if original_index == suspicious_index:
                 lcs_length = int(find_lcs_length(original_sentence, suspicious_sentence, plagiarism_threshold))
                 plagiarism_score = calculate_plagiarism_score(lcs_length, suspicious_sentence)
                 plagiarism_scores.append(plagiarism_score)
     total_plagiarism_score = sum(plagiarism_scores) / len(suspicious_text_tokens)
+
     return total_plagiarism_score
 
 
