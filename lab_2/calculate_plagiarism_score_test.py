@@ -65,7 +65,7 @@ class CalculatePlagiarismScoreTest(unittest.TestCase):
             can handle incorrect suspicious_sentence_tokens inputs
         """
         patches_lcs_length = 0
-        bad_inputs = [[], {}, (), 9.22, -1, 0, -6, None, True]
+        bad_inputs = [[], {}, 9.22, -1, 0, -6, None, True]
 
         expected = -1
         for bad_input in bad_inputs:
