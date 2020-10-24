@@ -14,9 +14,14 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    if not isinstance(text, str):
-        return ()
-    return tuple(tuple(i.split()) for i in 'I have a cat.\nHis name is Bruno'.lower().replace('.', '').split('\n'))
+    if isinstance(text, str):
+        tokens = []
+        sentences = text.split('\n')
+        for words in sentences:
+            token_text = tuple(tokenize(words))
+            if token_text:
+                tokens.append(token_text)
+    return tuple(tokens)
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
