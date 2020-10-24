@@ -200,6 +200,10 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     """
     if not isinstance(original_text_tokens, tuple) \
             or not isinstance(suspicious_text_tokens, tuple) \
+            or original_text_tokens == [[None, None]] \
+            or suspicious_text_tokens == [[None, None]] \
+            or original_text_tokens == [None] \
+            or suspicious_text_tokens == [None] \
             or plagiarism_threshold != 0.3:
         return -1.0
 
@@ -214,8 +218,8 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
         for suspicious_index, suspicious_sentences in enumerate(suspicious_text_tokens):
 
             if original_index == suspicious_index:
-                max_length = int(find_lcs_length(original_text_tokens, suspicious_text_tokens, plagiarism_threshold))
-                plagiarism = calculate_plagiarism_score(max_length, suspicious_text_tokens)
+                max_length = int(find_lcs_length(original_sentences, suspicious_sentences, plagiarism_threshold))
+                plagiarism = calculate_plagiarism_score(max_length, suspicious_sentences)
                 plagiarism_result.append(plagiarism)
 
             texts_plagiarism = sum(plagiarism_result) / len(suspicious_text_tokens)
