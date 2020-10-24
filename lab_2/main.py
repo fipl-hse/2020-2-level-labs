@@ -218,7 +218,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
                 plagiarism = calculate_plagiarism_score(max_length, suspicious_text_tokens)
                 plagiarism_result.append(plagiarism)
 
-            texts_plagiarism = plagiarism_result / len(suspicious_text_tokens)
+            texts_plagiarism = sum(plagiarism_result) / len(suspicious_text_tokens)
 
     return texts_plagiarism
 
