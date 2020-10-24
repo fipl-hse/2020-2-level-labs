@@ -74,8 +74,6 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
 
 
 
-
-
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
     """
     Finds a length of the longest common subsequence using the Needleman–Wunsch algorithm
@@ -143,12 +141,24 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         return ()
 
     lcs = []
-    for i_r, all_row in enumerate(reversed(lcs_matrix)):
-        for i_c, el_col in enumerate(reversed(all_row)):
-            if all_row and el_col:
-                if first_sentence_tokens[i_r] == second_sentence_tokens[i_c]:
-                    lcs.append(second_sentence_tokens[i_c])
-    return tuple(lcs)
+    row = len(first_sentence_tokens) - 1
+    column = len(second_sentence_tokens) - 1
+    if row < 0:
+        row = 0
+    elif column < 0:
+        column = 0
+    while row >= 0 and column >= 0:
+        if first_sentence_tokens[row] == second_sentence_tokens[column]:
+            lcs.append(second_sentence_tokens[column])
+            row -= 1
+            column -= 1
+        else:
+            if lcs_matrix[row - 1][column] > lcs_matrix[row][column - 1] or column == 0:
+                row -= 1
+            else:
+                column -= 1
+
+    return tuple(reversed(lcs))
 
 
 
