@@ -2,6 +2,7 @@
 Longest common subsequence problem
 """
 
+from lab_2.tokenizer import tokenize
 
 def tokenize_by_lines(text: str) -> tuple:
     """
@@ -12,7 +13,13 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    pass
+    tokens  = []
+    sentences  = text.split('\n')
+    for sentence in sentences:
+        token = tuple(tokenize(sentence))
+        if token:
+            tokens.append(token)
+    return token
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -24,7 +31,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
