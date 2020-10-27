@@ -3,6 +3,7 @@ Longest common subsequence implementation starter
 """
 import lab_2.main
 
+
 if __name__ == '__main__':
     original_text_tokens = (('i', 'have', 'a', 'cat'),
                             ('its', 'body', 'is', 'covered', 'with', 'bushy', 'white', 'fur'))
