@@ -18,8 +18,8 @@ class FindLcsOptimizedTest(unittest.TestCase):
         Tests that find_lcs_length_optimized
             works just fine and not fails with big text
         """
-        sentence_tokens_first_text = tokenize_big_file('lab_2/data.txt')[:30000]
-        sentence_tokens_second_text = tokenize_big_file('lab_2/data_2.txt')[:30000]
+        sentence_tokens_first_text = tokenize_big_file('data.txt')[:30000]
+        sentence_tokens_second_text = tokenize_big_file('data_2.txt')[:30000]
         plagiarism_threshold = 0.0001
         actual = find_lcs_length_optimized(sentence_tokens_first_text,
                                            sentence_tokens_second_text,
@@ -57,8 +57,8 @@ class FindLcsOptimizedTest(unittest.TestCase):
             works efficiently than given memory reference
         """
         reference = 65.69129527698863 * 1.1
-        sentence_tokens_first_text = tokenize_big_file('lab_2/data.txt')[:30000]
-        sentence_tokens_second_text = tokenize_big_file('lab_2/data_2.txt')[:30000]
+        sentence_tokens_first_text = tokenize_big_file('data.txt')[:30000]
+        sentence_tokens_second_text = tokenize_big_file('data_2.txt')[:30000]
         plagiarism_threshold = 0.0001
 
         actual_memory = memory_usage((find_lcs_length_optimized,
