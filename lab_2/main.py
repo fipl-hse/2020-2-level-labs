@@ -66,7 +66,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     if not all(checks) or not first_sentence_tokens or not second_sentence_tokens:
         return []
     for token_1, token_2 in zip(first_sentence_tokens, second_sentence_tokens):
-        if not token_1 or not token_2:
+        if not isinstance(token_1, str) or not isinstance(token_2, str):
             return []
 
     matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
