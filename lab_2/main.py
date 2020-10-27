@@ -1,7 +1,7 @@
 """
 Longest common subsequence problem
 """
-
+from tokenizer import tokenize
 
 def tokenize_by_lines(text: str) -> tuple:
     """
@@ -12,8 +12,15 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    text = text.split
-    return text
+    if not isinstgance(text, str):
+        return ()
+    result = []
+    text = text.split('.')
+    for sent in text:
+        sent = tuple(tokenize(sent))
+        if len(sent) > 0:
+            result.append(sent)
+    return tuple(result)
 
 
 
@@ -26,7 +33,10 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    pass
+    if not isinstance(rows, int) or not isinstance(columns, int):
+        return []
+    return [[0 for _ in range(columns)] for _ in range(rows)]
+
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
@@ -36,7 +46,24 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    pass
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
+        return []
+    if not len(first_sentence_tokens) > 1 or not len(second_sentence_tokens) > 1:
+        return []
+    if not isinstance(first_sentence_tokens[0], str) or not isinstance(second_sentence_tokens[0], str):
+        return []
+    rows = len(first_sentence_tokens)
+    columns = len(second_sentence_tokens)
+    matrix = create_zero_matrix(rows, columns)
+    if len(matrix) < 1:
+        return []
+    for row in range(rows):
+        for column in range(columns):
+            common = first_sentence_tokens[row] == second_sentence_tokens[column]
+            matrix[row][column] = max(matrix[row-1][column], matrix[row][column-1])
+            if common:
+                matrix[row][column] += 1
+    return matrix
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
