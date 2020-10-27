@@ -36,7 +36,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     if not isinstance(rows, int) or not isinstance(columns, int):
         return []
     if rows < 0 or columns < 0:
-        return []
+        return [[]]
     return [[0 for _ in range(columns)] for _ in range(rows)]
 
 
@@ -50,15 +50,13 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     """
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
         return []
-    if not len(first_sentence_tokens) > 1 or not len(second_sentence_tokens) > 1:
+    if not len(first_sentence_tokens) > 0 or not len(second_sentence_tokens) > 0:
         return []
     if not isinstance(first_sentence_tokens[0], str) or not isinstance(second_sentence_tokens[0], str):
         return []
     rows = len(first_sentence_tokens)
     columns = len(second_sentence_tokens)
     matrix = create_zero_matrix(rows, columns)
-    if len(matrix) < 1:
-        return []
     for row in range(rows):
         for column in range(columns):
             common = first_sentence_tokens[row] == second_sentence_tokens[column]
