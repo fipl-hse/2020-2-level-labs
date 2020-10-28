@@ -335,7 +335,32 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
             sus_sent.append(i)
 
         i += 1
-    return tuple(og_sent), tuple(sus_sent)
+
+    res1 = []
+
+    prev = -22
+    for i in range(len(og_sent)):
+        if og_sent[i] - prev != 1:
+            res1.append(og_sent[i])
+        else:
+            if i + 1 < len(og_sent) and og_sent[i + 1] - og_sent[i] != 1:
+                res1.append(og_sent[i])
+            elif i + 1 == len(og_sent):
+                res1.append(og_sent[i] + 1)
+        prev = og_sent[i]
+    res2 = []
+    prev = -22
+    for i in range(len(sus_sent)):
+        if sus_sent[i] - prev != 1:
+            res2.append(sus_sent[i])
+        else:
+            if i + 1 < len(sus_sent) and sus_sent[i + 1] - sus_sent[i] != 1:
+                res2.append(sus_sent[i])
+            elif i + 1 == len(sus_sent):
+                res2.append(sus_sent[i] + 1)
+        prev = sus_sent[i]
+
+    return tuple(res1), tuple(res2)
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
@@ -411,3 +436,12 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
     :return: a length of the longest common subsequence
     """
     pass
+
+
+first_sentence = ('the', 'cat', 'left')
+second_sentence = ('a', 'dog', 'appeared')
+lcs = ()
+
+expected = ((0, 3), (0, 3))
+actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
+print(actual)
