@@ -384,6 +384,20 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
+    s_1, s_2 = first_sentence_tokens, second_sentence_tokens
+    max_len = min(len(s_1), len(s_2))
+    i = [0] * (max_len + 1)
+    for w_1 in s_1[:max_len]:
+        prev_i = i[:]
+        for j, w_2 in enumerate(s_2[:max_len]):
+            if w_1 == w_2:
+                i[j + 1] = prev_i[j] + 1
+            else:
+                i[j + 1] = max((i[j], prev_i[j + 1]))
+    lcs_length: int = i[-1]
+    return lcs_length if not lcs_length / len(s_2) < plagiarism_threshold else 0
+
+    """
     sentence_length = min(len(first_sentence_tokens), len(second_sentence_tokens))
     current_row = [0] * (sentence_length + 1)
     for element_1 in first_sentence_tokens[:sentence_length]:
@@ -395,7 +409,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
                 current_row[index_2 + 1] = max(current_row[index_2], previous_row[index_2 + 1])
 
     return current_row[-1] if not current_row[-1] / len(second_sentence_tokens) < plagiarism_threshold else 0
-
+"""
 
 tokens_dict = {}
 
