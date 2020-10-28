@@ -5,7 +5,7 @@ Tests tokenize_big_file function
 import unittest
 import timeit
 from memory_profiler import memory_usage
-from lab_2.main import tokenize_big_file
+from lab_2.main import tokenize_big_file, tokenize_by_lines
 
 
 class TokenizeBigFileTest(unittest.TestCase):
@@ -18,7 +18,7 @@ class TokenizeBigFileTest(unittest.TestCase):
         Tests that tokenize_big_fie
             works just fine and not fails with big text
         """
-        reference_len = 36815824
+        reference_len = 36970273
         actual = tokenize_big_file('lab_2/data.txt')
         print(f"Actual tokenize_big_file function length: {len(actual)}")
         print(f"Reference tokenize_big_file function length: {reference_len}")

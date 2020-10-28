@@ -277,13 +277,15 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
                               tuple):
         return -1
 
-    for el in original_text_tokens:
-        if not isinstance(el, str):
-            return -1
+    for el2 in original_text_tokens:
+        for el in el2:
+            if not isinstance(el, str):
+                return -1
 
-    for el in suspicious_text_tokens:
-        if not isinstance(el, str):
-            return -1
+    for el2 in suspicious_text_tokens:
+        for el in el2:
+            if not isinstance(el, str):
+                return -1
 
     if plagiarism_threshold is None:
         return -1
