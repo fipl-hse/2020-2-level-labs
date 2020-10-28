@@ -137,8 +137,8 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         return ()
 
     if not lcs_matrix or not isinstance(lcs_matrix, list) or not all(
-            isinstance(i, list) for i in lcs_matrix) or not all(
-        isinstance(i, int) for lists in lcs_matrix for i in lists):
+            isinstance(i, list) for i in lcs_matrix) or not all(isinstance(i, int) \
+                                                                for lists in lcs_matrix for i in lists):
         return ()
 
     if lcs_matrix != fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens):
@@ -147,6 +147,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     answer = []
 
     lcs_matrix.insert(0, [0 for i in range(len(lcs_matrix[0]))])
+
     for line in lcs_matrix:
         line.insert(0, 0)
 
@@ -181,7 +182,6 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-
 
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or not isinstance(
             plagiarism_threshold, float):
@@ -264,10 +264,8 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    if str(type(original_text_tokens)) == "<class 'bool'>" or str(type(suspicious_text_tokens)) == "<class 'bool'>":
-        return -1
 
-    if original_text_tokens is None or suspicious_text_tokens is None:
+    if str(type(original_text_tokens)) == "<class 'bool'>" or str(type(suspicious_text_tokens)) == "<class 'bool'>":
         return -1
 
     if not isinstance(original_text_tokens, tuple) \
@@ -276,19 +274,30 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
                               tuple) or not suspicious_text_tokens:
         return -1
 
+    if original_text_tokens is None or suspicious_text_tokens is None or original_text_tokens == (None, None) \
+            or suspicious_text_tokens == (None, None):
+        return -1
+
     for i in original_text_tokens:
-        if not isinstance(i, tuple):
+        if str(type(i)) == "<class 'bool'>":
             return -1
-        for k in i:
-            if not isinstance(k, str):
-                return -1
+        if i is None:
+            return -1
 
     for i in suspicious_text_tokens:
-        if not isinstance(i, tuple):
+        if str(type(i)) == "<class 'bool'>":
             return -1
-        for k in i:
-            if not isinstance(k, str):
-                return -1
+        if i is None:
+            return -1
+
+    if plagiarism_threshold is None:
+        return -1
+
+    if str(type(plagiarism_threshold)) == "<class 'bool'>" or not isinstance(plagiarism_threshold, float):
+        return -1
+
+    if plagiarism_threshold < 0 or plagiarism_threshold > 1:
+        return -1
 
     sum = 0
     for lines in zip(original_text_tokens, suspicious_text_tokens):
@@ -387,6 +396,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :param accumulated_diff_stats: a dictionary with statistics for each pair of sentences
     :return: a report
     """
+
     pass
 
 
