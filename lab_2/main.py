@@ -1,3 +1,4 @@
+#pylint: skip-file
 """
 Longest common subsequence problem
 """
@@ -246,7 +247,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     if len(suspicious_sentence_tokens) == 0:
         return 0
 
-    if not (0 <= lcs_length <= len(suspicious_sentence_tokens)):
+    if not 0 <= lcs_length <= len(suspicious_sentence_tokens):
         return -1
 
     plagiarism_score = lcs_length / len(suspicious_sentence_tokens)
@@ -461,7 +462,9 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         i = 0
         j = 0
         for token in line[0]:
-            if j < len(accumulated_diff_stats['difference_indexes'][line_number][0]) and accumulated_diff_stats['difference_indexes'][line_number][0][j] == i:
+            if j < len(accumulated_diff_stats['difference_indexes'][line_number][0]) \
+                    and accumulated_diff_stats['difference_indexes'][line_number][0][j] == i:
+
                 result += '| '
                 j += 1
             result += token + ' '

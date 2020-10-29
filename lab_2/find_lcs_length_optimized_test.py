@@ -1,3 +1,4 @@
+pylint: skip-file
 """
 Tests find_lcs_optimized function
 """
