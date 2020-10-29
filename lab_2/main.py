@@ -239,8 +239,10 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
 
     if (str(type(original_text_tokens)) == "<class 'bool'>" \
         or str(type(suspicious_text_tokens)) == "<class 'bool'>") or \
-            original_text_tokens is None \
-            or suspicious_text_tokens is None or original_text_tokens == (None, None) \
+            original_text_tokens is None:
+        return -1
+
+    if suspicious_text_tokens is None or original_text_tokens == (None, None) \
             or suspicious_text_tokens == (None, None) \
             or not isinstance(original_text_tokens, tuple) \
             or not isinstance(suspicious_text_tokens,
