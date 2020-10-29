@@ -272,31 +272,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     return summa / len(suspicious_text_tokens)
 
 
-def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
-    """
-    Finds words not present in lcs.
-    :param original_sentence_tokens: a tuple of tokens
-    :param suspicious_sentence_tokens: a tuple of tokens
-    :param lcs: a longest common subsequence
-    :return: a tuple with tuples of indexes
-    """
-
-    if not isinstance(original_sentence_tokens, tuple) or not isinstance(suspicious_sentence_tokens, tuple) \
-            or not isinstance(lcs, tuple):
-        return ()
-
-    for element in original_sentence_tokens:
-        if not isinstance(element, str):
-            return ()
-
-    for element in suspicious_sentence_tokens:
-        if not isinstance(element, str):
-            return ()
-
-    for element in lcs:
-        if not isinstance(element, str):
-            return ()
-
+def find_diff_in_sentence_without_checks(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
     og_sent = []
     sus_sent = []
     i = 0
@@ -355,6 +331,34 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
         prev = sus_sent[i]
 
     return tuple(res1), tuple(res2)
+
+
+def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
+    """
+    Finds words not present in lcs.
+    :param original_sentence_tokens: a tuple of tokens
+    :param suspicious_sentence_tokens: a tuple of tokens
+    :param lcs: a longest common subsequence
+    :return: a tuple with tuples of indexes
+    """
+
+    if not isinstance(original_sentence_tokens, tuple) or not isinstance(suspicious_sentence_tokens, tuple) \
+            or not isinstance(lcs, tuple):
+        return ()
+
+    for element in original_sentence_tokens:
+        if not isinstance(element, str):
+            return ()
+
+    for element in suspicious_sentence_tokens:
+        if not isinstance(element, str):
+            return ()
+
+    for element in lcs:
+        if not isinstance(element, str):
+            return ()
+
+    return find_diff_in_sentence_without_checks(original_sentence_tokens, suspicious_sentence_tokens, lcs)
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
