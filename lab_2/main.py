@@ -35,7 +35,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     if not all(check) or rows < 1 or columns < 1:
         return []
 
-    z_matrix = [[0] * columns for i in range(rows)]
+    z_matrix = [[0] * columns for i in range(rows)]  # число подпоследовательностей = rows, число 0 в них = columns
     return z_matrix
 
 
@@ -51,19 +51,19 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
             or not all(isinstance(word, str) for word in second_sentence_tokens):
         return []
 
-    rows = len(first_sentence_tokens)
-    cols = len(second_sentence_tokens)
-    mtrx = create_zero_matrix(rows, cols)
+    first_sentence = len(first_sentence_tokens)
+    second_sentence = len(second_sentence_tokens)
+    mtrx = create_zero_matrix(first_sentence, second_sentence)
 
-    for row in range(rows):
-        for col in range(cols):
-            if first_sentence_tokens[row] == second_sentence_tokens[col]:
-                lcs = mtrx[row - 1][col - 1] + 1 if row - 1 >= 0 and col - 1 >= 0 else 1
+    for i in range(first_sentence):
+        for j in range(second_sentence):
+            if first_sentence_tokens[i] == second_sentence_tokens[j]:
+                lcs = mtrx[i - 1][j - 1] + 1 if i - 1 >= 0 and j - 1 >= 0 else 1
             else:
-                left_cell = mtrx[row][col - 1] if col - 1 >= 0 else 0
-                up_cell = mtrx[row - 1][col] if row - 1 >= 0 else 0
-                lcs = max(left_cell, up_cell)
-            mtrx[row][col] = lcs
+                cell_1 = mtrx[i][j - 1] if j - 1 >= 0 else 0
+                cell_2 = mtrx[i - 1][j] if i - 1 >= 0 else 0
+                lcs = max(cell_1, cell_2)
+            mtrx[i][j] = lcs
     return mtrx
 
 
@@ -91,7 +91,9 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
 
     if lcs_matrix:
         lcs_length = lcs_matrix[-1][-1]
-        if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
+        if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:  # если отношение длины наибольшей общей
+            # подпоследовательности к длине второго предложения
+            # меньше порога `plagiarism_threshold`
             return 0
 
     return lcs_length
@@ -256,8 +258,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
             or not isinstance(plagiarism_threshold, float) or 0 > plagiarism_threshold > 1:
         return {}
 
-    diff_stats = {'text_plagiarism': 0, 'sentence_plagiarism': [], 'sentence_lcs_length': [],
-                  'difference_indexes': []}
+    diff_stats = {'text_plagiarism': 0, 'sentence_plagiarism': [], 'sentence_lcs_length': [], 'difference_indexes': []}
 
     diff_stats['text_plagiarism'] = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens,
                                                                     plagiarism_threshold)
