@@ -433,6 +433,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     """
     line_number = 0
     result = ''
+    avarage = 0
     for line in zip(original_text_tokens, suspicious_text_tokens):
         result += '- '
         i = 0
@@ -459,9 +460,12 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         lcs = find_lcs_length(line[0], line[1], 0.3)
         result += 'lcs = ' + str(lcs) + ', '
         plagiate = calculate_plagiarism_score(lcs, line[1])
+        avarage += plagiate
         result += 'plagiarism = ' + str(plagiate * 100) + '%'
         result += '\n'
         result += '\n'
+    avarage /= len(suspicious_text_tokens)
+    result += 'Text average plagiarism (words): ' + str(avarage * 100) + '%'
     return result
 
 
@@ -475,5 +479,4 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
     :param second_sentence_tokens: a list of tokens
     :return: a length of the longest common subsequence
     """
-
     pass
