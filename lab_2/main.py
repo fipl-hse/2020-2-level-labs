@@ -1,4 +1,3 @@
-
 """
 Longest common subsequence problem
 """
@@ -65,16 +64,16 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :return: a lcs matrix
     """
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) \
-           or not first_sentence_tokens or not second_sentence_tokens \
+            or not first_sentence_tokens or not second_sentence_tokens \
             or str(type(first_sentence_tokens)) == "<class 'bool'>" \
-            or str(type(second_sentence_tokens)) == "<class 'bool'>"\
-             or first_sentence_tokens is None or second_sentence_tokens is None:
+            or str(type(second_sentence_tokens)) == "<class 'bool'>" \
+            or first_sentence_tokens is None or second_sentence_tokens is None:
         return []
 
     for token in first_sentence_tokens:
         if not isinstance(token, str) and not isinstance(token, int) or \
                 str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>" or \
-                token is None   :
+                token is None:
             return []
 
     for token in second_sentence_tokens:
@@ -84,12 +83,14 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
             return []
 
     f_lcs_matrix = create_big_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
-    for i in range(len(first_sentence_tokens)):
-        for j in range(len(second_sentence_tokens)):
+    n = len(first_sentence_tokens)
+    m = len(second_sentence_tokens)
+    for i in range(n):
+        for j in range(m):
             if first_sentence_tokens[i] == second_sentence_tokens[j]:
                 f_lcs_matrix[i + 1][j + 1] = f_lcs_matrix[i][j] + 1
             else:
-               f_lcs_matrix[i + 1][j + 1] = max(f_lcs_matrix[i][j + 1], f_lcs_matrix[i + 1][j])
+                f_lcs_matrix[i + 1][j + 1] = max(f_lcs_matrix[i][j + 1], f_lcs_matrix[i + 1][j])
 
     del f_lcs_matrix[0]
 
@@ -154,6 +155,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
 
     return tuple(answer.__reversed__())
 
+
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
     """
     Finds a length of the longest common subsequence using the Needleman–Wunsch algorithm
@@ -183,8 +185,6 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
 
     new_lcs = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
 
-
-
     i = len(new_lcs) - 1
     j = len(new_lcs[0]) - 1
     return new_lcs[i][j]
@@ -205,8 +205,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     if str(type(lcs_length)) == "<class 'bool'>" or not isinstance(lcs_length, int) or lcs_length is None \
-         or not isinstance(suspicious_sentence_tokens, tuple) or suspicious_sentence_tokens is None:
-
+            or not isinstance(suspicious_sentence_tokens, tuple) or suspicious_sentence_tokens is None:
         return -1
 
     for token in suspicious_sentence_tokens:
@@ -235,9 +234,9 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
 
-    if (str(type(original_text_tokens)) == "<class 'bool'>"\
+    if (str(type(original_text_tokens)) == "<class 'bool'>" \
         or str(type(suspicious_text_tokens)) == "<class 'bool'>") or \
-            original_text_tokens is None\
+            original_text_tokens is None \
             or suspicious_text_tokens is None or original_text_tokens == (None, None) \
             or suspicious_text_tokens == (None, None) \
             or not isinstance(original_text_tokens, tuple) \
@@ -261,15 +260,13 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
 
     if plagiarism_threshold is None or str(type(plagiarism_threshold)) == "<class 'bool'>" \
             or not isinstance(plagiarism_threshold, float) \
-          or plagiarism_threshold < 0 or plagiarism_threshold > 1:
+            or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
-
-
 
     summa = 0
     for lines in zip(original_text_tokens, suspicious_text_tokens):
         summa += plagiarism(lines[0], lines[1])
-    return summa     / len(suspicious_text_tokens)
+    return summa / len(suspicious_text_tokens)
 
 
 def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
@@ -284,7 +281,6 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     if not isinstance(original_sentence_tokens, tuple) or not isinstance(suspicious_sentence_tokens, tuple) \
             or not isinstance(lcs, tuple):
         return ()
-
 
     for element in original_sentence_tokens:
         if not isinstance(element, str):
@@ -425,7 +421,6 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         for token in line[0]:
             if j < len(accumulated_diff_stats['difference_indexes'][line_number][0]) \
                     and accumulated_diff_stats['difference_indexes'][line_number][0][j] == i:
-
                 result += '| '
                 j += 1
             result += token + ' '

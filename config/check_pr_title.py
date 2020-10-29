@@ -14,7 +14,7 @@ def is_matching_name(pr_name: str) -> bool:
     if not pr_name:
         print('Your Pull Request title does not confirm to the template.')
         print('Template: Laboratory work #1, Name Surname - 19FPL1\n')
-        return True
+        return False
     print('Your Pull Request name confirm to provided template!')
     return True
 
