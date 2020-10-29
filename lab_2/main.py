@@ -237,33 +237,37 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
 
+    bad_input = False
     if (str(type(original_text_tokens)) == "<class 'bool'>" \
         or str(type(suspicious_text_tokens)) == "<class 'bool'>") or \
             original_text_tokens is None:
-        return -1
+        bad_input = True
 
     if suspicious_text_tokens is None or original_text_tokens == (None, None) \
             or suspicious_text_tokens == (None, None) \
             or not isinstance(original_text_tokens, tuple) \
             or not isinstance(suspicious_text_tokens,
                               tuple):
+        bad_input = True
+
+    if bad_input:
         return -1
 
     for second_element in original_text_tokens:
         if not isinstance(second_element, tuple):
-            return -1
+            bad_input = True
         for element in second_element:
             if not isinstance(element, str):
-                return -1
+                bad_input = True
 
     for second_element in suspicious_text_tokens:
         if not isinstance(second_element, tuple):
-            return -1
+            bad_input = True
         for element in second_element:
             if not isinstance(element, str):
-                return -1
+                bad_input = True
 
-    if plagiarism_threshold is None or str(type(plagiarism_threshold)) == "<class 'bool'>" \
+    if bad_input or plagiarism_threshold is None or str(type(plagiarism_threshold)) == "<class 'bool'>" \
             or not isinstance(plagiarism_threshold, float) \
             or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
@@ -274,7 +278,11 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     return summa / len(suspicious_text_tokens)
 
 
-def find_diff_in_sentence_without_checks(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
+def find_diff_in_sentence_without_checks(
+        original_sentence_tokens: tuple,
+        suspicious_sentence_tokens: tuple,
+        lcs: tuple
+) -> tuple:
     og_sent = []
     sus_sent = []
     i = 0
