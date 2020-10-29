@@ -319,7 +319,8 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     res1 = []
 
     prev = -100
-    for i in range(len(og_sent)):
+    iterations = len(og_sent)
+    for i in range(iterations):
         if og_sent[i] - prev != 1:
             res1.append(og_sent[i])
             if i + 1 < len(og_sent) and og_sent[i + 1] - og_sent[i] != 1:
@@ -335,7 +336,8 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
 
     res2 = []
     prev = -100
-    for i in range(len(sus_sent)):
+    iterations = len(sus_sent)
+    for i in range(iterations):
         if sus_sent[i] - prev != 1:
             res2.append(sus_sent[i])
             if i + 1 < len(sus_sent) and sus_sent[i + 1] - sus_sent[i] != 1:
