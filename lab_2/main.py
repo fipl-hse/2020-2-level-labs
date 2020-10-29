@@ -315,6 +315,15 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :return: a tuple with tuples of indexes
     """
 
+    if not isinstance(original_sentence_tokens, tuple):
+        return ()
+
+    if not isinstance(suspicious_sentence_tokens, tuple):
+        return ()
+
+    if not isinstance(lcs, tuple):
+        return ()
+
     for el in original_sentence_tokens:
         if not isinstance(el, str):
             return ()
