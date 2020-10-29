@@ -66,28 +66,21 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     """
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) \
            or not first_sentence_tokens or not second_sentence_tokens \
-            or str(type(first_sentence_tokens)) == "<class 'bool'>" or str(type(second_sentence_tokens)) == "<class 'bool'>"\
+            or str(type(first_sentence_tokens)) == "<class 'bool'>" \
+            or str(type(second_sentence_tokens)) == "<class 'bool'>"\
              or first_sentence_tokens is None or second_sentence_tokens is None:
         return []
 
     for token in first_sentence_tokens:
-        if not isinstance(token, str) and not isinstance(token, int):
-            return []
-
-        if str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>":
-            return []
-
-        if token is None:
+        if not isinstance(token, str) and not isinstance(token, int) or \
+                str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>" or \
+                token is None   :
             return []
 
     for token in second_sentence_tokens:
-        if not isinstance(token, str) and not isinstance(token, int):
-            return []
-
-        if str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>":
-            return []
-
-        if token is None:
+        if not isinstance(token, str) and not isinstance(token, int) or \
+                str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>" or \
+                token is None:
             return []
 
     f_lcs_matrix = create_big_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
