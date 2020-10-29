@@ -39,3 +39,5 @@ if __name__ == '__main__':
 
     RESULT = text_plagiarism_score
 
+    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
+    assert RESULT == 0.3333333333333333, 'Checking not working'
