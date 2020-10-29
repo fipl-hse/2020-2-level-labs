@@ -314,6 +314,19 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :param lcs: a longest common subsequence
     :return: a tuple with tuples of indexes
     """
+
+    for el in original_sentence_tokens:
+        if not isinstance(el, str):
+            return ()
+
+    for el in suspicious_sentence_tokens:
+        if not isinstance(el, str):
+            return ()
+
+    for el in lcs:
+        if not isinstance(el, str):
+            return ()
+
     og_sent = []
     sus_sent = []
     i = 0
