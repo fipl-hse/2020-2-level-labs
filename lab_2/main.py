@@ -83,10 +83,10 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
             return []
 
     f_lcs_matrix = create_big_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
-    n = len(first_sentence_tokens)
-    m = len(second_sentence_tokens)
-    for i in range(n):
-        for j in range(m):
+    first_iterations = len(first_sentence_tokens)
+    second_iterations = len(second_sentence_tokens)
+    for i in range(first_iterations):
+        for j in range(second_iterations):
             if first_sentence_tokens[i] == second_sentence_tokens[j]:
                 f_lcs_matrix[i + 1][j + 1] = f_lcs_matrix[i][j] + 1
             else:
