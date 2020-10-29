@@ -1,4 +1,4 @@
-#pylint: skip-file
+
 """
 Longest common subsequence problem
 """
@@ -172,7 +172,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         del line[0]
 
     return tuple(answer.__reversed__())
-
+print(find_lcs(("the","cat","is","fat"),("the","dog","is","hotdog"),fill_lcs_matrix(("the","cat","is","fat"),("the","dog","is","hotdog"))))
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
     """
@@ -203,8 +203,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
 
     LCS = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
 
-    # if len(LCS) / len(second_sentence_tokens) < plagiarism_threshold:
-    #    return 0
+
 
     i = len(LCS) - 1
     j = len(LCS[0]) - 1
