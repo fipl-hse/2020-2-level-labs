@@ -1,4 +1,4 @@
-pylint: skip-file
+#pylint: skip-file
 """
 Tests tokenize_big_file function
 """
