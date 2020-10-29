@@ -199,7 +199,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
 
 def plagiarism(first_line: tuple, second_line: tuple) -> float:
     lcs_find = find_lcs_length(first_line, second_line, 0.0)
-    res = calculate_plagiarism_score(a, second_line)
+    res = calculate_plagiarism_score(lcs_find, second_line)
     return res
 
 
