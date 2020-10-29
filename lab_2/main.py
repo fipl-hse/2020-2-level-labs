@@ -71,7 +71,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     if str(type(second_sentence_tokens)) == "<class 'bool'>" \
             or first_sentence_tokens is None or second_sentence_tokens is None:
         return []
-    
+
     for token in first_sentence_tokens:
         if not isinstance(token, str) and not isinstance(token, int) or \
                 str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>" or \
@@ -110,8 +110,10 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) \
-            or not isinstance(lcs_matrix,
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
+        return ()
+    
+    if not isinstance(lcs_matrix,
                               list) or not first_sentence_tokens or not second_sentence_tokens or not lcs_matrix:
         return ()
 
