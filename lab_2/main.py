@@ -115,21 +115,21 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         bad_input = True
 
     if not isinstance(lcs_matrix, list) or not first_sentence_tokens or not second_sentence_tokens or not lcs_matrix:
-        bad_input = False
+        bad_input = True
 
     if first_sentence_tokens[0] is None or not all(isinstance(w, str) for w in first_sentence_tokens):
-        bad_input = False
+        bad_input = True
 
     if second_sentence_tokens[0] is None or not all(isinstance(w, str) for w in second_sentence_tokens):
-        bad_input = False
+        bad_input = True
 
     if not lcs_matrix or not isinstance(lcs_matrix, list) or not all(
             isinstance(i, list) for i in lcs_matrix) or not all(isinstance(i, int) \
                                                                 for lists in lcs_matrix for i in lists):
-        bad_input = False
+        bad_input = True
 
     if lcs_matrix != fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens):
-        bad_input = False
+        bad_input = True
 
     if bad_input:
         return ()
