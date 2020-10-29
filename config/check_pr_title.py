@@ -16,7 +16,7 @@ def is_matching_name(pr_name: str) -> bool:
         print('Template: Laboratory work #1, Name Surname - 19FPL1\n')
         return False
     print('Your Pull Request name confirm to provided template!')
-    return True
+    return False
 
 
 if __name__ == '__main__':
