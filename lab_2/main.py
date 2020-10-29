@@ -21,9 +21,9 @@ def tokenize_by_lines(text: str) -> tuple:
     new_text = ""
     text = text.lower()
     extra = set("""1234567890-=!@#$%^&*()_+,./<>?;:'"[{}]"'""")
-    for c in text:
-        if c not in extra:
-            new_text += c
+    for letter in text:
+        if letter not in extra:
+            new_text += letter
     new_text = new_text.split('\n')
     for sent in new_text:
         sent = tokenize(sent)
@@ -64,22 +64,10 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    if not isinstance(first_sentence_tokens, tuple):
-        return []
-
-    if not isinstance(second_sentence_tokens, tuple):
-        return []
-
-    if not first_sentence_tokens:
-        return []
-
-    if not second_sentence_tokens:
-        return []
-
-    if str(type(first_sentence_tokens)) == "<class 'bool'>" or str(type(second_sentence_tokens)) == "<class 'bool'>":
-        return []
-
-    if first_sentence_tokens is None or second_sentence_tokens is None:
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) \
+           or not first_sentence_tokens or not second_sentence_tokens \
+            or str(type(first_sentence_tokens)) == "<class 'bool'>" or str(type(second_sentence_tokens)) == "<class 'bool'>"\
+             or first_sentence_tokens is None or second_sentence_tokens is None:
         return []
 
     for token in first_sentence_tokens:
@@ -102,20 +90,20 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
         if token is None:
             return []
 
-    LCS = create_big_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
+    f_lcs_matrix = create_big_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
     for i in range(len(first_sentence_tokens)):
         for j in range(len(second_sentence_tokens)):
             if first_sentence_tokens[i] == second_sentence_tokens[j]:
-                LCS[i + 1][j + 1] = LCS[i][j] + 1
+                f_lcs_matrix[i + 1][j + 1] = f_lcs_matrix[i][j] + 1
             else:
-                LCS[i + 1][j + 1] = max(LCS[i][j + 1], LCS[i + 1][j])
+               f_lcs_matrix[i + 1][j + 1] = max(LCS[i][j + 1], f_lcs_matrix[i + 1][j])
 
-    del LCS[0]
+    del f_lcs_matrix[0]
 
-    for line in LCS:
+    for line in f_lcs_matrix:
         del line[0]
 
-    return LCS
+    return f_lcs_matrix
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
@@ -172,7 +160,6 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
         del line[0]
 
     return tuple(answer.__reversed__())
-print(find_lcs(("the","cat","is","fat"),("the","dog","is","hotdog"),fill_lcs_matrix(("the","cat","is","fat"),("the","dog","is","hotdog"))))
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
     """
@@ -211,7 +198,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
 
 
 def plagiarism(first_line: tuple, second_line: tuple) -> float:
-    a = find_lcs_length(first_line, second_line, 0.0)
+    lcs_find = find_lcs_length(first_line, second_line, 0.0)
     res = calculate_plagiarism_score(a, second_line)
     return res
 
@@ -224,21 +211,11 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    if str(type(lcs_length)) == "<class 'bool'>":
-        return -1
+    if str(type(lcs_length)) == "<class 'bool'>" or not isinstance(lcs_length, int) or lcs_length is None \
+         or not isinstance(suspicious_sentence_tokens, tuple) or suspicious_sentence_tokens is None:
 
-    if not isinstance(lcs_length, int):
         return -1
-
-    if lcs_length is None:
-        return -1
-
-    if not isinstance(suspicious_sentence_tokens, tuple):
-        return -1
-
-    if suspicious_sentence_tokens is None:
-        return -1
-
+    
     for token in suspicious_sentence_tokens:
         if not isinstance(token, str):
             return -1
@@ -265,45 +242,37 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
 
-    if str(type(original_text_tokens)) == "<class 'bool'>" or str(type(suspicious_text_tokens)) == "<class 'bool'>":
-        return -1
-
-    if original_text_tokens is None or suspicious_text_tokens is None or original_text_tokens == (None, None) \
-            or suspicious_text_tokens == (None, None):
-        return -1
-
-    if not isinstance(original_text_tokens, tuple) \
+    if (str(type(original_text_tokens)) == "<class 'bool'>" or str(type(suspicious_text_tokens)) == "<class 'bool'>") or \
+            original_text_tokens is None or suspicious_text_tokens is None or original_text_tokens == (None, None) \
+            or suspicious_text_tokens == (None, None) or not isinstance(original_text_tokens, tuple) \
             or not isinstance(suspicious_text_tokens,
                               tuple):
         return -1
 
-    for el2 in original_text_tokens:
-        if not isinstance(el2, tuple):
+    for second_element in original_text_tokens:
+        if not isinstance(second_element, tuple):
             return -1
-        for el in el2:
-            if not isinstance(el, str):
+        for element in second_element:
+            if not isinstance(element, str):
                 return -1
 
-    for el2 in suspicious_text_tokens:
-        if not isinstance(el2, tuple):
+    for second_element in suspicious_text_tokens:
+        if not isinstance(second_element, tuple):
             return -1
-        for el in el2:
-            if not isinstance(el, str):
+        for element in second_element:
+            if not isinstance(element, str):
                 return -1
 
-    if plagiarism_threshold is None:
+    if plagiarism_threshold is None or str(type(plagiarism_threshold)) == "<class 'bool'>" or not isinstance(plagiarism_threshold, float) \
+          or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
 
-    if str(type(plagiarism_threshold)) == "<class 'bool'>" or not isinstance(plagiarism_threshold, float):
-        return -1
 
-    if plagiarism_threshold < 0 or plagiarism_threshold > 1:
-        return -1
 
-    sum = 0
+    summa = 0
     for lines in zip(original_text_tokens, suspicious_text_tokens):
-        sum += plagiarism(lines[0], lines[1])
-    return sum / len(suspicious_text_tokens)
+        summa += plagiarism(lines[0], lines[1])
+    return summa     / len(suspicious_text_tokens)
 
 
 def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
@@ -315,25 +284,21 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :return: a tuple with tuples of indexes
     """
 
-    if not isinstance(original_sentence_tokens, tuple):
+    if not isinstance(original_sentence_tokens, tuple) or not isinstance(suspicious_sentence_tokens, tuple) \
+            or not isinstance(lcs, tuple):
         return ()
 
-    if not isinstance(suspicious_sentence_tokens, tuple):
-        return ()
 
-    if not isinstance(lcs, tuple):
-        return ()
-
-    for el in original_sentence_tokens:
-        if not isinstance(el, str):
+    for element in original_sentence_tokens:
+        if not isinstance(element, str):
             return ()
 
-    for el in suspicious_sentence_tokens:
-        if not isinstance(el, str):
+    for element in suspicious_sentence_tokens:
+        if not isinstance(element, str):
             return ()
 
-    for el in lcs:
-        if not isinstance(el, str):
+    for element in lcs:
+        if not isinstance(element, str):
             return ()
 
     og_sent = []
@@ -473,8 +438,10 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         i = 0
         j = 0
         for token in line[1]:
-            if j < len(accumulated_diff_stats['difference_indexes'][line_number][1]) and accumulated_diff_stats['difference_indexes'][line_number][1][j] == i:
-                result += '| '
+            if j < len(accumulated_diff_stats['difference_indexes'][line_number][1]) \
+                    and accumulated_diff_stats['difference_indexes'][line_number][1][j] == i:
+                result \
+                    += '| '
                 j += 1
             result += token + ' '
             i += 1
