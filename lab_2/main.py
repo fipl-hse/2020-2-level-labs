@@ -233,7 +233,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    bad_input = False
+
     if (str(type(original_text_tokens)) == "<class 'bool'>" \
         or str(type(suspicious_text_tokens)) == "<class 'bool'>") or \
             original_text_tokens is None \
@@ -242,30 +242,27 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
             or not isinstance(original_text_tokens, tuple) \
             or not isinstance(suspicious_text_tokens,
                               tuple):
-        bad_input = True
+        return -1
 
     for second_element in original_text_tokens:
         if not isinstance(second_element, tuple):
-            bad_input = True
+            return -1
         for element in second_element:
             if not isinstance(element, str):
-                bad_input = True
+                return -1
 
     for second_element in suspicious_text_tokens:
         if not isinstance(second_element, tuple):
-            bad_input = True
+            return -1
         for element in second_element:
             if not isinstance(element, str):
-                bad_input = True
+                return -1
 
     if plagiarism_threshold is None or str(type(plagiarism_threshold)) == "<class 'bool'>" \
             or not isinstance(plagiarism_threshold, float) \
             or plagiarism_threshold < 0 or plagiarism_threshold > 1:
-        bad_input = True
-
-    if bad_input:
         return -1
-    
+
     summa = 0
     for lines in zip(original_text_tokens, suspicious_text_tokens):
         summa += plagiarism(lines[0], lines[1])
