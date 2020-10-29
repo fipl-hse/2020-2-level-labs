@@ -65,11 +65,13 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     """
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) \
             or not first_sentence_tokens or not second_sentence_tokens \
-            or str(type(first_sentence_tokens)) == "<class 'bool'>" \
-            or str(type(second_sentence_tokens)) == "<class 'bool'>" \
-            or first_sentence_tokens is None or second_sentence_tokens is None:
+            or str(type(first_sentence_tokens)) == "<class 'bool'>":
         return []
 
+    if str(type(second_sentence_tokens)) == "<class 'bool'>" \
+            or first_sentence_tokens is None or second_sentence_tokens is None:
+        return []
+    
     for token in first_sentence_tokens:
         if not isinstance(token, str) and not isinstance(token, int) or \
                 str(type(token)) == "<class 'bool'>" or str(type(token)) == "<class 'bool'>" or \
