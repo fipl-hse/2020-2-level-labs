@@ -256,6 +256,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     for second_element in original_text_tokens:
         if not isinstance(second_element, tuple):
             bad_input = True
+            break
         for element in second_element:
             if not isinstance(element, str):
                 bad_input = True
@@ -263,6 +264,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     for second_element in suspicious_text_tokens:
         if not isinstance(second_element, tuple):
             bad_input = True
+            break
         for element in second_element:
             if not isinstance(element, str):
                 bad_input = True
