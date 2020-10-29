@@ -337,25 +337,34 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
         i += 1
 
     res1 = []
-
-    prev = -22
+    print(sus_sent)
+    prev = -100
     for i in range(len(og_sent)):
         if og_sent[i] - prev != 1:
             res1.append(og_sent[i])
+            if i + 1 < len(og_sent) and og_sent[i + 1] - og_sent[i] != 1:
+                res1.append(og_sent[i] + 1)
+            elif i == len(og_sent) - 1 and og_sent[i] < len(original_sentence_tokens):
+                res1.append(og_sent[i] + 1)
         else:
             if i + 1 < len(og_sent) and og_sent[i + 1] - og_sent[i] != 1:
-                res1.append(og_sent[i])
+                res1.append(og_sent[i + 1])
             elif i + 1 == len(og_sent):
                 res1.append(og_sent[i] + 1)
         prev = og_sent[i]
+
     res2 = []
-    prev = -22
+    prev = -100
     for i in range(len(sus_sent)):
         if sus_sent[i] - prev != 1:
             res2.append(sus_sent[i])
+            if i + 1 < len(sus_sent) and sus_sent[i + 1] - sus_sent[i] != 1:
+                res2.append(sus_sent[i] + 1)
+            elif i == len(sus_sent) - 1 and sus_sent[i] < len(suspicious_sentence_tokens):
+                res2.append(sus_sent[i] + 1)
         else:
             if i + 1 < len(sus_sent) and sus_sent[i + 1] - sus_sent[i] != 1:
-                res2.append(sus_sent[i])
+                res2.append(sus_sent[i + 1])
             elif i + 1 == len(sus_sent):
                 res2.append(sus_sent[i] + 1)
         prev = sus_sent[i]
@@ -437,6 +446,21 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
     """
     pass
 
+
+first_sentence = ('her', 'body', 'is', 'covered', 'with', 'bushy', 'white', 'fur')
+second_sentence = ('his', 'body', 'is', 'covered', 'with', 'shiny', 'black', 'fur')
+lcs = ('body', 'is', 'covered', 'with', 'fur')
+
+actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
+print(actual)
+
+first_sentence = ('its', 'body', 'is', 'covered', 'with', 'bushy')
+second_sentence = ('its', 'body', 'is', 'covered', 'with', 'shiny')
+lcs = ('its', 'body', 'is', 'covered', 'with')
+
+
+actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
+print(actual)
 
 first_sentence = ('the', 'cat', 'left')
 second_sentence = ('a', 'dog', 'appeared')
