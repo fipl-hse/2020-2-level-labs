@@ -1,50 +1,43 @@
 """
 Longest common subsequence implementation starter
 """
-import main
+from main import tokenize_by_lines
+from main import create_zero_matrix
+from main import fill_lcs_matrix
+from main import find_lcs_length
+from main import find_lcs
+from main import calculate_plagiarism_score
+from main import calculate_text_plagiarism_score
 
 if __name__ == '__main__':
-    ORIGINAL_TEXT = 'I have a dog.\nHis name is Nemo.\nI found him yesterday'
-    SUSPICIOUS_TEXT = 'I have a cat.\nHer name is Anny.\nI met her yesterday'
+    original_text = 'The cat appeared! The dog disappeared!'
+    suspicious_text = 'The man arrived! The boy left...'
+    print('Original text: {}\nSuspicious text: {}'.format(original_text, suspicious_text))
 
-    tokenized_orig_text = main.tokenize_by_lines(ORIGINAL_TEXT)
-    tokenized_susp_text = main.tokenize_by_lines(SUSPICIOUS_TEXT)
-    print(f"Original text tokens: {tokenized_orig_text}\nSuspicious text tokens: {tokenized_susp_text}\n")
+    original_text_tokens = tokenize_by_lines(original_text)
+    suspicious_text_tokens = tokenize_by_lines(suspicious_text)
+    print(original_text_tokens, suspicious_text_tokens)
 
-    orig_first_sent = tokenized_orig_text[2]
-    susp_first_sent = tokenized_susp_text[2]
+    zero_matrix = create_zero_matrix(len(original_text), len(suspicious_text))
+    print('Zero matrix: {}'.format(zero_matrix))
 
-    zero_matrix_first = main.create_zero_matrix(len(orig_first_sent), len(susp_first_sent))
-    lcs_matrix = main.fill_lcs_matrix(orig_first_sent, susp_first_sent)
-    print(f"Filled LCS matrix for first sentences: {lcs_matrix}\n")
+    lcs_matrix = fill_lcs_matrix(original_text_tokens[0], suspicious_text_tokens[0])
+    print('LCS matrix: {}'.format(lcs_matrix))
 
-    lcs_length = main.find_lcs_length(orig_first_sent, susp_first_sent, 0.3)
-    print(f"LCS length for first sentences: {lcs_length}\n")
+    lcs_length = find_lcs_length(original_text_tokens[0], suspicious_text_tokens[0], plagiarism_threshold=0.3)
+    print('LCS length: {}'.format(lcs_length))
 
-    lcs = main.find_lcs(orig_first_sent, susp_first_sent, lcs_matrix)
-    print(f"LCS for first sentences: {lcs}\n")
+    lcs = find_lcs(original_text_tokens[0], suspicious_text_tokens[0], lcs_matrix)
+    print('LCS is {}'.format(lcs))
 
-    plagiarism_score = main.calculate_plagiarism_score(lcs_length, susp_first_sent)
-    print(f"The plagiarism score for first sentences: {plagiarism_score}\n")
+    plagiarism_score = calculate_plagiarism_score(lcs_length, suspicious_text_tokens[0])
+    print('The score of plagiarism is {}'.format(plagiarism_score))
 
-    plagiarism_text = main.calculate_text_plagiarism_score(tokenized_orig_text, tokenized_susp_text)
-    print(f"The plagiarism score for the text: {plagiarism_text}\n")
+    text_plagiarism_score = calculate_text_plagiarism_score\
+        (original_text_tokens, suspicious_text_tokens, plagiarism_threshold=0.3)
+    print('The score is: {}% of plagiarism.'.format(round(text_plagiarism_score * 100, 2)))
 
-    diff_in_sent = main.find_diff_in_sentence(orig_first_sent, susp_first_sent, lcs)
-    print(f"Indexes of differences in first sentences: {diff_in_sent}\n")
+    RESULT = text_plagiarism_score
 
-    statistics = main.accumulate_diff_stats(tokenized_orig_text, tokenized_susp_text)
-    print(f"The main statistics for pairs of sentences in texts:\n{statistics}\n")
-
-    report = main.create_diff_report(tokenized_orig_text, tokenized_susp_text, statistics)
-    print(f"The report for two texts:\n{report}")
-
-    RESULT = report.split("\n")
-
-    assert RESULT == ['- i have a | dog |', '+ i have a | cat |', '',
-                      'lcs = 3, plagiarism = 75.0%', '',
-                      '- | his | name is | nemo |', '+ | her | name is | anny |', '',
-                      'lcs = 2, plagiarism = 50.0%', '',
-                      '- i | found him | yesterday', '+ i | met her | yesterday', '',
-                      'lcs = 2, plagiarism = 50.0%', '',
-                      'Text average plagiarism (words): 58.333333333333336%'], 'LCS not working'
+    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
+    assert RESULT == 0.3333333333333333, 'Checking not working'
