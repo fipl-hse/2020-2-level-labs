@@ -491,7 +491,6 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     return result
 
 
-
 def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_tokens: list) -> int:
     """
     Finds a length of the longest common subsequence using the Hirschberg's algorithm
@@ -501,4 +500,8 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
     :param second_sentence_tokens: a list of tokens
     :return: a length of the longest common subsequence
     """
+    pass
+
+
+def tokenize_big_file(path_to_file: str) -> tuple:
     pass
