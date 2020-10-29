@@ -40,7 +40,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
         return []
     if rows < 1 or columns < 1:
         return []
-    matrix = [[0] * columns] * rows
+    matrix = [[0] * columns for _ in range(rows)]
     return matrix
 
 
@@ -53,17 +53,20 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     """
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple):
         return []
-    if first_sentence_tokens == () or second_sentence_tokens == ():
+
+    if (not first_sentence_tokens
+            or not second_sentence_tokens or
+            not all(isinstance(el, str) for el in first_sentence_tokens + second_sentence_tokens)):
         return []
-    if not isinstance(first_sentence_tokens[0], str) or not isinstance(second_sentence_tokens[0], str):
-        return []
+
     lcs = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
-    for row_i, word_i in enumerate(first_sentence_tokens):
-        for column_j, word_j in enumerate(second_sentence_tokens):
-            if word_i == word_j:
-                lcs[row_i][column_j] = lcs[row_i - 1][column_j - 1] + 1
+
+    for i, i_word in enumerate(first_sentence_tokens):
+        for j, j_word in enumerate(second_sentence_tokens):
+            if i_word == j_word:
+                lcs[i][j] = lcs[i - 1][j - 1] + 1
             else:
-                lcs[row_i][column_j] = max(lcs[row_i - 1][column_j], lcs[row_i][column_j - 1])
+                lcs[i][j] = max(lcs[i][j - 1], lcs[i - 1][j])
     return lcs
 
 
@@ -76,16 +79,17 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) \
-            or not isinstance(plagiarism_threshold, float):
+    if (not isinstance(first_sentence_tokens, tuple) or
+            not isinstance(second_sentence_tokens, tuple) or
+            not isinstance(plagiarism_threshold, float)):
         return -1
     lcs = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
     if not lcs:
         return -1
     lcs_length = lcs[-1][-1]
     if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
-        return lcs_length
-    return -1
+        return 0
+    return lcs_length
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
