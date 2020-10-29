@@ -346,13 +346,12 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
 
     for row in range(len(first_sentence_tokens)):
         # to update new row we create a copy (previous)
-        previous = counted_row.copy()
         # the same logic as in usual, but save only the row
         for column in range(len(second_sentence_tokens)):
             if first_sentence_tokens[row] == second_sentence_tokens[column]:
-                counted_row[column] = previous[column - 1] + 1
+                counted_row[column] = counted_row[column - 1] + 1
             else:
-                counted_row[column] = max(previous[column], counted_row[column - 1])
+                counted_row[column] = max(counted_row[column], counted_row[column - 1])
     length = counted_row[-1]
     if length / len(second_sentence_tokens) < plagiarism_threshold:
         return 0
@@ -361,13 +360,14 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
-    with open(path_to_file, encoding="utf-8") as first_file, open(path_to_file, encoding="utf-8") as second_file:
-        first_lines = (tokenize_by_lines(line_1) for line_1 in first_file)
-        second_lines = (tokenize_by_lines(line_2) for line_2 in second_file)
+    dictionary = {}
+    sentences_in_numbers = []
+    with open(path_to_file, encoding="utf-8") as first_file:
+        tokenized = tokenize_by_lines(first_file.read())
+    for sent in tokenized:
+        for word in sent:
+            if word not in dictionary:
+                dictionary[word] = len(dictionary.keys()) + 1
+        sentences_in_numbers.append(tuple([dictionary[word] for word in sent]))
+    return tuple(sentences_in_numbers)
 
-        lengths = (find_lcs_length_optimized(first_line, second_line)
-                   for first_line, second_line in zip(first_lines, second_lines))
-
-        scores = [calculate_plagiarism_score(length, line_2) for length, line_2 in zip(lengths, second_lines)]
-
-    return tuple(scores)
