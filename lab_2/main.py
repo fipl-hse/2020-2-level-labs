@@ -225,6 +225,24 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     return plagiarism_score
 
 
+def tokens_check_calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple) -> int:
+
+    bad_input = False
+    if (str(type(original_text_tokens)) == "<class 'bool'>"
+        or str(type(suspicious_text_tokens)) == "<class 'bool'>") or \
+            original_text_tokens is None:
+        bad_input = True
+
+    if suspicious_text_tokens is None or original_text_tokens == (None, None) \
+            or suspicious_text_tokens == (None, None) \
+            or not isinstance(original_text_tokens, tuple) \
+            or not isinstance(suspicious_text_tokens,
+                              tuple):
+        bad_input = True
+
+    return bad_input
+
+
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
                                     plagiarism_threshold=0.3) -> float:
     """
@@ -237,19 +255,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
 
-    bad_input = False
-    if (str(type(original_text_tokens)) == "<class 'bool'>" \
-        or str(type(suspicious_text_tokens)) == "<class 'bool'>") or \
-            original_text_tokens is None:
-        bad_input = True
-
-    if suspicious_text_tokens is None or original_text_tokens == (None, None) \
-            or suspicious_text_tokens == (None, None) \
-            or not isinstance(original_text_tokens, tuple) \
-            or not isinstance(suspicious_text_tokens,
-                              tuple):
-        bad_input = True
-
+    bad_input = tokens_check_calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens)
     if bad_input:
         return -1
 
