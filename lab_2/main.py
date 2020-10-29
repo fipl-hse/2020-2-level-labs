@@ -289,10 +289,10 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     return summa / len(suspicious_text_tokens)
 
 
-def find_diff_in_sentence_without_checks(
-        original_sentence_tokens: tuple,
-        suspicious_sentence_tokens: tuple,
-        lcs: tuple
+def get_two_sent(
+    original_sentence_tokens: tuple,
+    suspicious_sentence_tokens: tuple,
+    lcs: tuple
 ) -> tuple:
     og_sent = []
     sus_sent = []
@@ -315,7 +315,16 @@ def find_diff_in_sentence_without_checks(
             sus_sent.append(i)
 
         i += 1
+    return og_sent, sus_sent
 
+
+def find_diff_in_sentence_without_checks(
+        original_sentence_tokens: tuple,
+        suspicious_sentence_tokens: tuple,
+        lcs: tuple
+) -> tuple:
+
+    og_sent, sus_sent = get_two_sent(original_sentence_tokens, suspicious_sentence_tokens, lcs)
     res1 = []
 
     prev = -100
