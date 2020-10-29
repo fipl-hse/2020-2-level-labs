@@ -337,7 +337,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
         i += 1
 
     res1 = []
-    print(sus_sent)
+
     prev = -100
     for i in range(len(og_sent)):
         if og_sent[i] - prev != 1:
@@ -431,8 +431,39 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :param accumulated_diff_stats: a dictionary with statistics for each pair of sentences
     :return: a report
     """
+    line_number = 0
+    result = ''
+    for line in zip(original_text_tokens, suspicious_text_tokens):
+        result += '- '
+        i = 0
+        j = 0
+        for token in line[0]:
+            if j < len(accumulated_diff_stats['difference_indexes'][line_number][0]) and accumulated_diff_stats['difference_indexes'][line_number][0][j] == i:
+                result += '| '
+                j += 1
+            result += token + ' '
+            i += 1
+        result += '\n'
+        result += '+ '
+        i = 0
+        j = 0
+        for token in line[1]:
+            if j < len(accumulated_diff_stats['difference_indexes'][line_number][1]) and accumulated_diff_stats['difference_indexes'][line_number][1][j] == i:
+                result += '| '
+                j += 1
+            result += token + ' '
+            i += 1
+        line_number += 1
+        result += '\n'
+        result += '\n'
+        lcs = find_lcs_length(line[0], line[1], 0.3)
+        result += 'lcs = ' + str(lcs) + ', '
+        plagiate = calculate_plagiarism_score(lcs, line[1])
+        result += 'plagiarism = ' + str(plagiate * 100) + '%'
+        result += '\n'
+        result += '\n'
+    return result
 
-    pass
 
 
 def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_tokens: list) -> int:
@@ -444,28 +475,5 @@ def find_lcs_length_optimized(first_sentence_tokens: list, second_sentence_token
     :param second_sentence_tokens: a list of tokens
     :return: a length of the longest common subsequence
     """
+
     pass
-
-
-first_sentence = ('her', 'body', 'is', 'covered', 'with', 'bushy', 'white', 'fur')
-second_sentence = ('his', 'body', 'is', 'covered', 'with', 'shiny', 'black', 'fur')
-lcs = ('body', 'is', 'covered', 'with', 'fur')
-
-actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
-print(actual)
-
-first_sentence = ('its', 'body', 'is', 'covered', 'with', 'bushy')
-second_sentence = ('its', 'body', 'is', 'covered', 'with', 'shiny')
-lcs = ('its', 'body', 'is', 'covered', 'with')
-
-
-actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
-print(actual)
-
-first_sentence = ('the', 'cat', 'left')
-second_sentence = ('a', 'dog', 'appeared')
-lcs = ()
-
-expected = ((0, 3), (0, 3))
-actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
-print(actual)
