@@ -269,7 +269,10 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
             if not isinstance(element, str):
                 bad_input = True
 
-    if bad_input or plagiarism_threshold is None or str(type(plagiarism_threshold)) == "<class 'bool'>" \
+    if bad_input:
+        return -1
+
+    if plagiarism_threshold is None or str(type(plagiarism_threshold)) == "<class 'bool'>" \
             or not isinstance(plagiarism_threshold, float) \
             or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
