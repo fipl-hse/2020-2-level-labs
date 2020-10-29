@@ -235,9 +235,12 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
 
-    if (str(type(original_text_tokens)) == "<class 'bool'>" or str(type(suspicious_text_tokens)) == "<class 'bool'>") or \
-            original_text_tokens is None or suspicious_text_tokens is None or original_text_tokens == (None, None) \
-            or suspicious_text_tokens == (None, None) or not isinstance(original_text_tokens, tuple) \
+    if (str(type(original_text_tokens)) == "<class 'bool'>"\
+        or str(type(suspicious_text_tokens)) == "<class 'bool'>") or \
+            original_text_tokens is None\
+            or suspicious_text_tokens is None or original_text_tokens == (None, None) \
+            or suspicious_text_tokens == (None, None) \
+            or not isinstance(original_text_tokens, tuple) \
             or not isinstance(suspicious_text_tokens,
                               tuple):
         return -1
