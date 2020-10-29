@@ -40,7 +40,6 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     return [[0 for _ in range(columns)] for _ in range(rows)]
 
 
-
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
     """
     Fills a longest common subsequence matrix using the Needleman–Wunsch algorithm
