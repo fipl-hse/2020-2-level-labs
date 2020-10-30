@@ -3,7 +3,7 @@ Tests find_lcs function
 """
 
 import unittest
-from lab_2.main import find_lcs
+from main import find_lcs
 
 
 class FindLcsTest(unittest.TestCase):

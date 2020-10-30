@@ -3,7 +3,7 @@ Tests find_diff_in_sentence function
 """
 
 import unittest
-from lab_2.main import find_diff_in_sentence
+from main import find_diff_in_sentence
 
 
 class FindDiffInSentence(unittest.TestCase):

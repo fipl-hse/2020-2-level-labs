@@ -3,7 +3,8 @@ Tests tokenize_by_lines function
 """
 
 import unittest
-from lab_2.main import tokenize_by_lines
+from main import tokenize_by_lines
+import tokenizer
 
 
 class TokenizeByLinesTest(unittest.TestCase):
