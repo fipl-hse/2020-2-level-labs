@@ -8,7 +8,6 @@ from lab_1.main import tokenize
 from lab_1.main import read_from_file
 
 
-
 class TokenizeTest(unittest.TestCase):
     """
     Tests tokenize function
@@ -60,7 +59,7 @@ class TokenizeTest(unittest.TestCase):
         """
         Tokenize big input text scenario
         """
-        text = read_from_file('lab_1/data.txt')
+        text = read_from_file('lab_1/tokens.txt')
 
         expected = text.split()
         actual = tokenize(text)
