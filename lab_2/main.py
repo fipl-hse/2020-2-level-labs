@@ -211,7 +211,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
     report = []
 
-    for i in enumerate(original_text_tokens)):
+    for i in enumerate(original_text_tokens):
         original_sentence = list(original_text_tokens[i])
         suspicious_sentence = list(suspicious_text_tokens[i])
         diff = accumulated_diff_stats['difference_indexes']
