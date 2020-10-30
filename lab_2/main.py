@@ -215,13 +215,12 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
     report = []
     len_orig = len(original_text_tokens)
-    next = 0
     
     for indx in range(len_orig):
         original_sentence = list(original_text_tokens[indx])
         suspicious_sentence = list(suspicious_text_tokens[indx])
         diff = accumulated_diff_stats['difference_indexes']
-        next = next - next
+        next = 0
         for index in diff[indx][0]:
             original_sentence.insert(index + next, '|')
             suspicious_sentence.insert(index + next, '|')
@@ -238,8 +237,8 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
                
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
                               plagiarism_threshold: float) -> int:
-    pass
+    return 0
 
 
 def tokenize_big_file(path_to_file: str, ids=0) -> tuple:
-    pass
+    return 0
