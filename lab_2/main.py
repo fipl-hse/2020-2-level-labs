@@ -21,8 +21,6 @@ def tokenize_by_lines(text: str) -> tuple:
                 tokens = tuple(tokenizer.tokenize(token))
                 tokens_tpl.append(tokens)
         return tuple(tokens_tpl)
-    else:
-        return ()
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
