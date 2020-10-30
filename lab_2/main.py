@@ -234,3 +234,12 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     report = "\n".join(report)
 
     return report
+               
+               
+def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
+                              plagiarism_threshold: float) -> int:
+    pass
+
+
+def tokenize_big_file(path_to_file: str, ids=0) -> tuple:
+    pass
