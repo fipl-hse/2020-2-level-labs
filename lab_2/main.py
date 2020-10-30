@@ -211,18 +211,18 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
     report = []
 
-    for i in enumerate(original_text_tokens):
-        original_sentence = list(original_text_tokens[i])
-        suspicious_sentence = list(suspicious_text_tokens[i])
+    for indx, token in enumerate(original_text_tokens):
+        original_sentence = list(original_text_tokens[indx])
+        suspicious_sentence = list(suspicious_text_tokens[indx])
         diff = accumulated_diff_stats['difference_indexes']
         next = 0
-        for index in diff[i][0]:
+        for index in diff[indx][0]:
             original_sentence.insert(index + next, '|')
             suspicious_sentence.insert(index + next, '|')
             next += 1
         report += [f"- {' '.join(original_sentence)} \n+ {' '.join(suspicious_sentence)} \n"
-                   f"lcs = {accumulated_diff_stats['sentence_lcs_length'][i]}, "
-                   f"plagiarism = {accumulated_diff_stats['sentence_plagiarism'][i] * 100}%"]
+                   f"lcs = {accumulated_diff_stats['sentence_lcs_length'][indx]}, "
+                   f"plagiarism = {accumulated_diff_stats['sentence_plagiarism'][indx] * 100}%"]
 
     report += [f"Text average plagiarism (words): {accumulated_diff_stats['text_plagiarism'] * 100}%"]
     report = "\n".join(report)
