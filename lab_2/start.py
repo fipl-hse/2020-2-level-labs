@@ -1,30 +1,17 @@
 """
 Longest common subsequence implementation starter
 """
-import lab_2.main
+from main import tokenize_by_lines, accumulate_diff_stats, create_diff_report
 
-ORIGINAL = 'the cat is sleeping'
-SUSPICIOUS = 'the little cat is running'
+TEXT_ORIGINAL = '''i like small cats'''
 
-original_tokens = lab2.main.tokenize_by_lines(ORIGINAL)
-suspicious_tokens = lab2.main.tokenize_by_lines(SUSPICIOUS)
+TEXT_SUSPICIOUS = '''i prefer small dogs'''
 
-print("Tokenized original text:", original_tokens)
-print("Tokenized suspicious text:", suspicious_tokens)
+original_tuple = tokenize_by_lines(TEXT_ORIGINAL)
+suspicious_tuple = tokenize_by_lines(TEXT_SUSPICIOUS)
 
-lcs_length = lab2.main.find_lcs_length(original_tokens, suspicious_tokens, plagiarism_threshold=0.3)
-print("Length of the longest common subsequence:", lcs_length)
+diff_stats = accumulate_diff_stats(original_tuple, suspicious_tuple)
 
-matrix = lab2.main.fill_lcs_matrix(original_tokens, suspicious_tokens)
+RESULT = create_diff_report(original_tuple, suspicious_tuple, diff_stats)
 
-lcs = lab2.main.find_lcs(original_tokens, suspicious_tokens, matrix)
-print("The longest common subsequence:", lcs)
-
-plagiarism_score = lab2.main.calculate_plagiarism_score(lcs_length, suspicious_tokens)
-print("The plagiarism score:", plagiarism_score)
-
-text_plagiarism_score = lab2.main.calculate_text_plagiarism_score(original_tokens, suspicious_tokens, plagiarism_score)
-print("Text average plagiarism:", text_plagiarism_score)
-
-RESULT = text_plagiarism_score
-assert RESULT, 'Not working'
+assert RESULT, 'LCS_length not working'
