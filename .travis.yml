@@ -29,11 +29,11 @@ env:
 
 jobs:
   include:
-    - stage: pr_name_check
-      script:
-        - if [[ ${TRAVIS_PULL_REQUEST} != "false" && $PR_TITLE != *"[skip_name]"* ]]; then
-            python3 config/check_pr_title.py --pr-name $(echo ${PR_TITLE// /_});
-          fi
+    # - stage: pr_name_check
+      # script:
+        # - if [[ ${TRAVIS_PULL_REQUEST} != "false" && $PR_TITLE != *"[skip_name]"* ]]; then
+            # python3 config/check_pr_title.py --pr-name $(echo ${PR_TITLE// /_});
+          # fi
     - stage: test
       script:
         - bash config/run-tests.sh
