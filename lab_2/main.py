@@ -220,11 +220,13 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         original_sentence = list(original_text_tokens[indx])
         suspicious_sentence = list(suspicious_text_tokens[indx])
         diff = accumulated_diff_stats['difference_indexes']
+
         next = 0
         for index in diff[indx][0]:
             original_sentence.insert(index + next, '|')
             suspicious_sentence.insert(index + next, '|')
             next += 1
+
         report += [f"- {' '.join(original_sentence)} \n+ {' '.join(suspicious_sentence)} \n"
                    f"lcs = {accumulated_diff_stats['sentence_lcs_length'][indx]}, "
                    f"plagiarism = {accumulated_diff_stats['sentence_plagiarism'][indx] * 100}%"]
