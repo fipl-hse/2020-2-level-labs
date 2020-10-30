@@ -210,33 +210,34 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     if checks:
         return ''
 
-    texts_length = len(original_text_tokens)
-    result_stats = ''
+    len_orig = len(original_text_tokens)
+    report = ''
 
-    for sent_ind in range(texts_length):
-        orig_sentence = list(original_text_tokens[sent_ind])
-        susp_sentence = list(suspicious_text_tokens[sent_ind])
-        difference_indexes = accumulated_diff_stats['difference_indexes'][sent_ind]
+    for sent_index in range(len_orig):
+        original_sentence = list(original_text_tokens[sent_index])
+        suspicious_sentence = list(suspicious_text_tokens[sent_index])
+        diff = accumulated_diff_stats['difference_indexes'][sent_index]
 
         insert_number = 0
-        for index in difference_indexes[0]:
-            orig_sentence.insert(index + insert_number, '|')
-            susp_sentence.insert(index + insert_number, '|')
+        for index in diff[0]:
+            original_sentence.insert(index + insert_number, '|')
+            suspicious_sentence.insert(index + insert_number, '|')
             insert_number += 1
 
-        orig_sentence = ' '.join(orig_sentence)
-        susp_sentence = ' '.join(susp_sentence)
+        original_sentence = ' '.join(original_sentence)
+        suspicious_sentence = ' '.join(suspicious_sentence)
 
-        lcs = accumulated_diff_stats['sentence_lcs_length'][sent_ind]
-        sentence_plagiarism = float(accumulated_diff_stats['sentence_plagiarism'][sent_ind] * 100)
-        result_stats += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(orig_sentence,
-                                                                              susp_sentence,
-                                                                              lcs,
-                                                                              sentence_plagiarism)
-    text_plagiarism = float(accumulated_diff_stats['text_plagiarism'] * 100)
-    result_stats += 'Text average plagiarism (words): {}%'.format(text_plagiarism)
+        lcs = accumulated_diff_stats['sentence_lcs_length'][sent_index]
+        sentence_plagiarism = float(accumulated_diff_stats['sentence_plagiarism'][sent_index] * 100)
+        report += '- {}\n+ {}\nlcs = {}, plagiarism = {}%\n'.format(original_sentence,
+                                                                    suspicious_sentence,
+                                                                    lcs,
+                                                                    sentence_plagiarism)
 
-    return result_stats
+    report += 'Text average plagiarism (words): {}%'.format(float(accumulated_diff_stats['text_plagiarism'] 
+                                                                  * 100))
+
+    return report
 
 
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
