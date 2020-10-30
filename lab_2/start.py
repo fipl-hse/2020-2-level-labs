@@ -21,8 +21,11 @@ if __name__ == "__main__":
      lcs_matrix = main.fill_lcs_matrix(original_tokens[0], second_tokens[0])
      print('LCS matrix: ', lcs_matrix)
 
-     RESULT = lcs_matrix
-     assert RESULT == lcs_matrix, "Not working"
+     lcs_length = main.find_lcs_length(original_tokens[0], second_tokens[0], plagiarism_threshold)
+     print('LCS is', lcs_length)
+
+     RESULT = lcs_length
+     assert RESULT == lcs_length, "Not working"
 
 
 
