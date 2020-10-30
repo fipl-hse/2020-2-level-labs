@@ -3,7 +3,7 @@ Tests create_zero_matrix function
 """
 
 import unittest
-from main import create_zero_matrix
+from lab_2.main import create_zero_matrix
 
 
 class ZeroMatrixTest(unittest.TestCase):
