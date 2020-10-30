@@ -3,7 +3,7 @@ Tests calculate_plagiarism_score function
 """
 
 import unittest
-from main import calculate_plagiarism_score
+from lab_2.main import calculate_plagiarism_score
 
 
 class CalculatePlagiarismScoreTest(unittest.TestCase):
