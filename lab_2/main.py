@@ -2,7 +2,8 @@
 Longest common subsequence problem
 """
 
-import tokenizer
+from tokenizer import tokenize
+
 
 def tokenize_by_lines(text: str) -> tuple:
     """
@@ -13,14 +14,16 @@ def tokenize_by_lines(text: str) -> tuple:
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
-    tokens_tpl = []
-    if isinstance(text, str) and text:
-        text_full = text.split('\n')
-        for token in text_full:
-            if len(tokenizer.tokenize(token)):
-                tokens = tuple(tokenizer.tokenize(token))
-                tokens_tpl.append(tokens)
-        return tuple(tokens_tpl)
+    if not isinstance(text, str) or not text:
+        return ()
+    text = text.split('\n')
+    text_tuple = ()
+    for sentence in text:
+        sentence_clear = tokenize(sentence)
+        if not sentence_clear:
+            continue
+        text_tuple += (tuple(sentence_clear),)
+    return text_tuple
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
@@ -304,6 +307,8 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
+    pass
+
 
 def tokenize_big_file(path_to_file: str) -> tuple:
     """
@@ -311,3 +316,4 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
+    pass
