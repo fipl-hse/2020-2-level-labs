@@ -34,14 +34,14 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    if not isinstance(rows, int) or not isinstance(columns, int) or \
-            isinstance(rows, bool) or isinstance(columns, bool):
+    is_rows = not isinstance(rows, bool) and isinstance(rows, int) and rows > 0
+    is_columns = not isinstance(columns, bool) and isinstance(columns, int) and columns > 0
+    if not is_rows or not is_columns:
         return []
-    zero_matrix = []
-    n_columns = [0] * columns
-    if n_columns:
-        zero_matrix = [[0] * columns for _ in range(rows)]
-        return zero_matrix
+
+    matrix = [[0] * columns for _ in range(rows)]
+
+    return matrix
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
@@ -51,17 +51,20 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
-    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
-            None in first_sentence_tokens or None in second_sentence_tokens:
+    if (not isinstance(first_sentence_tokens, tuple)
+            or not isinstance(second_sentence_tokens, tuple)
+            or not all(isinstance(i, str) for i in first_sentence_tokens)
+            or not all(isinstance(i, str) for i in second_sentence_tokens)):
         return []
-    lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
-    for row, word_1 in enumerate(first_sentence_tokens):
-        for column, word_2 in enumerate(second_sentence_tokens):
-            if word_1 == word_2:
-                lcs_matrix[row][column] = lcs_matrix[row - 1][column - 1] + 1
+
+    lcs_matrix = create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))  # r & c  по длинам
+    for in_1, elem_1 in enumerate(first_sentence_tokens):
+        for in_2, elem_2 in enumerate(second_sentence_tokens):
+            if elem_1 == elem_2:
+                lcs_matrix[in_1][in_2] = lcs_matrix[in_1 - 1][in_2 - 1] + 1
             else:
-                lcs_matrix[row][column] = max((lcs_matrix[row][column - 1], lcs_matrix[row - 1][column]))
-        return lcs_matrix
+                lcs_matrix[in_1][in_2] = max(lcs_matrix[in_1][in_2 - 1], lcs_matrix[in_1 - 1][in_2])
+    return lcs_matrix
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
@@ -73,22 +76,24 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
-            not isinstance(plagiarism_threshold, float):
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) \
+            or not isinstance(plagiarism_threshold, float) or None in first_sentence_tokens:
         return -1
-    if None in first_sentence_tokens or None in second_sentence_tokens or \
-            plagiarism_threshold < 0 or plagiarism_threshold > 1:
+    if None in second_sentence_tokens or plagiarism_threshold < 0 or plagiarism_threshold > 1:
         return -1
-    if len(first_sentence_tokens) == 0 or len(second_sentence_tokens) == 0:
+
+    if len(first_sentence_tokens) == 0 or not first_sentence_tokens \
+            or len(second_sentence_tokens) == 0 or not second_sentence_tokens:
         return 0
+
     lcs_matrix = fill_lcs_matrix(first_sentence_tokens, second_sentence_tokens)
     if len(first_sentence_tokens) > len(second_sentence_tokens):
-        lcs_length = max(lcs_matrix[len(second_sentence_tokens) - 1])
+        lcs_matrix = lcs_matrix[len(second_sentence_tokens) - 1][len(second_sentence_tokens) - 1]
     else:
-        lcs_length = max(lcs_matrix[-1])
-    if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
+        lcs_matrix = lcs_matrix[-1][-1]
+    if lcs_matrix / len(second_sentence_tokens) < plagiarism_threshold:
         return 0
-    return lcs_length
+    return lcs_matrix
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
@@ -99,35 +104,25 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
-    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
-            None in first_sentence_tokens or None in second_sentence_tokens:
+    if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) \
+            or not isinstance(lcs_matrix, list):
         return ()
-    if not isinstance(lcs_matrix, list) or None in lcs_matrix or \
-            (isinstance(lcs_matrix, list) and None in lcs_matrix):
+    if not first_sentence_tokens \
+            or not second_sentence_tokens or not lcs_matrix or None in lcs_matrix:
         return ()
-    if isinstance(lcs_matrix, list) and len(lcs_matrix) > 0:
-        if isinstance(lcs_matrix[0], list) and None in lcs_matrix[0]:
-            return ()
-    lcs = []
+
     if lcs_matrix:
-        if len(lcs_matrix) == len(first_sentence_tokens) and \
-                len(lcs_matrix[0]) == len(second_sentence_tokens):
+        if len(lcs_matrix) == len(first_sentence_tokens) and len(lcs_matrix[0]) == len(second_sentence_tokens):
             if lcs_matrix[0][0] > 1:
                 return ()
-            rows = len(first_sentence_tokens) - 1
-            columns = len(second_sentence_tokens) - 1
-            while rows > 0 and columns > 0:
-                if first_sentence_tokens[rows] == second_sentence_tokens[columns]:
-                    lcs.append(first_sentence_tokens[rows])
-                    rows -= 1
-                    columns -= 1
-                elif lcs_matrix[rows - 1][columns] > lcs_matrix[rows][columns - 1]:
-                    rows -= 1
-                else:
-                    columns -= 1
-            if lcs_matrix[0][0] != 0:
-                lcs.append(first_sentence_tokens[0])
-    return tuple(lcs[::-1])
+    max_len = []
+    for ind_1, el_1 in enumerate(reversed(lcs_matrix)):
+        for ind_2, el_2 in enumerate(reversed(el_1)):
+            if not el_1 or not el_2:
+                return ()
+            if first_sentence_tokens[ind_1] == second_sentence_tokens[ind_2]:
+                max_len.append(second_sentence_tokens[ind_2])
+    return tuple(max_len)
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
@@ -197,29 +192,30 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :param lcs: a longest common subsequence
     :return: a tuple with tuples of indexes
     """
-    if not isinstance(original_sentence_tokens, tuple) or not isinstance(suspicious_sentence_tokens, tuple) or \
-            not isinstance(lcs, tuple):
+    orig_sent_type = not isinstance(original_sentence_tokens, tuple)
+    susp_sent_type = not isinstance(suspicious_sentence_tokens, tuple)
+    lcs_type = not isinstance(lcs, tuple)
+    if orig_sent_type or susp_sent_type or lcs_type:
         return ()
-    if None in original_sentence_tokens or None in suspicious_sentence_tokens or None in lcs:
-        return ()
-    diff_indexes = []
-    changed_words_indexes = [index for index, token in enumerate(suspicious_sentence_tokens) if token not in lcs]
-    for number, index in enumerate(changed_words_indexes):
-        if len(changed_words_indexes) - 1 != number:
-            if index + 1 != changed_words_indexes[number + 1] and index - 1 not in diff_indexes:
-                diff_indexes.extend([index, index + 1])
-            elif index - 1 not in changed_words_indexes and index + 1 in changed_words_indexes:
-                diff_indexes.append(index)
-            elif index - 1 in changed_words_indexes and index + 1 not in changed_words_indexes:
-                diff_indexes.append(index + 1)
-        elif len(changed_words_indexes) - 1 == number:
-            if index - 1 != changed_words_indexes[number - 1]:
-                diff_indexes.extend([index, index + 1])
-            elif index - 1 == changed_words_indexes[number - 1]:
-                diff_indexes.append(index + 1)
-    if original_sentence_tokens == ():
-        return tuple([(), tuple(diff_indexes)])
-    return tuple([tuple(diff_indexes), tuple(diff_indexes)])
+    for function_parameter in (original_sentence_tokens, suspicious_sentence_tokens, lcs):
+        if isinstance(function_parameter, tuple):
+            if not all(isinstance(word, str) for word in function_parameter):
+                return ()
+
+    diff_sum = []
+    sentences = (original_sentence_tokens, suspicious_sentence_tokens)
+
+    for sentence in sentences:
+        diff = []
+        for i, token in enumerate(sentence):
+            if token not in lcs:
+                if i == 0 or sentence[i - 1] in lcs:
+                    diff.append(i)
+                if i == len(sentence) - 1 or sentence[i + 1] in lcs:
+                    diff.append(i + 1)
+        diff_sum.append(tuple(diff))
+
+    return tuple(diff_sum)
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
