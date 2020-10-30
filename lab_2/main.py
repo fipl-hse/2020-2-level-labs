@@ -145,7 +145,8 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     return plagiarism_score
 
 
-def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> float:
+def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
+                                    plagiarism_threshold=0.3) -> float:
     """
     Calculates the plagiarism score: compares two texts line by line using lcs
     The score is the sum of lcs values for each pair divided by the number of tokens in suspicious text
@@ -284,7 +285,10 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
         lcs = accumulated_diff_stats['sentence_lcs_length'][index_sent]
         sentence_plagiarism = float(accumulated_diff_stats['sentence_plagiarism'][index_sent] * 100)
-        report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(original_sentence, suspicious_sentence, lcs, sentence_plagiarism)
+        report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(original_sentence,
+                                                                suspicious_sentence,
+                                                                lcs,
+                                                                sentence_plagiarism)
 
     text_plagiarism = float(accumulated_diff_stats['text_plagiarism'] * 100)
     report += 'Text average plagiarism (words): {}%'.format(text_plagiarism)
