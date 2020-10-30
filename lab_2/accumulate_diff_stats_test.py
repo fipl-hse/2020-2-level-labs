@@ -4,7 +4,7 @@ Tests accumulate_diff_stats function
 
 import unittest
 from unittest.mock import patch
-from main import accumulate_diff_stats, find_lcs_length, calculate_plagiarism_score, find_diff_in_sentence
+from lab_2.main import accumulate_diff_stats, find_lcs_length, calculate_plagiarism_score, find_diff_in_sentence
 
 
 class AccumulateDiffStatsTest(unittest.TestCase):
@@ -55,7 +55,7 @@ class AccumulateDiffStatsTest(unittest.TestCase):
         self.assertEqual(expected['sentence_lcs_length'], actual['sentence_lcs_length'])
         self.assertEqual(expected['difference_indexes'], actual['difference_indexes'])
 
-    @patch('main.find_lcs_length', side_effect=find_lcs_length)
+    @patch('lab_2.main.find_lcs_length', side_effect=find_lcs_length)
     def test_accumulate_diff_stats_calls_required_function(self, mock):
         """
         Tests that accumulate_diff_stats function
@@ -67,7 +67,7 @@ class AccumulateDiffStatsTest(unittest.TestCase):
         accumulate_diff_stats(patches_text, patches_text)
         self.assertTrue(mock.called)
 
-    @patch('main.calculate_plagiarism_score', side_effect=calculate_plagiarism_score)
+    @patch('lab_2.main.calculate_plagiarism_score', side_effect=calculate_plagiarism_score)
     def test_accumulate_diff_stats_calls_second_required_function(self, mock):
         """
         Tests that accumulate_diff_stats function
@@ -79,7 +79,7 @@ class AccumulateDiffStatsTest(unittest.TestCase):
         accumulate_diff_stats(patches_text, patches_text)
         self.assertTrue(mock.called)
 
-    @patch('main.find_diff_in_sentence', side_effect=find_diff_in_sentence)
+    @patch('lab_2.main.find_diff_in_sentence', side_effect=find_diff_in_sentence)
     def test_accumulate_diff_stats_calls_third_required_function(self, mock):
         """
         Tests that accumulate_diff_stats function
