@@ -1,3 +1,7 @@
+"""
+Main.py
+"""
+
 from tokenizer import tokenize
 
 def tokenize_by_lines(text: str) -> tuple:
@@ -117,7 +121,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple,
               or not isinstance(suspicious_text_tokens, tuple)
               or not all(isinstance(tokens, tuple) for tokens in suspicious_text_tokens)
               or not all(isinstance(token, str) for tokens in suspicious_text_tokens for token in tokens)
-              or not isinstance(plagiarism_threshold, float) 
+              or not isinstance(plagiarism_threshold, float)
               or len(suspicious_text_tokens) <= 0)
 
     if checks:
@@ -125,7 +129,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple,
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
         original_text_tokens = list(original_text_tokens)
-        for i in range(len(suspicious_text_tokens) - len(original_text_tokens)):
+        for _ in range(len(suspicious_text_tokens) - len(original_text_tokens)):
             original_text_tokens += [[]]
         original_text_tokens = tuple(original_text_tokens)
 
@@ -177,7 +181,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     if len(original_text_tokens) < len(suspicious_text_tokens):
         original_text_tokens += [[]] * (len(suspicious_text_tokens) - len(original_text_tokens))
 
-    text_plagiarism = calculate_text_plagiarism_score(original_text_tokens, 
+    text_plagiarism = calculate_text_plagiarism_score(original_text_tokens,
                                                       suspicious_text_tokens, plagiarism_threshold)
 
     stats = {'text_plagiarism': text_plagiarism,
@@ -211,11 +215,13 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
     report = []
 
-    for indx, token in enumerate(original_text_tokens):
+    len_orig = len(original_text_tokens)
+    
+    for indx in range(len_orig):
+        next = 0
         original_sentence = list(original_text_tokens[indx])
         suspicious_sentence = list(suspicious_text_tokens[indx])
         diff = accumulated_diff_stats['difference_indexes']
-        next = 0
         for index in diff[indx][0]:
             original_sentence.insert(index + next, '|')
             suspicious_sentence.insert(index + next, '|')
