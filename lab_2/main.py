@@ -257,34 +257,34 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :param accumulated_diff_stats: a dictionary with statistics for each pair of sentences
     :return: a report
     """
-    if not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple):
-        return ''
-    if not isinstance(accumulated_diff_stats, dict):
+    is_type_incorrect = (not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple)
+                         or not isinstance(accumulated_diff_stats, dict))
+
+    if is_type_incorrect:
         return ''
 
-    length = len(suspicious_text_tokens)
-    length_orig = len(original_text_tokens)
-    while len(original_text_tokens) < length:
-        original_text_tokens += ('',)
+    texts_length = len(original_text_tokens)
 
     report = ''
-    for ind in range(length_orig):
-        sent_1 = list(original_text_tokens[ind])
-        sent_2 = list(suspicious_text_tokens[ind])
-        diff_indexes = accumulated_diff_stats['difference_indexes'][ind]
 
-        index = 0
-    for i in diff_indexes[0]:
-        sent_1.insert(i + index, '|')
-        sent_2.insert(i + index, '|')
-        index += 1
-    orig_sent = ' '.join(sent_1)
-    susp_sent = ' '.join(sent_2)
-    report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(orig_sent, susp_sent,
-                                                                    accumulated_diff_stats['sentence_lcs_length'][ind],
-                                                                    float(accumulated_diff_stats['sentence_plagiarism'][
-                                                                              ind] * 100))
 
+    for index_sent in range(texts_length):
+        original_sentence = list(original_text_tokens[index_sent])
+        suspicious_sentence = list(suspicious_text_tokens[index_sent])
+        difference_indexes = accumulated_diff_stats['difference_indexes'][index_sent]
+
+        insert_number = 0
+        for index in difference_indexes[0]:
+            original_sentence.insert(index + insert_number, '|')
+            suspicious_sentence.insert(index + insert_number, '|')
+            insert_number += 1
+
+        original_sentence = ' '.join(original_sentence)
+        suspicious_sentence = ' '.join(suspicious_sentence)
+
+        lcs = accumulated_diff_stats['sentence_lcs_length'][index_sent]
+        sentence_plagiarism = float(accumulated_diff_stats['sentence_plagiarism'][index_sent] * 100)
+        report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(original_sentence, suspicious_sentence, lcs, sentence_plagiarism)
 
     text_plagiarism = float(accumulated_diff_stats['text_plagiarism'] * 100)
     report += 'Text average plagiarism (words): {}%'.format(text_plagiarism)

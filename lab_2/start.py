@@ -43,4 +43,3 @@ RESULT = report.split("\n")
 
 # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
 assert RESULT, 'Checking not working'
- 
