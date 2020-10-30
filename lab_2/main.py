@@ -214,14 +214,14 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         original_text_tokens += (()) * (len(suspicious_text_tokens) - len(original_text_tokens))
 
     report = []
-
     len_orig = len(original_text_tokens)
+    next = 0
     
     for indx in range(len_orig):
-        next = 0
         original_sentence = list(original_text_tokens[indx])
         suspicious_sentence = list(suspicious_text_tokens[indx])
         diff = accumulated_diff_stats['difference_indexes']
+        next = next - next
         for index in diff[indx][0]:
             original_sentence.insert(index + next, '|')
             suspicious_sentence.insert(index + next, '|')
