@@ -1,6 +1,11 @@
+# pylint: skip-file
+"""
+Tests find_lcs_length function
+"""
+
 import unittest
 from unittest.mock import patch
-from main import find_lcs_length, fill_lcs_matrix
+from lab_2.main import find_lcs_length, fill_lcs_matrix
 
 
 class FindLcsLengthTest(unittest.TestCase):
@@ -151,7 +156,7 @@ class FindLcsLengthTest(unittest.TestCase):
         actual = find_lcs_length(sentence_first, sentence_second, plagiarism_threshold)
         self.assertNotEqual(not_expected, actual)
 
-    @patch('main.fill_lcs_matrix', side_effect=fill_lcs_matrix)
+    @patch('lab_2.main.fill_lcs_matrix', side_effect=fill_lcs_matrix)
     def test_find_lcs_length_calls_required_function(self, mock):
         """
         Tests that find_lcs_length function
