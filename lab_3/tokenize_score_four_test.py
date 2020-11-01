@@ -4,7 +4,7 @@ Tests for tokenize_by_sentence_function
 """
 
 import unittest
-from main import tokenize_by_sentence
+from lab_3.main import tokenize_by_sentence
 
 
 class TokenizeBySentenceTest(unittest.TestCase):

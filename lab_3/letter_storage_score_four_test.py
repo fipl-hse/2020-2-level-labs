@@ -4,7 +4,7 @@ Tests LetterStorage class
 """
 
 import unittest
-from main import LetterStorage
+from lab_3.main import LetterStorage
 from unittest.mock import patch
 
 

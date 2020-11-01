@@ -4,8 +4,8 @@ Tests encode_corpus function
 """
 
 import unittest
-from main import encode_corpus
-from main import LetterStorage
+from lab_3.main import encode_corpus
+from lab_3.main import LetterStorage
 from unittest.mock import patch
 
 

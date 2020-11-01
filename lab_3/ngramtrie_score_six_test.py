@@ -5,7 +5,7 @@ Tests for NGramTrie class
 
 import math
 import unittest
-from main import NGramTrie
+from lab_3.main import NGramTrie
 
 
 class BiGramTest(unittest.TestCase):
