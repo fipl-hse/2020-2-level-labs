@@ -103,14 +103,3 @@ class TokenizeBySentenceTest(unittest.TestCase):
         expected = ()
         actual = tokenize_by_sentence(text)
         self.assertEqual(expected, actual)
-
-    def test_tokenize_by_sentence_not_sentence(self):
-        """
-        Tests that tokenize_by_sentence function
-            can handle not sentence input
-        """
-        text = 'Mary'
-
-        expected = ()
-        actual = tokenize_by_sentence(text)
-        self.assertEqual(expected, actual)
