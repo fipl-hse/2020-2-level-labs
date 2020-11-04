@@ -33,10 +33,10 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     e.g. rows = 2, columns = 2
     --> [[0, 0], [0, 0]]
     """
-    if not isinstance(rows, int) or not isinstance(columns, int):
+    if not isinstance(rows, int) or not isinstance(columns, int) or (isinstance(rows, bool) or isinstance(columns, bool)):
         return []
-    if rows < 0 or columns < 0:
-        return [[]]
+    elif rows < 1 or columns < 1:
+        return []
     return [[0 for _ in range(columns)] for _ in range(rows)]
 
 
