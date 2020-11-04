@@ -1,0 +1,6 @@
+tokenize_score_four_test.py
+letter_storage_score_four_test.py
+encode_corpus_score_six_test.py
+ngramtrie_score_six_test.py
+language_detector_score_eight_test.py
+probability_language_detector_score_ten_test.py
