@@ -402,8 +402,10 @@ NGram на основе 2-, 5- и 7-грам соответственно.
 
 Например,
 ```py
-self.trie_levels = (2, 3)
-self.top_k = 10
+trie_levels = (2, 3)
+top_k = 10
+self.trie_levels = trie_levels
+self.top_k = top_k
 ```
 
 Также необходимо создать поле `self.n_gram_storages`, где будут храниться заполненные `NGramTrie` для разных языков.
@@ -413,7 +415,7 @@ self.top_k = 10
 ### Шаг 5.1. Заполнение хранилища `NGramTrie` для конкретного языка
 
 Функция принимает на вход закодированный текст и название языка,
-добавляет заполненные `NGramTrie` для конкретного языка в поле `self.n_gram_storages`.
+заполняет `NGramTrie` для конкретного языка и добавляет в поле `self.n_gram_storages`.
 В NGramTrie заполнены поля `self.size`, `self.n_grams`, `self.n_gram_frequencies`, `self.n_gram_log_probabilities`.
 
 Обязательно использовать для хранения словарь, где ключами выступают названия языков,

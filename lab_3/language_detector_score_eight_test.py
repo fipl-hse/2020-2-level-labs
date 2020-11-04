@@ -112,7 +112,7 @@ class LanguageDetectorTest(unittest.TestCase):
 # ----------------------------------------------------------------------------
 
     def test_calculate_distance_ideal(self):
-        language_detector = LanguageDetector((3,), 10)
+        language_detector = LanguageDetector((2, 3), 10)
 
         first_n_grams = ((1, 2), (3, 4), (7, 8), (9, 10), (5, 6), (13, 14))
         second_n_grams = ((1, 2), (5, 6), (7, 8), (3, 4), (11, 12), (15, 16))
