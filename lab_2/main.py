@@ -271,49 +271,24 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
 
     for index_sent in range(texts_length):
-        original_sentence = list(original_text_tokens[index_sent])
-        suspicious_sentence = list(suspicious_text_tokens[index_sent])
+        orig = list(original_text_tokens[index_sent])
+        susp = list(suspicious_text_tokens[index_sent])
         difference_indexes = accumulated_diff_stats['difference_indexes'][index_sent]
 
         insert_number = 0
         for index in difference_indexes[0]:
-            original_sentence.insert(index + insert_number, '|')
-            suspicious_sentence.insert(index + insert_number, '|')
+            orig.insert(index + insert_number, '|')
+            susp.insert(index + insert_number, '|')
             insert_number += 1
 
-        original_sentence = ' '.join(original_sentence)
-        suspicious_sentence = ' '.join(suspicious_sentence)
+        orig = ' '.join(orig)
+        susp = ' '.join(susp)
 
         lcs = accumulated_diff_stats['sentence_lcs_length'][index_sent]
         sentence_plagiarism = float(accumulated_diff_stats['sentence_plagiarism'][index_sent] * 100)
-        report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(original_sentence,
-                                                                suspicious_sentence,
-                                                                lcs,
-                                                                sentence_plagiarism)
+        report += '- {}\n+ {}\n\nlcs = {}, plagiarism = {}%\n\n'.format(orig, susp, lcs, sentence_plagiarism)
 
     text_plagiarism = float(accumulated_diff_stats['text_plagiarism'] * 100)
     report += 'Text average plagiarism (words): {}%'.format(text_plagiarism)
 
     return report
-
-
-def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
-                              plagiarism_threshold: float) -> int:
-    """
-    Finds a length of the longest common subsequence using an optimized algorithm
-    When a length is less than the threshold, it becomes 0
-    :param first_sentence_tokens: a tuple of tokens
-    :param second_sentence_tokens: a tuple of tokens
-    :param plagiarism_threshold: a threshold
-    :return: a length of the longest common subsequence
-    """
-    pass
-
-
-def tokenize_big_file(path_to_file: str) -> tuple:
-    """
-    Reads, tokenizes and transforms a big file into a numeric form
-    :param path_to_file: a path
-    :return: a tuple with ids
-    """
-    pass
