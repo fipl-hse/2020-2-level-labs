@@ -286,7 +286,43 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :param accumulated_diff_stats: a dictionary with statistics for each pair of sentences
     :return: a report
     """
-    pass
+    if (not isinstance(original_text_tokens, tuple) or
+            not isinstance(suspicious_text_tokens, tuple) or
+            not all(isinstance(el, tuple) for el in original_text_tokens + suspicious_text_tokens) or
+            not all(isinstance(el, str) for el in original_text_tokens[0] + suspicious_text_tokens[0]) or
+            not isinstance(accumulated_diff_stats, dict)):
+        return ''
+
+    if len(original_text_tokens) < len(suspicious_text_tokens):
+        original_text_tokens = filler(original_text_tokens, suspicious_text_tokens)
+
+    diff_report = ''
+    number_of_sent = len(suspicious_text_tokens)
+
+    for sent_ind in range(number_of_sent):
+        orig_sent = list(original_text_tokens[sent_ind])
+        s_sent = list(suspicious_text_tokens[sent_ind])
+        difference_indexes = accumulated_diff_stats['difference_indexes'][sent_ind]
+
+        change_ind = 0
+        for index in difference_indexes[0]:
+            orig_sent.insert(index + change_ind, '|')
+            s_sent.insert(index + change_ind, '|')
+            change_ind += 1
+
+        orig_sent = ' '.join(orig_sent)
+        s_sent = ' '.join(s_sent)
+
+        sent_lcs_length = accumulated_diff_stats['sentence_lcs_length'][sent_ind]
+        sent_plagiarism = float(accumulated_diff_stats['sentence_plagiarism'][sent_ind] * 100)
+
+        diff_report += f"- {orig_sent}\n+ {s_sent}\n\nlcs = {sent_lcs_length}, plagiarism = {sent_plagiarism}%\n\n"
+
+    text_plagiarism = accumulated_diff_stats['text_plagiarism'] * 100
+
+    diff_report += f"Text average plagiarism (words): {text_plagiarism}%"
+
+    return diff_report
 
 
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
@@ -299,7 +335,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    return 0
 
 
 def tokenize_big_file(path_to_file: str) -> tuple:
@@ -308,4 +344,4 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    pass
+    return()
