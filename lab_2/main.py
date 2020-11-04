@@ -3,7 +3,6 @@ Longest common subsequence problem
 """
 
 
-import re
 from tokenizer import tokenize
 
 
@@ -18,8 +17,8 @@ def tokenize_by_lines(text: str) -> tuple:
     """
     if not isinstance(text, str):
         return tuple()
-    sentences = re.split('[.!?]', text)
-    return tuple([tuple(tokenize(token)) for token in sentences if token.strip() != ''])
+
+    return tuple([tuple(tokenize(token)) for token in text.split('\n') if token.strip() != ''])
 
 
 def create_zero_matrix(rows: int, columns: int) -> list:
