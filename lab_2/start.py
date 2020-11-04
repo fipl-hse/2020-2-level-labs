@@ -1,45 +1,18 @@
 """
 Longest common subsequence implementation starter
 """
-import main
+import lab_2.main
 
-ORIGINAL_TEXT = "I have a cat.\nIt's body is covered with bushy white fur."
-SUSPICIOUS_TEXT = "I have a cat.\nIt's body is covered with shiny black fur."
+if __name__ == '__main__':
+    original_text_tokens = (('i', 'have', 'a', 'cat'),
+                            ('its', 'body', 'is', 'covered', 'with', 'bushy', 'white', 'fur'))
+    suspicious_text_tokens = (('i', 'have', 'a', 'cat'),
+                              ('its', 'body', 'is', 'covered', 'with', 'shiny', 'black', 'fur'))
+    accumulated_diff_stats = lab_2.main.accumulate_diff_stats(original_text_tokens, suspicious_text_tokens)
 
-first_sentence_tokens = main.tokenize_by_lines(ORIGINAL_TEXT)
-second_sentence_tokens = main.tokenize_by_lines(SUSPICIOUS_TEXT)
-print(f'tokens:{first_sentence_tokens}, {second_sentence_tokens}')
+    expected = open('lab_2/diff_report_example.txt', 'r', errors='coerce').read().split()
+    actual = lab_2.main.create_diff_report(original_text_tokens, suspicious_text_tokens, accumulated_diff_stats).split()
 
-matrix = main.create_zero_matrix(len(first_sentence_tokens[1]),len(second_sentence_tokens[1]))
-lcs_matrix = main.fill_lcs_matrix(first_sentence_tokens[1], second_sentence_tokens[1])
-print(f'matrix: {lcs_matrix}')
-
-lcs_length = main.find_lcs_length(first_sentence_tokens[1], second_sentence_tokens[1], plagiarism_threshold = 0.3)
-print(f'lcs_length: {lcs_length}')
-
-lcs = main.find_lcs(first_sentence_tokens[1], second_sentence_tokens[1], lcs_matrix)
-print(f'lcs: {lcs}')
-
-plagiarism = main.calculate_plagiarism_score(lcs_length, second_sentence_tokens[1])
-print(f'plagiarism: {plagiarism}')
-
-text_plagiarism = main.calculate_text_plagiarism_score(first_sentence_tokens, second_sentence_tokens)
-print(f'text plagiarism: {text_plagiarism}')
-
-diff_in_sentence = main.find_diff_in_sentence(first_sentence_tokens[1], second_sentence_tokens[1], lcs)
-print(f'diff_in_sentence: {diff_in_sentence}')
-
-diff_stats = main.accumulate_diff_stats(first_sentence_tokens, second_sentence_tokens)
-print(f'diff_stats: {diff_stats}')
-
-report = main.create_diff_report(first_sentence_tokens, second_sentence_tokens, diff_stats)
-
-RESULT = report.split()
-
-assert RESULT == '''- i have a cat
-+ i have a cat
-lcs = 4, plagiarism = 100.0%
-- its body is covered with | bushy white | fur
-+ its body is covered with | shiny black | fur
-lcs = 6, plagiarism = 75.0%
-Text average plagiarism (words): 87.5%'''.split(), 'Lcs not working'
+    RESULT = actual
+    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
+    assert RESULT == expected, 'Results differ'
