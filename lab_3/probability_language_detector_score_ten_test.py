@@ -163,7 +163,7 @@ class ProbabilityLanguageDetectorTest(unittest.TestCase):
             actual = language_detector.detect_language(bad_input)
             self.assertEqual(expected, actual)
 
-    @patch('lab_3/main.ProbabilityLanguageDetector._calculate_sentence_probability',
+    @patch('lab_3.main.ProbabilityLanguageDetector._calculate_sentence_probability',
            side_effect=ProbabilityLanguageDetector()._calculate_sentence_probability)
     def test_probability_language_detector_calls_required_method(self, mock):
         unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
