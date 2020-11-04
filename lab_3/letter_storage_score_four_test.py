@@ -170,7 +170,7 @@ class LetterStorageTest(unittest.TestCase):
         self.assertEqual(letter_storage.storage, {})
         self.assertEqual(expected, actual)
 
-    @patch('main.LetterStorage._put_letter', side_effect=LetterStorage()._put_letter)
+    @patch('lab_3/main.LetterStorage._put_letter', side_effect=LetterStorage()._put_letter)
     def test_letter_storage_update_calls_required_function(self, mock):
         """
         ideal case for update calling put_letter method
