@@ -137,7 +137,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
         """
         Calculates sentence probability
         :param n_gram_storage: a filled NGramTrie with log-probabilities
-        :param sentence_n_grams: the top_k n-grams from a sentence
+        :param sentence_n_grams: n-grams from a sentence
         :return: a probability of a sentence
         """
         pass
