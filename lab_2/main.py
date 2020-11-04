@@ -166,21 +166,21 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
     if not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple):
-        return -1.0
+        return float(-1)
     if not original_text_tokens or not suspicious_text_tokens:
-        return -1.0
+        return float(-1)
     for sent in original_text_tokens:
         if not isinstance(sent, tuple):
-            return -1.0
+            return float(-1)
         for word in sent:
             if not isinstance(word, str):
-                return -1.0
+                return float(-1)
     for sent in suspicious_text_tokens:
         if not isinstance(sent, tuple):
-            return -1.0
+            return float(-1)
         for word in sent:
             if not isinstance(word, str):
-                return -1.0
+                return float(-1)
     len1 = len(original_text_tokens)
     len2 = len(suspicious_text_tokens)
     if len1 < len2:
@@ -190,11 +190,11 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     summ = 0
     for sent in range(len(original_text_tokens)):
         lcs_length = find_lcs_length(original_text_tokens[sent], suspicious_text_tokens[sent], plagiarism_threshold)
-        if lcs_length == -1.0:
-            return -1.0
+        if lcs_length == float(-1):
+            return float(-1)
         p_sent = calculate_plagiarism_score(lcs_length, suspicious_text_tokens[sent])
         if p_sent == -1:
-            p_sent = 0.0
+            p_sent = 0.
         summ += p_sent
     result = summ / len(suspicious_text_tokens)
     return result
