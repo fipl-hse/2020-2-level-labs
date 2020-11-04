@@ -1,29 +1,18 @@
 """
 Longest common subsequence implementation starter
 """
-from lab_2 import main
-if __name__ == "__main__":
-    original_text = '''
-    Once upon a time a little cat Meow walked down the street.
-    She met her friend, a giant dog Bow.
-    And they continued their walk together.
-    '''
-    suspicious_text = '''
-    Once upon a time a giant dog Bow walked down the street.
-    He met his friend, a little cat Meow.
-    And they went to the theatre.
-    '''
+import lab_2.main
 
-    plagiarism_threshold = 0.3
-    tuple_original = main.tokenize_by_lines(original_text)
-    tuple_suspicious = main.tokenize_by_lines(suspicious_text)
-    lcs_matrix = main.fill_lcs_matrix(tuple_original,tuple_suspicious)
-    max_length = main.find_lcs_length(tuple_original, tuple_suspicious, plagiarism_threshold)
-    LCS = main.find_lcs(tuple_original,tuple_suspicious,lcs_matrix)
-    plagiarism = main.calculate_plagiarism_score(max_length,tuple_suspicious)
-    calculate_plagiarism = main.calculate_plagiarism_score(tuple_original,tuple_suspicious)
-    texts_plagiarism = main.calculate_text_plagiarism_score(tuple_original,tuple_suspicious,plagiarism_threshold)
+if __name__ == '__main__':
+    original_text_tokens = (('i', 'have', 'a', 'cat'),
+                            ('its', 'body', 'is', 'covered', 'with', 'bushy', 'white', 'fur'))
+    suspicious_text_tokens = (('i', 'have', 'a', 'cat'),
+                              ('its', 'body', 'is', 'covered', 'with', 'shiny', 'black', 'fur'))
+    accumulated_diff_stats = lab_2.main.accumulate_diff_stats(original_text_tokens, suspicious_text_tokens)
 
-    RESULT = texts_plagiarism
-    assert RESULT == 0.4861111111111111, "Checking not working"
+    expected = open('lab_2/diff_report_example.txt', 'r', errors='coerce').read().split()
+    actual = lab_2.main.create_diff_report(original_text_tokens, suspicious_text_tokens, accumulated_diff_stats).split()
 
+    RESULT = actual
+    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
+    assert RESULT == expected, 'Results differ'
