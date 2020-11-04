@@ -12,7 +12,7 @@ install:
   - pip3 install -r requirements.txt
 
 stages:
-  # - pr_name_check
+  - pr_name_check
   - test
   - lint
   - start_py
