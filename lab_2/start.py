@@ -1,25 +1,18 @@
 """
 Longest common subsequence implementation starter
 """
-import main
-if __name__ == "__main__":
-     original_text = '''I have a nice dog. His name is Shar'''
-     suspicious_text = '''I have a cute cat. Her name is Alya'''
+import lab_2.main
 
-     original_tokens = main.tokenize_by_lines(original_text)
-     print('Original tokens: ', original_tokens)
+if __name__ == '__main__':
+    original_text_tokens = (('i', 'have', 'a', 'cat'),
+                            ('its', 'body', 'is', 'covered', 'with', 'bushy', 'white', 'fur'))
+    suspicious_text_tokens = (('i', 'have', 'a', 'cat'),
+                              ('its', 'body', 'is', 'covered', 'with', 'shiny', 'black', 'fur'))
+    accumulated_diff_stats = lab_2.main.accumulate_diff_stats(original_text_tokens, suspicious_text_tokens)
 
-     suspicious_tokens = main.tokenize_by_lines(suspicious_text)
-     print('Suspicious tokens: ', suspicious_tokens)
+    expected = open('lab_2/diff_report_example.txt', 'r', errors='coerce').read().split()
+    actual = lab_2.main.create_diff_report(original_text_tokens, suspicious_text_tokens, accumulated_diff_stats).split()
 
-     plagiarism_threshold = 0.3
-     zero_matrix = main.create_zero_matrix(len(original_tokens), len(suspicious_tokens))
-
-     m_lcs = main.fill_lcs_matrix(original_tokens[0], suspicious_tokens[0])
-     print('LCS matrix: ', m_lcs)
-
-     len_lcs = main.find_lcs_length(original_tokens[0], suspicious_tokens[0], plagiarism_threshold)
-     print('LCS is', len_lcs)
-
-     RESULT = len_lcs
-     assert RESULT == len_lcs, "Not working"
+    RESULT = actual
+    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
+    assert RESULT == expected, 'Results differ'
