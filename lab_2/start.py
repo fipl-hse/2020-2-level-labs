@@ -1,38 +1,18 @@
 """
 Longest common subsequence implementation starter
 """
-
-from lab_2 import main
+import lab_2.main
 
 if __name__ == '__main__':
-    ORIGINAL_TEXT = 'The dog is walking.\nThe cat is sleeping.\nThe boy has a cat.\nThe girl has a dog.'
-    SUSPICIOUS_TEXT = 'Mike is running.\nAnna is sleeping.\nMary has a cat.\nJack has a cat.'
+    original_text_tokens = (('i', 'have', 'a', 'cat'),
+                            ('its', 'body', 'is', 'covered', 'with', 'bushy', 'white', 'fur'))
+    suspicious_text_tokens = (('i', 'have', 'a', 'cat'),
+                              ('its', 'body', 'is', 'covered', 'with', 'shiny', 'black', 'fur'))
+    accumulated_diff_stats = lab_2.main.accumulate_diff_stats(original_text_tokens, suspicious_text_tokens)
 
-    original_text_tuple = main.tokenize_by_lines(ORIGINAL_TEXT)
-    suspicious_text_tuple = main.tokenize_by_lines(SUSPICIOUS_TEXT)
+    expected = open('lab_2/diff_report_example.txt', 'r', errors='coerce').read().split()
+    actual = lab_2.main.create_diff_report(original_text_tokens, suspicious_text_tokens, accumulated_diff_stats).split()
 
-    print('Original text: {}\n'.format(original_text_tuple, suspicious_text_tuple))
-
-    ORIGINAL_SENTENCE = original_text_tuple[1]
-    SUSPICIOUS_SENTENCE = suspicious_text_tuple[1]
-    print('Original sentence: {}\nSuspicious sentence: {}\n'.format(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE))
-
-    zero_matrix = main.create_zero_matrix(len(ORIGINAL_SENTENCE), len(SUSPICIOUS_SENTENCE))
-    print('Zero matrix: {}\n'.format(zero_matrix))
-
-    matrix = main.fill_lcs_matrix(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE)
-    print('Lcs matrix: {}\n'.format(matrix))
-
-    lcs_length = main.find_lcs_length(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE, 0.3)
-    print('Lcs length: {}\n'.format(lcs_length))
-
-    lcs = main.find_lcs(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE, matrix)
-    print('Lcs: {}\n'.format(lcs))
-
-    score = main.calculate_plagiarism_score(lcs_length, SUSPICIOUS_SENTENCE)
-    print('Plagiarism score: {}\n'.format(score))
-
-    text_plagiarism = main.calculate_text_plagiarism_score(ORIGINAL_SENTENCE, SUSPICIOUS_SENTENCE, 0.3)
-
-    RESULT = text_plagiarism
-    assert RESULT, 'Calculate plagiarism score not working'
+    RESULT = actual
+    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
+    assert RESULT == expected, 'Results differ'
