@@ -2,13 +2,19 @@
 Longest common subsequence problem
 """
 <<<<<<< HEAD
+<<<<<<< HEAD
 import tokenizer
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 import pickle
 import os
 import re
 from lab_2.tokenizer import tokenize
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 
 
 def tokenize_by_lines(text: str) -> tuple:
@@ -21,6 +27,7 @@ def tokenize_by_lines(text: str) -> tuple:
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     if not isinstance(text, str):
         return ()
@@ -32,13 +39,18 @@ def tokenize_by_lines(text: str) -> tuple:
         if tokenized_text:
             tokens.append(tokenized_text)
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     tokens = []
     sentences = text.split('\n')
     for sentence in sentences:
         token_sentence = tuple(tokenize(sentence))
         if token_sentence:
             tokens.append(token_sentence)
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     return tuple(tokens)
 
 
@@ -52,6 +64,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     --> [[0, 0], [0, 0]]
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     is_rows = not isinstance(rows, int) or isinstance(rows, bool)
     is_cols = not isinstance(columns, int) or isinstance(columns, bool)
 
@@ -62,6 +75,8 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     for _ in range(rows):
         zero_matrix.append([0] * columns)
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     if not isinstance(rows, int) or not isinstance(columns, int) or \
             isinstance(rows, bool) or isinstance(columns, bool):
         return []
@@ -69,7 +84,10 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     n_columns = [0] * columns
     if n_columns:
         zero_matrix = [[0] * columns for _ in range(rows)]
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     return zero_matrix
 
 
@@ -80,6 +98,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :param second_sentence_tokens: a tuple of tokens
     :return: a lcs matrix
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (not isinstance(first_sentence_tokens, tuple)
             or not isinstance(second_sentence_tokens, tuple)
@@ -97,6 +116,8 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
                 mtx[idx1][idx2] = max(mtx[idx1][idx2 - 1], mtx[idx1 - 1][idx2])
     return mtx
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
             None in first_sentence_tokens or None in second_sentence_tokens:
         return []
@@ -108,7 +129,10 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
             else:
                 lcs_matrix[row][column] = max((lcs_matrix[row][column - 1], lcs_matrix[row - 1][column]))
     return lcs_matrix
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
@@ -120,6 +144,7 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
     sent1_check = not ((isinstance(first_sentence_tokens, tuple) and first_sentence_tokens
                      and first_sentence_tokens[0] is not None)
@@ -149,6 +174,8 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
 
     return lcs_len
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
             not isinstance(plagiarism_threshold, float):
         return -1
@@ -165,7 +192,10 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     if lcs_length / len(second_sentence_tokens) < plagiarism_threshold:
         return 0
     return lcs_length
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
@@ -176,6 +206,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :param lcs_matrix: a filled lcs matrix
     :return: the longest common subsequence
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     sent1_check = (not isinstance(first_sentence_tokens, tuple) or not first_sentence_tokens
@@ -215,6 +246,8 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     lcs.reverse()
     return tuple(lcs)
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     if not isinstance(first_sentence_tokens, tuple) or not isinstance(second_sentence_tokens, tuple) or \
             None in first_sentence_tokens or None in second_sentence_tokens:
         return ()
@@ -244,7 +277,10 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
             if lcs_matrix[0][0] != 0:
                 lcs.append(first_sentence_tokens[0])
     return tuple(lcs[::-1])
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
@@ -255,6 +291,7 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
     len_check = not isinstance(lcs_length, int) or isinstance(lcs_length, bool)
 
@@ -267,6 +304,8 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     if len_check or susp_check or not 0 <= lcs_length <= len(suspicious_sentence_tokens):
         return -1
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     if not isinstance(lcs_length, int) and not isinstance(lcs_length, float) or isinstance(lcs_length, bool) or \
             not isinstance(suspicious_sentence_tokens, tuple) or None in suspicious_sentence_tokens:
         return -1
@@ -277,14 +316,19 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
         return plagiarism_score
     plagiarism_score = lcs_length / len(suspicious_sentence_tokens)
     return plagiarism_score
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 
-    return lcs_length / len(suspicious_sentence_tokens)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text_tokens: tuple,
                                     plagiarism_threshold=0.3) -> float:
     """
@@ -296,6 +340,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
     orig = original_text_tokens
     susp = suspicious_text_tokens
@@ -332,6 +377,8 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
 
     return p_scores / len(susp)
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     if not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple) or \
             None in original_text_tokens or None in suspicious_text_tokens or\
             not isinstance(plagiarism_threshold, float):
@@ -359,7 +406,10 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
                 plagiarism_scores.append(plagiarism_score)
     total_plagiarism_score = sum(plagiarism_scores) / len(suspicious_text_tokens)
     return total_plagiarism_score
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 
 
 def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
@@ -370,6 +420,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :param lcs: a longest common subsequence
     :return: a tuple with tuples of indexes
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
     sentences_check = (not isinstance(original_sentence_tokens, tuple)
                        or not isinstance(suspicious_sentence_tokens, tuple)
@@ -399,6 +450,8 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
 
     return tuple(difference_sum)
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     if not isinstance(original_sentence_tokens, tuple) or not isinstance(suspicious_sentence_tokens, tuple) or \
             not isinstance(lcs, tuple):
         return ()
@@ -422,7 +475,10 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     if original_sentence_tokens == ():
         return tuple([(), tuple(diff_indexes)])
     return tuple([tuple(diff_indexes), tuple(diff_indexes)])
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple,
@@ -440,6 +496,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
      'sentence_lcs_length': list,
      'difference_indexes': list}
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
     orig = original_text_tokens
     susp = suspicious_text_tokens
@@ -478,6 +535,8 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
 
     return stats
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     diff_stats = {'sentence_plagiarism': [], 'sentence_lcs_length': [], 'difference_indexes': []}
     for original_number, original_sentence in enumerate(original_text_tokens):
         for suspicious_number, suspicious_sentence in enumerate(suspicious_text_tokens):
@@ -494,7 +553,10 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
                     diff_stats['sentence_plagiarism'] += [plagiarism_score]
         diff_stats['text_plagiarism'] = sum(diff_stats['sentence_plagiarism']) / len(suspicious_text_tokens)
     return diff_stats
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 
 
 def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tuple, accumulated_diff_stats: dict) -> str:
@@ -505,6 +567,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :param accumulated_diff_stats: a dictionary with statistics for each pair of sentences
     :return: a report
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
     orig = original_text_tokens
     susp = suspicious_text_tokens
@@ -560,6 +623,8 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
     return report
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     if not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple) or \
             not isinstance(accumulated_diff_stats, dict):
         return ''
@@ -590,7 +655,10 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         report.append('lcs = {}, plagiarism = {}%'.format(lcs_length, plagiarism_percent))
     report.append('Text average plagiarism (words): {}%'.format(total_plagiarism_percent))
     return ' '.join(report)
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 
 
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
@@ -604,8 +672,11 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :return: a length of the longest common subsequence
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     return 0
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     len_search = min(len(first_sentence_tokens), len(second_sentence_tokens))
     cur_row = [0] * (len_search + 1)
     for w_1 in first_sentence_tokens:
@@ -619,7 +690,10 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     if lcs_len / len(second_sentence_tokens) < plagiarism_threshold:
         return 0
     return lcs_len if not lcs_len / len(second_sentence_tokens) < plagiarism_threshold else 0
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 
 
 def tokenize_big_file(path_to_file: str, ids=0) -> tuple:
@@ -630,8 +704,11 @@ def tokenize_big_file(path_to_file: str, ids=0) -> tuple:
     :return: a tuple with ids
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     return ()
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
     tokens = []
     if os.path.exists('id.pkl'):
         with open('id.pkl', 'rb') as put:
@@ -651,4 +728,7 @@ def tokenize_big_file(path_to_file: str, ids=0) -> tuple:
     with open('id.pkl', 'wb') as out:
         pickle.dump(id_dict, out)
     return tuple(tokens)
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d

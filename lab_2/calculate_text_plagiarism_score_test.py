@@ -143,6 +143,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                                  suspicious_text_tokens,
                                                  plagiarism_threshold)
 <<<<<<< HEAD
+<<<<<<< HEAD
         actual_reversed = calculate_text_plagiarism_score(original_text_tokens,
                                                           suspicious_text_tokens,
                                                           plagiarism_threshold)
@@ -151,6 +152,11 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                                           original_text_tokens,
                                                           plagiarism_threshold=0.1)
 >>>>>>> upstream/master
+=======
+        actual_reversed = calculate_text_plagiarism_score(suspicious_text_tokens,
+                                                          original_text_tokens,
+                                                          plagiarism_threshold=0.1)
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
         self.assertEqual(expected, actual)
         self.assertEqual(expected, actual_reversed)
 

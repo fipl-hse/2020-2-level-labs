@@ -2,6 +2,7 @@
 Longest common subsequence implementation starter
 """
 <<<<<<< HEAD
+<<<<<<< HEAD
 import main
 
 ORIGINAL_TEXT = '''The dog is barking.
@@ -45,6 +46,8 @@ print(f"The report for two texts:\n{report}")
 RESULT = report
 assert RESULT, 'Not working'
 =======
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 import lab_2.main
 
 if __name__ == '__main__':
@@ -60,4 +63,7 @@ if __name__ == '__main__':
     RESULT = actual
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == expected, 'Results differ'
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
