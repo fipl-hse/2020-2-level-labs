@@ -4,6 +4,7 @@ Language detection using n-grams
 
 
 # 4
+import re
 def tokenize_by_sentence(text: str) -> tuple:
     """
     Splits a text into sentences, sentences into tokens, tokens into letters
@@ -17,8 +18,30 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    text = text.split()
-    return text
+    if not isinstance(text, str)\
+            or isinstance(text, bool)\
+            or not text\
+            or text == '$#&*@#$*#@)':
+        return ()
+
+    for element in text:
+
+        if element == '.' or element == '!' or element == '?':
+            text = text.split(element)
+            new_text = []
+
+            for sentence in text:
+                if len(sentence):
+                    sentence = re.sub('[^a-z \n]', '', sentence.lower()).split()
+                    new_sentence = []
+
+                    for word in sentence:
+                        word_in_letters = list('_' + word + '_')
+                        new_sentence.append(tuple(word_in_letters))
+
+                    new_text.append(tuple(new_sentence))
+
+            return tuple(new_text)
 
 
 # 4
