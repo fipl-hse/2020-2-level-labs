@@ -200,7 +200,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     result = summ / len(suspicious_text_tokens)
     return result
 
-@unittest.skip('')
+
 def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
     """
     Finds words not present in lcs.
@@ -211,7 +211,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     """
     pass
 
-@unittest.skip('')
+
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
     """
     Accumulates the main statistics for pairs of sentences in texts:
@@ -227,7 +227,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     """
     pass
 
-@unittest.skip('')
+
 def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tuple, accumulated_diff_stats: dict) -> str:
     """
     Creates a diff report for two texts comparing them line by line
@@ -238,7 +238,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     """
     pass
 
-@unittest.skip('')
+
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
                               plagiarism_threshold: float) -> int:
     """
@@ -251,7 +251,7 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     """
     pass
 
-@unittest.skip('')
+
 def tokenize_big_file(path_to_file: str) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
