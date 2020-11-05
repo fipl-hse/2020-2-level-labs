@@ -12,15 +12,20 @@ def tokenize_by_lines(text: str) -> tuple:
     :return: a list of sentences with lowercase tokens without punctuation
     e.g. text = 'I have a cat.\nHis name is Bruno'
     --> (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))"""
+    tuple_of_tokens = ()
 
-     
-    tokens  = []
-    sentences  = text.split('\n')
-    for sentence in sentences:
-        token = tuple(tokenize(sentence))
-        if token:
-            tokens.append(token)
-    return tuple(tokens)
+    if not isinstance(text, str):
+        return tuple_of_tokens
+
+    lines = text.split('\n')
+    tokens = []
+    for line in lines:
+        line_tuple = tuple(tokenizer.tokenize(line))
+        if line_tuple:
+            tokens.append(line_tuple)
+    tuple_of_tokens = tuple(tokens)
+
+    return tuple_of_tokens
 
 
 
