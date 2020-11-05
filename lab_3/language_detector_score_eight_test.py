@@ -194,7 +194,7 @@ class LanguageDetectorTest(unittest.TestCase):
         expected = {}
         actual = language_detector.detect_language(encoded_text)
         self.assertEqual(expected, actual)
-
+    @unittest.skip('')
     @patch('lab_3.main.LanguageDetector._calculate_distance', side_effect=LanguageDetector()._calculate_distance)
     @unittest.skip('')
     def test_detect_language_calls_required_method(self, mock):

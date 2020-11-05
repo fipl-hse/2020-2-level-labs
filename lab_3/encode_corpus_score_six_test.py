@@ -89,7 +89,7 @@ class EncodeCorpusTest(unittest.TestCase):
         expected = ()
         actual = encode_corpus(letter_storage, sentences)
         self.assertEqual(expected, actual)
-
+    @unittest.skip('')
     @patch('lab_3.main.LetterStorage.get_id_by_letter', side_effect=LetterStorage().get_id_by_letter)
     @unittest.skip('')
     def test_encode_corpus_calls_require_function(self, mock):

@@ -162,7 +162,7 @@ class ProbabilityLanguageDetectorTest(unittest.TestCase):
         for bad_input in bad_inputs:
             actual = language_detector.detect_language(bad_input)
             self.assertEqual(expected, actual)
-
+    @unittest.skip('')
     @patch('lab_3.main.ProbabilityLanguageDetector._calculate_sentence_probability',
            side_effect=ProbabilityLanguageDetector()._calculate_sentence_probability)
     @unittest.skip('')

@@ -169,7 +169,7 @@ class LetterStorageTest(unittest.TestCase):
         actual = letter_storage.update(sentences)
         self.assertEqual(letter_storage.storage, {})
         self.assertEqual(expected, actual)
-
+    @unittest.skip('')
     @patch('lab_3.main.LetterStorage._put_letter', side_effect=LetterStorage()._put_letter)
     @unittest.skip('')
     def test_letter_storage_update_calls_required_function(self, mock):
