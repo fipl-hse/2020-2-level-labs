@@ -143,8 +143,6 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     for token_1, token_2, matrix_row in zip(tokens_1, tokens_2, matrix):
         if not token_1 or not token_2 or not matrix_row:
             return lcs
-        if not isinstance(token_1, str) or not isinstance(token_2, str):
-            return lcs
         for elem in matrix_row:
             if not isinstance(elem, int) or isinstance(elem, bool) or elem < 0:
                 return lcs
@@ -184,12 +182,11 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     if not suspicious_sentence_tokens:
         plagiarism_score = 0.0
         return plagiarism_score
-    else:
-        if lcs_length < 0 or lcs_length > len(suspicious_sentence_tokens):
+    if lcs_length < 0 or lcs_length > len(suspicious_sentence_tokens):
+        return plagiarism_score
+    for token in suspicious_sentence_tokens:
+        if not isinstance(token, str):
             return plagiarism_score
-        for token in suspicious_sentence_tokens:
-            if not isinstance(token, str):
-                return plagiarism_score
 
     plagiarism_score = lcs_length / len(suspicious_sentence_tokens)
 
@@ -214,7 +211,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
         original_text_tokens_list = list(original_text_tokens)
-        for empty in range(len(suspicious_text_tokens) - len(original_text_tokens)):
+        for _ in range(len(suspicious_text_tokens) - len(original_text_tokens)):
             original_text_tokens_list.append('')
         original_text_tokens = tuple(original_text_tokens_list)
     scores_list = []
@@ -290,7 +287,7 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
 
     if len(tokens_1) < len(tokens_2):
         tokens_1_list = list(tokens_1)
-        for empty in range(len(tokens_2) - len(tokens_1)):
+        for _ in range(len(tokens_2) - len(tokens_1)):
             tokens_1_list.append('')
         tokens_1 = tuple(tokens_1)
     diff_stats_dict['text_plagiarism'] = calculate_text_plagiarism_score(tokens_1, tokens_2, threshold)
@@ -309,6 +306,16 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
     return diff_stats_dict
 
 
+def add_lines(tokens, diff_index):
+    for num in range(0, len(diff_index), 2):
+        if diff_index[num] + 1 == diff_index[num + 1]:
+            tokens[diff_index[num]] = '| ' + tokens[diff_index[num]] + ' |'
+        else:
+            tokens[diff_index[num]] = '| ' + tokens[diff_index[num]]
+            tokens[diff_index[num + 1] - 1] = tokens[diff_index[num + 1] - 1] + ' |'
+    return ' '.join(tokens)
+
+
 def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tuple, accumulated_diff_stats: dict) -> str:
     """
     Creates a diff report for two texts comparing them line by line
@@ -318,44 +325,34 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :return: a report
     """
     diff_report = ''
-    tokens_1, tokens_2, stats = original_text_tokens, suspicious_text_tokens, accumulated_diff_stats
 
-    if not isinstance(tokens_1, tuple) or not isinstance(tokens_2, tuple):
+    if not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple):
         return diff_report
-    if tokens_1 and tokens_2:
-        for sentence_1, sentence_2 in zip(tokens_1, tokens_2):
+    if original_text_tokens and suspicious_text_tokens:
+        for sentence_1, sentence_2 in zip(original_text_tokens, suspicious_text_tokens):
             if not sentence_1 or not sentence_2:
                 return diff_report
 
-    if len(tokens_1) < len(tokens_2):
-        tokens_1_list = list(tokens_1)
-        for empty in range(len(tokens_2) - len(tokens_1)):
-            tokens_1_list.append('')
-        tokens_1 = tuple(tokens_1)
-    elif len(tokens_1) > len(tokens_2):
-        tokens_1 = tokens_1[:len(tokens_2)]
+    if len(original_text_tokens) < len(suspicious_text_tokens):
+        original_list = list(original_text_tokens)
+        for empty in range(len(suspicious_text_tokens) - len(original_text_tokens)):
+            original_list.append('')
+        original_text_tokens = tuple(original_text_tokens)
+    elif len(original_text_tokens) > len(suspicious_text_tokens):
+        original_text_tokens = original_text_tokens[:len(suspicious_text_tokens)]
 
-    def add_lines(tokens, diff_index):
-        for num in range(0, len(diff_index), 2):
-            if diff_index[num] + 1 == diff_index[num + 1]:
-                tokens[diff_index[num]] = '| ' + tokens[diff_index[num]] + ' |'
-            else:
-                tokens[diff_index[num]] = '| ' + tokens[diff_index[num]]
-                tokens[diff_index[num + 1] - 1] = tokens[diff_index[num + 1] - 1] + ' |'
-        return ' '.join(tokens)
-
-    for sentence_index, (diff_index_1, diff_index_2) in enumerate(stats['difference_indexes']):
-        tokens_1_list = list(tokens_1[sentence_index])
-        tokens_2_list = list(tokens_2[sentence_index])
-        lcs_length = stats['sentence_lcs_length'][sentence_index]
-        plagiarism = stats['sentence_plagiarism'][sentence_index] * 100
-        tokens_1_report = '- ' + add_lines(tokens_1_list, diff_index_1) + '\n'
-        diff_report += tokens_1_report
-        tokens_2_report = '+ ' + add_lines(tokens_2_list, diff_index_2) + '\n'
-        diff_report += tokens_2_report
+    for sentence_index, (diff_index_1, diff_index_2) in enumerate(accumulated_diff_stats['difference_indexes']):
+        original_list = list(original_text_tokens[sentence_index])
+        suspicious_list = list(suspicious_text_tokens[sentence_index])
+        lcs_length = accumulated_diff_stats['sentence_lcs_length'][sentence_index]
+        plagiarism = accumulated_diff_stats['sentence_plagiarism'][sentence_index] * 100
+        original_report = '- ' + add_lines(original_list, diff_index_1) + '\n'
+        diff_report += original_report
+        suspicious_report = '+ ' + add_lines(suspicious_list, diff_index_2) + '\n'
+        diff_report += suspicious_report
         lcs_plagiarism_report = '\nlcs = {}, plagiarism = {}%\n\n'.format(lcs_length, plagiarism)
         diff_report += lcs_plagiarism_report
-    final_report = 'Text average plagiarism (words): ' + str(stats['text_plagiarism'] * 100) + '%'
+    final_report = 'Text average plagiarism (words): ' + str(accumulated_diff_stats['text_plagiarism'] * 100) + '%'
     diff_report += final_report
 
     return diff_report
