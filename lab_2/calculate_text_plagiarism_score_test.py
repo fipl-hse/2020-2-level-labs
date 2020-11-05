@@ -144,7 +144,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                                  plagiarism_threshold)
         actual_reversed = calculate_text_plagiarism_score(suspicious_text_tokens,
                                                           original_text_tokens,
-                                                          plagiarism_threshold)
+                                                          plagiarism_threshold=0.1)
         self.assertEqual(expected, actual)
         self.assertEqual(expected, actual_reversed)
 
@@ -180,18 +180,12 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                   ('the', 'girl', 'arrived'),
                                   ('the', 'boy', 'left'))
         plagiarism_threshold = 0.3
-        plagiarism_threshold_lower = 0.1
 
-        expected = 0.0  # (0+1/3+0)/3  # 0.11 < 0.3
-        expected_lower = (0+1/3+0)/3
+        expected = (0+1/3+0)/3
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
                                                  plagiarism_threshold)
-        actual_lower = calculate_text_plagiarism_score(original_text_tokens,
-                                                       suspicious_text_tokens,
-                                                       plagiarism_threshold_lower)
         self.assertEqual(expected, actual)
-        self.assertEqual(expected_lower, actual_lower)
 
     def test_calculate_text_plagiarism_score_bigger_second_text(self):
         """
@@ -205,19 +199,13 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                   ('the', 'dog', 'disappeared'),
                                   (),
                                   ())
-        plagiarism_threshold_upper = 0.3
-        plagiarism_threshold_lower = 0.01
+        plagiarism_threshold = 0.3
         expected = (0+1/3+0+0)/4
-        expected_upper = 0.0
 
-        actual_upper = calculate_text_plagiarism_score(original_text_tokens,
-                                                       suspicious_text_tokens,
-                                                       plagiarism_threshold_upper)
-        actual_lower = calculate_text_plagiarism_score(original_text_tokens,
-                                                       suspicious_text_tokens,
-                                                       plagiarism_threshold_lower)
-        self.assertEqual(expected, actual_lower)
-        self.assertEqual(expected_upper, actual_upper)
+        actual = calculate_text_plagiarism_score(original_text_tokens,
+                                                 suspicious_text_tokens,
+                                                 plagiarism_threshold)
+        self.assertEqual(expected, actual)
 
     def test_calculate_text_plagiarism_score_check_threshold(self):
         """
@@ -237,7 +225,7 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
                                                  plagiarism_threshold)
-        self.assertNotEqual(expected, actual)
+        self.assertEqual(expected, actual)
 
     @patch('lab_2.main.calculate_plagiarism_score', side_effect=calculate_plagiarism_score)
     def test_calculate_text_plagiarism_score_calls_required_function(self, mock):
