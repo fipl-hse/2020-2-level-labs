@@ -34,12 +34,14 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     --> [[0, 0], [0, 0]]
     """
 
-    check = [isinstance (rows,int), isinstance(columns,int), not isinstance(rows,bool),
-         not isinstance(columns,bool)]
-    if all (check) and rows > 0 and columns > 0:
-        zero_matrix = [[0] * columns for row in range(rows)]
-        return (zero_matrix)
-    return []
+    if not isinstance(rows, int) or not isinstance(columns, int) or \
+            isinstance(rows, bool) or isinstance(columns, bool):
+        return []
+    zero_matrix = []
+    num_columns = [0] * columns
+    if num_columns:
+        zero_matrix = [[0] * columns for _ in range(rows)]
+    return zero_matrix
 
 
 
