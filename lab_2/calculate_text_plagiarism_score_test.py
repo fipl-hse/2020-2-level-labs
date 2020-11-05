@@ -139,11 +139,14 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
         plagiarism_threshold = 0.1
 
         expected = (1/3+1/3)/2
+        original_text_tokens_1 = suspicious_text_tokens
+        suspicious_text_tokens_1 = original_text_tokens
+
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
                                                  plagiarism_threshold)
-        actual_reversed = calculate_text_plagiarism_score(original_text_tokens,
-                                                          suspicious_text_tokens,
+        actual_reversed = calculate_text_plagiarism_score(original_text_tokens_1,
+                                                          suspicious_text_tokens_1,
                                                           plagiarism_threshold)
         self.assertEqual(expected, actual)
         self.assertEqual(expected, actual_reversed)
