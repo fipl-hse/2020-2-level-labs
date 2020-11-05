@@ -1,7 +1,6 @@
 """
 Longest common subsequence problem
 """
-
 import tokenizer
 
 
@@ -55,6 +54,8 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     for _ in range(rows):
         matrix_row = [0] * columns
         zero_matrix.append(matrix_row)
+
+    return zero_matrix
 
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
@@ -118,6 +119,8 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     lcs_length = matrix[-1][-1]
     if ratio < threshold:
         lcs_length = 0
+
+    return lcs_length
 
 
 def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_matrix: list) -> tuple:
@@ -262,12 +265,10 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     return diff_indexes_tuple
 
 
-def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple,
-                          plagiarism_threshold=0.3) -> dict:
+def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
     """
     Accumulates the main statistics for pairs of sentences in texts:
             lcs_length, plagiarism_score and indexes of differences
-    :param plagiarism_threshold:
     :param original_text_tokens: a tuple of sentences with tokens
     :param suspicious_text_tokens: a tuple of sentences with tokens
     :return: a dictionary of main statistics for each pair of sentences
@@ -358,4 +359,25 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     diff_report += final_report
 
     return diff_report
-  
+
+
+def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
+                              plagiarism_threshold: float) -> int:
+    """
+    Finds a length of the longest common subsequence using an optimized algorithm
+    When a length is less than the threshold, it becomes 0
+    :param first_sentence_tokens: a tuple of tokens
+    :param second_sentence_tokens: a tuple of tokens
+    :param plagiarism_threshold: a threshold
+    :return: a length of the longest common subsequence
+    """
+    pass
+
+
+def tokenize_big_file(path_to_file: str) -> tuple:
+    """
+    Reads, tokenizes and transforms a big file into a numeric form
+    :param path_to_file: a path
+    :return: a tuple with ids
+    """
+    pass
