@@ -132,15 +132,16 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
     :return: the longest common subsequence
     """
     lcs = ()
-    tokens_1, tokens_2, matrix = first_sentence_tokens, second_sentence_tokens, lcs_matrix
+    tokens_1, tokens_2 = first_sentence_tokens, second_sentence_tokens
 
-    if not isinstance(tokens_1, tuple) or not isinstance(tokens_2, tuple) or not isinstance(matrix, list):
+    if not isinstance(tokens_1, tuple) or not isinstance(tokens_2, tuple) or not isinstance(lcs_matrix, list):
         return lcs
     if not tokens_1 or not tokens_2:
         return lcs
-    if not matrix or len(matrix) != len(tokens_1) or len(matrix[0]) != len(tokens_2) or matrix[0][0] > matrix[-1][-1]:
+    if not lcs_matrix or len(lcs_matrix) != len(tokens_1) or len(lcs_matrix[0]) != len(tokens_2)\
+            or lcs_matrix[0][0] > lcs_matrix[-1][-1]:
         return lcs
-    for token_1, token_2, matrix_row in zip(tokens_1, tokens_2, matrix):
+    for token_1, token_2, matrix_row in zip(tokens_1, tokens_2, lcs_matrix):
         if not token_1 or not token_2 or not matrix_row:
             return lcs
         for elem in matrix_row:
@@ -148,10 +149,10 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
                 return lcs
 
     lcs_list = []
-    column_index, row_index = len(matrix[0]) - 1, len(matrix) - 1
-    while len(lcs_list) != matrix[-1][-1]:
-        upper_elem = matrix[row_index - 1][column_index] if row_index - 1 >= 0 else 0
-        left_elem = matrix[row_index][column_index - 1] if column_index - 1 >= 0 else 0
+    column_index, row_index = len(lcs_matrix[0]) - 1, len(lcs_matrix) - 1
+    while len(lcs_list) != lcs_matrix[-1][-1]:
+        upper_elem = lcs_matrix[row_index - 1][column_index] if row_index - 1 >= 0 else 0
+        left_elem = lcs_matrix[row_index][column_index - 1] if column_index - 1 >= 0 else 0
         if tokens_1[row_index] == tokens_2[column_index]:
             lcs_list.append(tokens_1[row_index])
             row_index -= 1
@@ -335,7 +336,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
         original_list = list(original_text_tokens)
-        for empty in range(len(suspicious_text_tokens) - len(original_text_tokens)):
+        for _ in range(len(suspicious_text_tokens) - len(original_text_tokens)):
             original_list.append('')
         original_text_tokens = tuple(original_text_tokens)
     elif len(original_text_tokens) > len(suspicious_text_tokens):
@@ -346,14 +347,10 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         suspicious_list = list(suspicious_text_tokens[sentence_index])
         lcs_length = accumulated_diff_stats['sentence_lcs_length'][sentence_index]
         plagiarism = accumulated_diff_stats['sentence_plagiarism'][sentence_index] * 100
-        original_report = '- ' + add_lines(original_list, diff_index_1) + '\n'
-        diff_report += original_report
-        suspicious_report = '+ ' + add_lines(suspicious_list, diff_index_2) + '\n'
-        diff_report += suspicious_report
-        lcs_plagiarism_report = '\nlcs = {}, plagiarism = {}%\n\n'.format(lcs_length, plagiarism)
-        diff_report += lcs_plagiarism_report
-    final_report = 'Text average plagiarism (words): ' + str(accumulated_diff_stats['text_plagiarism'] * 100) + '%'
-    diff_report += final_report
+        diff_report += '- ' + add_lines(original_list, diff_index_1) + '\n'
+        diff_report += '+ ' + add_lines(suspicious_list, diff_index_2) + '\n'
+        diff_report += '\nlcs = {}, plagiarism = {}%\n\n'.format(lcs_length, plagiarism)
+    diff_report += 'Text average plagiarism (words): ' + str(accumulated_diff_stats['text_plagiarism'] * 100) + '%'
 
     return diff_report
 
