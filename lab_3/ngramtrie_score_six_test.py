@@ -167,7 +167,7 @@ class BiGramTest(unittest.TestCase):
         self.assertEqual(ngram.n_gram_log_probabilities[(1, 2)], first_prob)
         self.assertEqual(ngram.n_gram_log_probabilities[(1, 3)], second_prob)
         self.assertEqual(0, actual)
-
+    @unittest.skip('')
     def test_calculate_log_probabilities_one_bi_gram(self):
         ngram = NGramTrie(2)
         ngram.n_gram_frequencies = {(1, 2): 10}
@@ -175,7 +175,7 @@ class BiGramTest(unittest.TestCase):
         actual = ngram.calculate_log_probabilities()
         self.assertEqual(ngram.n_gram_log_probabilities[(1, 2)], 0.0)
         self.assertEqual(0, actual)
-
+    @unittest.skip('')
     def test_calculate_log_probabilities_empty_frequencies(self):
         ngram = NGramTrie(2)
         ngram.n_gram_frequencies = {}
