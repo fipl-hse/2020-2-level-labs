@@ -353,7 +353,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         diff_report += tokens_1_report
         tokens_2_report = '+ ' + add_lines(tokens_2_list, diff_index_2) + '\n'
         diff_report += tokens_2_report
-        lcs_plagiarism_report = '\nlcs = {}, plagiarism = {}\n\n'.format(lcs_length, plagiarism)
+        lcs_plagiarism_report = '\nlcs = {}, plagiarism = {}%\n\n'.format(lcs_length, plagiarism)
         diff_report += lcs_plagiarism_report
     final_report = 'Text average plagiarism (words): ' + str(stats['text_plagiarism'] * 100) + '%'
     diff_report += final_report
