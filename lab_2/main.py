@@ -2,7 +2,7 @@
 Longest common subsequence problem
 """
 
-from lab_2.tokenizer import tokenize
+import tokenizer
 
 def tokenize_by_lines(text: str) -> tuple:
     """
