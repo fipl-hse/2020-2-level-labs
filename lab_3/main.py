@@ -1,6 +1,7 @@
 """
 Language detection using n-grams
 """
+import re
 
 
 # 4
@@ -17,14 +18,28 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    if not isinstance(text, str):
+        return ()
+    tokens = []
+    sentences = text.split('.')
+    for sentence in sentences:
+        letters_sentence = []
+        token_sentence = re.sub('[^a-z \n]', '', sentence.lower()).split()
+        for token in token_sentence:
+            letters = tuple(['_'] + list(token) + ['_'])
+            letters_sentence.append(letters)
+        if letters_sentence:
+            tokens.append(tuple(letters_sentence))
+            print(tokens)
+    return tuple(tokens)
 
 
 # 4
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
+        self.ids = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -32,7 +47,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str) or letter == '':
+            return 1
+        if letter not in self.storage:
+            self.storage[letter] = self.ids
+            self.ids += 1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -40,7 +60,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if letter not in self.storage:
+            return -1
+        return self.storage[letter]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -48,7 +70,13 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return 1
+        for sentence in corpus:
+            for token in sentence:
+                for letter in token:
+                    self._put_letter(letter)
+        return 0
 
 
 # 6
