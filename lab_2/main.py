@@ -21,7 +21,7 @@ def tokenize_by_lines(text: str) -> tuple:
         token = tuple(tokenize(sentence))
         if token:
             tokens.append(token)
-    return token
+    return tuple(tokens)
 
 
 
