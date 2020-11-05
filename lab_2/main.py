@@ -21,7 +21,7 @@ def tokenize_by_lines(text: str) -> tuple:
         if len(sent) > 0:
             result.append(sent)
     return tuple(result)
-    return a
+    
 
 
 
