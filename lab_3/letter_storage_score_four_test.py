@@ -14,6 +14,7 @@ class LetterStorageTest(unittest.TestCase):
         All tests should pass for score 4 or above
     """
 
+    @unittest.skip('')
     def test_letter_storage_correct_instance_creation(self):
         """
         letter storage instance creates with correct attributes
@@ -24,6 +25,7 @@ class LetterStorageTest(unittest.TestCase):
 
 # --------------------------------------------------------
 
+    @unittest.skip('')
     def test_letter_storage_put_letter_ideal(self):
         """
         letter is added to storage
@@ -35,6 +37,7 @@ class LetterStorageTest(unittest.TestCase):
         self.assertTrue(letter in letter_storage.storage)
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_letter_storage_put_letter_none(self):
         """
         none is not added to storage
@@ -46,6 +49,7 @@ class LetterStorageTest(unittest.TestCase):
         self.assertEqual(letter_storage.storage, {})
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_letter_storage_put_letter_not_str(self):
         """
         non string letter is not added to storage
@@ -57,6 +61,7 @@ class LetterStorageTest(unittest.TestCase):
         self.assertEqual(letter_storage.storage, {})
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_letter_storage_put_letter_existing(self):
         """
         existing letter is not added to storage
@@ -71,6 +76,7 @@ class LetterStorageTest(unittest.TestCase):
 
 # -----------------------------------------------------------------
 
+    @unittest.skip('')
     def test_letter_storage_get_id_by_letter_ideal(self):
         """
         ideal case for get_id_by_letter
@@ -81,6 +87,7 @@ class LetterStorageTest(unittest.TestCase):
         actual = letter_storage.get_id_by_letter('w')
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_letter_storage_get_id_by_letter_none(self):
         """
         get_id_by_letter none
@@ -91,6 +98,7 @@ class LetterStorageTest(unittest.TestCase):
         actual = letter_storage.get_id_by_letter(None)
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_letter_storage_get_id_by_letter_not_str(self):
         """
         id is not str  get_id_by_letter
@@ -101,6 +109,7 @@ class LetterStorageTest(unittest.TestCase):
         actual = letter_storage.get_id_by_letter(123)
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_letter_storage_get_id_by_letter_not_in_storage(self):
         """
         letter not in storage
@@ -113,6 +122,7 @@ class LetterStorageTest(unittest.TestCase):
 
 # -----------------------------------------------------------
 
+    @unittest.skip('')
     def test_letter_storage_update_ideal(self):
         """
         ideal case for update
@@ -124,6 +134,7 @@ class LetterStorageTest(unittest.TestCase):
         self.assertEqual(len(letter_storage.storage), 4)
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_letter_storage_update_duplicates(self):
         """
         ideal case for update
@@ -136,6 +147,7 @@ class LetterStorageTest(unittest.TestCase):
         self.assertEqual(len(letter_storage.storage), 4)
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_letter_storage_update_empty(self):
         """
         ideal case for update
@@ -147,6 +159,7 @@ class LetterStorageTest(unittest.TestCase):
         self.assertEqual(letter_storage.storage, {})
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_letter_storage_update_none(self):
         """
         ideal case for update
@@ -158,6 +171,7 @@ class LetterStorageTest(unittest.TestCase):
         self.assertEqual(letter_storage.storage, {})
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_letter_storage_update_not_tuple(self):
         """
         ideal case for update
@@ -171,6 +185,7 @@ class LetterStorageTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     @patch('lab_3.main.LetterStorage._put_letter', side_effect=LetterStorage()._put_letter)
+    @unittest.skip('')
     def test_letter_storage_update_calls_required_function(self, mock):
         """
         ideal case for update calling put_letter method
