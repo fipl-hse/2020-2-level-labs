@@ -46,11 +46,13 @@ def create_zero_matrix(rows: int, columns: int) -> list:
         not isinstance(rows, bool),
         not isinstance(columns, bool),
     ]
-    if not all(input_check) or rows <= 0 or columns <= 0:
+    if not all(input_check):
+        return zero_matrix
+    if rows <= 0 or columns <= 0:
         return zero_matrix
 
     for _ in range(rows):
-        matrix_row = [0 for elem in range(columns)]
+        matrix_row = [0] * columns
         zero_matrix.append(matrix_row)
 
     return zero_matrix
@@ -64,6 +66,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     :return: a lcs matrix
     """
     matrix = []
+
     tokens_1, tokens_2 = first_sentence_tokens, second_sentence_tokens
     if not isinstance(tokens_1, tuple) or not isinstance(tokens_2, tuple):
         return matrix
@@ -72,6 +75,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
     for token_1, token_2 in zip(tokens_1, tokens_2):
         if not isinstance(token_1, str) or not isinstance(token_2, str):
             return matrix
+
     matrix = create_zero_matrix(len(tokens_1), len(tokens_2))
     for index_1, token_1 in enumerate(tokens_1):
         for index_2, token_2 in enumerate(tokens_2):
@@ -79,6 +83,7 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
                 matrix[index_1][index_2] = matrix[index_1 - 1][index_2 - 1] + 1
             else:
                 matrix[index_1][index_2] = max(matrix[index_1 - 1][index_2], matrix[index_1][index_2 - 1])
+
     return matrix
 
 
@@ -97,7 +102,8 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     if not isinstance(tokens_1, tuple) or not isinstance(tokens_2, tuple) or not isinstance(threshold, float):
         return lcs_length
     if tokens_1 == () or tokens_2 == ():
-        return 0
+        lcs_length = 0
+        return lcs_length
     if threshold >= 1 or threshold <= 0 or not tokens_1 or not tokens_2:
         return lcs_length
     for token_1, token_2 in zip(tokens_1, tokens_2):
@@ -110,9 +116,9 @@ def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
     if not matrix:
         return lcs_length
     ratio = matrix[-1][-1] / len(tokens_2)
-    lcs_length = 0
-    if ratio >= threshold:
-        lcs_length = matrix[-1][-1]
+    lcs_length = matrix[-1][-1]
+    if ratio < threshold:
+        lcs_length = 0
 
     return lcs_length
 
@@ -288,8 +294,9 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
             tokens_1_list.append('')
         tokens_1 = tuple(tokens_1)
     diff_stats_dict['text_plagiarism'] = calculate_text_plagiarism_score(tokens_1, tokens_2, threshold)
-    for key_name in ['sentence_plagiarism', 'sentence_lcs_length', 'difference_indexes']:
-        diff_stats_dict[key_name] = []
+    diff_stats_dict['sentence_plagiarism'] = []
+    diff_stats_dict['sentence_lcs_length'] = []
+    diff_stats_dict['difference_indexes'] = []
     for index, sentence in enumerate(tokens_2):
         length = find_lcs_length(tokens_1[index], sentence, threshold)
         diff_stats_dict['sentence_plagiarism'].append(calculate_plagiarism_score(length, sentence))
@@ -311,7 +318,7 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :return: a report
     """
     diff_report = ''
-    tokens_1, tokens_2 = original_text_tokens, suspicious_text_tokens
+    tokens_1, tokens_2, stats = original_text_tokens, suspicious_text_tokens, accumulated_diff_stats
 
     if not isinstance(tokens_1, tuple) or not isinstance(tokens_2, tuple):
         return diff_report
@@ -319,29 +326,37 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
         for sentence_1, sentence_2 in zip(tokens_1, tokens_2):
             if not sentence_1 or not sentence_2:
                 return diff_report
+
     if len(tokens_1) < len(tokens_2):
         tokens_1_list = list(tokens_1)
         for empty in range(len(tokens_2) - len(tokens_1)):
             tokens_1_list.append('')
         tokens_1 = tuple(tokens_1)
+    elif len(tokens_1) > len(tokens_2):
+        tokens_1 = tokens_1[:len(tokens_2)]
 
-    for index, element in enumerate(tokens_2):
-        diff_report += '-'
-        for sentence_index in range(0, len(tokens_1[index])):
-            if sentence_index in accumulated_diff_stats['difference_indexes'][index][0]:
-                diff_report += ' |'
-            diff_report += ' ' + tokens_1[index][sentence_index]
-        diff_report += '\n'
-        diff_report += '+ '
-        for sentence_index in range(0, len(element)):
-            if sentence_index in accumulated_diff_stats['difference_indexes'][index][1]:
-                diff_report += ' |'
-            diff_report += ' ' + tokens_2[index][sentence_index]
-        diff_report += '\r\n'
-        diff_report += 'lcs = {}, plagiarism = {}%'.format(accumulated_diff_stats['sentence_lcs_length'][index],
-                                                           accumulated_diff_stats['sentence_plagiarism'][index] * 100)
-        diff_report += '\r\n'
-    diff_report += 'Text average plagiarism (words): {}%'.format(accumulated_diff_stats['text_plagiarism'] * 100)
+    def add_lines(tokens, diff_index):
+        for num in range(0, len(diff_index), 2):
+            if diff_index[num] + 1 == diff_index[num + 1]:
+                tokens[diff_index[num]] = '| ' + tokens[diff_index[num]] + ' |'
+            else:
+                tokens[diff_index[num]] = '| ' + tokens[diff_index[num]]
+                tokens[diff_index[num + 1] - 1] = tokens[diff_index[num + 1] - 1] + ' |'
+        return ' '.join(tokens)
+
+    for sentence_index, (diff_index_1, diff_index_2) in enumerate(stats['difference_indexes']):
+        tokens_1_list = list(tokens_1[sentence_index])
+        tokens_2_list = list(tokens_2[sentence_index])
+        lcs_length = stats['sentence_lcs_length'][sentence_index]
+        plagiarism = stats['sentence_plagiarism'][sentence_index] * 100
+        tokens_1_report = '- ' + add_lines(tokens_1_list, diff_index_1) + '\n'
+        diff_report += tokens_1_report
+        tokens_2_report = '+ ' + add_lines(tokens_2_list, diff_index_2) + '\n'
+        diff_report += tokens_2_report
+        lcs_plagiarism_report = '\nlcs = {}, plagiarism = {}\n\n'.format(lcs_length, plagiarism)
+        diff_report += lcs_plagiarism_report
+    final_report = 'Text average plagiarism (words): ' + str(stats['text_plagiarism'] * 100) + '%'
+    diff_report += final_report
 
     return diff_report
 
