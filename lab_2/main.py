@@ -200,7 +200,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     result = summ / len(suspicious_text_tokens)
     return result
 
-
+'''
 def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_tokens: tuple, lcs: tuple) -> tuple:
     """
     Finds words not present in lcs.
@@ -259,4 +259,4 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :return: a tuple with ids
     """
     pass
-
+'''
