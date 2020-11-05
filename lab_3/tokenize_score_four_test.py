@@ -12,6 +12,8 @@ class TokenizeBySentenceTest(unittest.TestCase):
     checks for tokenize_by_sentence function.
         All tests should pass for score 4 or above
     """
+
+    @unittest.skip('')
     def test_tokenize_by_sentence_ideal(self):
         """
         Tests that tokenize_by_sentence function
@@ -25,6 +27,7 @@ class TokenizeBySentenceTest(unittest.TestCase):
         actual = tokenize_by_sentence(text)
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_tokenize_by_sentence_punctuation_marks(self):
         """
         Tests that tokenize_by_sentence function
@@ -40,6 +43,7 @@ class TokenizeBySentenceTest(unittest.TestCase):
         actual = tokenize_by_sentence(text)
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_tokenize_by_sentence_dirty_text(self):
         """
         Tests that tokenize_by_sentence function
@@ -55,6 +59,7 @@ class TokenizeBySentenceTest(unittest.TestCase):
         actual = tokenize_by_sentence(text)
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_tokenize_by_sentence_incorrect_input(self):
         """
         Tests that tokenize_by_sentence function
@@ -66,6 +71,7 @@ class TokenizeBySentenceTest(unittest.TestCase):
             actual = tokenize_by_sentence(bad_input)
             self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_tokenize_by_sentence_complex(self):
         """
         Tests that tokenize_by_sentence function
@@ -82,6 +88,7 @@ class TokenizeBySentenceTest(unittest.TestCase):
         actual = tokenize_by_sentence(text)
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_tokenize_by_sentence_empty_sentence(self):
         """
         Tests that tokenize_by_sentence function
@@ -93,6 +100,7 @@ class TokenizeBySentenceTest(unittest.TestCase):
         actual = tokenize_by_sentence(text)
         self.assertEqual(expected, actual)
 
+    @unittest.skip('')
     def test_tokenize_by_sentence_inappropriate_sentence(self):
         """
         Tests that tokenize_by_sentence function
