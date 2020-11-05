@@ -2,7 +2,7 @@
 Language detector implementation starter
 """
 
-import lab_3.main
+# import lab_3.main
 
 if __name__ == '__main__':
 
