@@ -2,10 +2,10 @@
 Longest common subsequence implementation starter
 """
 import main
-    ORIGINAL_TEXT = 'I have a dog.\nHis name is Nemo.\nI found him yesterday'
-    SUSPICIOUS_TEXT = 'I have a cat.\nHer name is Anny.\nI met her yesterday'
+ORIGINAL_TEXT = 'I have a dog.\nHis name is Nemo.\nI found him yesterday'
+SUSPICIOUS_TEXT = 'I have a cat.\nHer name is Anny.\nI met her yesterday'
 
-    tokenized_orig_text = main.tokenize_by_lines(ORIGINAL_TEXT)
+tokenized_orig_text = main.tokenize_by_lines(ORIGINAL_TEXT)
 tokenized_susp_text = main.tokenize_by_lines(SUSPICIOUS_TEXT)
 print(f"Original text tokens: {tokenized_orig_text}\nSuspicious text tokens: {tokenized_susp_text}\n")
 
@@ -30,7 +30,6 @@ print(f"The plagiarism score for the text: {plagiarism_text}\n")
 
 diff_in_sent = main.find_diff_in_sentence(orig_first_sent, susp_first_sent, lcs)
 print(f"Indexes of differences in first sentences: {diff_in_sent}\n")
-
 statistics = main.accumulate_diff_stats(tokenized_orig_text, tokenized_susp_text)
 print(f"The main statistics for pairs of sentences in texts:\n{statistics}\n")
 
