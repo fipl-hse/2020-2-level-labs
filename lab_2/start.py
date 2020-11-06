@@ -1,35 +1,43 @@
 """
 Longest common subsequence implementation starter
 """
-from main import tokenize_by_lines, accumulate_diff_stats, create_diff_report
+from main import tokenize_by_lines
+from main import create_zero_matrix
+from main import fill_lcs_matrix
+from main import find_lcs_length
+from main import find_lcs
+from main import calculate_plagiarism_score
+from main import calculate_text_plagiarism_score
 
-TEXT_ORIGINAL = '''This is the horse and the hound and the horn.
-That belonged to the farmer sowing his corn.
-That kept the cock that crowed in the morn.
-That waked the priest all shaven and shorn.
-That married the man all tattered and torn.
-That kissed the maiden all forlorn.
-That milked the cow with the crumpled horn.
-That tossed the dog that worried the cat.
-That killed the rat that ate the malt.
-That lay in the house that Jack built.'''
+if __name__ == '__main__':
+    original_text = 'The cat appeared! The dog disappeared!'
+    suspicious_text = 'The man arrived! The boy left...'
+    print('Original text: {}\nSuspicious text: {}'.format(original_text, suspicious_text))
 
-TEXT_SUSPICIOUS = '''This is the cow and the raccoon and the horn.
-That kept the chicken that crowed in the morn!
-That waked the priest all shaven and shorn!
-That belonged to the farmer sowing his corn.
-hat married the man all tattered and torn!
-That kissed the woman all forlorn?
-That milked the goat with the crumpled horn.
-That killed the rat that ate the malt.
-That tossed the dog that worried the cat.
-That stay in the house that Jack built.'''
+    original_text_tokens = tokenize_by_lines(original_text)
+    suspicious_text_tokens = tokenize_by_lines(suspicious_text)
+    print(original_text_tokens, suspicious_text_tokens)
 
-original_tuple = tokenize_by_lines(TEXT_ORIGINAL)
-suspicious_tuple = tokenize_by_lines(TEXT_SUSPICIOUS)
+    zero_matrix = create_zero_matrix(len(original_text), len(suspicious_text))
+    print('Zero matrix: {}'.format(zero_matrix))
 
-diff_stats = accumulate_diff_stats(original_tuple, suspicious_tuple)
+    lcs_matrix = fill_lcs_matrix(original_text_tokens[0], suspicious_text_tokens[0])
+    print('LCS matrix: {}'.format(lcs_matrix))
 
-RESULT = create_diff_report(original_tuple, suspicious_tuple, diff_stats)
+    lcs_length = find_lcs_length(original_text_tokens[0], suspicious_text_tokens[0], plagiarism_threshold=0.3)
+    print('LCS length: {}'.format(lcs_length))
 
-assert RESULT, 'LCS_length not working'
+    lcs = find_lcs(original_text_tokens[0], suspicious_text_tokens[0], lcs_matrix)
+    print('LCS is {}'.format(lcs))
+
+    plagiarism_score = calculate_plagiarism_score(lcs_length, suspicious_text_tokens[0])
+    print('The score of plagiarism is {}'.format(plagiarism_score))
+
+    text_plagiarism_score = calculate_text_plagiarism_score\
+        (original_text_tokens, suspicious_text_tokens, plagiarism_threshold=0.3)
+    print('The score is: {}% of plagiarism.'.format(round(text_plagiarism_score * 100, 2)))
+
+    RESULT = text_plagiarism_score
+
+    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
+    assert RESULT == 0.3333333333333333, 'Checking not working'
