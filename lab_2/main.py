@@ -2,6 +2,7 @@
 Longest common subsequence problem
 """
 from tokenizer import tokenize
+import json
 
 
 def tokenize_by_lines(text: str) -> tuple:
@@ -323,26 +324,48 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     return lcs
 
 
+def get_tokens_id(path_to_file: str, id: dict, last_index: int) -> list:
+    with open(path_to_file, encoding='utf-8') as file:
+        tokens = []
+        for line in file:
+            addition = []
+            for token in line.split():
+                try:
+                    addition.append(id[token])
+                except KeyError:
+                    id[token] = last_index + 1
+                    addition.append(id[token])
+                    last_index += 1
+            tokens.extend(addition)
+    return tuple(tokens)
+
 def tokenize_big_file(path_to_file: str) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    with open(path_to_file, 'r', encoding='utf-8') as file:
-        unique = tuple()
-        tokens = tuple()
-        line = ' '
-        while line:
-            words = tokenize_by_lines(file.read(100000))
-            for word in words:
-                if word not in unique:
-                    unique = list(unique)
-                    unique.append(word)
-                    unique = tuple(unique)
-                tokens = list(tokens)
-                tokens.append(unique.index(word))
-    return tuple(tokens)
+    with open('indexes.json', 'r', encoding='utf-8') as f:
+        id = json.load(f)
+    return get_tokens_id(path_to_file, id, len(id))
+
+
+
+    # with open(path_to_file, 'r', encoding='utf-8') as file:
+    #     unique = tuple()
+    #     tokens = tuple()
+    #     line = ' '
+    #     while line:
+    #         words = tokenize_by_lines(file.read(100000))
+    #         for word in words:
+    #             if word not in unique:
+    #                 unique = list(unique)
+    #                 unique.append(word)
+    #                 unique = tuple(unique)
+    #             tokens = list(tokens)
+    #             tokens.append(unique.index(word))
+    # return tuple(tokens)
+    #
     # lst.append(new)
     # text = tuple(lst)
     # contents = (item for item in content.split())
