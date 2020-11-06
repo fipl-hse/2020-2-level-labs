@@ -231,6 +231,7 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     if None in original_sentence_tokens or None in suspicious_sentence_tokens or None in lcs:
         return ()
     diff_indexes_tuple = ()
+    diff_indexes_list = []
     sentences = (original_sentence_tokens, suspicious_sentence_tokens)
     for sentence in sentences:
         diff_indexes = []
