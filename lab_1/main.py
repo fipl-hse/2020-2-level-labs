@@ -1,200 +1,129 @@
-"""
-Lab 1
-A concordance extraction
-"""
+def clean_tokenize_corpus(texts: list) -> list:
+    pass
 
-
-import re
-
-
-def tokenize(text: str) -> list:
-    """
-    Splits sentences into tokens, converts the tokens into lowercase, removes punctuation
-    :param text: the initial text
-    :return: a list of lowercased tokens without punctuation
-    e.g. text = 'The weather is sunny, the man is happy.'
-    --> ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    """
-    if not isinstance(text, str):
-        return []
-    text_output = re.sub('[^a-z \n]', '', text.lower()).split()
-    return text_output
-
-
-def remove_stop_words(tokens: list, stop_words: list) -> list:
-    """
-    Removes stop words
-    :param tokens: a list of tokens
-    :param stop_words: a list of stop words
-    :return: a list of tokens without stop words
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy']
-    stop_words = ['the', 'is']
-    --> ['weather', 'sunny', 'man', 'happy']
-    """
-    if not isinstance(tokens, list):
-        return []
-    list_words = [word for word in tokens if word not in stop_words]
-    return list_words
-
-
-def calculate_frequencies(tokens: list) -> dict:
-    """
-    Calculates frequencies of given tokens
-    :param tokens: a list of tokens without stop words
-    :return: a dictionary with frequencies
-    e.g. tokens = ['weather', 'sunny', 'man', 'happy']
-    --> {'weather': 1, 'sunny': 1, 'man': 1, 'happy': 1}
-    """
-    if not isinstance(tokens, list):
-        return {}
-    if len(tokens) > 0 and not isinstance(tokens[0], str):
-        return {}
-    set_words = set(tokens.copy())
-    dict_freq = {word: tokens.count(word) for word in set_words}
-    return dict_freq
-
-
-def get_top_n_words(freq_dict: dict, top_n: int) -> list:
-    """
-    Returns the most common words
-    :param freq_dict: a dictionary with frequencies
-    :param top_n: a number of the most common words to return
-    :return: a list of the most common words
-    e.g. tokens = ['weather', 'sunny', 'man', 'happy', 'and', 'dog', 'happy']
-    top_n = 1
-    --> ['happy']
-    """
-    if not isinstance(freq_dict, dict) or not isinstance(top_n, int):
-        return []
-    list_output = sorted(freq_dict, key=freq_dict.get, reverse=True)
-    return list_output[:top_n]
-
-
-def get_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int) -> list:
-    """
-    Gets a concordance of a word
-    A concordance is a listing of each occurrence of a word in a text,
-    presented with the words surrounding it
-    :param tokens: a list of tokens
-    :param word: a word-base for a concordance
-    :param left_context_size: the number of words in the left context
-    :param right_context_size: the number of words in the right context
-    :return: a concordance
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
-                    'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
-    word = 'happy'
-    left_context_size = 2
-    right_context_size = 3
-    --> [['man', 'is', 'happy', 'the', 'dog', 'is'], ['dog', 'is', 'happy', 'but', 'the', 'cat']]
-    """
-    stop = False
-    if not isinstance(tokens, list) or not isinstance(word, str) or len(word) == 0:
-        return []
-    if not isinstance(left_context_size, int) or isinstance(left_context_size, bool):
-        stop = True
-    if not isinstance(right_context_size, int) or isinstance(right_context_size, bool):
-        stop = True
-    if len(tokens) > 0 and not isinstance(tokens[0], str):
-        stop = True
-    if stop:
+    if not texts:
         return []
 
-    list_all_words = tokens.copy()
-    indexes = [ind for ind, char in enumerate(list_all_words) if char == word]
+    tokenized_text_list = []
 
-    if len(indexes) == 0 or right_context_size < 0 or left_context_size < 0:
-        return []
-    if right_context_size == 0 and left_context_size == 0:
-        return []
-    if (indexes[-1] + right_context_size) > len(tokens):
-        right_context_size = len(tokens)
+    for text in texts:
 
-    if (indexes[0] - left_context_size) < 0:
-        list_output = [tokens[0:ind + 1 + right_context_size] for ind in indexes]
-    else:
-        list_output = [tokens[ind - left_context_size:ind + 1 + right_context_size] for ind in indexes]
-    return list_output
+        # skipping non-string items in passed texts
+        if type(text) is not str:
+            continue
 
+        # removing line breaks
+        text = text.replace('<br />', ' ')
 
-def get_adjacent_words(tokens: list, word: str, left_n: int, right_n: int) -> list:
-    """
-    Gets adjacent words from the left and right context
-    :param tokens: a list of tokens
-    :param word: a word-base for the search
-    :param left_n: the distance between a word and an adjacent one in the left context
-    :param right_n: the distance between a word and an adjacent one in the right context
-    :return: a list of adjacent words
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
-                    'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
-    word = 'happy'
-    left_n = 2
-    right_n = 3
-    --> [['man', 'is'], ['dog, 'cat']]
-    """
-    concordance = get_concordance(tokens, word, left_n, right_n)
-    if len(concordance) == 0:
-        return []
+        # leaving only lowercase letters and spaces
+        stripped_text = ''
+        for symbol in text:
+            if symbol.isalpha() or symbol == ' ':
+                stripped_text += symbol.lower()
 
-    if left_n == 0:
-        output = [[concord[-1]] for concord in concordance]
-    elif right_n == 0:
-        output = [[concord[0]] for concord in concordance]
-    else:
-        output = [[context[0], context[-1]] for context in concordance]
-    return output
+        # splitting the words and adding tokenized text to the list
+        tokenized_text_list.append(stripped_text.split())
+
+    return tokenized_text_list
 
 
-def read_from_file(path_to_file: str) -> str:
-    """
-    Opens the file and reads its content
-    :return: the initial text in string format
-    """
-    with open(path_to_file, 'r', encoding='utf-8') as file_to_read:
-        data = file_to_read.read()
+class TfIdfCalculator:
+    def __init__(self, corpus):
+        pass
+        self.corpus = []
 
-    return data
+        # clean up all the garbage from the passed corpus at object construction (retain only string words)
+        if corpus:
+            for text in corpus:
+                if not text:
+                    continue
+                clean_text = []
+                for word in text:
+                    if type(word) is str:
+                        clean_text.append(word)
+                self.corpus.append(clean_text)
 
+        self.tf_values = []
+        self.idf_values = {}
+        self.tf_idf_values = []
 
-def write_to_file(content: list, path_to_file='report.txt'):
-    """
-    Writes the result in a file
-    """
-    list_strings = [' '.join(concordance) for concordance in content]
-    with open(path_to_file, 'w') as file:
-        file.write('\n'.join(list_strings))
+    def calculate_tf(self):
+        pass
 
+        for text in self.corpus:
 
-def sort_concordance(tokens: list, word: str, left_context_size: int, right_context_size: int, left_sort: bool) -> list:
-    """
-    Gets a concordance of a word and sorts it by either left or right context
-    :param tokens: a list of tokens
-    :param word: a word-base for a concordance
-    :param left_context_size: the number of words in the left context
-    :param right_context_size: the number of words in the right context
-    :param left_sort: if True, sort by the left context, False – by the right context
-    :return: a concordance
-    e.g. tokens = ['the', 'weather', 'is', 'sunny', 'the', 'man', 'is', 'happy',
-                    'the', 'dog', 'is', 'happy', 'but', 'the', 'cat', 'is', 'sad']
-    word = 'happy'
-    left_context_size = 2
-    right_context_size = 3
-    left_sort = True
-    --> [['dog', 'is', 'happy', 'but', 'the', 'cat'], ['man', 'is', 'happy', 'the', 'dog', 'is']]
-    """
-    if not isinstance(left_sort, bool):
-        return []
-    if isinstance(left_context_size, int) and left_context_size < 0 and not left_sort:
-        left_context_size = 0
-    if isinstance(right_context_size, int) and right_context_size < 0 and left_sort:
-        right_context_size = 0
+            tf_text = {}
+            len_text = len(text)
 
-    concordance = get_concordance(tokens, word, left_context_size, right_context_size)
-    if len(concordance) == 0:
-        return []
+            for word in text:
+                if word in tf_text:
+                    # incrementing tf if already in the dictionary
+                    tf_text[word] += 1 / len_text
+                else:
+                    # setting initial tf value if not
+                    tf_text[word] = 1 / len_text
 
-    if left_sort:
-        dict_raw = {context[0]: context for context in concordance}
-    else:
-        dict_raw = {context[context.index(word)+1]: context for context in concordance}
-    list_output = [dict_raw[key] for key in sorted(dict_raw)]
-    return list_output
+            # adding dictionary with tf values for the text to the list
+            self.tf_values.append(tf_text)
+        return
+
+    def calculate_idf(self):
+        pass
+
+        texts_count = len(self.corpus)
+
+        for index in range(texts_count):
+            for word in self.corpus[index]:
+
+                # skipping if idf has been already calculated for that word
+                if word not in self.idf_values:
+
+                    # we already got at least one entry
+                    word_in_texts = 1
+
+                    # and checking if we have more entries in subsequent texts
+                    next_text_index = index + 1
+                    while next_text_index < texts_count:
+                        if word in self.corpus[next_text_index]:
+                            word_in_texts += 1
+                        next_text_index += 1
+
+                    self.idf_values[word] = math.log(texts_count / word_in_texts)
+
+        return
+
+    def calculate(self):
+        pass
+
+        if not self.tf_values or not self.idf_values:
+            return
+
+        for tf_dict in self.tf_values:
+            tf_idf_dict = {}
+            for key, value in tf_dict.items():
+                tf_idf_dict[key] = value * self.idf_values[key]
+            self.tf_idf_values.append(tf_idf_dict)
+
+        return
+
+    def report_on(self, word, document_index):
+        pass
+
+        if not self.tf_idf_values or document_index >= len(self.tf_idf_values):
+            return ()
+
+        # converting tf_idf values for the provided document to a list sorted by tf_idf value, descending
+        tf_idf_values_list = []
+        for key, value in self.tf_idf_values[document_index].items():
+            tf_idf_values_list.append((key, value))
+
+        tf_idf_values_list.sort(key=lambda x: x[1], reverse=True)
+
+        # looking up for the provided word and returning it's position in the sorted list (rating) if found
+        index = 0
+        while index < len(tf_idf_values_list):
+            if tf_idf_values_list[index][0] == word:
+                return (tf_idf_values_list[index][1], index)
+            index += 1
+
+        return ()
