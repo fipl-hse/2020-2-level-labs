@@ -14,7 +14,6 @@ class BiGramTest(unittest.TestCase):
         All tests should pass for 6 score or above
     """
 
-    @unittest.skip('')
     def test_ngram_trie_check_creation(self):
         ngram = NGramTrie(2)
         self.assertEqual(ngram.size, 2)
@@ -24,7 +23,6 @@ class BiGramTest(unittest.TestCase):
 
 # -----------------------------------------------------------
 
-    @unittest.skip('')
     def test_fill_n_grams_ideal(self):
         ngram = NGramTrie(2)
         text = (((1, 2, 3, 4, 5), (2, 3, 4, 5)),)
@@ -38,7 +36,6 @@ class BiGramTest(unittest.TestCase):
         self.assertEqual(0, actual)
         self.assertEqual(ngram.n_grams, expected)
 
-    @unittest.skip('')
     def test_fill_n_grams_duplcicates_ideal(self):
         ngram = NGramTrie(2)
         sentences = (((1, 2, 1, 2, 1, 2), (10, 11, 12)),)
@@ -52,7 +49,6 @@ class BiGramTest(unittest.TestCase):
         self.assertEqual(0, actual)
         self.assertEqual(ngram.n_grams, expected)
 
-    @unittest.skip('')
     def test_fill_n_grams_empty(self):
         ngram = NGramTrie(2)
         sentences = ()
@@ -61,7 +57,6 @@ class BiGramTest(unittest.TestCase):
         self.assertEqual(0, actual)
         self.assertEqual(ngram.n_grams, expected)
 
-    @unittest.skip('')
     def test_fill_n_grams_none(self):
         ngram = NGramTrie(2)
         sentences = None
@@ -70,7 +65,6 @@ class BiGramTest(unittest.TestCase):
         self.assertEqual(1, actual)
         self.assertEqual(ngram.n_grams, expected)
 
-    @unittest.skip('')
     def test_fill_n_grams_not_tuple(self):
         ngram = NGramTrie(2)
         sentences = [(1, 2, 3, 4, 5)]
@@ -81,7 +75,6 @@ class BiGramTest(unittest.TestCase):
 
 # -------------------------------------------------------------
 
-    @unittest.skip('')
     def test_calculate_n_grams_frequencies_ideal(self):
         ngram = NGramTrie(2)
         sentences = (((1, 2, 3, 4, 5),),)
@@ -92,7 +85,6 @@ class BiGramTest(unittest.TestCase):
         self.assertEqual(expected, ngram.n_gram_frequencies)
         self.assertEqual(0, actual)
 
-    @unittest.skip('')
     def test_calculate_n_grams_frequencies_duplcicates_ideal(self):
         ngram = NGramTrie(2)
         sentences = (((1, 2, 1, 2, 1, 2), (1, 2)),)
@@ -103,7 +95,6 @@ class BiGramTest(unittest.TestCase):
         self.assertEqual(expected, ngram.n_gram_frequencies)
         self.assertEqual(0, actual)
 
-    @unittest.skip('')
     def test_calculate_n_grams_frequencies_empty(self):
         ngram = NGramTrie(2)
         sentences = ()
@@ -114,7 +105,6 @@ class BiGramTest(unittest.TestCase):
         self.assertEqual(expected, ngram.n_gram_frequencies)
         self.assertEqual(1, actual)
 
-    @unittest.skip('')
     def test_get_ngrams_frequencies_from_sentence_none(self):
         ngram = NGramTrie(2)
         sentences = None
@@ -125,7 +115,6 @@ class BiGramTest(unittest.TestCase):
         self.assertEqual(expected, ngram.n_gram_frequencies)
         self.assertEqual(1, actual)
 
-    @unittest.skip('')
     def test_get_ngrams_frequencies_from_sentence_not_tuple(self):
         ngram = NGramTrie(2)
         sentences = [(1, 2, 3, 4, 5)]
@@ -138,7 +127,6 @@ class BiGramTest(unittest.TestCase):
 
 # ----------------------------------------------------------
 
-    @unittest.skip('')
     def test_top_n_grams_ideal(self):
         ngram = NGramTrie(2)
         top_n = 2
@@ -149,7 +137,6 @@ class BiGramTest(unittest.TestCase):
         actual = ngram.top_n_grams(top_n)
         self.assertEqual(expected, actual)
 
-    @unittest.skip('')
     def test_top_n_grams_more(self):
         ngram = NGramTrie(2)
         top_n = 2000000
@@ -160,7 +147,6 @@ class BiGramTest(unittest.TestCase):
         actual = ngram.top_n_grams(top_n)
         self.assertEqual(expected, actual)
 
-    @unittest.skip('')
     def test_top_n_grams_inappropriate(self):
         ngram = NGramTrie(2)
         bad_inputs = [[], (), {}, None, True, '', -1, 0, 9.22]
@@ -171,7 +157,6 @@ class BiGramTest(unittest.TestCase):
 
 # -----------------------------------------------------------
 
-    @unittest.skip('')
     def test_calculate_log_probabilities_ideal(self):
         ngram = NGramTrie(2)
         ngram.n_gram_frequencies = {(1, 2): 10, (1, 3): 2, (2, 5): 5}
@@ -183,7 +168,6 @@ class BiGramTest(unittest.TestCase):
         self.assertEqual(ngram.n_gram_log_probabilities[(1, 3)], second_prob)
         self.assertEqual(0, actual)
 
-    @unittest.skip('')
     def test_calculate_log_probabilities_one_bi_gram(self):
         ngram = NGramTrie(2)
         ngram.n_gram_frequencies = {(1, 2): 10}
@@ -192,7 +176,6 @@ class BiGramTest(unittest.TestCase):
         self.assertEqual(ngram.n_gram_log_probabilities[(1, 2)], 0.0)
         self.assertEqual(0, actual)
 
-    @unittest.skip('')
     def test_calculate_log_probabilities_empty_frequencies(self):
         ngram = NGramTrie(2)
         ngram.n_gram_frequencies = {}
