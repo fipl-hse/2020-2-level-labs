@@ -2,7 +2,7 @@
 Language detection using n-grams
 """
 
-
+import re
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
@@ -17,14 +17,29 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    if not isinstance(text, str) or isinstance(text, bool):
+        return ()
+    list_of_tokens = []
+    list_of_sent = []
+    text = re.split(r'[.!?]', text)
+    if '' in text:
+        text.remove('')
+    for sent in text:
+        sent_new = re.sub('[^a-z\s A-Z]', '', sent.lower()).split()
+        for i, token in enumerate(sent_new):
+            list_of_tokens.append(tuple('_' + str(token) + '_'))
+            if i == len(sent_new) - 1:
+                part = list_of_tokens[:i + 1]
+                list_of_sent.append(tuple(part))
+                list_of_tokens = list_of_tokens[i + 1::]
+    return tuple(list_of_sent)
 
 
 # 4
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = dict()
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -32,7 +47,13 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not letter or not isinstance(letter, str) or isinstance(letter, bool):
+            return 1
+        self.letter = letter
+        if self.letter in self.storage.keys():
+            return 0
+        self.storage[letter] = len(self.storage.keys())
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -40,7 +61,10 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str) or isinstance(letter, bool) or letter not in self.storage.keys() or not letter:
+            return -1
+        for self.letter in self.storage.keys():
+            return self.storage[self.letter]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -48,7 +72,9 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple) or isinstance(corpus, bool) or not corpus:
+            return 1
+        self.storage = getattr(LetterStorage, '_put_letter')
 
 
 # 6
