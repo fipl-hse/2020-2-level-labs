@@ -3,6 +3,7 @@ Language detection using n-grams
 """
 import re
 
+
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
@@ -35,7 +36,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -43,7 +44,15 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str) or not letter:
+            return 1
+
+        id = 0
+        if letter not in self.storage:
+            self.storage[letter] = id
+            id += 1
+
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -51,7 +60,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        id_of_letter = self.storage[letter] if (isinstance(letter, str) and letter in self.storage) else -1
+
+        return id_of_letter
 
     def update(self, corpus: tuple) -> int:
         """
@@ -59,7 +70,14 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return 1
+
+        for word in corpus:
+            for letter in word:
+                self._put_letter(letter)
+
+        return 0
 
 
 # 6
