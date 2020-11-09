@@ -3,6 +3,10 @@ Language detection using n-grams
 """
 
 
+import re
+from math import log
+
+
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
@@ -17,14 +21,29 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    is_not_good_text = not(isinstance(text, str) and len(text))
+
+    if is_not_good_text:
+        return ()
+
+    sentence_tokens = re.split('[?!.]', text)
+
+    word_tokens = []
+    for sentence in sentence_tokens:
+        tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
+        if not len(tokens):
+            continue
+
+        word_tokens.append(tuple([tuple(['_'] + list(token) + ['_']) for token in tokens]))
+
+    return tuple(word_tokens)
 
 
 # 4
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -32,7 +51,15 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        is_not_good_letter = not(isinstance(letter, str) and len(letter) == 1)
+
+        if is_not_good_letter:
+            return 1
+
+        if letter not in self.storage:
+            self.storage[letter] = len(self.storage) + 1
+
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -40,7 +67,15 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        is_not_good_letter = not (isinstance(letter, str) and len(letter))
+
+        if is_not_good_letter:
+            return 1
+
+        if letter in self.storage:
+            return self.storage[letter]
+
+        return -1
 
     def update(self, corpus: tuple) -> int:
         """
@@ -48,7 +83,14 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+
+        if not isinstance(corpus, tuple):
+            return 1
+
+        for sentence in corpus:
+            for element in sentence:
+                self._put_letter(element)
+        return 0
 
 
 # 6
@@ -59,42 +101,117 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    is_not_good_storage = not isinstance(storage, LetterStorage)
+    is_not_good_corpus = not(isinstance(corpus, tuple) and len(corpus))
+
+    if is_not_good_storage or is_not_good_corpus:
+        return ()
+
+    encode = []
+    for sentence in corpus:
+        if isinstance(sentence[0], tuple):
+            for word in sentence:
+                encode.append(tuple((storage.get_id_by_letter(letter),) for letter in word))
+        else:
+            encode.append(tuple((storage.get_id_by_letter(letter),) for letter in sentence))
+
+    return tuple(encode)
 
 
 # 6
 class NGramTrie:
 
     def __init__(self, n: int):
-        pass
+        self.size = n
+        self.n_grams = ()
+        self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
         """
-        pass
+
+        if not isinstance(encoded_text, tuple):
+            return 1
+
+        n_grams = []
+        for sentence in encoded_text:
+            sentence_grams = []
+            for word in sentence:
+                word_grams = []
+                for ind_letter, letter in enumerate(word[:-self.size + 1]):
+                    word_grams.append(tuple([letter for letter in word[ind_letter:ind_letter + self.size]]))
+                sentence_grams.append(tuple(word_grams))
+            n_grams.append(tuple(sentence_grams))
+
+        self.n_grams = tuple(n_grams)
+        return 0
 
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        frequency_dict = {}
+        for sentence in self.n_grams:
+            print(sentence)
+            for word in sentence:
+                print('w', word)
+                for gram in word:
+                    if gram not in frequency_dict:
+                        frequency_dict[gram] = 1
+                    else:
+                        frequency_dict[gram] += 1
+
+        self.n_gram_frequencies = frequency_dict
+        if self.n_gram_frequencies:
+            return 0
+        else:
+            return 1
 
     def calculate_log_probabilities(self) -> int:
         """
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+
+        if not len(self.n_gram_frequencies):
+            return 1
+
+        prob_dict = {}
+
+        for gram in self.n_gram_frequencies:
+            p = self.n_gram_frequencies[gram] / sum([self.n_gram_frequencies[another_gram] for another_gram in
+                                                    self.n_gram_frequencies if another_gram[0] == gram[0]])
+            prob_dict[gram] = log(p)
+
+        self.n_gram_log_probabilities = prob_dict
+
+        return 0
 
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        pass
+        if not isinstance(k, int) or k < 1:
+            return ()
+
+        freq_dict = {}
+        for key, value in self.n_gram_frequencies.items():
+            freq_dict[value] = tuple(freq_dict.get(value, []) + [key])
+
+        sorted_freq = sorted(list(freq_dict.keys()), reverse=True)
+        top_grams = []
+        for i in range(k):
+            if i < len(sorted_freq):
+                top_grams.extend(freq_dict[sorted_freq[i]])
+            else:
+                break
+
+        return tuple(top_grams)
 
 
 # 8
