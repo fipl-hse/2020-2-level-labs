@@ -156,14 +156,9 @@ class NGramTrie:
         """
         frequency_dict = {}
         for sentence in self.n_grams:
-            print(sentence)
             for word in sentence:
-                print('w', word)
                 for gram in word:
-                    if gram not in frequency_dict:
-                        frequency_dict[gram] = 1
-                    else:
-                        frequency_dict[gram] += 1
+                    frequency_dict[gram] = self.n_gram_frequencies.get(gram, 0) + 1
 
         self.n_gram_frequencies = frequency_dict
         if self.n_gram_frequencies:
