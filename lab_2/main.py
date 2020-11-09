@@ -295,7 +295,6 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
         original_text_tokens.append(('',) * (len(suspicious_text_tokens) - len(original_text_tokens)))
         original_text_tokens = tuple(original_text_tokens)
 
-    stats = {}
     sentence_plagiarism = []
     sentence_lcs_length = []
     difference_indexes = []
@@ -308,12 +307,30 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
         lcs = find_lcs(original_text_tokens[sentence_index], sentence, matrix)
         difference_indexes.append(find_diff_in_sentence(original_text_tokens[sentence_index], sentence, lcs))
 
-    stats['text_plagiarism'] = calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens,
-                                                               plagiarism_threshold)
-    stats['sentence_plagiarism'] = sentence_plagiarism
-    stats['sentence_lcs_length'] = sentence_lcs_length
-    stats['difference_indexes'] = difference_indexes
-    return stats
+    s_all_len = 0
+    o_all_len = 0
+    for sentence in suspicious_text_tokens:
+        s_all_len += len(sentence)
+    s_average_line_length = s_all_len / len(suspicious_text_tokens)
+
+    for sentence in original_text_tokens:
+        o_all_len += len(sentence)
+    o_average_line_length = o_all_len / len(original_text_tokens)
+
+    return {
+        'text_plagiarism': calculate_text_plagiarism_score(original_text_tokens, suspicious_text_tokens,
+                                                           plagiarism_threshold),
+        'sentence_plagiarism': sentence_plagiarism,
+        'sentence_lcs_length': sentence_lcs_length,
+        'difference_indexes': difference_indexes,
+        'average line length in original text': o_average_line_length,
+        'average line length in suspicious text': s_average_line_length
+    }
+
+
+first_text = (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'mr', 'bruno'))
+second_text = (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'paw'))
+print(accumulate_diff_stats(first_text, second_text))
 
 
 def sentence_with_lines(counter, sentence, difference_indexes):
@@ -416,5 +433,5 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :return: a tuple with ids
     """
     f = open(path_to_file, encoding='utf-8')
-
+    f.close()
     return tuple(read_in_parts(f, 0))
