@@ -121,7 +121,7 @@ class LetterStorageTest(unittest.TestCase):
         sentence = (('_', 't', 'e', 's', 't', '_'), )
         expected = 0
         actual = letter_storage.update(sentence)
-        self.assertEqual(len(letter_storage.storage), 4)
+        self.assertEqual(len(letter_storage.storage), 3)
         self.assertEqual(expected, actual)
 
     def test_letter_storage_update_duplicates(self):
@@ -133,7 +133,7 @@ class LetterStorageTest(unittest.TestCase):
                     ('_', 't', 'e', 's', 't', '_'))
         expected = 0
         actual = letter_storage.update(sentence)
-        self.assertEqual(len(letter_storage.storage), 4)
+        self.assertEqual(len(letter_storage.storage), 3)
         self.assertEqual(expected, actual)
 
     def test_letter_storage_update_empty(self):
