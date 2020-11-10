@@ -55,7 +55,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
         return matrix
 
     return []
-
+create_zero_matrix(2, 2)
 
 def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple) -> list:
     """
@@ -86,11 +86,12 @@ def fill_lcs_matrix(first_sentence_tokens: tuple, second_sentence_tokens: tuple)
 
                 else:
                     f[i][j] = max(f[i][j - 1], f[i - 1][j])
-
+        print(f)
         return f
 
     return []
 
+fill_lcs_matrix(('they', 'like', 'this', 'toy'), ('i', 'dont', 'like', 'this'))
 
 def find_lcs_length(first_sentence_tokens: tuple, second_sentence_tokens: tuple, plagiarism_threshold: float) -> int:
     """
@@ -153,12 +154,11 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
                         if not is_num or is_none or k is False or num is False:
                             return ()
 
-                    if (lcs_matrix[0][0] > lcs_matrix[-1][-1] or len(first_sentence_tokens) != len(lcs_matrix)
-                            or len(second_sentence_tokens) != len(lcs_matrix[0])):
+                    if (lcs_matrix[0][0] > lcs_matrix[-1][-1]):
                         return ()
 
-                    i_len = len(first_sentence_tokens) - 1
-                    j_len = len(second_sentence_tokens) - 1
+                    i_len = len(first_sentence_tokens) - 1 # row
+                    j_len = len(second_sentence_tokens) - 1 # column
 
                     while i_len >= 0 and j_len >= 0:
 
@@ -184,6 +184,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
 
 
     return ()
+
 
 
 def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tuple) -> float:
