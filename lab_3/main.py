@@ -70,7 +70,7 @@ class LetterStorage:
         is_not_good_letter = not (isinstance(letter, str) and len(letter))
 
         if is_not_good_letter:
-            return 1
+            return -1
 
         if letter in self.storage:
             return self.storage[letter]
@@ -158,7 +158,7 @@ class NGramTrie:
         for sentence in self.n_grams:
             for word in sentence:
                 for gram in word:
-                    frequency_dict[gram] = self.n_gram_frequencies.get(gram, 0) + 1
+                    frequency_dict[gram] = frequency_dict.get(gram, 0) + 1
 
         self.n_gram_frequencies = frequency_dict
         if self.n_gram_frequencies:
@@ -208,6 +208,14 @@ class NGramTrie:
 
         return tuple(top_grams)
 
+
+ngram = NGramTrie(2)
+sentences = (((1, 2, 1, 2, 1, 2), (1, 2)),)
+ngram.fill_n_grams(sentences)
+
+expected = {(1, 2): 4, (2, 1): 2}
+actual = ngram.calculate_n_grams_frequencies()
+print(ngram.n_gram_frequencies)
 
 # 8
 class LanguageDetector:
