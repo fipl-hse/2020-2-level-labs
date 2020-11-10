@@ -19,7 +19,11 @@ class TokenizeBigFileTest(unittest.TestCase):
             works just fine and not fails with big text
         """
         reference_len = 36815824
+<<<<<<< HEAD
         actual = tokenize_big_file('data.txt')
+=======
+        actual = tokenize_big_file('lab_2/data.txt')
+>>>>>>> 9763061778cd0b78065767da147383fff9174dd7
         print(f"Actual tokenize_big_file function length: {len(actual)}")
         print(f"Reference tokenize_big_file function length: {reference_len}")
         self.assertTrue(actual)
@@ -31,7 +35,7 @@ class TokenizeBigFileTest(unittest.TestCase):
             works faster than  time reference
         """
         start_time = timeit.default_timer()
-        tokenize_big_file('data.txt')
+        tokenize_big_file('lab_2/data.txt')
         end_time = timeit.default_timer()
 
         expected = 17.614083574000006 * 1.1
@@ -46,7 +50,7 @@ class TokenizeBigFileTest(unittest.TestCase):
             works efficiently than given memory reference
         """
         expected = 224.9296875 * 1.1
-        actual_memory = memory_usage((tokenize_big_file, ('data.txt',)),
+        actual_memory = memory_usage((tokenize_big_file, ('lab_2/data.txt',)),
                                      interval=2)
         actual = sum(actual_memory)/len(actual_memory)
 
