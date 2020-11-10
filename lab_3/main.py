@@ -119,17 +119,16 @@ class LetterStorage:
         """
         if not isinstance(corpus, tuple):
             return 1
-        print(f'got sentence {corpus}')
+        # print(f'got sentence {corpus}')
         for sentence in corpus:
             for word in sentence:
                 for letter in word:
-                    print(f'considering {letter}')
-                    if not letter == '_':
-                        response = self._put_letter(letter)
-                        print(f'response is {response}')
-                        if response == 1:
-                            return 1
-        print(self.storage)
+                    # print(f'considering {letter}')
+                    response = self._put_letter(letter)
+                    # print(f'response is {response}')
+                    if response == 1:
+                        return 1
+        # print(self.storage)
         return 0
 
 
@@ -141,7 +140,19 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not (isinstance(corpus, tuple) and isinstance(storage, LetterStorage)):
+        return ()
+    encoded_corpus = []
+    for sentence in corpus:
+        encoded_sentence = []
+        for word in sentence:
+            encoded_word = []
+            for letter in word:
+                    encoded_word.append(storage.get_id_by_letter(letter))
+            encoded_sentence.append(tuple(encoded_word))
+        encoded_corpus.append(tuple(encoded_sentence))
+    return tuple(encoded_corpus)
+
 
 
 # 6
