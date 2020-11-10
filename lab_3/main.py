@@ -2,6 +2,7 @@
 Language detection using n-grams
 """
 import string
+import re
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -21,38 +22,27 @@ def tokenize_by_sentence(text: str) -> tuple:
         return ()
     if not any(letter in text for letter in 'abcdefghijklmnopqrstuvwxyz'):
         return ()
-    text_list = []
-    current_sent = []
-    for sign in text:
-        if not (sign in '.?!' and text[text.index(sign) + 1] == ' '
-            and text[text.index(sign) + 2] != text[text.index(sign) + 2].lower()):
-            current_sent.append(sign.lower())
-        else:
-            text_list.append(current_sent)
-            current_sent = []
     result = []
-    for current_sent in text_list:
-        result_sent = []
-        current_word = ['_']
-        for sign in current_sent:
-            if sign in 'abcdefghijklmnopqrstuvwxyz' and len(current_sent) - 1 != current_sent.index(sign):
-                current_word.append(sign)
-            elif len(current_sent) - 1 == current_sent.index(sign):
-                current_word.append(sign)
-                current_word.append('_')
-                result_sent.append(tuple(current_word))
-                current_word = ['_']
-            elif sign not in 'abcdefghijklmnopqrstuvwxyz' or len(current_sent) - 1 == current_sent.index(sign):
-                current_word.append('_')
-                if current_word != ['_', '_']:
-                    result_sent.append(tuple(current_word))
-                current_word = ['_']
-        result.append(tuple(result_sent))
-#tokenize_by_sentence('She is happy. He is happy. He is her son.')
-
-
-
-
+    current_sent = []
+    new_text = ''
+    for sign in text:
+        if sign != sign.lower():
+            new_text += 2*sign
+        elif sign in 'abcdefghijklmnopqrstuvwxyz!?,. ':
+            new_text += sign.lower()
+    new_text = new_text[1:]
+    new_text = re.split(r'[.]\ [A-Z]', new_text)
+    for sent in new_text:
+        sent = re.sub(r'[!?.,]', '', sent)
+        sent = sent.split()
+        for word in sent:
+            word = word.lower()
+            current_word = tuple('_' + ''.join(word) + '_')
+            current_sent.append(current_word)
+        current_sent = tuple(current_sent)
+        result.append(current_sent)
+        current_sent = []
+    return tuple(result)
 
 # 4
 class LetterStorage:
