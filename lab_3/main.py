@@ -1,7 +1,7 @@
 """
 Language detection using n-grams
 """
-
+import string
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -17,14 +17,49 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    if not isinstance(text, str) or len(text) == 0:
+        return ()
+    if not any(letter in text for letter in 'abcdefghijklmnopqrstuvwxyz'):
+        return ()
+    text_list = []
+    current_sent = []
+    for sign in text:
+        if not (sign in '.?!' and text[text.index(sign) + 1] == ' '
+            and text[text.index(sign) + 2] != text[text.index(sign) + 2].lower()):
+            current_sent.append(sign.lower())
+        else:
+            text_list.append(current_sent)
+            current_sent = []
+    result = []
+    for current_sent in text_list:
+        result_sent = []
+        current_word = ['_']
+        for sign in current_sent:
+            if sign in 'abcdefghijklmnopqrstuvwxyz' and len(current_sent) - 1 != current_sent.index(sign):
+                current_word.append(sign)
+            elif len(current_sent) - 1 == current_sent.index(sign):
+                current_word.append(sign)
+                current_word.append('_')
+                result_sent.append(tuple(current_word))
+                current_word = ['_']
+            elif sign not in 'abcdefghijklmnopqrstuvwxyz' or len(current_sent) - 1 == current_sent.index(sign):
+                current_word.append('_')
+                if current_word != ['_', '_']:
+                    result_sent.append(tuple(current_word))
+                current_word = ['_']
+        result.append(tuple(result_sent))
+#tokenize_by_sentence('She is happy. He is happy. He is her son.')
+
+
+
 
 
 # 4
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
+
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -32,7 +67,13 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        letters = 'abcdefghijklmnopqrstuvwxyz_'
+        if not isinstance(letter, str) or letter not in 'abcdefghijklmnopqrstuvwxyz_':
+            return 1
+        if letter not in self.storage.keys():
+            self.storage[letter] = letters.index(letter)
+        return 0
+
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -40,7 +81,10 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str) or letter not in 'abcdefghijklmnopqrstuvwxyz_' \
+                or letter not in self.storage.keys():
+            return -1
+        return self.storage[letter]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -48,7 +92,14 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return 1
+        for sentence in corpus:
+            for word in sentence:
+                for sign in word:
+                    self._put_letter(sign)
+        return 0
+
 
 
 # 6
