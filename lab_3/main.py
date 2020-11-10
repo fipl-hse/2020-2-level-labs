@@ -47,10 +47,9 @@ class LetterStorage:
         if not isinstance(letter, str) or not letter:
             return 1
 
-        id = 0
+        id = len(self.storage)
         if letter not in self.storage:
-            self.storage[letter] = id
-            id += 1
+            self.storage[letter] = id + 1
 
         return 0
 
@@ -88,7 +87,23 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not isinstance(corpus, tuple) or not corpus or not isinstance(storage, LetterStorage):
+        return ()
+
+    new_corpus = []
+
+    for sentence in corpus:
+        if not isinstance(sentence[0], tuple):
+            for letter in sentence:
+                storage._put_letter(letter)
+            new_corpus.append(tuple(tuple([storage.get_id_by_letter(letter)]) for letter in sentence))
+        else:
+            for word in sentence:
+                for letter in word:
+                    storage._put_letter(letter)
+                new_corpus.append(tuple(tuple([storage.get_id_by_letter(letter)]) for letter in word))
+
+    return tuple(new_corpus)
 
 
 # 6
