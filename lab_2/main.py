@@ -333,7 +333,8 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     :param plagiarism_threshold: a threshold
     :return: a length of the longest common subsequence
     """
-    pass
+    lcs_length = 0
+    return lcs_length
 
 
 def tokenize_big_file(path_to_file: str, ids=0) -> tuple:
@@ -343,4 +344,5 @@ def tokenize_big_file(path_to_file: str, ids=0) -> tuple:
     :param ids: an id
     :return: a tuple with ids
     """
-    pass
+    tokens_tuple = ()
+    return tokens_tuple
