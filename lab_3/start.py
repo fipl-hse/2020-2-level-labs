@@ -7,7 +7,7 @@ import lab_3.main
 if __name__ == '__main__':
 
     # here goes your function calls
-    text = '''Der Mond
+    TEXT = '''Der Mond
     Der Mond ist das hellste und das groesste Objekt in unserem Nachthimmel. 
     Oft scheint es, dass er genauso wie die Sonne beim trueben Wetter scheint. 
     Aber in der Wirklichkeit hat der Mond keine Ausstrahlung. 
@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
     text_english = lab_3.main.tokenize_by_sentence(file_first.read())
     text_german = lab_3.main.tokenize_by_sentence(file_second.read())
-    text_unknown = lab_3.main.tokenize_by_sentence(text)
+    text_unknown = lab_3.main.tokenize_by_sentence(TEXT)
 
     letter_storage.update(text_english)
     letter_storage.update(text_german)
