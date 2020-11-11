@@ -218,6 +218,8 @@ class LanguageDetector:
             return -1
         distance = []
         for first_index, first_n_gram in enumerate(first_n_grams):
+            if first_n_gram not in second_n_grams:
+                distance.append(len(second_n_grams))
             for second_index, second_n_gram in enumerate(second_n_grams):
                 if first_n_gram == second_n_gram:
                     distance.append(abs(first_index - second_index))
