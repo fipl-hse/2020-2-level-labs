@@ -22,10 +22,6 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str) or not text:
         return ()
 
-    letters_in_text = re.search(r'[a-zA-Z]', text)
-    if letters_in_text is None:
-        return ()
-
     result = []
     sentences_list = re.split(r'[.!?] ', text)
     for i, sentence in enumerate(sentences_list):
@@ -38,6 +34,9 @@ def tokenize_by_sentence(text: str) -> tuple:
         sentences_list[i] = tuple(sentences_list[i])
         result.append(tuple(sentence))
 
+    if not all(sentences_list):
+        return ()
+
     return tuple(sentences_list)
 
 
@@ -45,7 +44,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -53,7 +52,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        alphabet_and_underscore= '_abcdefghijklmnopqrstuvwxyz'
+        if not isinstance(letter, str) or not 0 < len(letter) <= 1 or letter not in alphabet_and_underscore:
+            return 1
+        if letter not in self.storage:
+            self.storage[letter] = len(self.storage)
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -61,7 +65,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if letter not in self.storage:
+            return -1
+        return self.storage[letter]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -69,7 +75,15 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return 1
+
+        for sentence in corpus:
+            for word in sentence:
+                for letter in word:
+                    self._put_letter(letter)
+
+        return 0
 
 
 # 6
@@ -80,8 +94,20 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
+        return ()
 
+    encoded_corpus = []
+    for i, sentence in enumerate(corpus):
+        encoded_corpus.append([])
+        for j, word in enumerate(sentence):
+            encoded_corpus[i].append([])
+            for letter in word:
+                encoded_corpus[i][j].append(storage.get_id_by_letter(letter))
+            encoded_corpus[i][j] = tuple(encoded_corpus[i][j])
+        encoded_corpus[i] = tuple(encoded_corpus[i])
+
+    return tuple(encoded_corpus)
 
 # 6
 class NGramTrie:
