@@ -130,7 +130,7 @@ class LetterStorage:
             for word in sentence:
                 for letter in word:
                     self._put_letter(letter)
-            return 0
+        return 0
 
 # a = LetterStorage()
 # test_text = "I am gay"
