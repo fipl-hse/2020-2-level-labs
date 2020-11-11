@@ -176,13 +176,9 @@ class LanguageDetectorTest(unittest.TestCase):
         language_detector.new_language(encoded_german, 'german')
 
         actual = language_detector.detect_language(encoded_unknown)
-<<<<<<< HEAD
         self.assertTrue(actual['english'] > actual['german'])
-    @unittest.skip('')
-=======
-        self.assertTrue(actual['german'] > actual['english'])
 
->>>>>>> upstream/master
+    @unittest.skip('')
     def test_detect_language_incorrect_text_input(self):
         language_detector = LanguageDetector((3,), 10)
 
