@@ -235,22 +235,24 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
         return ()
     if None in original_sentence_tokens or None in suspicious_sentence_tokens or None in lcs:
         return ()
-    diff_indexes_tuple = ()
-    diff_indexes_list = []
-    sentences = (original_sentence_tokens, suspicious_sentence_tokens)
-    for sentence in sentences:
-        diff_indexes = []
-        for index, token in enumerate(sentence):
-            if token not in lcs:
-                if not index or sentence[index - 1] in lcs:
-                    diff_indexes.append(index)
-                if index == len(sentence) - 1 or sentence[index + 1] in lcs:
-                    diff_indexes.append(index + 1)
-        diff_indexes_list.append(tuple(diff_indexes))
-    diff_indexes_tuple = tuple(diff_indexes_list)
-
-    return diff_indexes_tuple
-
+    diff_indexes = []
+    changed_words_indexes = [index for index, token in enumerate(suspicious_sentence_tokens) if token not in lcs]
+    for number, index in enumerate(changed_words_indexes):
+        if len(changed_words_indexes) - 1 != number:
+            if index + 1 != changed_words_indexes[number + 1] and index - 1 not in diff_indexes:
+                diff_indexes.extend([index, index + 1])
+            elif index - 1 not in changed_words_indexes and index + 1 in changed_words_indexes:
+                diff_indexes.append(index)
+            elif index - 1 in changed_words_indexes and index + 1 not in changed_words_indexes:
+                diff_indexes.append(index + 1)
+        elif len(changed_words_indexes) - 1 == number:
+            if index - 1 != changed_words_indexes[number - 1]:
+                diff_indexes.extend([index, index + 1])
+            elif index - 1 == changed_words_indexes[number - 1]:
+                diff_indexes.append(index + 1)
+    if original_sentence_tokens == ():
+        return tuple([(), tuple(diff_indexes)])
+    return tuple([tuple(diff_indexes), tuple(diff_indexes)])
 
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple,
@@ -284,7 +286,6 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
                     diff_stats['sentence_plagiarism'] += [plagiarism_score]
         diff_stats['text_plagiarism'] = sum(diff_stats['sentence_plagiarism']) / len(suspicious_text_tokens)
     return diff_stats
-
 
 
 def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tuple, accumulated_diff_stats: dict) -> str:
