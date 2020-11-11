@@ -123,7 +123,8 @@ class NGramTrie:
             sentence_of_n_grams = []
             for token in sentence:
                 token_of_n_grams = []
-                for index, letter in enumerate(token):
+                for pair in enumerate(token):
+                    index = pair[0]
                     if index != len(token) - (self.size - 1):
                         n_grams = tuple(list(token[index:self.size+index]))
                         if len(n_grams) == self.size:
@@ -203,7 +204,8 @@ class LanguageDetector:
             trie.calculate_log_probabilities()
         return 0
 
-    def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
+    @staticmethod
+    def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
         :param first_n_grams: a tuple of the top_k n-grams
@@ -255,7 +257,8 @@ class LanguageDetector:
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
-    def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+    @staticmethod
+    def _calculate_sentence_probability(n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
         :param n_gram_storage: a filled NGramTrie with log-probabilities
