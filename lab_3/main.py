@@ -82,23 +82,20 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple) or not len(corpus) :
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple) or not len(corpus):
         return ()
 
     encoded_corpus = []
 
     for sentence in corpus:
-        if isinstance(sentence[0], tuple):
-            for token in sentence:
-                for letter in token:
-                    encoded_corpus.append(tuple(storage.get_id_by_letter(letter),))
-                    tuple(encoded_corpus)
-        else:
-            for letter in sentence:
-                encoded_corpus.append(tuple(storage.get_id_by_letter(letter),))
-                tuple(encoded_corpus)
-
-        return tuple(encoded_corpus)
+        sentence_l = []
+        for word in sentence:
+            word_l = []
+            for letter in word:
+                word_l.append(storage.get_id_by_letter(letter))
+            sentence_l.append(tuple(word_l))
+        encoded_corpus.append(tuple(sentence_l))
+    return tuple(encoded_corpus)
 
 # 6
 class NGramTrie:
@@ -168,10 +165,11 @@ class NGramTrie:
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        pass
+        if not isinstance(k, int) or not self.n_gram_frequencies:
+            return ()
+        n_top = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)
 
-
-
+        return tuple(n_top[:k])
 # 8
 class LanguageDetector:
 
