@@ -1,9 +1,11 @@
 import re
+
 """
 Language detection using n-grams
 """
-def universal_input_checker(*args_checker):
 
+
+def universal_input_checker(*args_checker):
     def dec_func(f):
         def wrapper(*args, **kwargs):
             types = args_checker[1:]
@@ -20,6 +22,22 @@ def universal_input_checker(*args_checker):
     return dec_func
 
 
+def universal_input_checker_method(*args_checker):
+    def dec_func(f):
+        def wrapper(self, *args, **kwargs):
+            types = args_checker[1:]
+            for i, el in enumerate(types):
+                if not isinstance(args[i], el):
+                    return args_checker[0]
+            for x in args:
+                if x is None:
+                    return args_checker[0]
+            return f(self, *args, **kwargs)
+
+        return wrapper
+
+    return dec_func
+
 
 # 4
 def my_replace(word: list, letter_old: str, letter_new: str) -> list:
@@ -30,6 +48,7 @@ def my_replace(word: list, letter_old: str, letter_new: str) -> list:
         else:
             result.append(letter)
     return result
+
 
 @universal_input_checker((), str)
 def tokenize_by_sentence(text: str) -> tuple:
@@ -62,7 +81,6 @@ def tokenize_by_sentence(text: str) -> tuple:
             word_letters = my_replace(word_letters, "ä", "ae")
             word_letters = my_replace(word_letters, "ß", "ss")
             sentence_words.append(tuple(word_letters))
-        # result.append(tuple(sentence_words))
         if () != tuple(sentence_words):
             result.append(tuple(sentence_words))
     return tuple(result)
@@ -75,7 +93,7 @@ class LetterStorage:
         self.count = 0
         self.storage = {}
 
-
+    @universal_input_checker_method(-1, str)
     def _put_letter(self, letter: str) -> int:
         """
         Puts a letter into storage, assigns a unique id
@@ -110,7 +128,6 @@ class LetterStorage:
             for letter in word:
                 self._put_letter(letter)
         return 0
-
 
 
 # 6
