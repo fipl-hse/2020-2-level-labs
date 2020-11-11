@@ -23,8 +23,8 @@ class EncodeCorpusTest(unittest.TestCase):
         letter_storage = LetterStorage()
 
         sentences = (
-            ('_', 't', 'e', 's', 't', '_'),
-            ('_', 's', 'e', 'c', 'o', 'n', 'd', '_')
+            (('_', 't', 'e', 's', 't', '_'),),
+            (('_', 's', 'e', 'c', 'o', 'n', 'd', '_'),)
         )
 
         actual = encode_corpus(letter_storage, sentences)
@@ -41,11 +41,12 @@ class EncodeCorpusTest(unittest.TestCase):
         letter_storage = LetterStorage()
 
         sentences = (
-            ('_', 't', 'e', 's', 't', '_'),
-            ('_', 't', 'e', 's', 't', '_')
+            (('_', 't', 'e', 's', 't', '_'),),
+            (('_', 't', 'e', 's', 't', '_'),)
         )
 
         actual = encode_corpus(letter_storage, sentences)
+
         self.assertEqual(actual[0][0], actual[0][1])
     @unittest.skip('')
     def test_encode_corpus_inappropriate_sentence(self):
@@ -69,8 +70,8 @@ class EncodeCorpusTest(unittest.TestCase):
         bad_inputs = [None, 123, 'test', [], {}]
 
         sentences = (
-            ('_', 't', 'e', 's', 't', '_'),
-            ('_', 's', 'e', 'c', 'o', 'n', 'd', '_')
+            (('_', 't', 'e', 's', 't', '_'),),
+            (('_', 's', 'e', 'c', 'o', 'n', 'd', '_'),)
         )
 
         expected = ()
@@ -100,8 +101,8 @@ class EncodeCorpusTest(unittest.TestCase):
         letter_storage = LetterStorage()
 
         sentences = (
-            ('_', 't', 'e', 's', 't', '_'),
-            ('_', 's', 'e', 'c', 'o', 'n', 'd', '_')
+            (('_', 't', 'e', 's', 't', '_'),),
+            (('_', 's', 'e', 'c', 'o', 'n', 'd', '_'),)
         )
         encode_corpus(letter_storage, sentences)
         self.assertTrue(mock.called)

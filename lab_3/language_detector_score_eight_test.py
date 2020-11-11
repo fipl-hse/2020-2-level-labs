@@ -117,7 +117,7 @@ class LanguageDetectorTest(unittest.TestCase):
         first_n_grams = ((1, 2), (3, 4), (7, 8), (9, 10), (5, 6), (13, 14))
         second_n_grams = ((1, 2), (5, 6), (7, 8), (3, 4), (11, 12), (15, 16))
 
-        expected = 5
+        expected = 17
         actual = language_detector._calculate_distance(first_n_grams, second_n_grams)
         self.assertEqual(expected, actual)
     @unittest.skip('')
@@ -176,8 +176,13 @@ class LanguageDetectorTest(unittest.TestCase):
         language_detector.new_language(encoded_german, 'german')
 
         actual = language_detector.detect_language(encoded_unknown)
+<<<<<<< HEAD
         self.assertTrue(actual['english'] > actual['german'])
     @unittest.skip('')
+=======
+        self.assertTrue(actual['german'] > actual['english'])
+
+>>>>>>> upstream/master
     def test_detect_language_incorrect_text_input(self):
         language_detector = LanguageDetector((3,), 10)
 
