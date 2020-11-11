@@ -49,7 +49,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -57,7 +57,15 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        wrong_circumstances = not isinstance(letter, str) or isinstance(letter, bool) \
+                              or letter == '' or letter is None
+        if wrong_circumstances:
+            return 1
+        if letter in self.storage:
+            return 0
+        number = 0
+        self.storage[letter] = number + 1
+        #return?
 
     def get_id_by_letter(self, letter: str) -> int:
         """
