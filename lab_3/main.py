@@ -101,7 +101,7 @@ class LetterStorage:
         :return: 0 if succeeds, 1 if not
         """
         if letter in self.storage:
-            return 1
+            return 0
         else:
             self.storage[letter] = self.count
             self.count += 1
@@ -138,6 +138,7 @@ class LetterStorage:
 # print(corpus)
 # a.update(corpus)
 # 6
+@universal_input_checker((), LetterStorage, tuple)
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     Encodes sentences by replacing letters with their ids
