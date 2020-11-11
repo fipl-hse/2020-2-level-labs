@@ -266,14 +266,22 @@ class LanguageDetector:
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
-    def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+    @staticmethod
+    def _calculate_sentence_probability(n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
         :param n_gram_storage: a filled NGramTrie with log-probabilities
         :param sentence_n_grams: n-grams from a sentence
         :return: a probability of a sentence
         """
-        pass
+        if not isinstance(sentence_n_grams, tuple) or not isinstance(n_gram_storage, NGramTrie):
+            return -1.0
+        sum_probabilities = 0
+        for sentence in sentence_n_grams:
+            for word in sentence:
+                for n_gram in word:
+                    sum_probabilities += n_gram_storage.n_gram_log_probabilities.get(n_gram, 0)
+        return sum_probabilities
 
     def detect_language(self, encoded_text: tuple) -> dict:
         """
@@ -281,4 +289,13 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary with language_name: probability
         """
-        pass
+        if not isinstance(encoded_text, tuple):
+            return {}
+        probabilities_dict = {}
+        for language_name in self.n_gram_storages:
+            probabilities_dict[language_name] = []
+            for level in self.n_gram_storages[language_name].values():
+                probabilities_dict[language_name].append(self._calculate_sentence_probability(level, encoded_text))
+            res = sum(probabilities_dict[language_name]) / len(probabilities_dict[language_name])
+            probabilities_dict[language_name] = res
+        return probabilities_dict
