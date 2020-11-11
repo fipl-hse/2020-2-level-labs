@@ -194,6 +194,7 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     """
 
     plagiarism_score = -1.0
+
     if not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple):
         return plagiarism_score
 
