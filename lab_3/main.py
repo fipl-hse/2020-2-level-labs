@@ -268,8 +268,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
         if not isinstance(n_gram_storage, NGramTrie) or not isinstance(sentence_n_grams, tuple):
             return -1.0
         log_probabilities = []
-        for n_gram_sent in sentence_n_grams:
-            for n_gram in n_gram_sent:
+        for n_gram_sentence in sentence_n_grams:
+            for n_gram in n_gram_sentence:
                 for one_n_gram in n_gram:
                     if one_n_gram in n_gram_storage.n_gram_log_probabilities:
                         log_probabilities.append(n_gram_storage.n_gram_log_probabilities[one_n_gram])
