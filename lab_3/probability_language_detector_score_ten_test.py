@@ -148,10 +148,7 @@ class ProbabilityLanguageDetectorTest(unittest.TestCase):
         language_detector.new_language(eng_encoded, 'english')
         language_detector.new_language(ger_encoded, 'german')
 
-        ngram_unknown = NGramTrie(4)
-        ngram_unknown.fill_n_grams(unk_encoded)
-
-        actual = language_detector.detect_language(ngram_unknown.n_grams)
+        actual = language_detector.detect_language(unk_encoded)
         self.assertTrue(actual['german'] > actual['english'])
 
     def test_probability_language_detector_detect_incorrect(self):
