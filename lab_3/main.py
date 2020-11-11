@@ -71,7 +71,11 @@ class LetterStorage:
             return 1
         for word in corpus:
             for letter in word:
-                self._put_letter(letter)
+                if isinstance(letter, tuple):
+                    for symbol in letter:
+                        self._put_letter(symbol)
+                else:
+                    self._put_letter(letter)
         return 0
 
 
@@ -89,11 +93,15 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     encoded_corpus = []
     for sentence in corpus:
         if isinstance(sentence[0], tuple):
+            sentence_list = []
             for word in sentence:
-                encoded_corpus.append(tuple(tuple([storage.get_id_by_letter(letter)]) for letter in word))
+                sentence_list.append(tuple([storage.get_id_by_letter(letter) for letter in word]))
+            encoded_corpus.append(tuple(sentence_list))
         else:
-            encoded_corpus.append(tuple(tuple([storage.get_id_by_letter(letter)]) for letter in sentence))
+            encoded_corpus.append(tuple([storage.get_id_by_letter(letter) for letter in sentence]))
 
+    if len(encoded_corpus) == 0:
+        return tuple(encoded_corpus)
     return tuple(encoded_corpus)
 
 
@@ -168,7 +176,9 @@ class NGramTrie:
 class LanguageDetector:
 
     def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
-        pass
+        self.trie_levels = trie_levels
+        self.top_k = top_k
+        self.n_gram_storages = {}
 
     def new_language(self, encoded_text: tuple, language_name: str) -> int:
         """
@@ -177,16 +187,66 @@ class LanguageDetector:
         :param language_name: a language
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(encoded_text, tuple) or not isinstance(encoded_text[0], tuple) \
+                or not isinstance(language_name, str):
+            return 1
+        self.n_gram_storages[language_name] = {}
+        for level in self.trie_levels:
+            storage_language = NGramTrie(level)
+            storage_language.fill_n_grams(encoded_text)
+            storage_language.calculate_n_grams_frequencies()
+            storage_language.calculate_log_probabilities()
+            self.n_gram_storages[language_name][level] = storage_language
+        return 0
 
-    def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
+    @staticmethod
+    def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
         :param first_n_grams: a tuple of the top_k n-grams
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
-        pass
+        if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple):
+            return -1
+        if len(first_n_grams) != 0 and not (isinstance(first_n_grams[0], tuple) or isinstance(first_n_grams[0], str)):
+            return -1
+        if len(second_n_grams) != 0 and not (isinstance(second_n_grams[0], tuple) or isinstance(second_n_grams[0], str)):
+            return -1
+
+        #if (len(first_n_grams) == 0 and len(second_n_grams) > 0) or\
+          #     (len(second_n_grams) == 0 and len(first_n_grams) > 0):
+           # return 0
+        sum_distance = 0
+        list_all_first = []
+        list_all_second = []
+        try:
+            if isinstance(first_n_grams[0][0], int):
+                list_all_first = first_n_grams
+                list_all_second = second_n_grams
+            else:
+                for sentence in first_n_grams:
+                    if isinstance(sentence[0], int):
+                        list_all_first.append(sentence)
+                    else:
+                        for word in sentence:
+                            list_all_first.extend(list(word))
+                for sentence in second_n_grams:
+                    if isinstance(sentence[0], int):
+                        list_all_second.append(sentence)
+                    else:
+                        for word in sentence:
+                            list_all_second.extend(list(word))
+        except IndexError:
+            return 0
+
+        for ind, gram in enumerate(list_all_first):
+            if gram in list_all_second:
+                sum_distance += abs(list_all_second.index(gram) - ind)
+            else:
+                sum_distance += len(list_all_second)
+
+        return sum_distance
 
     def detect_language(self, encoded_text: tuple) -> dict:
         """
@@ -194,7 +254,23 @@ class LanguageDetector:
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary where a key is a language, a value – the distance
         """
-        pass
+        if not isinstance(encoded_text, tuple):
+            return {}
+        languages_dist = {}
+
+        for name, language in self.n_gram_storages.items():
+            languages_dist[name] = []
+            for level_int, level in language.items():
+                top_grams = level.top_n_grams(self.top_k)
+                storage_language = NGramTrie(level_int)
+                storage_language.fill_n_grams(encoded_text)
+                storage_language.calculate_n_grams_frequencies()
+                languages_dist[name].append(
+                    LanguageDetector._calculate_distance(top_grams, storage_language.top_n_grams(self.top_k))
+                )
+            languages_dist[name] = sum(languages_dist[name]) / len(languages_dist[name])
+
+        return languages_dist
 
 
 # 10
