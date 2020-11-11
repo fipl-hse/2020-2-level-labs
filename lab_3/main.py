@@ -208,7 +208,7 @@ class LanguageDetector:
         :return: a distance
         """
         if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple) or\
-                len(first_n_grams) != 0 and not (isinstance(first_n_grams[0], (str, tuple))):
+                len(first_n_grams) != 0 and not isinstance(first_n_grams[0], (str, tuple)):
             return -1
         if len(second_n_grams) != 0 and not isinstance(second_n_grams[0], (str, tuple)):
             return -1
