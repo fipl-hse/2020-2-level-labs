@@ -93,7 +93,7 @@ class LetterStorage:
         self.count = 0
         self.storage = {}
 
-    @universal_input_checker_method(-1, str)
+    @universal_input_checker_method(1, str)
     def _put_letter(self, letter: str) -> int:
         """
         Puts a letter into storage, assigns a unique id
@@ -107,6 +107,7 @@ class LetterStorage:
             self.count += 1
             return 0
 
+    @universal_input_checker_method(-1, str)
     def get_id_by_letter(self, letter: str) -> int:
         """
         Gets a unique id by a letter
@@ -118,6 +119,7 @@ class LetterStorage:
         else:
             return -1
 
+    @universal_input_checker_method(1, tuple)
     def update(self, corpus: tuple) -> int:
         """
         Fills a storage by letters from the corpus
