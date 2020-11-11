@@ -92,16 +92,11 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 
     encoded_corpus = []
     for sentence in corpus:
-        if isinstance(sentence[0], tuple):
-            sentence_list = []
-            for word in sentence:
-                sentence_list.append(tuple([storage.get_id_by_letter(letter) for letter in word]))
-            encoded_corpus.append(tuple(sentence_list))
-        else:
-            encoded_corpus.append(tuple([storage.get_id_by_letter(letter) for letter in sentence]))
+        sentence_list = []
+        for word in sentence:
+            sentence_list.append(tuple([storage.get_id_by_letter(letter) for letter in word]))
+        encoded_corpus.append(tuple(sentence_list))
 
-    if len(encoded_corpus) == 0:
-        return tuple(encoded_corpus)
     return tuple(encoded_corpus)
 
 
@@ -212,30 +207,15 @@ class LanguageDetector:
             return -1
         if len(second_n_grams) != 0 and not isinstance(second_n_grams[0], (str, tuple)):
             return -1
-
-        sum_distance = 0
-        list_all_first = []
-        list_all_second = []
-        try:
-            if isinstance(first_n_grams[0][0], int):
-                list_all_first = first_n_grams
-                list_all_second = second_n_grams
-            else:
-                for sentence in first_n_grams:
-                    for word in sentence:
-                        list_all_first.extend(list(word))
-                for sentence in second_n_grams:
-                    for word in sentence:
-                        list_all_second.extend(list(word))
-        except IndexError:
+        if len(first_n_grams) == 0 or len(second_n_grams) == 0:
             return 0
 
-        for ind, gram in enumerate(list_all_first):
-            if gram in list_all_second:
-                sum_distance += abs(list_all_second.index(gram) - ind)
+        sum_distance = 0
+        for ind, gram in enumerate(first_n_grams):
+            if gram in second_n_grams:
+                sum_distance += abs(second_n_grams.index(gram) - ind)
             else:
-                sum_distance += len(list_all_second)
-
+                sum_distance += len(second_n_grams)
         return sum_distance
 
     def detect_language(self, encoded_text: tuple) -> dict:
