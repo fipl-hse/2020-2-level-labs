@@ -2,6 +2,23 @@ import re
 """
 Language detection using n-grams
 """
+def universal_input_checker(*args_checker):
+
+    def dec_func(f):
+        def wrapper(*args, **kwargs):
+            types = args_checker[1:]
+            for i, el in enumerate(types):
+                if not isinstance(args[i], el):
+                    return args_checker[0]
+            for x in args:
+                if x is None:
+                    return args_checker[0]
+            return f(*args, **kwargs)
+
+        return wrapper
+
+    return dec_func
+
 
 
 # 4
@@ -14,7 +31,7 @@ def my_replace(word: list, letter_old: str, letter_new: str) -> list:
             result.append(letter)
     return result
 
-
+@universal_input_checker((), str)
 def tokenize_by_sentence(text: str) -> tuple:
     """
     Splits a text into sentences, sentences into tokens, tokens into letters
