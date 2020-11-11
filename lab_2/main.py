@@ -161,13 +161,13 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
 
-    is_incorrect_lcs_length = (not isinstance(lcs_length, int) or
+    checking_lcs_length = (not isinstance(lcs_length, int) or
                                isinstance(lcs_length, bool) or
                                lcs_length < 0)
-    is_incorrect_sentence = (not isinstance(suspicious_sentence_tokens, tuple) or
+    checking_sentence = (not isinstance(suspicious_sentence_tokens, tuple) or
                              None in suspicious_sentence_tokens)
 
-    if is_incorrect_lcs_length or is_incorrect_sentence:
+    if checking_lcs_length or checking_sentence:
         return -1.0
     if (len(suspicious_sentence_tokens) > 0 and lcs_length > len(suspicious_sentence_tokens) or
             lcs_length == 0 and len(suspicious_sentence_tokens) == 0):
@@ -188,17 +188,17 @@ def calculate_text_plagiarism_score(original_text_tokens: tuple, suspicious_text
     :param plagiarism_threshold: a threshold
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    is_incorrect_plagiarism_threshold = (not isinstance(plagiarism_threshold, float) or
+    checking_plagiarism_threshold = (not isinstance(plagiarism_threshold, float) or
                                          plagiarism_threshold < 0 or
                                          plagiarism_threshold > 1)
-    is_incorrect_original_text = (not isinstance(original_text_tokens, tuple) or
+    checking_original_text = (not isinstance(original_text_tokens, tuple) or
                                   None in original_text_tokens[0] or
                                   '' in original_text_tokens[0])
-    is_incorrect_suspicious_text = (not isinstance(suspicious_text_tokens, tuple) or
+    checking_suspicious_text = (not isinstance(suspicious_text_tokens, tuple) or
                                     None in suspicious_text_tokens[0] or
                                     '' in suspicious_text_tokens[0])
 
-    if is_incorrect_plagiarism_threshold or is_incorrect_original_text or is_incorrect_suspicious_text:
+    if checking_plagiarism_threshold or checking_original_text or checking_suspicious_text:
         return -1.0
 
     if len(original_text_tokens) < len(suspicious_text_tokens):
