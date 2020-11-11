@@ -17,7 +17,32 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    wrong_circumstances = not isinstance(text, str) or isinstance(text, bool) \
+                          or text == ''
+    if wrong_circumstances:
+        return ()
+    check = list(filter(lambda symbol: symbol.isalpha(), text))  # проверка на буквы в строке
+    if check == []:
+        return ()
+    tokenize_text = []
+    text = text.lower()  # привели к нижнему регистру
+    text = text.split('. ')  # разделили на предложения
+    for sentence in text:  # убираем символы
+        for element in sentence:
+            if element.isalpha() is False and element != ' ':
+                sentence = sentence.replace(element, '')
+        sentence = sentence.replace(' ', '_ _')
+        sentence = '_' + sentence + '_'  # добавляем подчеркивания
+        sentence = sentence.split(' ')  # разделяем на слова
+        for word in sentence:  # избегаем ошибки из-за знака внутри предложения
+            if len(word) <= 2:
+                sentence.remove(word)
+        sentence_tuple = []  # будущий кортеж предложения
+        for word in sentence:  # превращаем слова в кортежи
+            sentence_tuple.append(tuple(word))
+        tokenize_text.append(tuple(sentence_tuple))  # добавляем кортежи предложений
+    tokenize_text = tuple(tokenize_text)
+    return tokenize_text
 
 
 # 4
