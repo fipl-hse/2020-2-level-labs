@@ -1,39 +1,18 @@
 """
 Longest common subsequence implementation starter
 """
-from lab_2 import main
-if __name__ == "__main__":
-    original_text = "The cat is sleeping. So do Sam"
-    suspicious_text = "The dog is eating. So do I"
+import lab_2.main
 
-    first_sentence_tokens = main.tokenize_by_lines(original_text)
+if __name__ == '__main__':
+    original_text_tokens = (('i', 'have', 'a', 'cat'),
+                            ('its', 'body', 'is', 'covered', 'with', 'bushy', 'white', 'fur'))
+    suspicious_text_tokens = (('i', 'have', 'a', 'cat'),
+                              ('its', 'body', 'is', 'covered', 'with', 'shiny', 'black', 'fur'))
+    accumulated_diff_stats = lab_2.main.accumulate_diff_stats(original_text_tokens, suspicious_text_tokens)
 
-    second_sentence_tokens = main.tokenize_by_lines(suspicious_text)
+    expected = open('lab_2/diff_report_example.txt', 'r', errors='coerce').read().split()
+    actual = lab_2.main.create_diff_report(original_text_tokens, suspicious_text_tokens, accumulated_diff_stats).split()
 
-    plagiarism_threshold = 0.3
-    zero_matrix = main.create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
-
-    plagiarism_threshold = 0.3
-    zero_matrix = main.create_zero_matrix(len(first_sentence_tokens), len(second_sentence_tokens))
-
-    lcs_matrix = main.fill_lcs_matrix(first_sentence_tokens[0], second_sentence_tokens[0])
-    print('LCS matrix: ', lcs_matrix)
-
-    lcs_length = main.find_lcs_length(first_sentence_tokens[0], second_sentence_tokens[0], plagiarism_threshold)
-    print('LCS -', lcs_length)
-
-    lcs = main.find_lcs(first_sentence_tokens[0], second_sentence_tokens[0], lcs_matrix)
-    print('LCS for the the first sentence: ', lcs)
-
-    calculate_plagiarism_score = main.calculate_plagiarism_score(lcs_length, second_sentence_tokens[0])
-    print('Plagiarism score -', calculate_plagiarism_score)
-
-    text_plagiarism_score = main.calculate_text_plagiarism_score(first_sentence_tokens[0], second_sentence_tokens[0])
-    print('Plagiarism score for the text -', text_plagiarism_score)
-
-    RESULT = text_plagiarism_score
-    assert RESULT == text_plagiarism_score, "Sorry, currently not working"
-
-
-
-
+    RESULT = actual
+    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
+    assert RESULT == expected, 'Results differ'
