@@ -207,16 +207,12 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
-        if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple):
+        if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple) or\
+                len(first_n_grams) != 0 and not (isinstance(first_n_grams[0], (str, tuple))):
             return -1
-        if len(first_n_grams) != 0 and not (isinstance(first_n_grams[0], tuple) or isinstance(first_n_grams[0], str)):
-            return -1
-        if len(second_n_grams) != 0 and not (isinstance(second_n_grams[0], tuple) or isinstance(second_n_grams[0], str)):
+        if len(second_n_grams) != 0 and not isinstance(second_n_grams[0], (str, tuple)):
             return -1
 
-        #if (len(first_n_grams) == 0 and len(second_n_grams) > 0) or\
-          #     (len(second_n_grams) == 0 and len(first_n_grams) > 0):
-           # return 0
         sum_distance = 0
         list_all_first = []
         list_all_second = []
@@ -226,17 +222,11 @@ class LanguageDetector:
                 list_all_second = second_n_grams
             else:
                 for sentence in first_n_grams:
-                    if isinstance(sentence[0], int):
-                        list_all_first.append(sentence)
-                    else:
-                        for word in sentence:
-                            list_all_first.extend(list(word))
+                    for word in sentence:
+                        list_all_first.extend(list(word))
                 for sentence in second_n_grams:
-                    if isinstance(sentence[0], int):
-                        list_all_second.append(sentence)
-                    else:
-                        for word in sentence:
-                            list_all_second.extend(list(word))
+                    for word in sentence:
+                        list_all_second.extend(list(word))
         except IndexError:
             return 0
 
