@@ -90,7 +90,6 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     if not isinstance(corpus, tuple) or not isinstance(storage, LetterStorage):
         return ()
-    storage.update(corpus)
     encoded_corpus = []
     for sentence in corpus:
         encoded_sentence = []
@@ -129,7 +128,8 @@ class NGramTrie:
                         n_grams = tuple(list(token[index:self.size+index]))
                         if len(n_grams) == self.size:
                             token_of_n_grams.append(n_grams)
-                sentence_of_n_grams.append(tuple(token_of_n_grams))
+                if token_of_n_grams:
+                    sentence_of_n_grams.append(tuple(token_of_n_grams))
             text_of_n_grams.append(tuple(sentence_of_n_grams))
         self.n_grams = tuple(text_of_n_grams)
         return 0
@@ -139,13 +139,10 @@ class NGramTrie:
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        n_grams = []
         for sentence in self.n_grams:
             for token in sentence:
                 for element in token:
-                    n_grams.append(element)
-        self.n_gram_frequencies = {n_gram: n_grams.count(n_gram)
-                                   for n_gram in n_grams}
+                    self.n_gram_frequencies[element] = self.n_gram_frequencies.get(element, 0) + 1
         if not self.n_gram_frequencies:
             return 1
         return 0
@@ -183,7 +180,7 @@ class NGramTrie:
 # 8
 class LanguageDetector:
 
-    def __init__(self, trie_levels: tuple = (2, 5, 7), top_k: int = 10):
+    def __init__(self, trie_levels: tuple = (2, 3, 5), top_k: int = 10):
         self.trie_levels = trie_levels
         self.top_k = top_k
         self.n_gram_storages = {}
@@ -283,3 +280,18 @@ class ProbabilityLanguageDetector(LanguageDetector):
         """
         if not isinstance(encoded_text, tuple) or None in encoded_text:
             return {}
+        eng_probability = []
+        ger_probability = []
+        prob_dict = {}
+        for size in self.trie_levels:
+            if 'english' in self.n_gram_storages:
+                eng_probability.append(self._calculate_sentence_probability(self.n_gram_storages['english'][size],
+                                                                            encoded_text))
+            if 'german' in self.n_gram_storages:
+                ger_probability.append(self._calculate_sentence_probability(self.n_gram_storages['german'][size],
+                                                                            encoded_text))
+        if eng_probability:
+            prob_dict['english'] = mean(eng_probability)
+        if ger_probability:
+            prob_dict['german'] = mean(ger_probability)
+        return prob_dict
