@@ -46,14 +46,15 @@ def tokenize_by_sentence(text: str) -> tuple:
          )
     """
     result = []
-    extra = set("""1234567890-=!@#$%^&*()_+,/<>?;:'"[{}]"'""")
+    extra = set("""1234567890-=@#$%^&*()_+,/<>;:'"[{}]"'""")
     for letter in extra:
         text = text.replace(letter, "")
 
-    text = text.lower().split(".")
+    # text = text.lower().split(r"[.?!]")
+    text = re.split(r"[.?!]", text.lower())
     for sentence in text:
         sentence_words = []
-        sentence = sentence.split(r"[.?!]")
+        sentence = sentence.split()
         for word in sentence:
             word_letters = list("_" + word + "_")
             word_letters = my_replace(word_letters, "ö", "oe")
@@ -61,7 +62,9 @@ def tokenize_by_sentence(text: str) -> tuple:
             word_letters = my_replace(word_letters, "ä", "ae")
             word_letters = my_replace(word_letters, "ß", "ss")
             sentence_words.append(tuple(word_letters))
-        result.append(tuple(sentence_words))
+        # result.append(tuple(sentence_words))
+        if () != tuple(sentence_words):
+            result.append(tuple(sentence_words))
     return tuple(result)
 
 
