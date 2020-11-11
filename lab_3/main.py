@@ -126,12 +126,17 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        for word in corpus:
-            for letter in word:
-                self._put_letter(letter)
-        return 0
+        for sentence in corpus:
+            for word in sentence:
+                for letter in word:
+                    self._put_letter(letter)
+            return 0
 
-
+# a = LetterStorage()
+# test_text = "I am gay"
+# corpus = tokenize_by_sentence(test_text)
+# print(corpus)
+# a.update(corpus)
 # 6
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
@@ -140,7 +145,17 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    result = []
+    for sentence in corpus:
+        result_sentence = []
+        for word in sentence:
+            result_word = []
+            for letter in word:
+                id = storage.get_id_by_letter(letter)
+                result_word.append(id)
+            result_sentence.append(tuple(result_word))
+        result.append(tuple(result_sentence))
+    return tuple(result)
 
 
 # 6
