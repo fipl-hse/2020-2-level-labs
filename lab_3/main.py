@@ -3,6 +3,7 @@ Language detection using n-grams
 """
 import re
 import string
+import math
 
 
 # 4
@@ -165,14 +166,29 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not self.n_gram_frequencies:
+            return 1
+
+        for n_gram, frequency in self.n_gram_frequencies.items():
+            probability = frequency / sum([self.n_gram_frequencies[n_gram1] for n_gram1 in self.n_gram_frequencies if
+                                           n_gram1[:-1] == n_gram[:-1]])
+            self.n_gram_log_probabilities[n_gram] = math.log(probability)
+
+        return 0
 
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        pass
+        if not isinstance(k, int) or isinstance(k, bool) or k <= 0:
+            return ()
+
+        if k > len(self.n_gram_frequencies):
+            k = len(self.n_gram_frequencies)
+
+        sorted_n_gram_frequencies = sorted(self.n_gram_frequencies.items(), key=lambda i: i[1], reverse=True)
+        return tuple([sorted_n_gram_frequencies[i][0] for i in range(k)])
 
 
 # 8
