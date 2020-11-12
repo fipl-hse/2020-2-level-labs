@@ -19,29 +19,25 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    if not isinstance(text, str) \
-            or isinstance(text, bool) \
-            or not text \
-            or text == '$#&*@#$*#@)':
+    if not isinstance(text, str) or not text:
         return ()
 
-    for element in text:
-        if element == '.' or element == '!' or element == '?':
-            text_splited = text.split(element)
-            text_output = []
+    text_splited = re.split('[.!?] ', text)
+    text_output = []
 
-            for sentence in text_splited:
-                if len(sentence):
-                    tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
-                    letters = []
+    for sentence in text_splited:
+        if len(sentence):
+            tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
+            letters = []
 
-                    for word in tokens:
-                        word = list('_' + word + '_')
-                        letters.append(tuple(word))
+            for word in tokens:
+                word = list('_' + word + '_')
+                letters.append(tuple(word))
 
-                    text_output.append(tuple(letters))
+        if len(letters) > 2:
+            text_output.append(tuple(letters))
 
-            return tuple(text_output)
+    return tuple(text_output)
 
 
 # 4
@@ -109,13 +105,13 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     encoded_number = []
     encoded_sentence = []
     encoded_corpus = []
+
     for sentence in corpus:
-            if sentence[0] == sentence[1]:
-                for word in sentence:
-                    for letter in word:
-                        encoded_number.append(storage.get_id_by_letter(letter))
-                        encoded_sentence.append(tuple(encoded_number))
-                        encoded_corpus.append(tuple(encoded_sentence)
+        for word in sentence:
+            for letter in word:
+                encoded_number.append(storage.get_id_by_letter(letter))
+                encoded_sentence.append(tuple(encoded_number))
+                encoded_corpus.append(tuple(encoded_sentence))
 
     return tuple(encoded_corpus)
 
