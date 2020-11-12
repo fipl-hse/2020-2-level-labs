@@ -2,6 +2,7 @@
 Longest common subsequence implementation starter
 """
 <<<<<<< HEAD
+<<<<<<< HEAD
 from lab_2 import main
 text_sentences_tokenize = main.tokenize_by_lines('I have a cat.\nHis name is Bruno')
 print(text_sentences_tokenize)
@@ -31,6 +32,8 @@ print(diff_report)
 RESULT = diff_report
 assert RESULT, 'Program not working'
 =======
+=======
+>>>>>>> c99b707b69c86137a72bf1ec2ef4150512dbbf6d
 import lab_2.main
 
 if __name__ == '__main__':
@@ -46,4 +49,7 @@ if __name__ == '__main__':
     RESULT = actual
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == expected, 'Results differ'
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> c99b707b69c86137a72bf1ec2ef4150512dbbf6d

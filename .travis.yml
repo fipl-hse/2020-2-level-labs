@@ -8,21 +8,18 @@ dist: xenial
 
 cache: pip
 
-before_install:
-  - git lfs install
-
-before_script:
-  - git lfs pull
-
 install:
   - pip3 install -r requirements.txt
 
 stages:
   - pr_name_check
 <<<<<<< HEAD
+<<<<<<< HEAD
   # - pr_name_check
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> c99b707b69c86137a72bf1ec2ef4150512dbbf6d
   - test
   - lint
   - start_py
@@ -35,7 +32,6 @@ jobs:
   include:
     - stage: pr_name_check
       script:
-        - python3 config/check_pr_title.py --pr-name $(echo ${PR_TITLE// /_})
         - if [[ ${TRAVIS_PULL_REQUEST} != "false" && $PR_TITLE != *"[skip_name]"* ]]; then
             python3 config/check_pr_title.py --pr-name $(echo ${PR_TITLE// /_});
           fi
