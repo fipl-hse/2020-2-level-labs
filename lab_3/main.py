@@ -252,6 +252,8 @@ class LanguageDetector:
             if n_gram in second_n_grams:
                 idx_second = second_n_grams_indexes[n_gram]
                 dist += abs(idx_first - idx_second)
+            else:
+                dist += len(second_n_grams)
         return dist
 
     @input_checker
@@ -332,5 +334,5 @@ class ProbabilityLanguageDetector(LanguageDetector):
         
         for language in prob_dict:
             mean = sum(prob_dict[language]) / len(prob_dict[language])
-            prob_dict[language] = abs(mean)
+            prob_dict[language] = mean
         return prob_dict
