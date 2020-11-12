@@ -62,7 +62,8 @@ class LetterStorage:
         if wrong_circumstances:
             return 1
         number = 0
-        self.storage[letter] = number + 1
+        if letter not in self.storage:  # записываем букву и её индекс в словарь
+            self.storage[letter] = number + 1
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -71,7 +72,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if letter not in self.storage:
+            return -1
+        return self.storage[letter]  # возвращаем индекс буквы
 
     def update(self, corpus: tuple) -> int:
         """
@@ -79,7 +82,14 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        wrong_circumstances = not isinstance(corpus, tuple) or isinstance(corpus, bool)
+        if wrong_circumstances:
+            return 1
+        for sentence in corpus:
+            for word in sentence:
+                for symbol in word:
+                    LetterStorage._put_letter(self, symbol) #поправить вызов?
+        return 0
 
 
 # 6
@@ -90,7 +100,26 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    wrong_circumstances = not isinstance(corpus, tuple) or isinstance(corpus, bool)
+    if wrong_circumstances:
+        return ()
+    storage = LetterStorage(corpus)
+    encoded_corpus = []
+    for sentence in corpus:  # делаем из корпуса список со списками из строк
+        encoded_sentence = []
+        for word in sentence:
+            encoded_sentence.append(list(word))
+        encoded_corpus.append(encoded_sentence)
+    for sentence in encoded_corpus:  # меняем буквы на индексы
+        for word in sentence:
+            for index, symbol in enumerate(word):
+                if symbol == '_':
+                    word.remove(symbol)
+                    word.insert(index, 0)
+                else:
+                    word.remove(symbol)
+                    word.insert(index, storage[symbol])
+    return encoded_corpus #порешать проблемы с функцией?
 
 
 # 6
