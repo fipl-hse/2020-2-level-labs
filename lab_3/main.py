@@ -266,7 +266,7 @@ class LanguageDetector:
         """
 
         unknown_storages = {}
-        for levle in self.trie_levels:
+        for level in self.trie_levels:
             trie = NGramTrie(level)
             trie.fill_n_grams(encoded_text)
             trie.calculate_n_grams_frequencies()
