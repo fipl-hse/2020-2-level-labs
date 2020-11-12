@@ -6,7 +6,7 @@ Language detection using n-grams
 import math
 import re
 
-from decorators import input_checker
+from lab_3.decorators import input_checker
 
 
 # 4
