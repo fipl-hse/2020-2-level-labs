@@ -334,5 +334,5 @@ class ProbabilityLanguageDetector(LanguageDetector):
         
         for language in prob_dict:
             mean = sum(prob_dict[language]) / len(prob_dict[language])
-            prob_dict[language] = mean
+            prob_dict[language] = abs(mean)
         return prob_dict
