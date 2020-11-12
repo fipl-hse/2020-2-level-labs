@@ -2,10 +2,6 @@
 Language detection using n-grams
 """
 
-#1
-def tokenize_by_sentence(text: str) -> tuple:
-  pass
-
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -21,14 +17,48 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    if not isinstance(text, str) or not text:
+        return ()
+
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v', 'w', 'x', 'y', 'z']
+
+    for symbol in text.lower():
+        if symbol in letters:
+            break
+    else:
+        return ()
+
+    text = text.replace('!', '.')
+    text = text.replace('?', '.')
+
+    tuple_sentences = tuple(text.lower().split('. '))
+    result = []
+
+    for sentence in tuple_sentences:
+        tokens = sentence.split()
+        tokens_by_letter = []  # for a sentence
+        for token in tokens:
+            token_by_letter = ''
+            for symbol in token:
+                if symbol in letters:
+                    token_by_letter += symbol
+            token_by_letter = '_' + token_by_letter + '_'
+            token_output = tuple(list(token_by_letter))
+            if len(token_output) == 2:  # if token_by_letter = ('_', '_')
+                continue
+            tokens_by_letter.append(token_output)
+        tokens_by_letter = tuple(tokens_by_letter)  # for a sentence
+        result.append(tokens_by_letter)
+    return tuple(result)
 
 
 # 4
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
+        self.unique_id = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -36,7 +66,14 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str) or not letter:
+            return 1
+        if letter in self.storage:
+            return 0
+
+        self.unique_id += 1
+        self.storage[letter] = self.unique_id
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -44,7 +81,10 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str) or not letter or letter not in self.storage:
+            return -1
+
+        return self.storage[letter]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -52,7 +92,14 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple) or corpus is None:
+            return 1
+
+        for sentence in corpus:
+            for token in sentence:
+                for letter in token:
+                    self._put_letter(letter)
+        return 0
 
 
 # 6
@@ -63,28 +110,73 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not isinstance(corpus, tuple) or not isinstance(storage, LetterStorage):
+        return ()
+
+    corpus_output = []
+    for sentence in corpus:
+        sentence_token_id = []
+        for token in sentence:
+            token_id = []
+            for letter in token:
+                id_letter = storage.get_id_by_letter(letter)
+                token_id.append(id_letter)
+            token_id = tuple(token_id)
+            sentence_token_id.append(token_id)
+        sentence_token_id = tuple(sentence_token_id)
+        corpus_output.append(sentence_token_id)
+    return tuple(corpus_output)
 
 
 # 6
 class NGramTrie:
 
     def __init__(self, n: int):
-        pass
+        self.size = n
+        self.n_grams = ()
+        self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(encoded_text, tuple) or encoded_text is None:
+            return 1
+
+        self.n_grams = []
+        for sentence in encoded_text:
+            sentence_with_n_grams = []
+            for token in sentence:
+                token_with_n_grams = []
+                for id_unique in token[:-1]:
+                    index_id = token.index(id_unique)
+                    n_gram = (token[index_id: index_id + self.size])
+                    token_with_n_grams.append(n_gram)
+                token_with_n_grams = tuple(token_with_n_grams)
+                sentence_with_n_grams.append(token_with_n_grams)
+            sentence_with_n_grams = tuple(sentence_with_n_grams)
+            self.n_grams.append(sentence_with_n_grams)
+        self.n_grams = tuple(self.n_grams)
+        return 0
 
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(self.n_grams, tuple) or not self.n_grams:
+            return 1
+
+        for sentence in self.n_grams:
+            for token in sentence:
+                for bi_gram in token:
+                    if bi_gram in self.n_gram_frequencies:
+                        self.n_gram_frequencies[bi_gram] += 1
+                    else:
+                        self.n_gram_frequencies[bi_gram] = 1
+        return 0
 
     def calculate_log_probabilities(self) -> int:
         """
