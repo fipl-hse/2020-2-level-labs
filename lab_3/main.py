@@ -322,13 +322,13 @@ class ProbabilityLanguageDetector(LanguageDetector):
         prob_dict = {}
         for language in self.n_gram_storages:
             prob_dict[language] = []
-            for n in self.trie_levels:
-                unknown_trie = NGramTrie(n)
+            for level in self.trie_levels:
+                unknown_trie = NGramTrie(level)
                 unknown_trie.fill_n_grams(encoded_text)
                 unknown_trie.calculate_n_grams_frequencies()
                 unknown_trie.calculate_log_probabilities()
 
-                trie = self.n_gram_storages[language][n]
+                trie = self.n_gram_storages[language][level]
                 prob = self._calculate_sentence_probability(trie, unknown_trie.n_grams)
                 prob_dict[language] += [prob]
 
