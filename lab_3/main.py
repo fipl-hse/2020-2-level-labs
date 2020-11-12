@@ -26,7 +26,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
 
     def clean_text(text):
-        return re.sub('[^\.!\?\w\s]', '', text)
+        return re.sub(r'[^\.!\?\w\s]', '', text)
 
     def split_to_sentences(text):
         return tuple(re.findall(r'([A-Z][\w\s]+)[\.!\?]', text))
@@ -46,8 +46,8 @@ def tokenize_by_sentence(text: str) -> tuple:
 
 
 # 4
-class LetterStorage(object):
-    
+class LetterStorage:
+
     def __init__(self: object):
         self.storage = {}
 
@@ -107,11 +107,11 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         return tuple(encode_sentence(sent) for sent in text)
 
     return encode_text(corpus)
-  
+
 
 # 6
 class NGramTrie:
-    
+
     def __init__(self: object, n: int):
         self.size = n
         self.n_grams = ()
@@ -137,7 +137,7 @@ class NGramTrie:
 
         def split_text_to_sents(text):
             return tuple(split_sent_to_words(sent) for sent in text)
-        
+
         self.n_grams = split_text_to_sents(encoded_text)
         return 0
 
@@ -149,10 +149,10 @@ class NGramTrie:
         """
         if not self.n_grams:
             return 1
-        
+
         def calculate_frequencies(n_gram):
             freqs[n_gram] = freqs.get(n_gram, 0) + 1
-        
+
         def split_word_to_n_grams(word):
             return tuple(calculate_frequencies(n_gram) for n_gram in word)
 
@@ -225,18 +225,18 @@ class LanguageDetector:
         :return: 0 if succeeds, 1 if not
         """
         self.n_gram_storages[language_name] = {}
-        
-        for n in self.trie_levels:
-            trie = NGramTrie(n)
+
+        for level in self.trie_levels:
+            trie = NGramTrie(level)
             trie.fill_n_grams(encoded_text)
             trie.calculate_n_grams_frequencies()
             trie.calculate_log_probabilities()
-            self.n_gram_storages[language_name].update({n: trie})
+            self.n_gram_storages[language_name].update({level: trie})
         return 0
 
+    @staticmethod
     @input_checker
-    def _calculate_distance(self: object,
-                            first_n_grams: tuple,
+    def _calculate_distance(first_n_grams: tuple,
                             second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
@@ -244,7 +244,7 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
-        second_n_grams_indexes = {n_gram: idx for idx, n_gram 
+        second_n_grams_indexes = {n_gram: idx for idx, n_gram
                                   in enumerate(second_n_grams)
                                   }
         dist = 0
@@ -266,12 +266,12 @@ class LanguageDetector:
         """
 
         unknown_storages = {}
-        for n in self.trie_levels:
-            trie = NGramTrie(n)
+        for levle in self.trie_levels:
+            trie = NGramTrie(level)
             trie.fill_n_grams(encoded_text)
             trie.calculate_n_grams_frequencies()
             trie.calculate_log_probabilities()
-            unknown_storages.update({n: trie})
+            unknown_storages.update({level: trie})
 
         dist = {}
         for language in self.n_gram_storages:
@@ -293,9 +293,9 @@ class LanguageDetector:
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
+    @staticmethod
     @input_checker
-    def _calculate_sentence_probability(self: object,
-                                        n_gram_storage: NGramTrie,
+    def _calculate_sentence_probability(n_gram_storage: NGramTrie,
                                         sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
@@ -331,7 +331,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
                 trie = self.n_gram_storages[language][n]
                 prob = self._calculate_sentence_probability(trie, unknown_trie.n_grams)
                 prob_dict[language] += [prob]
-        
+
         for language in prob_dict:
             mean = sum(prob_dict[language]) / len(prob_dict[language])
             prob_dict[language] = abs(mean)

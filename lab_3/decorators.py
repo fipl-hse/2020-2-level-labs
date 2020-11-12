@@ -25,7 +25,7 @@ def has_none(arg):
 
 def input_checker(func):
     name = func.__name__
-    def wrapper(*args, **kwargs):  # todo account for kwargs
+    def wrapper(*args, **kwargs):
         annot = get_type_hints(func)
 
         if name == '_calculate_distance':
