@@ -19,7 +19,7 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    if not isinstance(text, str) or not text:
+    if not isinstance(text, str):
         return ()
 
     result = []
@@ -52,7 +52,7 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        alphabet_and_underscore= '_abcdefghijklmnopqrstuvwxyz'
+        alphabet_and_underscore = '_abcdefghijklmnopqrstuvwxyz'
         if not isinstance(letter, str) or not 0 < len(letter) <= 1 or letter not in alphabet_and_underscore:
             return 1
         if letter not in self.storage:
@@ -109,25 +109,56 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 
     return tuple(encoded_corpus)
 
+
 # 6
 class NGramTrie:
 
     def __init__(self, n: int):
-        pass
+        self.size = n
+        self.n_grams = ()
+        self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(encoded_text, tuple):
+            return 1
+
+        self.n_grams = list(self.n_grams)
+
+        for i, sentence in enumerate(encoded_text):
+            self.n_grams.append([])
+            for j, word in enumerate(sentence):
+                self.n_grams[i].append([])
+                for k in range(len(word) + 1 - self.size):
+                    n_gram = word[k:k+self.size] if k + self.size < len(word) else word[k:]
+                    self.n_grams[i][j].append(tuple(n_gram))
+                self.n_grams[i][j] = tuple(self.n_grams[i][j])
+            self.n_grams[i] = tuple(self.n_grams[i])
+        self.n_grams = tuple(self.n_grams)
+
+        return 0
 
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not self.n_grams:
+            return 1
+
+        for sentence in self.n_grams:
+            for word in sentence:
+                for n_gram in word:
+                    if n_gram not in self.n_gram_frequencies:
+                        self.n_gram_frequencies[n_gram] = 1
+                    else:
+                        self.n_gram_frequencies[n_gram] += 1
+
+        return 0
 
     def calculate_log_probabilities(self) -> int:
         """
