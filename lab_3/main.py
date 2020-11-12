@@ -61,11 +61,9 @@ class LetterStorage:
                               or letter == '' or letter is None
         if wrong_circumstances:
             return 1
-        if letter in self.storage:
-            return 0
         number = 0
         self.storage[letter] = number + 1
-        #return?
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
