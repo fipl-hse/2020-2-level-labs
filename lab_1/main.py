@@ -3,7 +3,6 @@ Lab 1
 A concordance extraction
 """
 
-
 import re
 
 
@@ -195,6 +194,9 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     if left_sort:
         dict_raw = {context[0]: context for context in concordance}
     else:
-        dict_raw = {context[context.index(word)+1]: context for context in concordance}
+        dict_raw = {context[context.index(word) + 1]: context for context in concordance}
     list_output = [dict_raw[key] for key in sorted(dict_raw)]
     return list_output
+
+
+t
