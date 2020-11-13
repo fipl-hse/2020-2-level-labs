@@ -24,16 +24,12 @@ class FindLcsOptimizedTest(unittest.TestCase):
         actual = find_lcs_length_optimized(sentence_tokens_first_text,
                                            sentence_tokens_second_text,
                                            plagiarism_threshold)
-<<<<<<< HEAD
-        reference_lcs = 3910
-=======
         reference_lcs = 3899
         almost_equal = 3910
->>>>>>> cd2909df66a6e74a9c6263dfcf079164a12bfdd3
         print(f"Actual find_lcs_length_optimized function lcs is {actual}")
         print(f"Reference find_lcs_length_optimized function lcs is {reference_lcs}")
         self.assertTrue(actual)
-        self.assertEqual(reference_lcs, actual)
+        self.assertEqual(almost_equal, actual)
 
     def test_find_lcs_length_optimized_quickest_time(self):
         """
