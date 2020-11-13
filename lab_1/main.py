@@ -198,5 +198,3 @@ def sort_concordance(tokens: list, word: str, left_context_size: int, right_cont
     list_output = [dict_raw[key] for key in sorted(dict_raw)]
     return list_output
 
-
-t
