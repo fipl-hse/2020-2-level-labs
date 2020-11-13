@@ -19,7 +19,7 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    if not isinstance(text, str) or not len(text):
+    if not isinstance(text, str) or len(text) == 0:
         return ()
 
     sentences = re.split('[!?.] ', text)
@@ -27,7 +27,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     for sentence in sentences:
         list_tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
-        if not len(list_tokens):
+        if len(list_tokens) == 0:
             continue
         list_letters.append(tuple(tuple(['_'] + list(token) + ['_']) for token in list_tokens))
 
@@ -132,7 +132,7 @@ class NGramTrie:
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        if not len(self.n_grams):
+        if len(self.n_grams) == 0:
             return 1
 
         for sentence in self.n_grams:
@@ -146,7 +146,7 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        if not len(self.n_gram_frequencies):
+        if len(self.n_gram_frequencies) == 0:
             return 1
 
         for n_gram in self.n_gram_frequencies:
@@ -162,7 +162,7 @@ class NGramTrie:
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        if not isinstance(k, int) or k < 0 or not len(self.n_gram_frequencies):
+        if not isinstance(k, int) or k < 0 or len(self.n_gram_frequencies) == 0:
             return ()
         return tuple(sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)[:k])
 
@@ -196,7 +196,8 @@ class LanguageDetector:
             self.n_gram_storages[language_name][trie_level] = storage_lang
         return 0
 
-    def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
+    @staticmethod
+    def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
         :param first_n_grams: a tuple of the top_k n-grams
@@ -234,10 +235,9 @@ class LanguageDetector:
                 text_storage = NGramTrie(trie_level)
                 text_storage.fill_n_grams(encoded_text)
                 text_storage.calculate_n_grams_frequencies()
-                text_detector = LanguageDetector(self.trie_levels, self.top_k)
                 lang_distance[language_name].append(
-                    text_detector._calculate_distance(n_gram_trie.top_n_grams(self.top_k),
-                                                      text_storage.top_n_grams(self.top_k)))
+                    self._calculate_distance(n_gram_trie.top_n_grams(self.top_k),
+                                             text_storage.top_n_grams(self.top_k)))
 
             lang_distance[language_name] = sum(lang_distance[language_name]) / len(lang_distance[language_name])
 
@@ -247,7 +247,8 @@ class LanguageDetector:
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
-    def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+    @staticmethod
+    def _calculate_sentence_probability(n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
         :param n_gram_storage: a filled NGramTrie with log-probabilities
