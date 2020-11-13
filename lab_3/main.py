@@ -17,14 +17,31 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    if not isinstance(text, str):
+        return tuple()
+
+    raw_sentences = text.split('.')
+    result = []
+    separators = ".,?!@#$%^&*()[]<>{}-+:;/"
+    for sentence in raw_sentences:
+        raw_sentence = ''.join(letter for letter in sentence.lower() if letter not in separators)
+        raw_words = raw_sentence.split()
+        tokenized_sentence = []
+        for word in raw_words:
+            if word != '':
+                word = tuple(['_'] + list(word) + ['_'])
+                tokenized_sentence.append(word)
+        if tokenized_sentence:
+            result.append(tuple(tokenized_sentence))
+    return tuple(result)
 
 
 # 4
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
+        self.count = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -32,7 +49,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str) or letter == '':
+            return 1
+        if letter not in self.storage:
+            self.storage[letter] = self.count
+            self.count += 1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -40,7 +62,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if letter not in self.storage:
+            return -1
+        return self.storage[letter]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -48,7 +72,13 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return 1
+        for sentence in corpus:
+            for token in sentence:
+                for letter in token:
+                    self._put_letter(letter)
+        return 0
 
 
 # 6
