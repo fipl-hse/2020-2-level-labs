@@ -47,7 +47,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 class LetterStorage:
 
     def __init__(self):
-        LetterStorage.storage = {}
+        self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -120,10 +120,10 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 class NGramTrie:
 
     def __init__(self, n: int):
-        NGramTrie.size = n
-        NGramTrie.n_grams = ()
-        NGramTrie.n_gram_frequencies = {}
-        NGramTrie.n_gram_log_probabilities = {}
+        self.size = n
+        self.n_grams = ()
+        self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
@@ -200,9 +200,9 @@ class NGramTrie:
 class LanguageDetector:
 
     def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
-        LanguageDetector.trie_levels = trie_levels
-        LanguageDetector.top_k = top_k
-        LanguageDetector.n_gram_storages = {}
+        self.trie_levels = trie_levels
+        self.top_k = top_k
+        self.n_gram_storages = {}
 
     def new_language(self, encoded_text: tuple, language_name: str) -> int:
         """
@@ -251,14 +251,10 @@ class LanguageDetector:
         for character in encoded_text:
             if not isinstance(character, tuple):
                 return {}
+
         print(self.n_gram_storages)
-        top_eng = self.n_gram_storages['english'][3]
-        print('see:', top_eng)
-
-        for language in self.n_gram_storages.keys():
-
-            a = NGramTrie(3)  # self.n_gram_storages[language].values()
-            print(a)
+        for language in self.n_gram_storages:
+            print(language, a)
             NGramTrie.fill_n_grams(a, self.n_gram_storages[language])
             print(self.top_k, NGramTrie.top_n_grams(a, self.top_k))
             print({language: self._calculate_distance(encoded_text, NGramTrie.top_n_grams(a, self.top_k))
@@ -287,10 +283,6 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :return: a dictionary with language_name: probability
         """
         pass
-
-
-
-
 
 
 
