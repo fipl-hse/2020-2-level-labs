@@ -148,7 +148,7 @@ class NGramTrie:
             for word in sentence:
                 n_gram_word = []
                 index = 0
-                while index + self.size <= len(word):
+                while index + self.size <= len(word):  # проходимся по словам и берем нужные n-граммы
                     n_gram_word.append(word[index:index + self.size])
                     index += 1
                 n_gram_sentence.append(tuple(n_gram_word))
