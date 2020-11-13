@@ -104,8 +104,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
                           or not isinstance(storage, LetterStorage) or isinstance(storage, bool)
     if wrong_circumstances:
         return ()
-    #storage = LetterStorage(corpus) если что удалить
-    storage.update(corpus)  # заполнили словарь индексами из предложений
+    storage.update(corpus)  # заполнили словарь буквами предложений и присвоили им индексы
     encoded_corpus = []
     encoded_corpus_tuple = []
     for sentence in corpus:  # делаем из корпуса список со списками из строк
@@ -116,19 +115,15 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     for sentence in encoded_corpus:  # меняем буквы на индексы
         for word in sentence:
             for index, symbol in enumerate(word):
-                if symbol == '_':
                     word.remove(symbol)
-                    word.insert(index, 0)
-                else:
-                    word.remove(symbol)
-                    word.insert(index, storage.storage[symbol])
-    for sentence in encoded_corpus:
+                    word.insert(index, storage.get_id_by_letter(symbol))
+    for sentence in encoded_corpus:  # превращаем список в кортеж
         sentence_tuple = []
         for word in sentence:
             sentence_tuple.append(tuple(word))
         encoded_corpus_tuple.append(tuple(sentence_tuple))
     encoded_corpus_tuple = tuple(encoded_corpus_tuple)
-    return encoded_corpus_tuple #использовать метод get it by letter
+    return encoded_corpus_tuple
 
 
 # 6
