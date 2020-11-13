@@ -130,14 +130,30 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 class NGramTrie:
 
     def __init__(self, n: int):
-        pass
+        self.size = n
+        self.n_grams = ()  #кортеж?
+        self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = 0
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        wrong_circumstances = not isinstance(encoded_text, tuple) or isinstance(encoded_text, bool)
+        if wrong_circumstances:
+            return 1
+        for sentence in encoded_text:
+            n_gram_sentence = []
+            for word in sentence:
+                n_gram_word = []
+                index = 0
+                while index + self.size <= len(word):
+                    n_gram_word.append(word[index:index + self.size])
+                    index += 1
+                n_gram_sentence.append(tuple(n_gram_word))
+            self.n_grams += tuple(n_gram_sentence)
+        return 0
 
     def calculate_n_grams_frequencies(self) -> int:
         """
