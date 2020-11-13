@@ -88,7 +88,7 @@ class LetterStorage:
         for sentence in corpus:
             for word in sentence:
                 for symbol in word:
-                    LetterStorage._put_letter(self, symbol) #поправить вызов?
+                   self._put_letter(symbol)
         return 0
 
 
@@ -100,11 +100,14 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    wrong_circumstances = not isinstance(corpus, tuple) or isinstance(corpus, bool)
+    wrong_circumstances = not isinstance(corpus, tuple) or isinstance(corpus, bool) \
+                          or not isinstance(storage, LetterStorage) or isinstance(storage, bool)
     if wrong_circumstances:
         return ()
-    storage = LetterStorage(corpus)
+    #storage = LetterStorage(corpus) если что удалить
+    storage.update(corpus)  # заполнили словарь индексами из предложений
     encoded_corpus = []
+    encoded_corpus_tuple = []
     for sentence in corpus:  # делаем из корпуса список со списками из строк
         encoded_sentence = []
         for word in sentence:
@@ -118,8 +121,14 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
                     word.insert(index, 0)
                 else:
                     word.remove(symbol)
-                    word.insert(index, storage[symbol])
-    return encoded_corpus #порешать проблемы с функцией?
+                    word.insert(index, storage.storage[symbol])
+    for sentence in encoded_corpus:
+        sentence_tuple = []
+        for word in sentence:
+            sentence_tuple.append(tuple(word))
+        encoded_corpus_tuple.append(tuple(sentence_tuple))
+    encoded_corpus_tuple = tuple(encoded_corpus_tuple)
+    return encoded_corpus_tuple #использовать метод get it by letter
 
 
 # 6
