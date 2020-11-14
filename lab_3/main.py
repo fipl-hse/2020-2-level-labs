@@ -162,7 +162,18 @@ class NGramTrie:
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        wrong_circumstances = not isinstance(self.n_grams, tuple) or isinstance(self.n_grams, bool) \
+                              or self.n_grams == ()
+        if wrong_circumstances:
+            return 1
+        for sentence in self.n_grams:
+            for word in sentence:
+                for n_gram in word:
+                    if n_gram in self.n_gram_frequencies:
+                        self.n_gram_frequencies[n_gram] += 1
+                    else:
+                        self.n_gram_frequencies[n_gram] = 1
+        return 0
 
     def calculate_log_probabilities(self) -> int:
         """
