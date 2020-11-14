@@ -1,7 +1,8 @@
 """
 Language detection using n-grams
 """
-
+import re
+from math import log
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
