@@ -19,16 +19,17 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     if not isinstance(text, str) or len(text) == 0:
         return ()
-    tokens = re.split(r'[!.?] ', text)
+    
+    sentences = re.split('[!?.] ', text)
     spl_tok = []
-    for token in tokens:
-        token_list = re.sub('[^a-z \n]', '', token.lower()).split()
-        if not token_list:
-            return ()
-        spl_tok.append(tuple(tuple(['_'] + list(word) + ['_']) for word in token_list))
+
+    for sentence in sentences:
+        list_tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
+        if len(list_tokens) == 0:
+            continue
+        spl_tok.append(tuple(tuple(['_'] + list(token) + ['_']) for token in list_tokens))
+
     return tuple(spl_tok)
-
-
 # 4
 class LetterStorage:
 
