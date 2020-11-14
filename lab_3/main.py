@@ -131,7 +131,7 @@ class NGramTrie:
 
     def __init__(self, n: int):
         self.size = n
-        self.n_grams = ()  #кортеж?
+        self.n_grams = ()
         self.n_gram_frequencies = {}
         self.n_gram_log_probabilities = 0
 
@@ -143,6 +143,7 @@ class NGramTrie:
         wrong_circumstances = not isinstance(encoded_text, tuple) or isinstance(encoded_text, bool)
         if wrong_circumstances:
             return 1
+        n_gram_text = []
         for sentence in encoded_text:
             n_gram_sentence = []
             for word in sentence:
@@ -151,8 +152,9 @@ class NGramTrie:
                 while index + self.size <= len(word):  # проходимся по словам и берем нужные n-граммы
                     n_gram_word.append(word[index:index + self.size])
                     index += 1
-                n_gram_sentence.append(tuple(n_gram_word))
-            self.n_grams += tuple(n_gram_sentence)
+                n_gram_sentence.append(tuple(n_gram_word))  # записываем слова в предложения
+            n_gram_text.append(tuple(n_gram_sentence))  # предложения в текст
+            self.n_grams = tuple(n_gram_text)
         return 0
 
     def calculate_n_grams_frequencies(self) -> int:
