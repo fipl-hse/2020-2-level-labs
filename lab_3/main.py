@@ -3,6 +3,9 @@ Language detection using n-grams
 """
 
 
+import re
+
+
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
@@ -17,14 +20,34 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    if not isinstance(text, str):
+        return ()
+
+    text = re.sub('[!?.]', '.', text).lower()
+    text = re.sub('[^a-z .]', '', text)
+
+    current_text = []
+    for sentence in text.split('.'):
+        current_sentence = []
+        for word in sentence.split():
+            current_word = ['_']
+            for character in word:
+                if character.isalpha():
+                    current_word.append(character)
+            current_word.append('_')
+            current_sentence.append(tuple(current_word))
+        current_text.append(tuple(current_sentence))
+    if current_text[-1] == ():
+        current_text = current_text[:-1]
+    return tuple(current_text)
 
 
 # 4
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
+        self.n_size = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -32,7 +55,13 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str):
+            return 1
+
+        if letter not in self.storage:
+            self.n_size += 1
+            self.storage[letter] = self.n_size
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -40,7 +69,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if letter in self.storage:
+            return self.storage[letter]
+        return -1
 
     def update(self, corpus: tuple) -> int:
         """
@@ -48,7 +79,14 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return 1
+
+        for sentence in corpus:
+            for word in sentence:
+                for character in word:
+                    self._put_letter(character)
+        return 0
 
 
 # 6
