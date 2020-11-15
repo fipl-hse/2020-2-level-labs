@@ -29,7 +29,7 @@ class LanguageDetectorTest(unittest.TestCase):
         letter_storage = LetterStorage()
         language_detector = LanguageDetector((3,), 10)
 
-        file = open('lab_3/Frank_Baum.txt', 'r', encoding='utf-8')
+        file = open('Frank_Baum.txt', 'r', encoding='utf-8')
         text = tokenize_by_sentence(file.read())
         letter_storage.update(text)
         encoded_text = encode_corpus(letter_storage, text)

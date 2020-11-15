@@ -25,6 +25,7 @@ class ProbabilityLanguageDetectorTest(unittest.TestCase):
         self.assertEqual(language_detector.n_gram_storages, {})
 
     def test_probability_language_detector_calculate_probability_ideal(self):
+        print('launching test')
         english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
         german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
         unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
