@@ -1,8 +1,8 @@
 """
 Longest common subsequence problem
 """
-from tokenizer import tokenize
 import json
+from tokenizer import tokenize
 
 
 def tokenize_by_lines(text: str) -> tuple:
@@ -326,17 +326,17 @@ def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_toke
     return lcs
 
 
-def get_tokens_id(path_to_file: str, id: dict, last_index: int) -> list:
+def get_tokens_id(path_to_file: str, i_d: dict, last_index: int) -> list:
     with open(path_to_file, encoding='utf-8') as file:
         tokens = []
         for line in file:
             addition = []
             for token in line.split():
                 try:
-                    addition.append(id[token])
+                    addition.append(i_d[token])
                 except KeyError:
-                    id[token] = last_index + 1
-                    addition.append(id[token])
+                    i_d[token] = last_index + 1
+                    addition.append(i_d[token])
                     last_index += 1
             tokens.extend(addition)
     return tuple(tokens)
@@ -347,6 +347,6 @@ def tokenize_big_file(path_to_file: str) -> tuple:
     :param path_to_file: a path
     :return: a tuple with ids
     """
-    with open('indexes.json', 'r', encoding='utf-8') as f:
-        id = json.load(f)
-    return get_tokens_id(path_to_file, id, len(id))
+    with open('indexes.json', 'r', encoding='utf-8') as file:
+        i_d = json.load(file)
+    return get_tokens_id(path_to_file, i_d, len(i_d))
