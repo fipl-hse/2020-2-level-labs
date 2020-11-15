@@ -259,7 +259,8 @@ class LanguageDetector:
             self.n_gram_storages[language_name][level] = ngram
         return 0
 
-    def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
+    @staticmethod
+    def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
         :param first_n_grams: a tuple of the top_k n-grams
@@ -314,7 +315,8 @@ class LanguageDetector:
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
-    def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+    @staticmethod
+    def _calculate_sentence_probability(n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
         :param n_gram_storage: a filled NGramTrie with log-probabilities
@@ -332,23 +334,24 @@ class ProbabilityLanguageDetector(LanguageDetector):
                     probability += n_gram_storage.n_gram_log_probabilities.get(n_gram, 0)
         return probability
 
-    def detect_language(self, encoded_t: tuple) -> dict:
+    def detect_language(self, encoded_text: tuple) -> dict:
         """
         Detects the language the unknown sentence is written in using sentence probability in different languages
-        :param encoded_t: a tuple of sentences with tuples of tokens split into letters
+        :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary with language_name: probability
         """
-        if not isinstance(encoded_t, tuple):
+        if not isinstance(encoded_text, tuple):
             return {}
-        if len(encoded_t) == 0:
+        if len(encoded_text) == 0:
             return {}
-        if not isinstance(encoded_t[0], tuple):
+        if not isinstance(encoded_text[0], tuple):
             return {}
 
         output = {}
         for language in self.n_gram_storages:
             output[language] = 0
             for lvl in self.n_gram_storages[language].keys():
-                output[language] += self._calculate_sentence_probability(self.n_gram_storages[language][lvl], encoded_t)
+                first_arg = self.n_gram_storages[language][lvl]
+                output[language] += self._calculate_sentence_probability(first_arg, encoded_text)
             output[language] = output[language] / len(self.trie_levels)
         return output
