@@ -69,9 +69,11 @@ class LetterStorage:
         """
         if not isinstance(corpus, tuple):
             return 1
-        for token in corpus:
-            for letter in token:
-                self._put_letter(letter)
+        for sentence in corpus:
+            for token in sentence:
+                for letter in token:
+                    self._put_letter(letter)
+
         return 0
 
 # 6
@@ -122,7 +124,9 @@ class NGramTrie:
                     word_l.append(tuple((word[i], word[i+1])))
                 sentence_l.append(tuple(word_l))
             bi_gram.append(tuple(sentence_l))
+    
         self.n_grams = tuple(bi_gram)
+
 
         return 0
 
@@ -131,6 +135,8 @@ class NGramTrie:
         Fills in the n-gramб storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
+
+
         if not self.n_grams:
             return 1
         for sentence in self.n_grams:
@@ -184,6 +190,8 @@ class LanguageDetector:
         :return: 0 if succeeds, 1 if not
         """
         pass
+
+
 
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
