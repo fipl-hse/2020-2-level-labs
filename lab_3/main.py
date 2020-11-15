@@ -353,21 +353,25 @@ class ProbabilityLanguageDetector(LanguageDetector):
 
         output = {}
         for language in self.n_gram_storages.keys():
-            output[language] = []
+            output[language] = 0
+            for level in self.n_gram_storages[language].keys():
+                output[language] += self._calculate_sentence_probability(self.n_gram_storages[language][level], encoded_text)
+            output[language] = output[language] / len(self.trie_levels)
+        return output
 
-        for level in self.trie_levels:
-
-            ngram = NGramTrie(level)
-            if (ngram.fill_n_grams(
-                    encoded_text) or ngram.calculate_n_grams_frequencies() or ngram.calculate_log_probabilities()):
-                return 1
-            sentence_n_grams = ngram.n_grams
-
-            for language in output.keys():
-                output[language].append(self._calculate_sentence_probability(self.n_gram_storages[language], sentence_n_grams))
-
-        for language in output.keys():
-            probabilities = output[language]
-            output[language] = sum(probabilities) / len(probabilities)
+        # for level in self.trie_levels:
+        #
+        #     ngram = NGramTrie(level)
+        #     if (ngram.fill_n_grams(
+        #             encoded_text) or ngram.calculate_n_grams_frequencies() or ngram.calculate_log_probabilities()):
+        #         return 1
+        #     sentence_n_grams = ngram.n_grams
+        #
+        #     for language in output.keys():
+        #         output[language].append(self._calculate_sentence_probability(self.n_gram_storages[language], sentence_n_grams))
+        #
+        # for language in output.keys():
+        #     probabilities = output[language]
+        #     output[language] = sum(probabilities) / len(probabilities)
 
         return output
