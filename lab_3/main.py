@@ -44,6 +44,16 @@ def check_tuple(given_tuple: tuple) -> bool:
                                                                         and given_tuple[0]))
 
 
+def get_grams_only(grams):
+    all_grams = []
+    for sentence in grams:
+        for word in sentence:
+            for gram in word:
+                all_grams.append(gram)
+
+    return tuple(all_grams)
+
+
 # 4
 class LetterStorage:
 
@@ -115,12 +125,15 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 
     encode = []
     for sentence in corpus:
+
         encoded_sentence = []
         if isinstance(sentence[0], tuple):
             for word in sentence:
                 encoded_sentence.append(tuple(storage.get_id_by_letter(letter) for letter in word))
+
         else:
             encoded_sentence.append(tuple(storage.get_id_by_letter(letter) for letter in sentence))
+
         encode.append(tuple(encoded_sentence))
 
     return tuple(encode)
@@ -146,12 +159,16 @@ class NGramTrie:
 
         n_grams = []
         for sentence in encoded_text:
+
             sentence_grams = []
             for word in sentence:
+
                 word_grams = []
                 for ind_letter, letter in enumerate(word[:-self.size + 1]):
                     word_grams.append(tuple([letter for letter in word[ind_letter:ind_letter + self.size]]))
+
                 sentence_grams.append(tuple(word_grams))
+
             n_grams.append(tuple(sentence_grams))
 
         self.n_grams = tuple(n_grams)
@@ -208,11 +225,8 @@ class NGramTrie:
 
         sorted_freq = sorted(list(freq_dict.keys()), reverse=True)
         top_grams = []
-        for i in range(k):
-            if i < len(sorted_freq):
-                top_grams.extend(freq_dict[sorted_freq[i]])
-            else:
-                break
+        for i in range(min(k, len(sorted_freq))):
+            top_grams.extend(freq_dict[sorted_freq[i]])
 
         return tuple(top_grams)
 
@@ -223,11 +237,7 @@ class LanguageDetector:
     def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
         self.trie_levels = trie_levels
         self.top_k = top_k
-        self.n_gram_storages = {} # {'language': {2: NGramTrie.n_grams
-                                  #               3: {1, 2, 3}}
-                                  #  'language2': {2: {1, 2}
-                                  #                3: {1, 2, 3}}
-                                  # }
+        self.n_gram_storages = {}
 
     def new_language(self, encoded_text: tuple, language_name: str) -> int:
         """
@@ -236,13 +246,11 @@ class LanguageDetector:
         :param language_name: a language
         :return: 0 if succeeds, 1 if not
         """
-        if not isinstance(encoded_text, tuple) and not isinstance(language_name, str):
+        is_not_good_encoded_text = not(isinstance(encoded_text, tuple) and len(encoded_text) and encoded_text[0])
+        if is_not_good_encoded_text or not isinstance(language_name, str):
             return 1
 
-        self.n_gram_storages[language_name] = {}
-        for n in self.trie_levels:
-            self.n_gram_storages[language_name][n] = NGramTrie(n)
-
+        self.n_gram_storages[language_name] = {n: NGramTrie(n) for n in self.trie_levels}
 
         for n in self.trie_levels:
             self.n_gram_storages[language_name][n].fill_n_grams(encoded_text)
@@ -264,11 +272,13 @@ class LanguageDetector:
             return 0
 
         distance_dict = {}
-
         second_length = len(second_n_grams)
-        for ind_1, n_gram1 in enumerate(first_n_grams):
+
+        for n_gram1 in set(first_n_grams):
+
             if n_gram1 in second_n_grams:
-                distance_dict[n_gram1] = abs(ind_1 - second_n_grams.index(n_gram1))
+                distance_dict[n_gram1] = abs(first_n_grams.index(n_gram1) - second_n_grams.index(n_gram1))
+
             else:
                 distance_dict[n_gram1] = second_length
 
@@ -282,25 +292,35 @@ class LanguageDetector:
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters (encoded???)
         :return: a dictionary where a key is a language, a value – the distance
         """
-        if not isinstance(encoded_text, tuple):
+        is_not_good_encoded_text = not(isinstance(encoded_text, tuple) and len(encoded_text) and encoded_text[0])
+
+        if is_not_good_encoded_text or not len(self.n_gram_storages):
             return {}
 
         n = self.n_gram_storages['english'].keys()
 
         encoded_text_dict = {}
+
         for i in n:
-            i_NGramTrie = NGramTrie(i)
-            i_NGramTrie.fill_n_grams(encoded_text_dict)
-            encoded_text_dict[i] = i_NGramTrie.n_grams
+            i_ngramtrie = NGramTrie(i)
+            i_ngramtrie.fill_n_grams(encoded_text)
+            encoded_text_dict[i] = i_ngramtrie.n_grams
 
         distance_dict = {}
+
         for language in self.n_gram_storages.keys():
+
             sum_dict = []
             for i in n:
-                sum_dict.append(self._calculate_distance(self.n_gram_storages[language][i], encoded_text_dict[i]))
+                unknown_k_grams = get_grams_only(encoded_text_dict[i][:self.top_k])[:self.top_k]
+                language_k_grams = get_grams_only(self.n_gram_storages[language][i].n_grams[:self.top_k])[:self.top_k]
+
+                sum_dict.append(self._calculate_distance(unknown_k_grams, language_k_grams))
+
             distance_dict[language] = sum(sum_dict)
 
         return distance_dict
+
 
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
