@@ -34,7 +34,7 @@ def create_zero_matrix(rows: int, columns: int) -> list:
     """
     req=[isinstance (rows,int), isinstance(columns,int), not isinstance(rows,bool),
          not isinstance(columns,bool)]
-    if all (req) and rows>0 and columns>0:
+    if all  (req) and rows>0 and columns>0:
         matrix = [[0] * columns for i in range(rows)]
         return(matrix)
     return  []
@@ -106,7 +106,7 @@ def find_lcs(first_sentence_tokens: tuple, second_sentence_tokens: tuple, lcs_ma
             if element_1 == element_2:
                 lcs.append(element_1)
                 index_1-=1
-                index_2-=2
+                index_2-=1
             elif lcs_matrix[index_1 - 1][index_2] > lcs_matrix[index_1][index_2 - 1]:
                 index_1-=1
             else:
@@ -171,8 +171,23 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
     :param lcs: a longest common subsequence
     :return: a tuple with tuples of indexes
     """
-    pass
-
+    if not isinstance (original_sentence_tokens,tuple) or not isinstance(suspicious_sentence_tokens,tuple)or not isinstance(lcs,tuple)\
+    or not  all(isinstance(i, str) for i in original_sentence_tokens)\
+    or not all(isinstance(i, str) for i in suspicious_sentence_tokens)\
+    or not all(isinstance(i,str) for i in lcs):
+        return ()
+    diff_in_sent=[]
+    sentences=(original_sentence_tokens,suspicious_sentence_tokens)
+    for sent in sentences:
+        diff=[]
+        for ind,el in enumerate(sent):
+            if el not in lcs:
+                if  ind==0 or sent[ind-1] in lcs:
+                    diff.append(ind)
+                if  ind==len(sent)-1 or sent[ind+1] in lcs :
+                    diff.append(ind+1)
+        diff_in_sent.append(tuple(diff))
+    return tuple(diff_in_sent)
 
 def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
     """
@@ -187,7 +202,33 @@ def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: t
      'sentence_lcs_length': list,
      'difference_indexes': list}
     """
-    pass
+    if not isinstance(original_text_tokens,tuple) or not isinstance(suspicious_text_tokens,tuple) \
+    or not all (isinstance(i,tuple) for i in original_text_tokens)  or not all (isinstance(i,tuple) for i in suspicious_text_tokens)\
+    or not all(isinstance(i,str) for tok in original_text_tokens for i in tok) \
+    or not all(isinstance(i, str) for tok in suspicious_text_tokens for i in tok) \
+    or not isinstance(plagiarism_threshold,float) or not 0<=plagiarism_threshold<=1:
+        return {}
+    if len(original_text_tokens)<len(suspicious_text_tokens):
+        original_text_tokens += ((),) * (len(suspicious_text_tokens) - len(original_text_tokens))
+    sentence_plagiarism=[]
+    sentence_lcs_length=[]
+    difference_indexes=[]
+    for el_1, el_2 in zip(original_text_tokens,suspicious_text_tokens):
+            lcs_len=find_lcs_length(el_1,el_2,plagiarism_threshold)
+            sentence_lcs_length.append(lcs_len)
+            sentence_plagiarism.append(calculate_plagiarism_score(lcs_len,el_2))
+            lcs_matrix=fill_lcs_matrix(el_1,el_2)
+            lcs=find_lcs(el_1,el_2,lcs_matrix)
+            difference_indexes.append(find_diff_in_sentence(el_1,el_2,lcs))
+    states={
+        'text_plagiarism': calculate_text_plagiarism_score(original_text_tokens,suspicious_text_tokens,plagiarism_threshold),
+        'sentence_plagiarism': sentence_plagiarism,
+        'sentence_lcs_length': sentence_lcs_length,
+        'difference_indexes': difference_indexes
+    }
+    return states
+
+
 
 
 def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tuple, accumulated_diff_stats: dict) -> str:
@@ -198,7 +239,13 @@ def create_diff_report(original_text_tokens: tuple, suspicious_text_tokens: tupl
     :param accumulated_diff_stats: a dictionary with statistics for each pair of sentences
     :return: a report
     """
-    pass
+    if not isinstance(original_text_tokens, tuple) or not isinstance(suspicious_text_tokens, tuple) \
+    or not all(isinstance(i, tuple) for i in original_text_tokens) or not all(isinstance(i, tuple) for i in suspicious_text_tokens) \
+    or not isinstance(accumulated_diff_stats,dict):
+        return ''
+
+    
+
 
 
 def find_lcs_length_optimized(first_sentence_tokens: tuple, second_sentence_tokens: tuple,
