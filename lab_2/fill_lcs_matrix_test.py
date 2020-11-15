@@ -162,7 +162,7 @@ class FillLcsMatrixTest(unittest.TestCase):
                              [1, 1, 1],
                              [1, 1, 1]]
 
-        sentence_first = ('the', 'dog', 'sleeps')
+        sentence_first = ('the','dog','sleeps')
         sentence_second = ('the', 'cat', 'is', 'sleeping')
 
         actual = fill_lcs_matrix(sentence_first, sentence_second)
