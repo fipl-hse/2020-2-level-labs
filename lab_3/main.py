@@ -2,6 +2,7 @@
 Language detection using n-grams
 """
 import re
+from math import log
 
 
 # 4
@@ -24,16 +25,18 @@ def tokenize_by_sentence(text: str) -> tuple:
     tokenized_text = []
 
     text = text.lower()
-    text = re.split(r'[.?!]', text)
+    text = re.split('[.?!]', text)
 
-    for sent in text:
-        if sent == '':
+    for sentence in text:
+        if sentence == '':
             continue
-        sent = re.sub(r'[^a-z \n]', sent)
+        sent = re.sub('[^a-z \n]', '', sentence)
         sent = sent.split()
         tokenized_sent = []
+        if not len(sent):
+            continue
         for word in sent:
-            word = [_] + list(word) + [_]
+            word = ['_'] + list(word) + ['_']
             tokenized_sent.append(tuple(word))
         tokenized_text.append(tuple(tokenized_sent))
 
@@ -93,42 +96,95 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if (not isinstance(storage, LetterStorage) or
+            not isinstance(corpus, tuple)):
+        return ()
+
+    encoded_corpus = []
+
+    for sent in corpus:
+        listed_sent = []
+        for word in sent:
+            encoded_word = [storage.get_id_by_letter(letter) for letter in word]
+            listed_sent.append(tuple(encoded_word))
+        encoded_corpus.append(tuple(listed_sent))
+
+    return tuple(encoded_corpus)
 
 
 # 6
 class NGramTrie:
 
     def __init__(self, n: int):
-        pass
+        self.size = n
+        self.n_grams = ()
+        self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(encoded_text, tuple):
+            return 1
+        listed_n_grams = []
+        for sent in encoded_text:
+            listed_sent = []
+            for word in sent:
+                listed_word = []
+                n_grams_number = len(word) - self.size + 1
+                count = 0
+                while len(listed_word) < n_grams_number:
+                    listed_word.append(tuple(word[count:self.size + count]))
+                    count += 1
+                listed_sent.append(tuple(listed_word))
+            listed_n_grams.append(tuple(listed_sent))
+        tuple(listed_n_grams)
+        return 0
 
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not len(self.n_grams):
+            return 1
+
+        for sent in self.n_grams:
+            for word in sent:
+                for n_gram in word:
+                    self.n_gram_frequencies[n_gram] = self.n_gram_frequencies.get(n_gram, 0) + 1
+        return 0
 
     def calculate_log_probabilities(self) -> int:
         """
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not len(self.n_grams):
+            return 1
+
+        for n_gram in self.n_gram_frequencies:
+            probability = self.n_gram_frequencies[n_gram] / \
+                          sum([self.n_gram_frequencies[other_n_gram]
+                               for other_n_gram in self.n_gram_frequencies
+                               if n_gram[:-1] == other_n_gram[:-1]])
+            self.n_gram_log_probabilities[n_gram] = log(probability)
+
+        return 0
 
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        pass
+        if (not isinstance(k, int) or
+                k < 0 or
+                not len(self.n_gram_frequencies)):
+            return ()
+        top_n_grams = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)[:k]
+        return tuple(top_n_grams)
 
 
 # 8
