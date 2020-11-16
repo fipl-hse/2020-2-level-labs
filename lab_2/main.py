@@ -1,8 +1,10 @@
 """
 Longest common subsequence problem
 """
-from tokenizer import tokenize
+from lab_2.tokenizer import tokenize
 import re
+import os
+import pickle
 
 
 # 1
@@ -165,21 +167,16 @@ def calculate_plagiarism_score(lcs_length: int, suspicious_sentence_tokens: tupl
     :param suspicious_sentence_tokens: a tuple of tokens
     :return: a score from 0 to 1, where 0 means no plagiarism, 1 – the texts are the same
     """
-    checks = [
-        isinstance(lcs_length, int),
-        not isinstance(lcs_length, bool),
-        isinstance(suspicious_sentence_tokens, tuple)
-    ]
-    if not all(checks) or lcs_length < 0 or lcs_length > len(suspicious_sentence_tokens):
-        return -1.0
-    if suspicious_sentence_tokens:
-        for token in suspicious_sentence_tokens:
-            if not isinstance(token, str) and not isinstance(token, int):
-                return -1.0
-    else:
-        return 0.0
-
-    return lcs_length / len(suspicious_sentence_tokens)
+    if not isinstance(lcs_length, int) and not isinstance(lcs_length, float) or isinstance(lcs_length, bool) or \
+            not isinstance(suspicious_sentence_tokens, tuple) or None in suspicious_sentence_tokens:
+        return -1
+    if lcs_length > len(suspicious_sentence_tokens) > 0 or lcs_length < 0:
+        return -1
+    if not suspicious_sentence_tokens:
+        plagiarism_score = 0.0
+        return plagiarism_score
+    plagiarism_score = lcs_length / len(suspicious_sentence_tokens)
+    return plagiarism_score
 
 
 # 7
@@ -269,7 +266,8 @@ def find_diff_in_sentence(original_sentence_tokens: tuple, suspicious_sentence_t
 
 
 # 9
-def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple, plagiarism_threshold=0.3) -> dict:
+def accumulate_diff_stats(original_text_tokens: tuple, suspicious_text_tokens: tuple,
+                          plagiarism_threshold=0.3) -> dict:
     """
     Accumulates the main statistics for pairs of sentences in texts:
             lcs_length, plagiarism_score and indexes of differences
@@ -417,12 +415,29 @@ def read_in_parts(text, token_num) -> str:
             yield tokens_dict[token]
 
 
-def tokenize_big_file(path_to_file: str) -> tuple:
+def tokenize_big_file(path_to_file: str, ids=0) -> tuple:
     """
     Reads, tokenizes and transforms a big file into a numeric form
     :param path_to_file: a path
+    :param ids: an id
     :return: a tuple with ids
     """
-    f = open(path_to_file, encoding='utf-8')
-
-    return tuple(read_in_parts(f, 0))
+    tokens = []
+    if os.path.exists('id.pkl'):
+        with open('id.pkl', 'rb') as put:
+            id_dict = pickle.load(put)
+    else:
+        id_dict = {}
+    with open(path_to_file, encoding='UTF-8') as file:
+        for line in file:
+            token_sentence = re.sub('[^a-z \n]', '', line.lower()).split()
+            for token in token_sentence:
+                if token not in id_dict:
+                    id_dict[token] = ids
+                    tokens.append(ids)
+                    ids += 1
+                else:
+                    tokens.append(id_dict[token])
+    with open('id.pkl', 'wb') as out:
+        pickle.dump(id_dict, out)
+    return tuple(tokens)
