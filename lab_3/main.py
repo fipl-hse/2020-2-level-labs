@@ -23,22 +23,21 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
 
-    result = []
-    sentences_list = re.split(r'[.!?] ', text)
-    for i, sentence in enumerate(sentences_list):
+    sentences = re.split(r'[.!?] ', text)
+
+    for i, sentence in enumerate(sentences):
         words_list = [word.lower().strip(string.punctuation) for word in sentence.split() if
                       word.strip(string.punctuation)]
-        sentences_list[i] = words_list
-        for j, word in enumerate(sentences_list[i]):
+        sentences[i] = words_list
+        for j, word in enumerate(sentences[i]):
             letters_list = ['_'] + [letter for letter in list(word) if letter.isalpha()] + ['_']
-            sentences_list[i][j] = tuple(letters_list)
-        sentences_list[i] = tuple(sentences_list[i])
-        result.append(tuple(sentence))
+            sentences[i][j] = tuple(letters_list)
+        sentences[i] = tuple(sentences[i])
 
-    if not all(sentences_list):
+    if not all(sentences):
         return ()
 
-    return tuple(sentences_list)
+    return tuple(sentences)
 
 
 # 4
@@ -54,10 +53,13 @@ class LetterStorage:
         :return: 0 if succeeds, 1 if not
         """
         alphabet_and_underscore = '_abcdefghijklmnopqrstuvwxyz'
+
         if not isinstance(letter, str) or not 0 < len(letter) <= 1 or letter not in alphabet_and_underscore:
             return 1
+
         if letter not in self.storage:
             self.storage[letter] = len(self.storage)
+
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -68,6 +70,7 @@ class LetterStorage:
         """
         if letter not in self.storage:
             return -1
+
         return self.storage[letter]
 
     def update(self, corpus: tuple) -> int:
@@ -99,6 +102,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         return ()
 
     encoded_corpus = []
+
     for i, sentence in enumerate(corpus):
         encoded_corpus.append([])
         for j, word in enumerate(sentence):
@@ -135,10 +139,11 @@ class NGramTrie:
             for j, word in enumerate(sentence):
                 self.n_grams[i].append([])
                 for k in range(len(word) + 1 - self.size):
-                    n_gram = word[k:k+self.size] if k + self.size < len(word) else word[k:]
+                    n_gram = word[k:k+self.size]
                     self.n_grams[i][j].append(tuple(n_gram))
                 self.n_grams[i][j] = tuple(self.n_grams[i][j])
             self.n_grams[i] = tuple(self.n_grams[i])
+
         self.n_grams = tuple(self.n_grams)
 
         return 0
@@ -188,14 +193,18 @@ class NGramTrie:
             k = len(self.n_gram_frequencies)
 
         sorted_n_gram_frequencies = sorted(self.n_gram_frequencies.items(), key=lambda i: i[1], reverse=True)
-        return tuple([sorted_n_gram_frequencies[i][0] for i in range(k)])
+        top_n_grams = [sorted_n_gram_frequencies[i][0] for i in range(k)]
+
+        return tuple(top_n_grams)
 
 
 # 8
 class LanguageDetector:
 
     def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
-        pass
+        self.trie_levels = trie_levels
+        self.top_k = top_k
+        self.n_gram_storages = {}
 
     def new_language(self, encoded_text: tuple, language_name: str) -> int:
         """
@@ -204,7 +213,20 @@ class LanguageDetector:
         :param language_name: a language
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if (not isinstance(encoded_text, tuple) or not all(isinstance(i, tuple) for i in encoded_text)
+                or not isinstance(language_name, str)):
+            return 1
+
+        self.n_gram_storages[language_name] = {}
+
+        for i in self.trie_levels:
+            new_language = NGramTrie(i)
+            new_language.fill_n_grams(encoded_text)
+            new_language.calculate_n_grams_frequencies()
+            new_language.calculate_log_probabilities()
+            self.n_gram_storages[language_name][i] = new_language
+
+        return 0
 
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
@@ -213,7 +235,24 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
-        pass
+        if ((isinstance(first_n_grams, tuple) and not first_n_grams) or
+                (isinstance(second_n_grams, tuple) and not second_n_grams)):
+            return 0
+
+        if (not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple)
+                or not all(isinstance(i, tuple) for i in first_n_grams)
+                or not all(isinstance(i, tuple) for i in second_n_grams)):
+            return -1
+
+        distance = 0
+
+        for i, n_gram in enumerate(first_n_grams):
+            if n_gram in second_n_grams:
+                distance += abs(second_n_grams.index(n_gram) - i)
+            else:
+                distance += len(second_n_grams)
+
+        return distance
 
     def detect_language(self, encoded_text: tuple) -> dict:
         """
@@ -221,7 +260,23 @@ class LanguageDetector:
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary where a key is a language, a value – the distance
         """
-        pass
+        if not isinstance(encoded_text, tuple) or not all(isinstance(i, tuple) for i in encoded_text):
+            return {}
+
+        language_distance_dict = {}
+
+        for language, dictionary in self.n_gram_storages.items():
+            distances = 0
+            for n_gram_size, n_gram_trie in dictionary.items():
+                top_n_grams = n_gram_trie.top_n_grams(self.top_k)
+                unknown_n_gram_trie = NGramTrie(n_gram_size)
+                unknown_n_gram_trie.fill_n_grams(encoded_text)
+                unknown_n_gram_trie.calculate_n_grams_frequencies()
+                top_n_grams1 = unknown_n_gram_trie.top_n_grams(self.top_k)
+                distances += self._calculate_distance(top_n_grams, top_n_grams1)
+            language_distance_dict[language] = distances / len(dictionary)
+
+        return language_distance_dict
 
 
 # 10
