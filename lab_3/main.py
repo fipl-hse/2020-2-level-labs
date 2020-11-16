@@ -27,7 +27,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     for sentence in sentences:
         list_tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
-        if len(list_tokens) == 0:
+        if not list_tokens:
             continue
         list_letters.append(tuple(tuple(['_'] + list(token) + ['_']) for token in list_tokens))
 
@@ -132,7 +132,7 @@ class NGramTrie:
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        if len(self.n_grams) == 0:
+        if not self.n_grams:
             return 1
 
         for sentence in self.n_grams:
@@ -162,7 +162,7 @@ class NGramTrie:
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        if not isinstance(k, int) or k < 0 or len(self.n_gram_frequencies) == 0:
+        if not isinstance(k, int) or k < 0 or not self.n_gram_frequencies:
             return ()
         return tuple(sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)[:k])
 
@@ -206,8 +206,8 @@ class LanguageDetector:
         """
         incorrect_inputs = (not isinstance(first_n_grams, tuple) or
                             not isinstance(second_n_grams, tuple) or
-                            None in first_n_grams or
-                            None in second_n_grams)
+                            first_n_grams and not isinstance(first_n_grams[0], (tuple, str)) or
+                            second_n_grams and not isinstance(second_n_grams[0], (tuple, str)))
         if incorrect_inputs:
             return -1
 
