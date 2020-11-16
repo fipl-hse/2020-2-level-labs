@@ -1,6 +1,7 @@
 """
 Language detection using n-grams
 """
+import re
 
 
 # 4
@@ -20,12 +21,30 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
 
+    tokenized_text = []
+
+    text = text.lower()
+    text = re.split(r'[.?!]', text)
+
+    for sent in text:
+        if sent == '':
+            continue
+        sent = re.sub(r'[^a-z \n]', sent)
+        sent = sent.split()
+        tokenized_sent = []
+        for word in sent:
+            word = [_] + list(word) + [_]
+            tokenized_sent.append(tuple(word))
+        tokenized_text.append(tuple(tokenized_sent))
+
+    return tuple(tokenized_text)
+
 
 # 4
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -33,7 +52,12 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if (not isinstance(letter, str) or
+                len(letter) != 1):
+            return 1
+        if letter not in self.storage:
+            self.storage[letter] = len(self.storage) + 1
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -41,7 +65,10 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str):
+            return -1
+        letter_id = self.storage.get(letter, -1)
+        return letter_id
 
     def update(self, corpus: tuple) -> int:
         """
@@ -49,7 +76,13 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return 1
+        for sent in corpus:
+            for word in sent:
+                for letter in word:
+                    self._put_letter(letter)
+        return 0
 
 
 # 6
