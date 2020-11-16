@@ -205,8 +205,7 @@ class NGramTrie:
         wrong_circumstances = not isinstance(k, int) or isinstance(k, bool) or k <= 0
         if wrong_circumstances:
             return ()
-        n_g_l_p = self.n_gram_frequencies  # переписываем имя для сокращения
-        sorted_n_grams = sorted(n_g_l_p, key=n_g_l_p.get, reverse=True)  # отсортированный список ключей по убыванию значений
+        sorted_n_grams = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)  # отсортированный список ключей по убыванию значений
         top = tuple(sorted_n_grams[0: k])  # берем нужное кол-во n-рамм
         return top
 
