@@ -145,17 +145,6 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
         actual = calculate_text_plagiarism_score(original_text_tokens,
                                                  suspicious_text_tokens,
                                                  plagiarism_threshold)
-<<<<<<< HEAD
-        actual_reversed = calculate_text_plagiarism_score(original_text_tokens_1,
-                                                          suspicious_text_tokens_1,
-                                                          plagiarism_threshold)
-=======
-        actual_reversed = calculate_text_plagiarism_score(suspicious_text_tokens,
-                                                          original_text_tokens,
-                                                          plagiarism_threshold=0.1)
->>>>>>> 65b6dc2f8c231347d873a4634c4a97ab29d86b27
-        self.assertEqual(expected, actual)
-        self.assertEqual(expected, actual_reversed)
 
     def test_calculate_text_plagiarism_score_bigger_first_text(self):
         """

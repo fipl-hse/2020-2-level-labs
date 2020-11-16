@@ -208,7 +208,7 @@ class NGramTrie:
         sorted_freq = sorted(list(freq_dict.keys()), reverse=True)
         top_grams = []
         for i in range(min(k, len(sorted_freq))):
-            top_grams.extend(freq_dict[sorted_freq[i]])
+            top_grams.append(freq_dict[sorted_freq[i]])
 
         return tuple(top_grams)
 
@@ -254,16 +254,16 @@ class LanguageDetector:
         if not len(first_n_grams) or not len(second_n_grams):
             return 0
 
-        distance_dict = {}
+        distance = []
         second_length = len(second_n_grams)
 
         for n_gram1 in set(first_n_grams):
             if n_gram1 in second_n_grams:
-                distance_dict[n_gram1] = abs(first_n_grams.index(n_gram1) - second_n_grams.index(n_gram1))
+                distance.append(abs(first_n_grams.index(n_gram1) - second_n_grams.index(n_gram1)))
             else:
-                distance_dict[n_gram1] = second_length
+                distance.append(second_length)
 
-        distance_sum = sum(list(distance_dict.values()))
+        distance_sum = sum(distance)
 
         return distance_sum
 
