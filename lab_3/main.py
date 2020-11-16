@@ -4,6 +4,7 @@ Language detection using n-grams
 import re
 
 
+# 1
 def tokenize_by_sentence(text: str) -> tuple:
     """
     Splits a text into sentences, sentences into tokens, tokens into letters
@@ -22,14 +23,13 @@ def tokenize_by_sentence(text: str) -> tuple:
     ]
 
 
-
-
-
+# 2
 class LetterStorage:
 
     def __init__(self):
         pass
 
+    # 2.1
     def _put_letter(self, letter: str) -> int:
         """
         Puts a letter into storage, assigns a unique id
@@ -38,6 +38,7 @@ class LetterStorage:
         """
         pass
 
+    # 2.2
     def get_id_by_letter(self, letter: str) -> int:
         """
         Gets a unique id by a letter
@@ -46,6 +47,7 @@ class LetterStorage:
         """
         pass
 
+    # 2.3
     def update(self, corpus: tuple) -> int:
         """
         Fills a storage by letters from the corpus
@@ -55,6 +57,7 @@ class LetterStorage:
         pass
 
 
+# 3
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
     Encodes sentences by replacing letters with their ids
@@ -65,11 +68,13 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     pass
 
 
+# 4
 class NGramTrie:
 
     def __init__(self, n: int):
         pass
 
+    # 4.2
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
@@ -77,6 +82,7 @@ class NGramTrie:
         """
         pass
 
+    # 4.3
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
@@ -84,6 +90,7 @@ class NGramTrie:
         """
         pass
 
+    # 4.4
     def calculate_log_probabilities(self) -> int:
         """
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
@@ -91,6 +98,7 @@ class NGramTrie:
         """
         pass
 
+    # 4.5
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
@@ -99,11 +107,13 @@ class NGramTrie:
         pass
 
 
+# 5
 class LanguageDetector:
 
     def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
         pass
 
+    # 5.1
     def new_language(self, encoded_text: tuple, language_name: str) -> int:
         """
         Fills NGramTries with regard to the trie_levels field
@@ -113,6 +123,7 @@ class LanguageDetector:
         """
         pass
 
+    # 5.2
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
@@ -122,6 +133,7 @@ class LanguageDetector:
         """
         pass
 
+    # 5.3
     def detect_language(self, encoded_text: tuple) -> dict:
         """
         Detects the language the unknown text is written in using the function _calculate_distance
@@ -131,9 +143,9 @@ class LanguageDetector:
         pass
 
 
-# 10
+# 6
 class ProbabilityLanguageDetector(LanguageDetector):
-
+    # 6.1
     def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
@@ -143,6 +155,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
         """
         pass
 
+    # 6.2
     def detect_language(self, encoded_text: tuple) -> dict:
         """
         Detects the language the unknown sentence is written in using sentence probability in different languages

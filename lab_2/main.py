@@ -236,7 +236,6 @@ def find_diff_indexes(sentence: tuple, lcs: tuple) -> list:
             pass
         elif element == diff_indexes[index]:
             diff_indexes.remove(element)
-            diff_indexes.remove(element)
         else:
             index += 1
     return diff_indexes
