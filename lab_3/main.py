@@ -2,6 +2,7 @@
 Language detection using n-grams
 """
 
+import math
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -28,7 +29,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         raw_words = raw_sentence.split()
         tokenized_sentence = []
         for word in raw_words:
-            if word != '':
+            if word:
                 word = tuple(['_'] + list(word) + ['_'])
                 tokenized_sentence.append(word)
         if tokenized_sentence:
@@ -89,43 +90,105 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not (isinstance(storage, LetterStorage) and isinstance(corpus, tuple)):
+        return ()
+
+    encoded_corpus = []
+    for raw_sentence in corpus:
+        encoded_sentence = []
+        for raw_word in raw_sentence:
+            encoded_word = []
+            for letter in raw_word:
+                encoded_word.append(storage.get_id_by_letter(letter))
+            encoded_sentence.append(tuple(encoded_word))
+        encoded_corpus.append(tuple(encoded_sentence))
+
+    return tuple(encoded_corpus)
 
 
 # 6
 class NGramTrie:
 
     def __init__(self, n: int):
-        pass
+        self.size = n
+        self.n_grams = ()
+        self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(encoded_text, tuple):
+            return 1
+
+        n_grams = []
+
+        for raw_sentence in encoded_text:
+            gram_sentence = []
+            for word in raw_sentence:
+                gram_word = []
+                for letter_index in range(len(word)):
+                    n_gram = word[letter_index:self.size + letter_index]
+                    if self.size == len(n_gram):
+                        gram_word.append(tuple(n_gram))
+                    else:
+                        gram_sentence.append(tuple(gram_word))
+            n_grams.append(tuple(gram_sentence))
+        self.n_grams = tuple(n_grams)
+
+        return 0
 
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not self.n_grams:
+            return 1
+
+        for sentence in self.n_grams:
+            for word in sentence:
+                for n_gram in word:
+                    self.n_gram_frequencies[n_gram] = self.n_gram_frequencies.get(n_gram, 0) + 1
+        return 0
 
     def calculate_log_probabilities(self) -> int:
         """
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        frequencies = tuple(self.n_gram_frequencies.items())
+
+        if not frequencies:
+            return 1
+
+        for n_gram in frequencies:
+            probability_coeff = 0
+            for sum_item in frequencies:
+                if n_gram[0][0] is sum_item[0][0]:
+                    probability_coeff += sum_item[1]
+            self.n_gram_log_probabilities[n_gram[0]] = math.log(n_gram[1] / probability_coeff)
+
+        return 0
 
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        pass
+        if not isinstance(k, int):
+            return tuple()
 
+        if not (k > 0 and self.calculate_log_probabilities() == 0):
+            return tuple()
+
+        frequencies = list(self.n_gram_frequencies.items())
+        overall_top = sorted(frequencies, key=lambda x: x[1], reverse=True)
+        requested_top = [n_gram[0] for n_gram in overall_top[:k]]
+        
+        return tuple(requested_top)
 
 # 8
 class LanguageDetector:
