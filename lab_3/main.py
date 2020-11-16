@@ -1,6 +1,7 @@
 """
 Language detection using n-grams
 """
+from math import log
 
 
 # 4
@@ -133,7 +134,7 @@ class NGramTrie:
         self.size = n
         self.n_grams = ()
         self.n_gram_frequencies = {}
-        self.n_gram_log_probabilities = 0
+        self.n_gram_log_probabilities = {}
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
@@ -180,14 +181,34 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        wrong_circumstances = not isinstance(self.n_gram_frequencies, dict) \
+                              or isinstance(self.n_gram_frequencies, bool) \
+                              or self.n_gram_frequencies == {}
+        if wrong_circumstances:
+            return 1
+        for n_gram, freq in self.n_gram_frequencies.items():  # берем конкретный n-грамм
+            frequency_large = 0  # знаменатель формулы
+            if n_gram not in self.n_gram_log_probabilities:  # находим его частоту
+                frequency = freq  # числитель формулы
+                for key, value in self.n_gram_frequencies.items():  # берем n-граммы, отличающиеся последним элементом
+                    if key[0: len(key) - 1] == n_gram[0: len(key) - 1]:
+                        frequency_large += value  # складываем их частоты
+            log_probability = log(frequency / frequency_large)  # находим логарифмическую вероятность
+            self.n_gram_log_probabilities[n_gram] = log_probability  # записываем вероятность в словарь
+        return 0
 
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        pass
+        wrong_circumstances = not isinstance(k, int) or isinstance(k, bool) or k <= 0
+        if wrong_circumstances:
+            return ()
+        n_g_l_p = self.n_gram_frequencies  # переписываем имя для сокращения
+        sorted_n_grams = sorted(n_g_l_p, key=n_g_l_p.get, reverse=True)  # отсортированный список ключей по убыванию значений
+        top = tuple(sorted_n_grams[0: k])  # берем нужное кол-во n-рамм
+        return top
 
 
 # 8
