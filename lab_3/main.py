@@ -40,18 +40,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
 
 def check_tuple(given_tuple: tuple) -> bool:
-    return isinstance(given_tuple, tuple) and (not len(given_tuple) or (len(given_tuple)
-                                                                        and given_tuple[0]))
-
-
-def get_grams_only(grams):
-    all_grams = []
-    for sentence in grams:
-        for word in sentence:
-            for gram in word:
-                all_grams.append(gram)
-
-    return tuple(all_grams)
+    return isinstance(given_tuple, tuple) and (not len(given_tuple) or (len(given_tuple) and given_tuple[0]))
 
 
 # 4
@@ -106,6 +95,7 @@ class LetterStorage:
             for word in sentence:
                 for element in word:
                     self._put_letter(element)
+
         return 0
 
 
@@ -221,7 +211,7 @@ class NGramTrie:
 
         freq_dict = {}
         for key, value in self.n_gram_frequencies.items():
-            freq_dict[value] = tuple(freq_dict.get(value, []) + [key])
+            freq_dict[value] = freq_dict.get(value, ()) + (key)
 
         sorted_freq = sorted(list(freq_dict.keys()), reverse=True)
         top_grams = []
@@ -275,7 +265,6 @@ class LanguageDetector:
         second_length = len(second_n_grams)
 
         for n_gram1 in set(first_n_grams):
-
             if n_gram1 in second_n_grams:
                 distance_dict[n_gram1] = abs(first_n_grams.index(n_gram1) - second_n_grams.index(n_gram1))
 
@@ -300,22 +289,22 @@ class LanguageDetector:
         n = self.n_gram_storages['english'].keys()
 
         encoded_text_dict = {}
-
         for i in n:
             i_ngramtrie = NGramTrie(i)
             i_ngramtrie.fill_n_grams(encoded_text)
-            encoded_text_dict[i] = i_ngramtrie.n_grams
+            i_ngramtrie.calculate_n_grams_frequencies()
+            top_text = i_ngramtrie.top_n_grams(self.top_k)
+
+            encoded_text_dict[i] = top_text
 
         distance_dict = {}
-
         for language in self.n_gram_storages.keys():
-
             sum_dict = []
             for i in n:
-                unknown_k_grams = get_grams_only(encoded_text_dict[i][:self.top_k])[:self.top_k]
-                language_k_grams = get_grams_only(self.n_gram_storages[language][i].n_grams[:self.top_k])[:self.top_k]
+                self.n_gram_storages[language][i].calculate_n_grams_frequencies()
+                language_top_grams = self.n_gram_storages[language][i].top_n_grams(self.top_k)
 
-                sum_dict.append(self._calculate_distance(unknown_k_grams, language_k_grams))
+                sum_dict.append(self._calculate_distance(encoded_text_dict[i], language_top_grams))
 
             distance_dict[language] = sum(sum_dict)
 
