@@ -104,7 +104,7 @@ class NGramTrie:
 
     def __init__(self, n: int):
         self.size = n
-        self.n_grams = []
+        self.n_grams = ()
         self.n_gram_frequencies = {}
         self.n_gram_log_probabilities = {}
 
