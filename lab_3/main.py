@@ -2,6 +2,7 @@
 Language detection using n-grams
 """
 from math import log
+from statistics import mean
 
 
 # 4
@@ -267,7 +268,65 @@ class LanguageDetector:
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary where a key is a language, a value – the distance
         """
-        pass
+        #text = tokenize_by_sentence(encoded_text)  # разбили текст на кортежи слов
+        #storage_for_text = LetterStorage()
+        #text = encode_corpus(storage_for_text, text)  # закодировали текст
+        wrong_circumstances = not isinstance(encoded_text, tuple) or isinstance(encoded_text, bool)
+        if wrong_circumstances:
+            return {}
+
+        final_storage = {}
+
+        storage_for_unknown = {}  # словарь для неизвестного языка
+        dict_for_unknown = {}  # создаем словарь, который будет значением
+        for element in self.trie_levels:  # создаем экземпляр класса NGramTrie для каждого числа
+            unknown = NGramTrie(element)
+            unknown.fill_n_grams(encoded_text)
+            unknown.calculate_n_grams_frequencies()
+            dict_for_unknown[element] = unknown  # записываем число в ключ, заполненный экземпляр в значение
+        storage_for_unknown['unknown language'] = dict_for_unknown
+
+        # top n-граммы для неизвестного языка
+        unknown_summ_all_top = []  # здесь топ n-граммы для каждого числа n
+        for language, storage in storage_for_unknown.items():
+            unknown_all_top = []
+            for number, example in storage.items():
+                top = example.top_n_grams(self.top_k)  # нашли top n-граммы для каждого экземпляра языка
+                unknown_all_top.append(top)
+                unknown_summ_all_top.append(tuple(unknown_all_top))
+
+        # найти top n-граммы для каждого языка и сравнить с top n-граммами для неизвестного
+        summ_all_top_english = []  # здесь топ n-граммы для каждого числа n английского
+        summ_all_top_german = []  # здесь топ n-граммы для каждого числа n немецкого
+        for language, storage in self.n_gram_storages.items():
+            all_top = []
+            for number, example in storage.items():
+                top = example.top_n_grams(self.top_k)  # нашли top n-граммы для каждого экземпляра языка
+                all_top.append(top)
+                if language == 'English':
+                    summ_all_top_english.append(tuple(all_top))
+                else:
+                    summ_all_top_german.append(tuple(all_top))
+
+        # сравнить top n-граммы неизвестного языка с известными
+        difference_with_english = []
+        difference_with_german = []
+        print(unknown_summ_all_top)
+        print(summ_all_top_english)
+        print(summ_all_top_german)
+        for index in enumerate(unknown_summ_all_top):
+            difference_e = self._calculate_distance(unknown_summ_all_top[index], summ_all_top_english[index])
+            difference_g = self._calculate_distance(unknown_summ_all_top[index], summ_all_top_german[index])
+            difference_with_english.append(difference_e)
+            difference_with_german.append(difference_g)
+
+        difference_with_english = mean(difference_with_english)
+        difference_with_german = mean(difference_with_german)
+
+        final_storage['English'] = difference_with_english
+        final_storage['German'] = difference_with_german
+
+        return final_storage
 
 
 # 10
