@@ -6,7 +6,7 @@ from lab_3.main import tokenize_by_sentence
 from lab_3.main import encode_corpus
 from lab_3.main import NGramTrie
 from lab_3.main import LetterStorage
-from lab_3.main import ProbabilityLanguageDetector
+from lab_3.main import LanguageDetector
 
 
 if __name__ == '__main__':
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     unk_encoded = encode_corpus(letter_storage, text_unk)
     ger_encoded = encode_corpus(letter_storage, text_ger)
 
-    language_detector = ProbabilityLanguageDetector((3, 4, 5), 1000)
+    language_detector = LanguageDetector((3, 4, 5), 1000)
     language_detector.new_language(eng_encoded, 'english')
     language_detector.new_language(ger_encoded, 'german')
 
@@ -48,4 +48,4 @@ if __name__ == '__main__':
     print('The text is in {}'.format(RESULT))
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == 'english', 'Not working'
+    assert RESULT == 'german', 'Not working'
