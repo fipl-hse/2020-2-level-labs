@@ -125,19 +125,17 @@ class NGramTrie:
         if not isinstance(encoded_text, tuple):
             return 1
 
-        self.n_grams = list(self.n_grams)
+        bi_gram = []
+        for sentence in encoded_text:
+            sentence_l = []
+            for word in sentence:
+                word_l = []
+                for i in range(len(word) - 1):
+                    word_l.append(tuple((word[i], word[i + 1])))
+                sentence_l.append(tuple(word_l))
+            bi_gram.append(tuple(sentence_l))
 
-        for i, sentence in enumerate(encoded_text):
-            self.n_grams.append([])
-            for j, word in enumerate(sentence):
-                self.n_grams[i].append([])
-                for k in range(len(word) + 1 - self.size):
-                    n_gram = word[k:k + self.size]
-                    self.n_grams[i][j].append(tuple(n_gram))
-                self.n_grams[i][j] = tuple(self.n_grams[i][j])
-            self.n_grams[i] = tuple(self.n_grams[i])
-
-        self.n_grams = tuple(self.n_grams)
+        self.n_grams = tuple(bi_gram)
 
         return 0
 
@@ -150,11 +148,12 @@ class NGramTrie:
             return 1
 
         for sentence in self.n_grams:
-            for token in sentence:
-                for element in token:
-                    self.n_gram_frequencies[element] = self.n_gram_frequencies.get(element, 0) + 1
-        if not self.n_gram_frequencies:
-            return 1
+            for word in sentence:
+                for grams in word:
+                    if grams in self.n_gram_frequencies:
+                        self.n_gram_frequencies[grams] += 1
+                    else:
+                        self.n_gram_frequencies[grams] = 1
         return 0
 
     def calculate_log_probabilities(self) -> int:
