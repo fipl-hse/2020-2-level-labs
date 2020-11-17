@@ -242,23 +242,20 @@ class LanguageDetector:
         if not isinstance(encoded_text, tuple) or not all(encoded_text):
             return {}
 
-        known_languages = list(self.n_gram_storages.keys())
+        distance_language = {}
+        for language_name, storage_lang in self.n_gram_storages.items():
+            distance_language[language_name] = []
+            for trie_level, n_gram_trie in storage_lang.items():
+                text_storage = NGramTrie(trie_level)
+                text_storage.fill_n_grams(encoded_text)
+                text_storage.calculate_n_grams_frequencies()
+                distance_language[language_name].append(
+                    self._calculate_distance(n_gram_trie.top_n_grams(self.top_k),
+                                             text_storage.top_n_grams(self.top_k)))
 
-        distances_languages = {}
-        for level in self.trie_levels:
-            n_grams_unknown = NGramTrie(level)
-            n_grams_unknown.fill_n_grams(encoded_text)
-            n_grams_unknown.calculate_n_grams_frequencies()
-            for language in known_languages:
-                n_grams_language = self.n_gram_storages[language][level].top_n_grams(self.top_k)
-                if language not in distances_languages:
-                    distances_languages[language] = []
-                distances_languages[language].append(self._calculate_distance(n_grams_unknown.top_n_grams(self.top_k),
-                                                                              n_grams_language))
-        for language, distance_list in distances_languages.items():
-            distances_languages[language] = sum(distance_list) / len(distance_list)
+            distance_language[language_name] = sum(distance_language[language_name]) / len(distance_language[language_name])
 
-        return distances_languages
+        return distance_language
 
 
 # 10
