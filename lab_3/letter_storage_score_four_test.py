@@ -119,7 +119,7 @@ class LetterStorageTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
 # -----------------------------------------------------------
-    @unittest.skip('')
+
     def test_letter_storage_update_ideal(self):
         """
         ideal case for update
