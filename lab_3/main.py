@@ -130,8 +130,6 @@ class NGramTrie:
         return 0
 
 
-
-
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gramб storage from a sentence, fills the field n_gram_frequencies
