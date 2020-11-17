@@ -1,7 +1,7 @@
 """
 Language detection using n-grams
 """
-
+import re
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -17,7 +17,21 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    if not isinstance(text, str) or not text:
+        return ()
+
+    text = text.lower().split('. ')
+    for index_sent, sentence in enumerate(text):
+        sentence = re.sub(r'[^\w\s]', '', sentence).split()
+        if sentence:
+            for index_word, word in enumerate(sentence):
+                word = '_' + word + '_'
+                sentence[index_word] = tuple(word)
+            text[index_sent] = tuple(sentence)
+            continue
+        del text[index_sent]
+
+    return tuple(text)
 
 
 # 4
