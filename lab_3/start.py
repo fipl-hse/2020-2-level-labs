@@ -26,4 +26,4 @@ if __name__ == '__main__':
 
     RESULT = top
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == ((1, 1),), 'Not working'
+    assert RESULT == ((1, 3), (3, 4), (4, 1), (1, 5), (5, 2)), 'Not working'
