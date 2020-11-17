@@ -212,16 +212,17 @@ class LanguageDetector:
         if not isinstance(encoded_text, tuple):
             return {}
         detect_language_dict = {}
-        for element, language in self.n_gram_storages.items():
-            detect_language_dict[element] = []
-            for levels, level in language.items():
-                top_grams = level.top_n_grams(self.top_k)
-                storage_language = NGramTrie(levels)
-                storage_language.fill_n_grams(encoded_text)
-                storage_language.calculate_n_grams_frequencies()
-                detect_language_dict[element].append(LanguageDetector._calculate_distance(
-                    top_grams, storage_language.top_n_grams(self.top_k)))
-                detect_language_dict[element] = sum(detect_language_dict[element] / len(detect_language_dict[element]))
+        for language in self.n_gram_storages:
+            language_dis = []
+            for size in self.trie_levels:
+                unknown_n_gram = NGramTrie(size)
+                unknown_n_gram.fill_n_grams(encoded_text)
+                unknown_n_gram.calculate_n_grams_frequencies()
+                top_unknown_n_gram = unknown_n_gram.top_n_grams(self.top_k)
+                top_language = self.n_gram_storages[language][size].top_n_grams(self.top_k)
+                language_dis.append(self._calculate_distance(top_unknown_n_gram, top_language))
+            if language_dis:
+                detect_language_dict[language] = mean(language_dis)
         return detect_language_dict
 
 
