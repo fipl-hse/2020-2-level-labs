@@ -44,7 +44,7 @@ if __name__ == '__main__':
     else:
         RESULT = 'german'
 
-    print('The text is in {}'.format(RESULT))
+    print('this is a {} text.'.format(RESULT))
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT == 'german', 'Not working'
