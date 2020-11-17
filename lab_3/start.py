@@ -36,7 +36,8 @@ if __name__ == '__main__':
 
     languages_probabilities = language_detector.detect_language(ngram_trie_unknown.n_grams)
 
+    expected = True
     RESULT = languages_probabilities['English'] < languages_probabilities['German']
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == True, 'Language detector does not work.'
+    assert RESULT == expected, 'Language detector does not work.'
