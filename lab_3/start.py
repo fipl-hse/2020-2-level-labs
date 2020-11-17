@@ -30,11 +30,11 @@ if __name__ == '__main__':
 
     unknown_text = lab_3.main.tokenize_by_sentence(TEXT)
 
-    english = open('Frank_Baum.txt', encoding='utf-8')
+    english = open('lab_3/Frank_Baum.txt', encoding='utf-8')
     english_text = lab_3.main.tokenize_by_sentence(english.read())
     english.close()
 
-    german = open('Thomas_Mann.txt', encoding='utf-8')
+    german = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
     german_text = lab_3.main.tokenize_by_sentence(german.read())
     german.close()
 
