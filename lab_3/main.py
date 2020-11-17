@@ -31,12 +31,12 @@ def tokenize_by_sentence(text: str) -> tuple:
     return tuple(tokens)
 
 
-
 # 4
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
+        self.id = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -44,7 +44,13 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str) or not letter:
+            return 1
+        if letter in self.storage:
+            return 0
+        self.id += 1
+        self.storage[letter] = self.id
+        return id
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -52,7 +58,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str) or not letter or letter not in self.storage:
+            return -1
+        return self.storage[letter]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -60,8 +68,13 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
-
+        if not isinstance(corpus, tuple):
+            return 1
+        for sentence in corpus:
+            for token in sentence:
+                for letter in token:
+                    self._put_letter(letter)
+        return 0
 
 # 6
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
