@@ -2,6 +2,7 @@
 Language detection using n-grams
 """
 
+import re
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
