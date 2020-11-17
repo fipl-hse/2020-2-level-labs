@@ -221,8 +221,7 @@ class LanguageDetector:
                 storage_language.calculate_n_grams_frequencies()
                 detect_language_dict[element].append(LanguageDetector._calculate_distance(
                     top_grams, storage_language.top_n_grams(self.top_k)))
-                detect_language_dict[element] = sum(detect_language_dict[element] /
-                                                    len(detect_language_dict[element]))
+                detect_language_dict[element] = sum(detect_language_dict[element] / len(detect_language_dict[element]))
         return detect_language_dict
 
 
