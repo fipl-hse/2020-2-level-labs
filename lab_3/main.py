@@ -1,4 +1,5 @@
 import re
+from math import log
 
 """
 Language detection using n-grams
@@ -132,12 +133,8 @@ class LetterStorage:
                     self._put_letter(letter)
         return 0
 
-# a = LetterStorage()
-# test_text = "I am gay"
-# corpus = tokenize_by_sentence(test_text)
-# print(corpus)
-# a.update(corpus)
-# 6
+
+
 @universal_input_checker((), LetterStorage, tuple)
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
@@ -163,29 +160,60 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 class NGramTrie:
 
     def __init__(self, n: int):
-        pass
+        self.size = n
+        self.n_grams = ()
+        self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
+    @universal_input_checker_method(1, tuple)
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        result = []
+        for sentence in encoded_text:
+            sentence_res = []
+            for word in sentence:
+                word_res = []
+                for i in range(len(word) - self.size + 1):
+                    word_res.append(tuple(word[i:i + self.size]))
+                sentence_res.append(tuple(word_res))
+            result.append(tuple(sentence_res))
+        self.n_grams = tuple(result)
+        return 0
 
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if len(self.n_grams) == 0:
+            return 1
+        for sentence in self.n_grams:
+            for word in sentence:
+                for n_gram in word:
+                    if self.n_gram_frequencies.get(n_gram):
+                        self.n_gram_frequencies[n_gram] += 1
+                    else:
+                        self.n_gram_frequencies[n_gram] = 1
+        return 0
 
     def calculate_log_probabilities(self) -> int:
         """
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if len(self.n_gram_frequencies) == 0:
+            return 1
+        all_events = 0
+        for v, freq in self.n_gram_frequencies.items():
+            all_events += freq
+        for n_gram, freq in self.n_gram_frequencies.items():
+            self.n_gram_log_probabilities[n_gram] = log(freq / all_events)
+        return 0
 
+    @universal_input_checker_method(1, int)
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
@@ -246,3 +274,15 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :return: a dictionary with language_name: probability
         """
         pass
+
+
+ngram = NGramTrie(2)
+sentences = (((1, 2, 1, 2, 1, 2), (10, 11, 12)),)
+expected = (
+    (
+        ((1, 2), (2, 1), (1, 2), (2, 1), (1, 2)),
+        ((10, 11), (11, 12))
+    ),
+)
+ngram.fill_n_grams(sentences)
+print(ngram.n_grams)
