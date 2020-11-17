@@ -113,6 +113,7 @@ class NGramTrie:
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
         """
+
         if not isinstance(encoded_text, tuple):
             return 1
         bi_gram = []
@@ -126,16 +127,16 @@ class NGramTrie:
             bi_gram.append(tuple(sentence_l))
     
         self.n_grams = tuple(bi_gram)
-
-
         return 0
+
+
+
 
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gramб storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-
 
         if not self.n_grams:
             return 1
@@ -153,19 +154,20 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
+
         if not self.n_gram_frequencies:
             return 1
 
-        for n_gram in self.n_gram_frequencies:
-            summary = sum([self.n_gram_frequencies[n_gram]])
-
-        for n_gram2 in self.n_gram_frequencies:
-            probability = self.n_gram_frequencies[n_gram2] / summary
-
-        self.n_gram_log_probabilities[n_gram] = math.log(probability)
-
+        for n_gram_1 in self.n_gram_frequencies:
+            divide = 0
+            for n_gram_2 in self.n_gram_frequencies:
+                if n_gram_1[0] == n_gram_2[0]:
+                    divide += self.n_gram_frequencies[n_gram_2]
+            if divide == 0:
+                divide = 1
+            probability = self.n_gram_frequencies[n_gram_1] / divide
+            self.n_gram_log_probabilities[n_gram_1] = math.log(probability)
         return 0
-
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
