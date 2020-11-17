@@ -91,14 +91,18 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
 
-    encoded_corp = []
-    for sentence in corpus:
-        list_sentence = []
-        for token in sentence:
-            list_sentence.append(tuple([storage.get_id_by_letter(letter) for letter in token]))
-        encoded_corp.append(tuple(list_sentence))
+    encoded_corpus = []
 
-    return tuple(encoded_corp)
+    for sentence in corpus:
+        sentence_class = []
+        for word in sentence:
+            word_class = []
+            for letter in word:
+                word_class.append(storage.get_id_by_letter(letter))
+            sentence_class.append(tuple(word_class))
+        encoded_corpus.append(tuple(sentence_class))
+
+    return tuple(encoded_corpus)
 
 
 # 6
@@ -118,16 +122,19 @@ class NGramTrie:
         if not isinstance(encoded_text, tuple):
             return 1
 
-        list_n_grams = []
-        for sentence in encoded_text:
-            n_grams_sentence = []
-            for token in sentence:
-                n_grams_token = []
-                for ind in range(len(token) - self.size + 1):
-                    n_grams_token.append(tuple(token[ind:ind + self.size]))
-                n_grams_sentence.append(tuple(n_grams_token))
-            list_n_grams.append(tuple(n_grams_sentence))
-        self.n_grams = tuple(list_n_grams)
+        self.n_grams = list(self.n_grams)
+
+        for i, sentence in enumerate(encoded_text):
+            self.n_grams.append([])
+            for j, word in enumerate(sentence):
+                self.n_grams[i].append([])
+                for k in range(len(word) + 1 - self.size):
+                    n_gram = word[k:k + self.size]
+                    self.n_grams[i][j].append(tuple(n_gram))
+                self.n_grams[i][j] = tuple(self.n_grams[i][j])
+            self.n_grams[i] = tuple(self.n_grams[i])
+
+        self.n_grams = tuple(self.n_grams)
 
         return 0
 
@@ -139,14 +146,13 @@ class NGramTrie:
         if not self.n_gram_frequencies:
             return 1
 
-        for pair in self.n_gram_frequencies:
-            appearing = 0
-            for begin in self.n_gram_frequencies:
-                if pair[0] in begin:
-                    appearing += self.n_gram_frequencies[begin]
-            self.n_gram_log_probabilities[pair] = math.log(self.n_gram_frequencies[pair] / appearing)
-        if not self.n_gram_log_probabilities:
-            return 1
+        for sentence in self.n_grams:
+            for word in sentence:
+                for n_gram in word:
+                    if n_gram not in self.n_gram_frequencies:
+                        self.n_gram_frequencies[n_gram] = 1
+                    else:
+                        self.n_gram_frequencies[n_gram] += 1
 
         return 0
 

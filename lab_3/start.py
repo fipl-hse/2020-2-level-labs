@@ -8,10 +8,12 @@ from lab_3.main import NGramTrie
 from lab_3.main import LetterStorage
 from lab_3.main import ProbabilityLanguageDetector
 
+
 if __name__ == '__main__':
-    unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
-    german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
-    english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
+    # here goes your function calls
+    unknown_file = open('unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
+    german_file = open('Thomas_Mann.txt', encoding='utf-8')
+    english_file = open('Frank_Baum.txt', encoding='utf-8')
 
     text_unk = tokenize_by_sentence(unknown_file.read())
     text_ger = tokenize_by_sentence(german_file.read())
@@ -36,9 +38,14 @@ if __name__ == '__main__':
     ngram_unknown = NGramTrie(4)
     ngram_unknown.fill_n_grams(unk_encoded)
 
-    actual = language_detector.detect_language(ngram_unknown.n_grams)
-    print(actual)
+    language_log_probability_dict = language_detector.detect_language(ngram_unknown.n_grams)
 
-    RESULT = actual['english'] < actual['german']
+    if language_log_probability_dict['german'] > language_log_probability_dict['english']:
+        RESULT = 'english'
+    else:
+        RESULT = 'german'
+
+    print('The text is in {}'.format(RESULT))
+
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == 1, ''
+    assert RESULT == 'english', 'Not working'
