@@ -214,7 +214,9 @@ class NGramTrie:
 class LanguageDetector:
 
     def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
-        pass
+        self.trie_levels = trie_levels
+        self.top_k = top_k
+        self.n_gram_storages = {}
 
     def new_language(self, encoded_text: tuple, language_name: str) -> int:
         """
@@ -223,7 +225,19 @@ class LanguageDetector:
         :param language_name: a language
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        wrong_circumstances = not isinstance(encoded_text, tuple) or isinstance(encoded_text, bool) \
+                              or None in encoded_text or language_name == '' \
+                              or not isinstance(language_name, str) or isinstance(language_name, bool)
+        if wrong_circumstances:
+            return 1
+        dict_for_language = {}  # создаем словарь, который будет значением
+        for element in self.trie_levels:  # создаем экземпляр класса NGramTrie для каждого числа
+            n_g_t = NGramTrie(element)
+            n_g_t.fill_n_grams(encoded_text)
+            n_g_t.calculate_n_grams_frequencies()
+            dict_for_language[element] = n_g_t  # записываем число в ключ, заполненный экземпляр в значение
+        self.n_gram_storages[language_name] = dict_for_language  # записываем в основной словарь: язык в ключ, словарь в значение
+        return 0
 
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
@@ -232,7 +246,20 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
-        pass
+        wrong_circumstances = not isinstance(first_n_grams, tuple) or isinstance(first_n_grams, bool) \
+                              or not isinstance(second_n_grams, tuple) or isinstance(second_n_grams, bool) \
+                              or None in first_n_grams or None in second_n_grams
+        if wrong_circumstances:
+            return -1
+        difference = 0
+        for index_1, n_gram_1 in enumerate(first_n_grams):
+            if n_gram_1 not in second_n_grams:
+                difference += len(second_n_grams)
+            else:
+                for index_2, n_gram_2 in enumerate(second_n_grams):
+                    if n_gram_1 == n_gram_2:
+                        difference += abs(index_1 - index_2)
+        return difference
 
     def detect_language(self, encoded_text: tuple) -> dict:
         """
