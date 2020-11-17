@@ -34,10 +34,7 @@ if __name__ == '__main__':
     ngram_trie_unknown = lab_3.main.NGramTrie(4)
     ngram_trie_unknown.fill_n_grams(unknown_encoded_text)
 
-    languages_probabilities = language_detector.detect_language(ngram_trie_unknown.n_grams)
-
-    expected = True
-    RESULT = languages_probabilities['English'] < languages_probabilities['German']
+    RESULT = language_detector.detect_language(ngram_trie_unknown.n_grams)
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == expected, 'Language detector does not work.'
+    assert RESULT['English'] < RESULT['German'], 'Language detector does not work.'
