@@ -17,7 +17,19 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+    if not isinstance(text, str):
+        return ()
+    tokens = []
+    sentences = text.split('.')
+    for sentence in sentences:
+        letters = []
+        list_of_tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
+        for token in list_of_tokens:
+            letters.append(tuple(['_'] + list(token) + ['_']))
+        if letters:
+            tokens.append(tuple(letters))
+    return tuple(tokens)
+
 
 
 # 4
