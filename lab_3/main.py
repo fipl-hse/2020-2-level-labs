@@ -147,6 +147,7 @@ class NGramTrie:
                         self.n_gram_frequencies[bi_gram] = 1
         return 0
 
+
     def calculate_log_probabilities(self) -> int:
         """
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
