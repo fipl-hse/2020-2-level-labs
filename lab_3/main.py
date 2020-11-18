@@ -203,7 +203,7 @@ class LanguageDetector:
 class ProbabilityLanguageDetector(LanguageDetector):
 
     def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
-        return 0.0
+        pass
 
     def detect_language(self, encoded_text: tuple) -> dict:
         pass
