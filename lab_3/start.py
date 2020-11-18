@@ -13,7 +13,7 @@ if __name__ == '__main__':
     # here goes your function calls
     unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
     german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
-    english_file = open('lab_3/Frank_baum.txt', encoding='utf-8')
+    english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
 
     unknown_text = tokenize_by_sentence(unknown_file.read())
     german_text = tokenize_by_sentence(german_file.read())
