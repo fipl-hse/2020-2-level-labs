@@ -194,10 +194,10 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
-        checker = ((first_n_grams and not isinstance(first_n_grams[0],  (tuple, str)))
-                   or (second_n_grams and not isinstance(second_n_grams[0], (tuple, str))))
-        if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple) \
-                or checker:
+        if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple):
+            return -1
+        if (first_n_grams and not isinstance(first_n_grams[0],  (tuple, str))) \
+                or (second_n_grams and not isinstance(second_n_grams[0], (tuple, str))):
             return -1
         distance = 0
         for index_1, n_gam in enumerate(first_n_grams):
