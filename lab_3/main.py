@@ -248,7 +248,7 @@ class LanguageDetector:
             return {}
 
         languages_dict = {}
-        for language in self.n_gram_storages.keys():
+        for language in self.n_gram_storages:
             languages_dict[language] = []
             for i in self.n_gram_storages['english']:
                 storage = NGramTrie(i)
