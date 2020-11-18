@@ -201,7 +201,6 @@ class LanguageDetector:
             self.n_gram_storages[language_name][trie_level] = language_storage
         return 0
 
-    "def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:"
     @staticmethod
     def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
