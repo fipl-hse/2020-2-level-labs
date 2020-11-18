@@ -38,7 +38,9 @@ def tokenize_by_sentence(text: str) -> tuple:
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
+        self.counter = 0
+
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -46,7 +48,15 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str) or not letter:
+            return 1
+
+        if letter in self.storage:
+            return 0
+        self.storage[letter] = self.counter
+        self.counter += 1
+        return 0
+
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -54,7 +64,10 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if not isinstance(letter, str) or not letter or letter not in self.storage:
+            return -1
+        return self.storage[letter]
+
 
     def update(self, corpus: tuple) -> int:
         """
@@ -62,7 +75,15 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return 1
+
+        for sentence in corpus:
+            for word in sentence:
+                for letter in word:
+                    self._put_letter(letter)
+
+        return 0
 
 
 # 6
@@ -73,14 +94,29 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not corpus or not isinstance(corpus, tuple):
+        return ()
+
+    storage.update(corpus)
+    corpus_in_ids = ()
+    for sentence in corpus:
+        sentence_in_ids = []
+        for word in sentence:
+            word_in_ids = [storage.get_id_by_letter(letter) for letter in word]
+            sentence_in_ids.append(tuple(word_in_ids))
+        corpus_in_ids += (tuple(sentence_in_ids),)
+
+    return corpus_in_ids
 
 
 # 6
 class NGramTrie:
 
     def __init__(self, n: int):
-        pass
+        self.size = n
+        self.n_grams = ()
+        self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
