@@ -134,7 +134,6 @@ class LetterStorage:
         return 0
 
 
-
 @universal_input_checker((), LetterStorage, tuple)
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
@@ -206,20 +205,25 @@ class NGramTrie:
         """
         if len(self.n_gram_frequencies) == 0:
             return 1
-        all_events = 0
-        for v, freq in self.n_gram_frequencies.items():
-            all_events += freq
+
         for n_gram, freq in self.n_gram_frequencies.items():
+            all_events = 0
+            for n_gram2, freq2 in self.n_gram_frequencies.items():
+                if n_gram2[0: self.size - 1] == n_gram[0: self.size - 1]:
+                    all_events += freq2
             self.n_gram_log_probabilities[n_gram] = log(freq / all_events)
+
         return 0
 
-    @universal_input_checker_method(1, int)
+    @universal_input_checker_method((), int)
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        pass
+        n_grams_list = [(n_gram, freq) for n_gram, freq in self.n_gram_frequencies.items()]
+        n_grams_list = sorted(n_grams_list, key=lambda x: -x[1])
+        return tuple([x[0] for x in n_grams_list[0: k]])
 
 
 # 8
@@ -274,15 +278,3 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :return: a dictionary with language_name: probability
         """
         pass
-
-
-ngram = NGramTrie(2)
-sentences = (((1, 2, 1, 2, 1, 2), (10, 11, 12)),)
-expected = (
-    (
-        ((1, 2), (2, 1), (1, 2), (2, 1), (1, 2)),
-        ((10, 11), (11, 12))
-    ),
-)
-ngram.fill_n_grams(sentences)
-print(ngram.n_grams)
