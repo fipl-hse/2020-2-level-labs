@@ -31,7 +31,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     word_tokens = []
     for sentence in sentence_tokens:
         tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
-        if not len(tokens):
+        if not tokens:
             continue
         word_tokens.append(tuple([tuple(['_'] + list(token) + ['_']) for token in tokens]))
 
@@ -39,7 +39,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
 
 def check_tuple(given_tuple: tuple) -> bool:
-    return isinstance(given_tuple, tuple) and (not len(given_tuple) or (len(given_tuple) and given_tuple[0]))
+    return isinstance(given_tuple, tuple) and (not given_tuple or (given_tuple and given_tuple[0]))
 
 
 # 4
@@ -149,8 +149,8 @@ class NGramTrie:
             sentence_grams = []
             for word in sentence:
                 word_grams = []
-                for ind_letter, letter in enumerate(word[:-self.size + 1]):
-                    word_grams.append(tuple([letter for letter in word[ind_letter:ind_letter + self.size]]))
+                for ind_letter in range(len(word[:-self.size + 1])):
+                    word_grams.append(tuple(word[ind_letter:ind_letter + self.size]))
 
                 sentence_grams.append(tuple(word_grams))
 
@@ -179,15 +179,15 @@ class NGramTrie:
         :return: 0 if succeeds, 1 if not
         """
 
-        if not len(self.n_gram_frequencies):
+        if not self.n_gram_frequencies:
             return 1
 
         prob_dict = {}
 
         for gram in self.n_gram_frequencies:
-            p = self.n_gram_frequencies[gram] / sum([self.n_gram_frequencies[another_gram] for another_gram in
+            probability = self.n_gram_frequencies[gram] / sum([self.n_gram_frequencies[another_gram] for another_gram in
                                                     self.n_gram_frequencies if another_gram[0] == gram[0]])
-            prob_dict[gram] = log(p)
+            prob_dict[gram] = log(probability)
 
         self.n_gram_log_probabilities = prob_dict
 
@@ -234,8 +234,8 @@ class LanguageDetector:
 
         self.n_gram_storages[language_name] = {n: NGramTrie(n) for n in self.trie_levels}
 
-        for n in self.trie_levels:
-            self.n_gram_storages[language_name][n].fill_n_grams(encoded_text)
+        for level in self.trie_levels:
+            self.n_gram_storages[language_name][level].fill_n_grams(encoded_text)
 
         return 0
 
@@ -251,7 +251,7 @@ class LanguageDetector:
         if not check_tuple(first_n_grams) or not check_tuple(second_n_grams):
             return -1
 
-        if not len(first_n_grams) or not len(second_n_grams):
+        if not first_n_grams or not second_n_grams:
             return 0
 
         distance = []
@@ -270,33 +270,33 @@ class LanguageDetector:
     def detect_language(self, encoded_text: tuple) -> dict:
         """
         Detects the language the unknown text is written in using the function _calculate_distance
-        :param encoded_text: a tuple of sentences with tuples of tokens split into letters (encoded???)
+        :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary where a key is a language, a value – the distance
         """
         is_not_good_encoded_text = not(isinstance(encoded_text, tuple) and len(encoded_text) and encoded_text[0])
 
-        if is_not_good_encoded_text or not len(self.n_gram_storages):
+        if is_not_good_encoded_text or not self.n_gram_storages:
             return {}
 
-        n = self.n_gram_storages['english'].keys()
+        levels = self.n_gram_storages['english'].keys()
 
         encoded_text_dict = {}
-        for i in n:
-            i_ngramtrie = NGramTrie(i)
+        for level in levels:
+            i_ngramtrie = NGramTrie(level)
             i_ngramtrie.fill_n_grams(encoded_text)
             i_ngramtrie.calculate_n_grams_frequencies()
             top_text = i_ngramtrie.top_n_grams(self.top_k)
 
-            encoded_text_dict[i] = top_text
+            encoded_text_dict[level] = top_text
 
         distance_dict = {}
-        for language in self.n_gram_storages.keys():
+        for language in self.n_gram_storages:
             sum_list = []
-            for i in n:
-                self.n_gram_storages[language][i].calculate_n_grams_frequencies()
-                language_top_grams = self.n_gram_storages[language][i].top_n_grams(self.top_k)
+            for level in levels:
+                self.n_gram_storages[language][level].calculate_n_grams_frequencies()
+                language_top_grams = self.n_gram_storages[language][level].top_n_grams(self.top_k)
 
-                sum_list.append(self._calculate_distance(encoded_text_dict[i], language_top_grams))
+                sum_list.append(self._calculate_distance(encoded_text_dict[level], language_top_grams))
 
             distance_dict[language] = sum(sum_list) / len(sum_list)
 

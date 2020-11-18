@@ -127,25 +127,6 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
                                                      bad_input)
             self.assertEqual(expected, actual)
 
-    def test_calculate_text_plagiarism_score_reversed_behaviour(self):
-        """
-        Tests that calculate_text_plagiarism_score function
-            can generate correct behaviour if replace texts with each other
-        """
-        original_text_tokens = (('the', 'cat', 'appeared'),
-                                ('the', 'dog', 'disappeared'))
-        suspicious_text_tokens = (('the', 'man', 'arrived'),
-                                  ('the', 'boy', 'left'))
-        plagiarism_threshold = 0.1
-
-        expected = (1/3+1/3)/2
-        original_text_tokens_1 = suspicious_text_tokens
-        suspicious_text_tokens_1 = original_text_tokens
-
-        actual = calculate_text_plagiarism_score(original_text_tokens,
-                                                 suspicious_text_tokens,
-                                                 plagiarism_threshold)
-
     def test_calculate_text_plagiarism_score_bigger_first_text(self):
         """
         Tests that calculate_text_plagiarism_score function
