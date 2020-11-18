@@ -14,7 +14,8 @@ class AccumulateDiffStatsTest(unittest.TestCase):
 
     def test_accumulate_diff_stats_ideal(self):
         """
-        Tests that accumulate_diff_stats function can handle simple ideal input
+        Tests that accumulate_diff_stats function
+            can handle simple ideal input
         """
         first_text = (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'bruno'))
         second_text = (('i', 'have', 'a', 'cat'), ('his', 'name', 'is', 'paw'))
@@ -30,7 +31,8 @@ class AccumulateDiffStatsTest(unittest.TestCase):
 
     def test_accumulate_diff_stats_check_output(self):
         """
-        Tests that accumulate_diff_stats function can generate correct correct output according to given specs
+        Tests that accumulate_diff_stats function
+            can generate correct correct output according to given specs
         """
         expected = {
             'text_plagiarism': 0.875,
@@ -56,7 +58,8 @@ class AccumulateDiffStatsTest(unittest.TestCase):
     @patch('lab_2.main.find_lcs_length', side_effect=find_lcs_length)
     def test_accumulate_diff_stats_calls_required_function(self, mock):
         """
-        Tests that accumulate_diff_stats function can call required function
+        Tests that accumulate_diff_stats function
+            can call required function
         """
         patches_text = (('i', 'have', 'a', 'cat'),
                         ('his', 'name', 'is', 'bruno'))
@@ -67,7 +70,8 @@ class AccumulateDiffStatsTest(unittest.TestCase):
     @patch('lab_2.main.calculate_plagiarism_score', side_effect=calculate_plagiarism_score)
     def test_accumulate_diff_stats_calls_second_required_function(self, mock):
         """
-        Tests that accumulate_diff_stats function can call required function
+        Tests that accumulate_diff_stats function
+            can call required function
         """
         patches_text = (('i', 'have', 'a', 'cat'),
                         ('his', 'name', 'is', 'bruno'))
@@ -78,7 +82,8 @@ class AccumulateDiffStatsTest(unittest.TestCase):
     @patch('lab_2.main.find_diff_in_sentence', side_effect=find_diff_in_sentence)
     def test_accumulate_diff_stats_calls_third_required_function(self, mock):
         """
-        Tests that accumulate_diff_stats function can call required function
+        Tests that accumulate_diff_stats function
+            can call required function
         """
         patches_text = (('i', 'have', 'a', 'cat'),
                         ('his', 'name', 'is', 'bruno'))

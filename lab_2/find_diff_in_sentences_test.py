@@ -52,7 +52,8 @@ class FindDiffInSentence(unittest.TestCase):
 
     def test_find_diff_in_sentence_no_diff(self):
         """
-        Tests that find_diff_in_sentence function can handle maximum same sentences
+        Tests that find_diff_in_sentence function
+            can handle maximum same sentences
         """
         first_sentence = ('his', 'body', 'is', 'covered', 'with', 'bushy', 'white')
 
@@ -126,13 +127,14 @@ class FindDiffInSentence(unittest.TestCase):
 
     def test_find_diff_in_sentence_empty_sentence(self):
         """
-        Tests that find_diff_in_sentence function can handle empty sentence inputs
+        Tests that find_diff_in_sentence function
+            can handle empty sentence inputs
         """
         first_sentence = ()
         second_sentence = ('a', 'dog', 'appeared')
         lcs = ()
 
-        expected = ((), ())
+        expected = ((), (0, 3))
         actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
         self.assertEqual(expected, actual)
 
@@ -148,7 +150,3 @@ class FindDiffInSentence(unittest.TestCase):
         expected = ((0, 1, 5, 7), (0, 1, 5, 7))
         actual = find_diff_in_sentence(first_sentence, second_sentence, lcs)
         self.assertEqual(expected, actual)
-
-
-if __name__ == "__main__":
-    unittest.main()

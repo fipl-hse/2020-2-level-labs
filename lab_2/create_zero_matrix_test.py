@@ -50,15 +50,6 @@ class ZeroMatrixTest(unittest.TestCase):
             actual_right = create_zero_matrix(1, bad_input)
             self.assertEqual(expected, actual_left)
             self.assertEqual(expected, actual_right)
-            print(bad_input)
-
-    @unittest.skip
-    def test_create_zero_matrix_stress_test(self):
-        """
-        Tests that create_zero_matrix function
-            can raise error in case of unexpected calculations
-        """
-        self.assertRaises(RuntimeError, create_zero_matrix, 1000000, 1000000)
 
     def test_create_zero_matrix_output_check(self):
         """

@@ -13,7 +13,8 @@ class FindLcsTest(unittest.TestCase):
 
     def test_find_lcs_ideal_case(self):
         """
-        Tests that find lcs function can handle ideal case
+        Tests that find lcs function
+            can handle ideal case
         """
         first_sentence = ('the', 'dog', 'is', 'running')
         second_sentence = ('the', 'cat', 'is', 'sleeping')
@@ -28,7 +29,8 @@ class FindLcsTest(unittest.TestCase):
 
     def test_find_lcs_no_lcs(self):
         """
-        Tests that find lcs function can handle sentences with lcs equal to zero
+        Tests that find lcs function
+            can handle sentences with lcs equal to zero
         """
         first_sentence = ('the', 'dog', 'is', 'running')
         second_sentence = ('a', 'cat', 'was', 'sleeping')
@@ -43,7 +45,8 @@ class FindLcsTest(unittest.TestCase):
 
     def test_find_lcs_reversed_behaviour(self):
         """
-        Tests that find lcs function can handle the same params mixed
+        Tests that find lcs function
+            can handle the same params mixed
         """
         first_sentence = ('the', 'cat', 'is', 'sleeping')
         second_sentence = ('the', 'dog', 'is', 'sleeping')
@@ -60,7 +63,8 @@ class FindLcsTest(unittest.TestCase):
 
     def test_find_lcs_empty_sentence(self):
         """
-        Tests that find lcs function can handle empty sentence inputs
+        Tests that find lcs function
+            can handle empty sentence inputs
         """
         patches_sentence = ('the', 'cat', 'is', 'sleeping')
         empty_sentence = ()
@@ -74,7 +78,8 @@ class FindLcsTest(unittest.TestCase):
 
     def test_find_lcs_empty_lcs_matrix(self):
         """
-        Tests that find lcs function can handle empty lcs_matrix param
+        Tests that find lcs function
+            can handle empty lcs_matrix param
         """
         patches_sentence = ('the', 'cat', 'is', 'sleeping')
         lcs_matrix = []
@@ -85,7 +90,8 @@ class FindLcsTest(unittest.TestCase):
 
     def test_find_lcs_incorrect_sentence_inputs(self):
         """
-        Tests that find lcs function can handle incorrect sentence inputs appropriately
+        Tests that find lcs function
+            can handle incorrect sentence inputs appropriately
         """
         patches_lcs_matrix = [[0, 0],
                               [0, 0]]
@@ -101,7 +107,8 @@ class FindLcsTest(unittest.TestCase):
 
     def test_find_lcs_incorrect_lcs_matrix_inputs(self):
         """
-        Tests that find lcs function can handle incorrect matrix inputs appropriately
+        Tests that find lcs function
+            can handle incorrect matrix inputs appropriately
         """
         patches_sentence = ('the', 'dog')
         bad_inputs = [{}, '', 9.22, -1, 0, -6, None, True, (None, None), [None], [[None, None]]]
@@ -113,7 +120,8 @@ class FindLcsTest(unittest.TestCase):
 
     def test_find_lcs_check_output(self):
         """
-        Tests that find lcs function can generate correct output format according to specs
+        Tests that find lcs function
+            can generate correct output format according to specs
         """
         first_sentence = ('the', 'cat', 'is', 'sleeping')
         second_sentence = ('the', 'dog', 'is', 'sleeping')
@@ -132,7 +140,8 @@ class FindLcsTest(unittest.TestCase):
 
     def test_find_lcs_different_size(self):
         """
-        Tests that find lcs function can handle different sized sentences
+        Tests that find lcs function
+            can handle different sized sentences
         """
         lcs_matrix = [[1, 1, 1, 1],
                       [1, 1, 1, 1],
@@ -146,7 +155,8 @@ class FindLcsTest(unittest.TestCase):
 
     def test_find_lcs_with_incorrect_matrix_provided(self):
         """
-        Tests that find lcs function can check lcs_matrix matches given sentences
+        Tests that find lcs function
+            can check lcs_matrix matches given sentences
             NB! So the first element of lcs_matrix should be
                 equal to 1 or 0, otherwise - empty tuple
         """
@@ -162,7 +172,8 @@ class FindLcsTest(unittest.TestCase):
 
     def test_find_lcs_matrix_with_incorrect_matrix_shape(self):
         """
-        Tests that find_lcs function can check lcs_matrix shape is incorrect due to given sentences
+        Tests that find_lcs function
+            can check lcs_matrix shape is incorrect due to given sentences
         """
         lcs_matrix = [[0, 0],
                       [0, 0]]

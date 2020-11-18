@@ -59,7 +59,8 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
 
     def test_calculate_text_plagiarism_score_incorrect_text_input(self):
         """
-        Tests that calculate_text_plagiarism_score function can handle incorrect texts inputs
+        Tests that calculate_text_plagiarism_score function
+            can handle incorrect texts inputs
         """
         text_patches = (('the', 'cat', 'left'),
                         ('the', 'dog', 'disappeared'))
@@ -79,7 +80,8 @@ class CalculateTextPlagiarismScoreTest(unittest.TestCase):
 
     def test_calculate_text_plagiarism_score_empty_texts(self):
         """
-        Tests that calculate_text_plagiarism_score function can handle empty texts inputs
+        Tests that calculate_text_plagiarism_score function
+            can handle empty texts inputs
         """
         empty_text = ((), ())
         patches_texts = (('the', 'cat', 'left'),
