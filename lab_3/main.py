@@ -188,10 +188,8 @@ class LanguageDetector:
         :param language_name: a language
         :return: 0 if succeeds, 1 if not
         """
-        check = (isinstance(encoded_text, tuple) or
-                 isinstance(encoded_text[0], tuple) or
-                 isinstance(language_name, str))
-        if not check:
+        if not isinstance(encoded_text, tuple) or \
+                None in encoded_text or not isinstance(language_name, str):
             return 1
 
         self.n_gram_storages[language_name] = {}
@@ -233,7 +231,8 @@ class LanguageDetector:
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary where a key is a language, a value – the distance
         """
-        if not isinstance(encoded_text, tuple):
+        if not isinstance(encoded_text, tuple) or None in encoded_text or \
+                encoded_text == 0 or self.n_gram_storages == {}:
             return {}
 
         language_dist_detect = {}
