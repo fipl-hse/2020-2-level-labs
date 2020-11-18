@@ -48,4 +48,4 @@ if __name__ == '__main__':
     print('this is a {} text.'.format(RESULT))
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == 'english', 'Not working'
+    assert RESULT == 'german', 'Not working'
