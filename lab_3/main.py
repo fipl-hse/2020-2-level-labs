@@ -191,7 +191,7 @@ class NGramTrie:
         """
         if not isinstance(k, int):
             return ()
-        top_n_grams = sorted(self.n_gram_log_probabilities, key=self.n_gram_log_probabilities.get, reverse=True)
+        top_n_grams = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)
         return tuple(top_n_grams[:k])
 
 
