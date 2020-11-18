@@ -15,7 +15,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     for sentence in sentences:
         letters_token = []
-        tokens = re.sub('[^a-z\s]', '', sentence.lower())
+        tokens = re.sub('[^a-z'\s']', '', sentence.lower())
         tokens = tokens.split()
         for token in tokens:
             letters_token.append(tuple(['_'] + list(token) + ['_']))
@@ -42,7 +42,7 @@ class LetterStorage:
     def get_id_by_letter(self, letter: str) -> int:
         checks = [not isinstance(letter, str)
                   or letter not in self.storage
-                  or not 0 < len(letter)]
+                  or not len(letter) > 0]
 
         if all(checks):
             return -1
@@ -116,8 +116,8 @@ class NGramTrie:
         return 0
 
     def calculate_log_probabilities(self) -> int:
-        for n_gram in self.n_gram_frequencies.keys():
-            sum_n_grams = [self.n_gram_frequencies[l_gram] for l_gram in self.n_gram_frequencies.keys()
+        for n_gram in self.n_gram_frequencies:
+            sum_n_grams = [self.n_gram_frequencies[l_gram] for l_gram in self.n_gram_frequencies
                            if l_gram[0] == n_gram[0]]
             self.n_gram_log_probabilities[n_gram] = log(self.n_gram_frequencies[n_gram] / sum(sum_n_grams))
 
@@ -159,7 +159,8 @@ class LanguageDetector:
             trie.calculate_log_probabilities()
             self.n_gram_storages[language_name].update({trie_level: trie})
         return 0
-
+    
+    @staticmethod
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         checks = [not isinstance(first_n_grams, tuple)
                   or not isinstance(second_n_grams, tuple)
@@ -198,7 +199,6 @@ class LanguageDetector:
 
         return language_distance
 
-
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
@@ -218,4 +218,3 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :return: a dictionary with language_name: probability
         """
         pass
-
