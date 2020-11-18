@@ -230,8 +230,11 @@ class NGramTrie:
 class LanguageDetector:
 
     def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
-        pass
+        self.top_k = top_k
+        self.trie_levels = trie_levels
+        self.n_gram_storages = {}
 
+    @universal_input_checker_method(1, tuple, str)
     def new_language(self, encoded_text: tuple, language_name: str) -> int:
         """
         Fills NGramTries with regard to the trie_levels field
@@ -239,8 +242,28 @@ class LanguageDetector:
         :param language_name: a language
         :return: 0 if succeeds, 1 if not
         """
-        pass
 
+        self.n_gram_storages[language_name] = {}
+
+        for i in self.trie_levels:
+            trie = NGramTrie(i)
+            trie.fill_n_grams(encoded_text)
+            trie.calculate_n_grams_frequencies()
+            trie.calculate_log_probabilities()
+            self.n_gram_storages[language_name][i] = trie
+
+        return 0
+
+    def is_number(self, x):
+        if x is None:
+            return False
+        if str(type(x)) == "<class 'bool'>":
+            return False
+        if not isinstance(x, int):
+            return False
+        return True
+
+    @universal_input_checker_method(-1, tuple, tuple)
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
@@ -248,7 +271,26 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
-        pass
+        for n_gram in first_n_grams:
+            for element in n_gram:
+                if not self.is_number(element):
+                    return -1
+        for n_gram in second_n_grams:
+            for element in n_gram:
+                if not self.is_number(element):
+                    return -1
+        distance = 0
+        for i, n_gram1 in enumerate(first_n_grams):
+            index = -1
+            for j, n_gram2 in enumerate(second_n_grams):
+                if n_gram1 == n_gram2:
+                    index = j
+                    break
+            if index == -1:
+                distance += len(second_n_grams)
+            else:
+                distance += abs(index - i)
+        return distance
 
     def detect_language(self, encoded_text: tuple) -> dict:
         """
