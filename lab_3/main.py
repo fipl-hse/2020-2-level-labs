@@ -45,11 +45,11 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        len_storage = len(self.storage)
+
         if not isinstance(letter, str) or letter == '':
             return 1
         if letter not in self.storage:
-            self.storage[letter] = len_storage + 1
+            self.storage[letter] = len(self.storage) + 1
             return 0
         return 0
 
@@ -71,14 +71,15 @@ class LetterStorage:
         :return: 0 if succeeds, 1 if not
         """
         if isinstance(corpus, tuple):
-            for w in corpus:
-                for l in w:
-                    self._put_letter(l)
+            for s in corpus:
+                for w in s:
+                    for l in w:
+                        self._put_letter(l)
             return 0
         return 1
 
 
-# letter = LetterStorage()
+
 
 # 6
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -88,26 +89,26 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    is_inst = isinstance(corpus, tuple) or isinstance(storage, LetterStorage)
+    is_inst = isinstance(corpus, tuple) and isinstance(storage, LetterStorage)
     if not is_inst:
         print(())
         return ()
 
     encoded_corpus = []
-    sentences = []
     for s in corpus:
         if not isinstance(s, tuple):
             return ()
-
+        sentences = []
         for w in s:
+            words = []
             for l in w:
-                l_id = storage.get_id_by_letter(l)
-            sentences.append(tuple([l_id]))
+                words.append(storage.get_id_by_letter(l))
+            sentences.append(tuple(words))
         encoded_corpus.append(tuple(sentences))
     print(encoded_corpus)
     return tuple(encoded_corpus)
 
-#encode_corpus(letter, corpus)
+
 
 # 6
 class NGramTrie:
@@ -118,7 +119,6 @@ class NGramTrie:
         self.n_gram_frequencies = {}
         self.n_gram_log_probabilities = {}
 
-    encoded_text = (((1, 2, 3, 4, 5), (2, 3, 4, 5)),)
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
@@ -165,14 +165,12 @@ class NGramTrie:
         """
         if len(self.n_gram_frequencies) == 0:
             return 1
-        probability = {}
 
         for gram in self.n_gram_frequencies:
             p = self.n_gram_frequencies[gram] / sum([self.n_gram_frequencies[next_gram] for next_gram in
                                                      self.n_gram_frequencies if next_gram[0] == gram[0]])
 
-            probability[gram] = log(p)
-        self.n_gram_log_probabilities = probability
+            self.n_gram_log_probabilities[gram] = log(p)
         return 0
 
     def top_n_grams(self, k: int) -> tuple:
