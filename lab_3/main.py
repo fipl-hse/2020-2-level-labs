@@ -143,7 +143,7 @@ class NGramTrie:
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        if not self.n_gram_frequencies:
+        if not self.n_grams:
             return 1
 
         for sentence in self.n_grams:
@@ -267,23 +267,14 @@ class LanguageDetector:
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
-    @staticmethod
-    def _calculate_sentence_probability(n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+    def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
         :param n_gram_storage: a filled NGramTrie with log-probabilities
         :param sentence_n_grams: n-grams from a sentence
         :return: a probability of a sentence
         """
-        if not isinstance(n_gram_storage, NGramTrie) or not isinstance(sentence_n_grams, tuple):
-            return -1.0
-        log_probabilities = []
-        for n_gram_sentence in sentence_n_grams:
-            for n_gram in n_gram_sentence:
-                for one_n_gram in n_gram:
-                    if one_n_gram in n_gram_storage.n_gram_log_probabilities:
-                        log_probabilities.append(n_gram_storage.n_gram_log_probabilities[one_n_gram])
-        return sum(log_probabilities)
+        pass
 
     def detect_language(self, encoded_text: tuple) -> dict:
         """
@@ -291,15 +282,4 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary with language_name: probability
         """
-        if not isinstance(encoded_text, tuple) or not all(isinstance(i, tuple) for i in encoded_text):
-            return {}
-
-        language_log_probability_dict = {}
-
-        for language, dictionary in self.n_gram_storages.items():
-            log_probabilities = 0
-            for n_gram_trie in dictionary.values():
-                log_probabilities += self._calculate_sentence_probability(n_gram_trie, encoded_text)
-            language_log_probability_dict[language] = log_probabilities / len(dictionary)
-
-        return language_log_probability_dict
+        pass
