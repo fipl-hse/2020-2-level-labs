@@ -2,11 +2,10 @@
 Language detector implementation starter
 """
 
-from lab_3.main import tokenize_by_sentence
+from lab_3.main import tokenize_by_sentence, NGramTrie
 from lab_3.main import LetterStorage
 from lab_3.main import encode_corpus
 from lab_3.main import ProbabilityLanguageDetector
-from lab_3.main import NGramTrie
 
 if __name__ == '__main__':
     english_language = open('lab_3/Frank_Baum.txt', encoding='utf-8')
@@ -30,7 +29,7 @@ if __name__ == '__main__':
     encoded_germ = encode_corpus(letter_storage, germ_text)
     encoded_unkn = encode_corpus(letter_storage, unkn_text)
 
-    language_detector = ProbabilityLanguageDetector()
+    language_detector = ProbabilityLanguageDetector((3, 4, 5), 1000)
     language_detector.new_language(encoded_eng, 'english')
     language_detector.new_language(encoded_germ, 'german')
 
