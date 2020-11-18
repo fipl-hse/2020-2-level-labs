@@ -85,8 +85,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
     encoded_corpus = []
-    list_of_sentences = []
     for sentence in corpus:
+        list_of_sentences = []
         for word in sentence:
             list_of_sentences.append(tuple([storage.get_id_by_letter(letter) for letter in word]))
         encoded_corpus.append(tuple(list_of_sentences))
@@ -177,19 +177,17 @@ class LanguageDetector:
         :param language_name: a language
         :return: 0 if succeeds, 1 if not
         """
-        if not isinstance(encoded_text, tuple) or not isinstance(language_name, str):
+        if not isinstance(encoded_text, tuple) or not isinstance(language_name, str) or not all(encoded_text):
             return 1
-        for i in encoded_text:
-            if not isinstance(i, tuple):
-                return 1
         self.n_gram_storages[language_name] = {}
         for level in self.trie_levels:
-            language = NGramTrie(level)
-            language.fill_n_grams(encoded_text)
-            language.calculate_n_grams_frequencies()
-            language.calculate_log_probabilities()
-            self.n_gram_storages[language_name][level] = language
+            language_storage = NGramTrie(level)
+            language_storage.fill_n_grams(encoded_text)
+            language_storage.calculate_n_grams_frequencies()
+            language_storage.calculate_log_probabilities()
+            self.n_gram_storages[language_name][level] = language_storage
         return 0
+
 
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
@@ -215,7 +213,15 @@ class LanguageDetector:
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary where a key is a language, a value – the distance
         """
-        pass
+        # if not isinstance(encoded_text, tuple):
+        #     return {}
+        # language_distance = {}
+        # for language, storage in self.n_gram_storages.items():
+        #     language_distance[language] = 0
+        #     for size, trie in storage.items():
+
+
+
 
 
 # 10
