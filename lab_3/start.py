@@ -40,6 +40,6 @@ if __name__ == '__main__':
     # here goes your function calls
     actual = language_detector.detect_language(unknown_ngram.n_grams)
 
-    RESULT = actual['english'] < actual['german']
+    RESULT = actual['german'] > actual['english']
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, "Doesn't work"
