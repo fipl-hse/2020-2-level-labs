@@ -15,7 +15,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     for sentence in sentences:
         letters_token = []
-        tokens = re.sub('[^a-z'\s']', '', sentence.lower())
+        tokens = re.sub('[^a-z \s]', '', sentence.lower())
         tokens = tokens.split()
         for token in tokens:
             letters_token.append(tuple(['_'] + list(token) + ['_']))
