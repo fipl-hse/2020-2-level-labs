@@ -15,5 +15,5 @@ def tokenize(text: str) -> list:
     """
     if not isinstance(text, str):
         return []
-    text_output = re.sub('[^a-z \n]', '', text.lower()).split('\n')
+    text_output = re.sub('[^a-z \n]', '', text.lower()).split()
     return text_output
