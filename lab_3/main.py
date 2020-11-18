@@ -9,8 +9,6 @@ from typing import List, Tuple, Any, Dict, Union
 from itertools import chain
 
 
-# A good example of what would happen if you were obsessed with type annotations
-
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
@@ -161,7 +159,7 @@ class NGramTrie:
             return 1
 
         for n_gram, freq in self.n_gram_frequencies.items():
-            n_gram_prob = sum(_freq for token, _freq in self.n_gram_frequencies.items() if n_gram[0] == token[0])
+            n_gram_prob = sum(_freq for token, _freq in self.n_gram_frequencies.items() if n_gram[:-1] == token[:-1])
             self.n_gram_log_probabilities[n_gram] = math.log(freq / n_gram_prob)
 
         return 0
