@@ -197,13 +197,25 @@ class LanguageDetector:
             language_distance[language] = sum(language_distance[language]) / len(language_distance[language])
 
         return language_distance
-    
-    
+
+
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
     def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+        """
+        Calculates sentence probability
+        :param n_gram_storage: a filled NGramTrie with log-probabilities
+        :param sentence_n_grams: n-grams from a sentence
+        :return: a probability of a sentence
+        """
         pass
 
     def detect_language(self, encoded_text: tuple) -> dict:
+        """
+        Detects the language the unknown sentence is written in using sentence probability in different languages
+        :param encoded_text: a tuple of sentences with tuples of tokens split into letters
+        :return: a dictionary with language_name: probability
+        """
         pass
+
