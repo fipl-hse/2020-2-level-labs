@@ -86,7 +86,10 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         return ()
     encoded_corpus = []
     for element in corpus:
-        encoded_corpus.append(tuple(tuple([storage.get_id_by_letter(letter)]) for letter in element))
+        list_element = []
+        for word in element:
+            list_element.append(tuple([storage.get_id_by_letter(letter) for letter in word]))
+        encoded_corpus.append(tuple(list_element))
     return tuple(encoded_corpus)
 
 
