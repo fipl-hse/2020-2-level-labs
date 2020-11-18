@@ -63,9 +63,17 @@ class LetterStorage:
                               or letter == '' or letter is None
         if wrong_circumstances:
             return 1
+        '''
         number = 0
         if letter not in self.storage:  # записываем букву и её индекс в словарь
             self.storage[letter] = number + 1
+        '''
+        if letter not in self.storage:  # если буквы не было в словаре
+            if self.storage == {}:  # если словарь пустой
+                self.storage[letter] = 1
+            else:  # если словарь не пустой, то последнее значение словаря + 1
+                all_keys = list(self.storage.keys())  # список всех ключей словаря
+                self.storage[letter] = self.storage[all_keys[-1]] + 1
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -269,17 +277,10 @@ class LanguageDetector:
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary where a key is a language, a value – the distance
         """
-        '''
-        text = tokenize_by_sentence(encoded_text)  # разбили текст на кортежи слов
-        storage_for_text = LetterStorage()
-        text = encode_corpus(storage_for_text, text)  # закодировали текст
-        '''
         wrong_circumstances = not isinstance(encoded_text, tuple) or isinstance(encoded_text, bool) \
                               or None in encoded_text or encoded_text == ()
         if wrong_circumstances:
             return {}
-
-        # вызвать функцию для того, чтобы получился словарь?
 
         storage = {}
 
@@ -290,123 +291,41 @@ class LanguageDetector:
             unknown.calculate_n_grams_frequencies()
             unknown.calculate_log_probabilities()
             top_u.append(unknown.top_n_grams(self.top_k))
-        '''
-        unknown_2 = NGramTrie(2)
-        unknown_2.fill_n_grams(encoded_text)
-        unknown_2.calculate_n_grams_frequencies()
-        unknown_2.calculate_log_probabilities()
-        top_u_2 = unknown_2.top_n_grams(self.top_k)
-        
-        unknown_3 = NGramTrie(3)
-        unknown_3.fill_n_grams(encoded_text)
-        unknown_3.calculate_n_grams_frequencies()
-        unknown_3.calculate_log_probabilities()
-        top_u_3 = unknown_3.top_n_grams(self.top_k)
-        '''
 
-        top_e = []  # топы для английского
-        eng_storage = self.n_gram_storages['english']  # с большой буквы??
-        for example in eng_storage.values():
-            top_e.append(example.top_n_grams(self.top_k))
+        if 'english' in self.n_gram_storages:
+            top_e = []  # топы для английского
+            eng_storage = self.n_gram_storages['english']
+            for example in eng_storage.values():
+                top_e.append(example.top_n_grams(self.top_k))
 
-        top_g = []  # топы для немецкого
-        ger_storage = self.n_gram_storages['German']  #  с большой буквы??
-        for example in ger_storage.values():
-            top_g.append(example.top_n_grams(self.top_k))
+            dif_e = []  # разница с английским
 
-        dif_e = []  # разница с английским
-        dif_g = []  # разница с немецким
-        for u in top_u:
-            for e in top_e:
-                dif_e.append(self._calculate_distance(u, e))
-            for g in top_g:
-                dif_g.append(self._calculate_distance(u, g))
-        dif_e = mean(dif_e)
-        dif_g = mean(dif_g)
+            for u in top_u:  # находим расстояние между топами английского и неизвестного языков
+                for e in top_e:
+                    dif_e.append(self._calculate_distance(u, e))
 
-        storage['english'] = dif_e
-        storage['german'] = dif_g
+            dif_e = mean(dif_e)  # среднее расстояние
+
+            storage['english'] = dif_e  # записываем среднее расстояние между английским и неизвестным
+
+        if 'german' in self.n_gram_storages:
+            top_g = []  # топы для немецкого
+            ger_storage = self.n_gram_storages['german']
+            for example in ger_storage.values():
+                top_g.append(example.top_n_grams(self.top_k))
+
+            dif_g = []  # разница с немецким
+
+            for u in top_u:  # находим расстояние между топами немецкого и неизвестного языков
+                for g in top_g:
+                    dif_g.append(self._calculate_distance(u, g))
+
+            dif_g = mean(dif_g)  # среднее расстояние
+
+            storage['german'] = dif_g  # записываем среднее расстояние между английским и неизвестным
 
         return storage
 
-            # новое старое решение
-        '''
-        e_2 = eng_storage[2]
-        e_3 = eng_storage[3]
-        top_e_2 = e_2.top_n_grams(self.top_k)  # топ для английского
-        top_e_3 = e_3.top_n_grams(self.top_k)
-        
-        ger_storage = self.n_gram_storages['german']
-        g_2 = ger_storage[2]
-        g_3 = ger_storage[3]
-        top_g_2 = g_2.top_n_grams(self.top_k)  # топ для немецкого
-        top_g_3 = g_3.top_n_grams(self.top_k)
-
-        dif_e_2 = self._calculate_distance(top_u_2, top_e_2)
-        dif_e_3 = self._calculate_distance(top_u_3, top_e_3)
-        dif_g_2 = self._calculate_distance(top_u_2, top_g_2)
-        dif_g_3 = self._calculate_distance(top_u_3, top_g_3)
-
-        storage['english'] = mean(dif_e_2, dif_e_3)
-        storage['german'] = mean(dif_g_2, dif_g_3)
-
-        return storage
-        '''
-        #  самое старое решение
-        '''
-        final_storage = {}
-
-        storage_for_unknown = {}  # словарь для неизвестного языка
-        dict_for_unknown = {}  # создаем словарь, который будет значением
-        for element in self.trie_levels:  # создаем экземпляр класса NGramTrie для каждого числа
-            unknown = NGramTrie(element)
-            unknown.fill_n_grams(encoded_text)
-            unknown.calculate_n_grams_frequencies()
-            dict_for_unknown[element] = unknown  # записываем число в ключ, заполненный экземпляр в значение
-        storage_for_unknown['unknown language'] = dict_for_unknown
-
-        # top n-граммы для неизвестного языка
-        unknown_summ_all_top = []  # здесь топ n-граммы для каждого числа n
-        for language, storage in storage_for_unknown.items():
-            unknown_all_top = []
-            for number, example in storage.items():
-                top = example.top_n_grams(self.top_k)  # нашли top n-граммы для каждого экземпляра языка
-                unknown_all_top.append(top)
-                unknown_summ_all_top.append(tuple(unknown_all_top))
-
-        # найти top n-граммы для каждого языка и сравнить с top n-граммами для неизвестного
-        summ_all_top_english = []  # здесь топ n-граммы для каждого числа n английского
-        summ_all_top_german = []  # здесь топ n-граммы для каждого числа n немецкого
-        for language, storage in self.n_gram_storages.items():
-            all_top = []
-            for number, example in storage.items():
-                top = example.top_n_grams(self.top_k)  # нашли top n-граммы для каждого экземпляра языка
-                all_top.append(top)
-                if language == 'English':
-                    summ_all_top_english.append(tuple(all_top))
-                else:
-                    summ_all_top_german.append(tuple(all_top))
-
-        # сравнить top n-граммы неизвестного языка с известными
-        difference_with_english = []
-        difference_with_german = []
-        print(unknown_summ_all_top)
-        print(summ_all_top_english)
-        print(summ_all_top_german)
-        for index in enumerate(unknown_summ_all_top):
-            difference_e = self._calculate_distance(unknown_summ_all_top[index], summ_all_top_english[index])
-            difference_g = self._calculate_distance(unknown_summ_all_top[index], summ_all_top_german[index])
-            difference_with_english.append(difference_e)
-            difference_with_german.append(difference_g)
-
-        difference_with_english = mean(difference_with_english)
-        difference_with_german = mean(difference_with_german)
-
-        final_storage['English'] = difference_with_english
-        final_storage['German'] = difference_with_german
-
-        return final_storage
-        '''
 
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
