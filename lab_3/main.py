@@ -92,8 +92,11 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     encoded_corpus=[]
     for sent in corpus:
         encoded_sent=[]
-        for letter in sent:
-            encoded_sent.append(storage.get_id_by_letter(letter))
+        for word in sent:
+            encoded_word=[]
+            for letter in word:
+                encoded_word.append(storage.get_id_by_letter(letter))
+            encoded_sent.append(tuple(encoded_word))
         encoded_corpus.append(tuple(encoded_sent))
     return  tuple(encoded_corpus)
 
@@ -102,21 +105,46 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 class NGramTrie:
 
     def __init__(self, n: int):
-        pass
+        self.size=n
+        self.n_grams=()
+        self.n_gram_frequencies={}
+        self.n_gram_log_probabilities={}
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(encoded_text,tuple):
+            return 1
+        bi_grams=[]
+        for sent in encoded_text:
+            sent_gram=[]
+            for word in sent:
+                word_gram=[]
+                for i  in range (len(word)-1):
+                    word_gram.append(tuple(word[i:i+2]))
+                sent_gram.append(tuple(word_gram))
+            bi_grams.append(tuple(sent_gram))
+        self.n_grams=tuple(bi_grams)
+        return 0
 
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not self.n_grams:
+            return 1
+        for sent in self.n_grams:
+            for word in sent:
+                for num in word:
+                    if num  in self.n_gram_frequencies:
+                        self.n_gram_frequencies[num]+=1
+                    else:
+                        self.n_gram_frequencies[num]=1
+        return 0
+
 
     def calculate_log_probabilities(self) -> int:
         """
