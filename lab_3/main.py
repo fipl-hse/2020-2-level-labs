@@ -20,13 +20,13 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    if not isinstance(text, str) or not len(text):
+    if not isinstance(text, str) or not text:
         return ()
     result = []
     new_text = re.split('[.!?]', text)
     for element in new_text:
         tokens = re.sub('[^a-z \n]', '', element.lower()).split()
-        if len(tokens):
+        if tokens:
             result.append(tuple(tuple(['_'] + list(token) + ['_']) for token in tokens))
     return tuple(result)
 
@@ -126,7 +126,7 @@ class NGramTrie:
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        if not len(self.n_grams):
+        if not self.n_grams:
             return 1
         for element in self.n_grams:
             for token in element:
@@ -139,7 +139,7 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        if not len(self.n_gram_frequencies):
+        if not self.n_gram_frequencies:
             return 1
         for element in self.n_gram_frequencies:
             probab = self.n_gram_frequencies[element] / sum([self.n_gram_frequencies[n_gram]
@@ -194,9 +194,10 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
+        checker = ((first_n_grams and not isinstance(first_n_grams[0],  (tuple, str)))
+                   or (second_n_grams and not isinstance(second_n_grams[0], (tuple, str))))
         if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple) \
-                or (first_n_grams and not isinstance(first_n_grams[0],  (tuple, str))) \
-                or (second_n_grams and not isinstance(second_n_grams[0], (tuple, str))):
+                or checker:
             return -1
         distance = 0
         for index_1, n_gam in enumerate(first_n_grams):
