@@ -22,6 +22,7 @@ if __name__ == '__main__':
     german_file.close()
     unknown_file.close()
 
+    letter_storage = LetterStorage()
     eng_encoded = encode_corpus(letter_storage, text_eng)
     unk_encoded = encode_corpus(letter_storage, text_unk)
     ger_encoded = encode_corpus(letter_storage, text_ger)
