@@ -261,6 +261,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
                         log_probabilities.append(n_gram_storage.n_gram_log_probabilities[one_n_gram])
         return sum(log_probabilities)
 
+
     def detect_language(self, encoded_text: tuple) -> dict:
         """
         Detects the language the unknown sentence is written in using sentence probability in different languages
