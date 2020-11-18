@@ -47,6 +47,5 @@ if __name__ == '__main__':
 
     print('this is a {} text.'.format(RESULT))
 
-    RESULT = ''
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Not working'
+    assert RESULT == '', 'Not working'
