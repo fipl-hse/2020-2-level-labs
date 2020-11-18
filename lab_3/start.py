@@ -2,7 +2,7 @@
 Language detector implementation starter
 """
 
-from lab_3.main import *
+from lab_3.main import tokenize_by_sentence, LetterStorage, encode_corpus, ProbabilityLanguageDetector, NGramTrie
 
 if __name__ == '__main__':
 
