@@ -39,7 +39,6 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.ids = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -47,11 +46,11 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        if not isinstance(letter, str) or letter == '':
+        if not isinstance(letter, str):
             return 1
+
         if letter not in self.storage:
-            self.storage[letter] = self.ids
-            self.ids += 1
+            self.storage[letter] = len(self.storage)
 
         return 0
 
@@ -61,7 +60,7 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        if not isinstance(letter, str) or letter not in self.storage or not 0 < len(letter) <= 1:
+        if not isinstance(letter, str) or letter not in self.storage:
             return -1
 
         return self.storage[letter]
@@ -130,7 +129,7 @@ class NGramTrie:
             sentence_l = []
             for word in sentence:
                 word_l = []
-                for i in range(len(word) - 1):
+                for i in range(len(word) - self.size + 1):
                     word_l.append(tuple((word[i], word[i + 1])))
                 sentence_l.append(tuple(word_l))
             bi_gram.append(tuple(sentence_l))
@@ -149,11 +148,8 @@ class NGramTrie:
 
         for sentence in self.n_grams:
             for word in sentence:
-                for grams in word:
-                    if grams in self.n_gram_frequencies:
-                        self.n_gram_frequencies[grams] += 1
-                    else:
-                        self.n_gram_frequencies[grams] = 1
+                for n_gram in word:
+                    self.n_gram_frequencies[n_gram] = self.n_gram_frequencies.get(n_gram, 0) + 1
         return 0
 
     def calculate_log_probabilities(self) -> int:
@@ -164,9 +160,11 @@ class NGramTrie:
         if len(self.n_gram_frequencies) == 0:
             return 1
 
-        for n_gram, frequency in self.n_gram_frequencies.items():
-            probability = frequency / sum([self.n_gram_frequencies[n_gram1] for n_gram1 in self.n_gram_frequencies if
-                                           n_gram1[:-1] == n_gram[:-1]])
+        for n_gram in self.n_gram_frequencies:
+            sum_frequencies = sum([self.n_gram_frequencies[gram] for gram in self.n_gram_frequencies
+                                   if gram[0] == n_gram[0]])
+            probability = self.n_gram_frequencies[n_gram] / sum_frequencies
+
             self.n_gram_log_probabilities[n_gram] = math.log(probability)
 
         return 0
@@ -205,12 +203,12 @@ class LanguageDetector:
 
         self.n_gram_storages[language_name] = {}
 
-        for size in self.trie_levels:
-            self.n_gram_storages[language_name].update({size: NGramTrie(size)})
-            trie = self.n_gram_storages[language_name][size]
-            trie.fill_n_grams(encoded_text)
-            trie.calculate_n_grams_frequencies()
-            trie.calculate_log_probabilities()
+        for i in self.trie_levels:
+            new_language = NGramTrie(i)
+            new_language.fill_n_grams(encoded_text)
+            new_language.calculate_n_grams_frequencies()
+            new_language.calculate_log_probabilities()
+            self.n_gram_storages[language_name][i] = new_language
 
         return 0
 
@@ -250,19 +248,20 @@ class LanguageDetector:
         if not isinstance(encoded_text, tuple) or not all(encoded_text):
             return {}
 
-        distance_lang = {}
-        for language, dictionary in self.n_gram_storages.items():
-            distances = 0
-            for n_gram_size, n_gram_trie in dictionary.items():
-                top_n_grams = n_gram_trie.top_n_grams(self.top_k)
-                unknown_n_gram_trie = NGramTrie(n_gram_size)
-                unknown_n_gram_trie.fill_n_grams(encoded_text)
-                unknown_n_gram_trie.calculate_n_grams_frequencies()
-                top_n_grams1 = unknown_n_gram_trie.top_n_grams(self.top_k)
-                distances += self._calculate_distance(top_n_grams, top_n_grams1)
-            distance_lang[language] = distances / len(dictionary)
+        languages_dict = {}
+        for language in self.n_gram_storages:
+            languages_dict[language] = []
+            for i in self.n_gram_storages['english']:
+                storage = NGramTrie(i)
+                storage.fill_n_grams(encoded_text)
+                storage.calculate_n_grams_frequencies()
+                self.n_gram_storages[language][i].calculate_n_grams_frequencies()
+                languages_dict[language].append(self._calculate_distance(storage.top_n_grams(self.top_k),
+                                                                         self.n_gram_storages[language][i].top_n_grams(
+                                                                             self.top_k)))
+            languages_dict[language] = sum(languages_dict[language]) / len(languages_dict[language])
 
-        return distance_lang
+        return languages_dict
 
 
 # 10
