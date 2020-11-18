@@ -99,7 +99,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         for word in sentence:
             sentences.append(tuple([storage.get_id_by_letter(letter) for letter in word]))
         just_corpus.append(tuple(sentences))
-        finall_corpus = tuple(just_corpus)
+    finall_corpus = tuple(just_corpus)
     return finall_corpus
 
 
