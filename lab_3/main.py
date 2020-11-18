@@ -48,9 +48,8 @@ class LetterStorage:
         if not isinstance(letter, str) or not letter:
             return 1
 
-        id = len(self.storage)
         if letter not in self.storage:
-            self.storage[letter] = id + 1
+            self.storage[letter] = len(self.storage) + 1
 
         return 0
 
@@ -73,9 +72,10 @@ class LetterStorage:
         if not isinstance(corpus, tuple):
             return 1
 
-        for word in corpus:
-            for letter in word:
-                self._put_letter(letter)
+        for sentence in corpus:
+            for word in sentence:
+                for letter in word:
+                    self._put_letter(letter)
 
         return 0
 
@@ -94,13 +94,10 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     new_corpus = []
 
     for sentence in corpus:
-        if not isinstance(sentence[0], tuple):
-            [storage._put_letter(letter) for letter in sentence]
-            new_corpus.append(tuple(tuple([storage.get_id_by_letter(letter)]) for letter in sentence))
-        else:
-            for word in sentence:
-                [storage._put_letter(letter) for letter in word]
-                new_corpus.append(tuple(tuple([storage.get_id_by_letter(letter)]) for letter in word))
+        sentence_list = []
+        for word in sentence:
+            sentence_list.append(tuple([storage.get_id_by_letter(letter) for letter in word]))
+        new_corpus.append(tuple(sentence_list))
 
     return tuple(new_corpus)
 
@@ -178,7 +175,7 @@ class NGramTrie:
         if not isinstance(k, int) or isinstance(k, bool):
             return ()
 
-        top_n_grams = sorted(self.n_gram_frequencies.keys(), key=lambda n_gram: n_gram[1], reverse=True)
+        top_n_grams = sorted(self.n_gram_frequencies.keys(), key=self.n_gram_frequencies.get, reverse=True)
 
         return tuple(top_n_grams[:k])
 
@@ -186,8 +183,10 @@ class NGramTrie:
 # 8
 class LanguageDetector:
 
-    def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
-        pass
+    def __init__(self, trie_levels: tuple = (2, 3, 4), top_k: int = 10):
+        self.trie_levels = trie_levels
+        self.top_k = top_k
+        self.n_gram_storages = {}
 
     def new_language(self, encoded_text: tuple, language_name: str) -> int:
         """
@@ -196,7 +195,21 @@ class LanguageDetector:
         :param language_name: a language
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if (not isinstance(encoded_text, tuple) or
+            None in encoded_text or
+            not isinstance(language_name, str)):
+
+            return 1
+
+        self.n_gram_storages[language_name] = {}
+        for n_gram_size in self.trie_levels:
+            storage = NGramTrie(n_gram_size)
+            storage.fill_n_grams(encoded_text)
+            storage.calculate_n_grams_frequencies()
+            storage.calculate_log_probabilities()
+            self.n_gram_storages[language_name][n_gram_size] = storage
+
+        return 0
 
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
@@ -205,7 +218,23 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
-        pass
+        if (not isinstance(first_n_grams, tuple) or
+            not isinstance(second_n_grams, tuple) or
+            None in first_n_grams or
+            None in second_n_grams):
+
+            return -1
+
+        distance = 0
+        for fst_idx, fst_n_gram in enumerate(first_n_grams):
+            if fst_n_gram not in second_n_grams:
+                distance += len(second_n_grams)
+            for scd_idx, scd_n_gram in enumerate(second_n_grams):
+                if fst_n_gram == scd_n_gram:
+                    distance += abs(fst_idx - scd_idx)
+
+        return distance
+
 
     def detect_language(self, encoded_text: tuple) -> dict:
         """
@@ -214,7 +243,6 @@ class LanguageDetector:
         :return: a dictionary where a key is a language, a value – the distance
         """
         pass
-
 
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
