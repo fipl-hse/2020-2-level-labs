@@ -17,14 +17,36 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    pass
+
+    if not isinstance(text, str):
+        return ()
+    result = []
+
+    sentences = text.lower().split('.')     # все заглавные буквы делаем прописными и разбиваем по точке исходный текст на предложения
+
+    for elem in sentences:  # для предложений
+        if elem:    # если предложение не пустое (я хз, почему он в первом тесте после последнего предложения, добавляет ещё пустое: '', поэтому проверяю)
+            sentence = []     # список, куда будем сохранять обработанные предложения, объявляем его внутри цикла, а не вне
+            # потому что нужно, чтобы когда мы начинаем идти по новому предложению, он был пустым, иначе в result предыдущие предложения будут добавлены несколько раз
+            word = elem.split()     # создаем список из слов из этого предложения
+            for token in word:  # проходим по словам из списка
+                token = [letter for letter in list(token) if letter.isalpha()]     # проходим по символам слова, проверяя, является ли символ буквой, и составляем список из букв слова
+                # исключаем таким образом все лишние символы
+                if len(token) != 0:     # проверяем, не пустое ли слово
+                    sentence.append(tuple(['_'] + token + ['_']))
+            if sentence:    # если список предложений не пустой
+                result.append(tuple(sentence))    # добавляем в result кортеж предложения, разбитого на слова и буквы
+        # т.е., например, когда закончим обработку предложения She is happy, в кортеж будет добавлено (('_', 's', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
+            else:   # иначе возвращаем кортеж
+                return ()
+    return tuple(result)
 
 
 # 4
 class LetterStorage:
 
     def __init__(self):
-        pass
+        self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -32,7 +54,11 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(letter, str) or letter == '':
+            return 1
+        if letter not in self.storage:
+            self.storage[letter] = 5 + len(self.storage)
+        return 0
 
     def get_id_by_letter(self, letter: str) -> int:
         """
@@ -40,7 +66,9 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        pass
+        if letter not in self.storage:      # если такой буквы нет в хранилище
+            return -1
+        return self.storage[letter]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -48,7 +76,13 @@ class LetterStorage:
         :param corpus: a tuple of sentences
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(corpus, tuple):
+            return 1
+        for sentence in corpus:   # проходим по предложениям в корпусе
+            for word in sentence:   # проходим по словам в предложении
+                for letter in word:  # проходим по символам в кортеже слова
+                    self._put_letter(letter)
+        return 0
 
 
 # 6
