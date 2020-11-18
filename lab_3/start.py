@@ -23,6 +23,10 @@ if __name__ == '__main__':
     unknown_file.close()
 
     letter_storage = LetterStorage()
+    letter_storage.update(text_eng)
+    letter_storage.update(text_ger)
+    letter_storage.update(text_unk)
+
     eng_encoded = encode_corpus(letter_storage, text_eng)
     unk_encoded = encode_corpus(letter_storage, text_unk)
     ger_encoded = encode_corpus(letter_storage, text_ger)
