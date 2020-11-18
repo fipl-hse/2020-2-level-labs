@@ -1,11 +1,11 @@
 """
 Language detection using n-grams
 """
+
 import re
 from math import log
 
 # 4
-
 def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
@@ -197,3 +197,13 @@ class LanguageDetector:
             language_distance[language] = sum(language_distance[language]) / len(language_distance[language])
 
         return language_distance
+    
+    
+ # 10
+class ProbabilityLanguageDetector(LanguageDetector):
+
+    def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+        pass
+
+    def detect_language(self, encoded_text: tuple) -> dict:
+        pass
