@@ -206,7 +206,7 @@ class LanguageDetector:
 
         for i in self.trie_levels:
 
-             self.n_gram_storages[language_name][i].fill_n_grams(encoded_text)
+            self.n_gram_storages[language_name][i].fill_n_grams(encoded_text)
 
         return 0
 
@@ -218,9 +218,9 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
+
         if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple)\
-                or len(first_n_grams) != 0 and not isinstance(first_n_grams[0], (str, tuple))\
-                or len(second_n_grams) != 0 and not isinstance(second_n_grams[0], (str, tuple)):
+                or None in first_n_grams or None in second_n_grams:
             return -1
 
         if not first_n_grams or not second_n_grams:
@@ -248,11 +248,9 @@ class LanguageDetector:
             return {}
 
         languages_dict = {}
-        
         for language in self.n_gram_storages.keys():
             languages_dict[language] = []
-            
-            for i in self.n_gram_storages['english'].keys():
+            for i in self.n_gram_storages['english']:
                 storage = NGramTrie(i)
                 storage.fill_n_grams(encoded_text)
                 storage.calculate_n_grams_frequencies()
