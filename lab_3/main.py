@@ -93,6 +93,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         return ()
     just_corpus = []
     for sentence in corpus:
+        if not isinstance(sentence, tuple):
+            return ()
         sentences = []
         for word in sentence:
             sentences.append(tuple([storage.get_id_by_letter(letter) for letter in word]))
