@@ -42,4 +42,4 @@ if __name__ == '__main__':
 
     RESULT = actual['english'] < actual['german']
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == 1, "Doesn't work"
+    assert RESULT, "Doesn't work"
