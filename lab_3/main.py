@@ -130,9 +130,7 @@ class NGramTrie:
         if not isinstance(k, int):
             return ()
 
-        top = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)
-
-        return tuple(top[:k])
+        return tuple(sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)[:k])
 
 # 8
 class LanguageDetector:
