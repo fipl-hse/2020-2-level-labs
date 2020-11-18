@@ -30,7 +30,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         if not list_tokens:
             continue
         list_letters.append(tuple(tuple(['_'] + list(token) + ['_']) for token in list_tokens))
-
+    return tuple(list_letters)
 
 # 4
 class LetterStorage:
@@ -111,9 +111,9 @@ class NGramTrie:
         if not isinstance(encoded_text, tuple):
             return 1
         list_n_grams = []
-        for sentence in encoded_text:
+        for element in encoded_text:
             n_grams_sentence = []
-            for token in sentence:
+            for token in element:
                 n_grams_token = []
                 for ind in range(len(token) - self.size + 1):
                     n_grams_token.append(tuple(token[ind:ind + self.size]))
