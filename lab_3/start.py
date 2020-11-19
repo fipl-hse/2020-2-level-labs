@@ -38,8 +38,11 @@ if __name__ == '__main__':
     unknown_n_gram = NGramTrie(4)
     unknown_n_gram.fill_n_grams(unknown_encoded_text)
 
-    RESULT = language_detector.detect_language(unknown_n_gram.n_grams)
-    print(RESULT)
+    language_log_probability_dict = language_detector.detect_language(unknown_n_gram.n_grams)
+    if language_log_probability_dict['german'] > language_log_probability_dict['english']:
+        RESULT = 'english'
+    else:
+        RESULT = 'german'
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT['german'] > RESULT['english']
+    assert RESULT == 'german', 'Not working'
