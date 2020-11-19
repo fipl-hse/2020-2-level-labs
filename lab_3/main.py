@@ -136,7 +136,7 @@ class NGramTrie:
                 n_grams_number = len(word) - self.size + 1
                 count = 0
                 while len(listed_word) < n_grams_number:
-                    listed_word.append(tuple(word[count:self.size + count]))
+                    listed_word.append(tuple(word[count:count + self.size]))
                     count += 1
                 listed_sent.append(tuple(listed_word))
             listed_n_grams.append(tuple(listed_sent))
@@ -191,7 +191,9 @@ class NGramTrie:
 class LanguageDetector:
 
     def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
-        pass
+        self.trie_levels = trie_levels
+        self.top_k = top_k
+        self.n_gram_storages = {}
 
     def new_language(self, encoded_text: tuple, language_name: str) -> int:
         """
@@ -200,8 +202,24 @@ class LanguageDetector:
         :param language_name: a language
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if (not isinstance(encoded_text, tuple) or
+                not isinstance(language_name, str) or
+                not len(encoded_text) or
+                not isinstance(encoded_text[0], (tuple, str))):
+            return 1
 
+        self.n_gram_storages[language_name] = {}
+
+        for trie_level in self.trie_levels:
+            lang_storage = NGramTrie(trie_level)
+            lang_storage.fill_n_grams(encoded_text)
+            lang_storage.calculate_n_grams_frequencies()
+            lang_storage.calculate_log_probabilities()
+            self.n_gram_storages[language_name][trie_level] = lang_storage
+
+        return 0
+
+    @staticmethod
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
@@ -209,7 +227,24 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
-        pass
+        if (not isinstance(first_n_grams, tuple) or
+                not isinstance(second_n_grams, tuple) or
+                not len(first_n_grams) or not len(second_n_grams) or
+                not isinstance(first_n_grams[0], (tuple, str)) or
+                not isinstance(second_n_grams[0], (tuple, str))):
+            return -1
+
+        distance = []
+
+        for ind_1, n_gram_1 in enumerate(first_n_grams):
+            if n_gram_1 not in second_n_grams:
+                distance.append(len(second_n_grams))
+            else:
+                for ind_2, n_gram_2 in enumerate(second_n_grams):
+                    if n_gram_1 == n_gram_2:
+                        distance.append(abs(ind_1 - ind_2))
+
+        return sum(distance)
 
     def detect_language(self, encoded_text: tuple) -> dict:
         """
@@ -217,12 +252,31 @@ class LanguageDetector:
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary where a key is a language, a value – the distance
         """
-        pass
+        if (not isinstance(encoded_text, tuple) or
+                not len(encoded_text)):
+            return {}
+
+        lang_distance = {}
+
+        for language_name, storage_lang in self.n_gram_storages.items():
+            lang_distance[language_name] = []
+            for trie_level, n_gram_trie in storage_lang.items():
+                text_storage = NGramTrie(trie_level)
+                text_storage.fill_n_grams(encoded_text)
+                text_storage.calculate_n_grams_frequencies()
+                lang_distance[language_name].append(
+                    self._calculate_distance(n_gram_trie.top_n_grams(self.top_k),
+                                             text_storage.top_n_grams(self.top_k)))
+
+            lang_distance[language_name] = sum(lang_distance[language_name]) / len(lang_distance[language_name])
+
+        return lang_distance
 
 
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
+    @staticmethod
     def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
@@ -230,7 +284,19 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :param sentence_n_grams: n-grams from a sentence
         :return: a probability of a sentence
         """
-        pass
+        if (not isinstance(n_gram_storage, NGramTrie) or
+                not isinstance(sentence_n_grams, tuple)):
+            return -1.0
+
+        log_probabilities = []
+
+        for n_gram_sentence in sentence_n_grams:
+            for word in n_gram_sentence:
+                for n_gram in word:
+                    if n_gram in n_gram_storage.n_gram_log_probabilities:
+                        log_probabilities.append(n_gram_storage.n_gram_log_probabilities[n_gram])
+
+        return sum(log_probabilities)
 
     def detect_language(self, encoded_text: tuple) -> dict:
         """
@@ -238,4 +304,14 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary with language_name: probability
         """
-        pass
+        if not isinstance(encoded_text, tuple):
+            return {}
+
+        probability_dict = {}
+        for language_name in self.n_gram_storages:
+            language_prob = []
+            for n_gram_trie in self.n_gram_storages[language_name].values():
+                language_prob.append(self._calculate_sentence_probability(n_gram_trie, encoded_text))
+            probability_dict[language_name] = sum(language_prob) / len(language_prob)
+
+        return probability_dict
