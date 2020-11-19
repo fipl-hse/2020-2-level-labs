@@ -63,11 +63,7 @@ class LetterStorage:
                               or letter == '' or letter is None
         if wrong_circumstances:
             return 1
-        '''
-        number = 0
-        if letter not in self.storage:  # записываем букву и её индекс в словарь
-            self.storage[letter] = number + 1
-        '''
+
         if letter not in self.storage:  # если буквы не было в словаре
             if self.storage == {}:  # если словарь пустой
                 self.storage[letter] = 1
