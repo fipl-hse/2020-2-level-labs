@@ -5,6 +5,8 @@ Language detection using n-grams
 import re
 from statistics import mean
 from math import log
+
+
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
@@ -48,7 +50,6 @@ class LetterStorage:
         """
         if not isinstance(letter, str) or not letter:
             return 1
-
 
         if letter not in self.storage:
             self.storage[letter] = self.id
@@ -95,13 +96,13 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         return ()
 
     encoded_corpus = []
-    for sent in corpus:     #уровень предложения
+    for sent in corpus:  # уровень предложения
         encoded_sent = []
-        for token in sent:      #уровень слова
+        for token in sent:  # уровень слова
             encoded_token = []
-            for letter in token:    #буква на id
+            for letter in token:  # буква на id
                 encoded_token.append(storage.get_id_by_letter(letter))
-            encoded_sent.append(tuple(encoded_token))   #закрываем уровень слова
+            encoded_sent.append(tuple(encoded_token))  # закрываем уровень слова
         encoded_corpus.append(tuple(encoded_sent))
     return tuple(encoded_corpus)
 
@@ -128,26 +129,24 @@ class NGramTrie:
             sent_gramm = []
             for token in sent:
                 token_gramm = []
-                for ind in range(len(token) - self.size + 1):   #ограничение среза
-                    token_gramm.append(tuple(token[ind:ind + self.size]))   #срез по n
+                for ind in range(len(token) - self.size + 1):  # ограничение среза
+                    token_gramm.append(tuple(token[ind:ind + self.size]))  # срез по n
                 sent_gramm.append(tuple(token_gramm))
             list_n_gramm.append(tuple(sent_gramm))
         self.n_grams = tuple(list_n_gramm)
         return 0
-
 
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
+        for sentence in self.n_grams:
+            for token in sentence:
+                for element in token:
+                    self.n_gram_frequencies[element] = self.n_gram_frequencies.get(element, 0) + 1
         if not self.n_gram_frequencies:
             return 1
-        for sent in self.n_grams:
-            for token in sent:
-                for letter in token:
-                    self.n_gram_frequencies[letter] = self.n_gram_frequencies.get(letter, 0) + 1
-
         return 0
 
     def calculate_log_probabilities(self) -> int:
@@ -168,7 +167,6 @@ class NGramTrie:
             self.n_gram_log_probabilities[n_gram] = log(probability)
         return 0
 
-
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
@@ -177,9 +175,10 @@ class NGramTrie:
         if not isinstance(k, int) or k < 0 or not self.n_gram_frequencies:
             return ()
 
-        #сортировка по убыв в функции ключа частоты
+        # сортировка по убыв в функции ключа частоты
         top_list = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)
         return tuple(top_list[:k])
+
 
 # 8
 class LanguageDetector:
@@ -209,7 +208,6 @@ class LanguageDetector:
             self.n_gram_storages[language_name][elem] = about_language
         return 0
 
-
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
@@ -230,7 +228,6 @@ class LanguageDetector:
                     distance.append(abs(f_ind - s_ind))
         return sum(distance)
 
-
     def detect_language(self, encoded_text: tuple) -> dict:
         """
         Detects the language the unknown text is written in using the function _calculate_distance
@@ -249,11 +246,10 @@ class LanguageDetector:
                 about_lang.calculate_n_grams_frequencies()
                 top_elem = about_lang.top_n_grams(self.top_k)
                 top_lang = self.n_gram_storages[lang][elem].top_n_grams(self.top_k)
-                dis_lang.append(self._calculate_distance(top_elem,top_lang))
+                dis_lang.append(self._calculate_distance(top_elem, top_lang))
 
             distant_dict[lang] = mean(dis_lang)
             return distant_dict
-
 
 
 # 10
@@ -273,7 +269,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
         for sent in sentence_n_grams:
             for word in sent:
                 for n_gram in word:
-                    probability += n_gram_storage.n_gram_log_probabilities.get(n_gram,0)
+                    probability += n_gram_storage.n_gram_log_probabilities.get(n_gram, 0)
         return probability
 
     def detect_language(self, encoded_text: tuple) -> dict:
