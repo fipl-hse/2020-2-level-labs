@@ -124,6 +124,7 @@ class NGramTrie:
                 sentence_gram.append(tuple(token_gram))
             result.append(tuple(sentence_gram))
         self.n_grams = tuple(result)
+        return 0
 
 
     def calculate_n_grams_frequencies(self) -> int:
