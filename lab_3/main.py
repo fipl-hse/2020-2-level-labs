@@ -169,9 +169,9 @@ class NGramTrie:
         """
         if not self.n_gram_frequencies:
             return 1
-        for ngram in self.n_gram_frequencies.keys():
+        for ngram in self.n_gram_frequencies:
             all_counts = 0
-            for another_ngram in self.n_gram_frequencies.keys():
+            for another_ngram in self.n_gram_frequencies:
                 if ngram[:-1] == another_ngram[:-1]:
                     all_counts += self.n_gram_frequencies[another_ngram]
             if ngram not in self.n_gram_log_probabilities:
@@ -206,7 +206,6 @@ class LanguageDetector:
         if not isinstance(encoded_text, tuple) or not isinstance(language_name, str) or \
                 None in encoded_text:
             return 1
-        
         for trie_level in self.trie_levels:
             storage = NGramTrie(trie_level)
             storage.fill_n_grams(encoded_text)
@@ -230,7 +229,6 @@ class LanguageDetector:
         if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple) or \
                 None in first_n_grams or None in second_n_grams:
             return -1
-        
         distance = 0
         for element in first_n_grams:
             if element in second_n_grams:
@@ -247,7 +245,6 @@ class LanguageDetector:
         """
         if not isinstance(encoded_text, tuple):
             return {}
-        
         language_probabilities = {}
         for language, storages in self.n_gram_storages.items():
             language_probability = 0
