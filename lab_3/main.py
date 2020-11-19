@@ -25,7 +25,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     text = re.split('[?!.]', text)
     processed_text = []
     for sentence in text:
-        list_of_words = re.sub('[^a-z\n]', '', sentence.lower()).split()
+        list_of_words = re.sub('[^a-z \n]', '', sentence.lower()).split()
         if not list_of_words:
             continue
         processed_text.append(tuple(tuple('_' + word + '_') for word in list_of_words))
