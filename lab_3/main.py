@@ -141,15 +141,12 @@ class NGramTrie:
         for sentence in encoded_text:
             current_sent = []
             for word in sentence:
-                if len(word) >= self.size:
-                    counter = 0
-                    for number in range(0, len(word) - self.size + 1):
-                        current_word.append(tuple(word[counter:self.size + counter]))
-                        counter += 1
-                    current_sent.append(tuple(current_word))
-                    current_word = []
-                else:
-                    current_sent.append(tuple(word))
+                counter = 0
+                for number in range(0, len(word) - self.size + 1):
+                    current_word.append(tuple(word[counter:self.size + counter]))
+                    counter += 1
+                current_sent.append(tuple(current_word))
+                current_word = []
             result.append(tuple(current_sent))
         self.n_grams = tuple(result)
         return 0
@@ -178,7 +175,9 @@ class NGramTrie:
         for gram in self.n_gram_frequencies.keys():
             current_summ = 0
             for key in self.n_gram_frequencies.keys():
-                if key[0] == gram[0]:
+                if isinstance(key, int):
+                    print(key, self.n_gram_frequencies[key])
+                if key[0:-1] == gram[0:-1]:
                     current_summ += self.n_gram_frequencies[key]
             self.n_gram_log_probabilities[gram] = math.log(self.n_gram_frequencies[gram]/current_summ)
         if len(self.n_gram_log_probabilities) == 0:
@@ -222,7 +221,6 @@ class LanguageDetector:
         for element in encoded_text:
             if not isinstance(element, tuple):
                 return 1
-        #self.n_gram_storages[language_name] = {number: NGramTrie(number) for number in self.trie_levels}
         self.n_gram_storages[language_name] = {}
         for number in self.trie_levels:
             language_data = NGramTrie(number)
@@ -276,10 +274,6 @@ class LanguageDetector:
         return result_dict
 
 
-
-
-
-
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
@@ -304,11 +298,16 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary with language_name: probability
         """
-        detect_dict = self.detect_language(encoded_text)
-        for value in detect_dict.values():
+        if not isinstance(encoded_text, tuple):
+            return {}
+        result_dict = {}
+        detect_dict = LanguageDetector.detect_language(self, encoded_text)
+        for key, value in detect_dict.items():
             value = 0
             for number in self.trie_levels:
                 object = NGramTrie(number)
                 n_grams = object.fill_n_grams(encoded_text)
                 value += self._calculate_sentence_probability(object, n_grams)
-        return detect_dict
+            result_dict[key] = value
+        return result_dict
+
