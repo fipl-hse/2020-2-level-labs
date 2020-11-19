@@ -37,9 +37,9 @@ if __name__ == '__main__':
     ngram_unknown = NGramTrie(4)
     ngram_unknown.fill_n_grams(unk_encoded)
 
-    language_log_probability_dict = language_detector.detect_language(ngram_unknown.n_grams)
+    actual = language_detector.detect_language(ngram_unknown.n_grams)
 
-    if language_log_probability_dict['german'] > language_log_probability_dict['english']:
+    if actual['german'] > actual['english']:
         RESULT = 'english'
     else:
         RESULT = 'german'
