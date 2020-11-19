@@ -4,6 +4,7 @@ Language detection using n-grams
 
 import re
 from math import log
+from statistics import mean
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -187,7 +188,7 @@ class LanguageDetector:
                 top_language = self.n_gram_storages[language][size].top_n_grams(self.top_k)
                 language_distance.append(self._calculate_distance(top_unknown, top_language))
             if language_distance:
-                dis_dict[language] = sum(dis_dict[language]) / len(dis_dict[language])
+                dis_dict[language] = mean(language_distance)
         return dis_dict
 
 
