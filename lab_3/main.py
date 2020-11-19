@@ -165,7 +165,7 @@ class NGramTrie:
 
         for n_gram in self.n_gram_frequencies:
             sum_frequencies = sum([self.n_gram_frequencies[gram] for gram in self.n_gram_frequencies
-                                   if gram[0] == n_gram[0]])
+                                   if gram[:-1] == n_gram[:-1]])
             probability = self.n_gram_frequencies[n_gram] / sum_frequencies
 
             self.n_gram_log_probabilities[n_gram] = math.log(probability)
@@ -250,7 +250,7 @@ class LanguageDetector:
         languages_dict = {}
         for language in self.n_gram_storages:
             languages_dict[language] = []
-            for i in self.n_gram_storages['english']:
+            for i in self.trie_levels:
                 storage = NGramTrie(i)
                 storage.fill_n_grams(encoded_text)
                 storage.calculate_n_grams_frequencies()
