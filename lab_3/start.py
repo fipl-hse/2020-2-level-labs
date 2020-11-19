@@ -5,8 +5,6 @@ from lab_3.main import tokenize_by_sentence
 from lab_3.main import encode_corpus
 from lab_3.main import NGramTrie
 from lab_3.main import LetterStorage
-from lab_3.main import ProbabilityLanguageDetector
-
 
 if __name__ == '__main__':
 
@@ -30,7 +28,7 @@ if __name__ == '__main__':
     eng_encoded = encode_corpus(letter_storage, text_eng)
     unk_encoded = encode_corpus(letter_storage, text_unk)
     ger_encoded = encode_corpus(letter_storage, text_ger)
-    
+
     ngram_unknown = NGramTrie(2)
     ngram_unknown.fill_n_grams(unk_encoded)
 
