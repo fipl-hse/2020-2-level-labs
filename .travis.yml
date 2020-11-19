@@ -13,13 +13,6 @@ install:
 
 stages:
   - pr_name_check
-<<<<<<< HEAD
-<<<<<<< HEAD
-  # - pr_name_check
-=======
->>>>>>> upstream/master
-=======
->>>>>>> c99b707b69c86137a72bf1ec2ef4150512dbbf6d
   - test
   - lint
   - start_py
