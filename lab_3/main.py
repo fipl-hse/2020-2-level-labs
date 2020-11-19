@@ -81,42 +81,89 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
+    if not isinstance(storage, LetterStorage) or not corpus or not isinstance(corpus, tuple):
+        return ()
+
+    storage.update(corpus)
+    corpus_in_id = ()
+    for sentence in corpus:
+        sentence_in_id = []
+        for word in sentence:
+            word_in_id = [storage.get_id_by_letter(letter) for letter in word]
+            sentence_in_id.append(tuple(word_in_id))
+        corpus_in_id += (tuple(sentence_in_id),)
+
+    return corpus_in_id
 
 
 # 6
 class NGramTrie:
-
     def __init__(self, n: int):
-        pass
+        self.size = n
+        self.n_grams = ()
+        self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not isinstance(encoded_text, tuple):
+            return 1
+        text_of_n_grams = []
+        for sentence in encoded_text:
+            sentence_of_n_grams = []
+            for token in sentence:
+                token_of_n_grams = []
+                for index in range(len(token)):
+                    if index != len(token) - (self.size - 1):
+                        n_grams = token[index:self.size + index]
+                        if len(n_grams) == self.size:
+                            token_of_n_grams.append(n_grams)
+                if token_of_n_grams:
+                    sentence_of_n_grams.append(tuple(token_of_n_grams))
+            text_of_n_grams.append(tuple(sentence_of_n_grams))
+        self.n_grams = tuple(text_of_n_grams)
+        return 0
 
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        for sentence in self.n_grams:
+            for token in sentence:
+                for element in token:
+                    self.n_gram_frequencies[element] = self.n_gram_frequencies.get(element, 0) + 1
+        if not self.n_gram_frequencies:
+            return 1
+        return 0
 
     def calculate_log_probabilities(self) -> int:
         """
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        for pair in self.n_gram_frequencies:
+            appearing = 0
+            for begin in self.n_gram_frequencies:
+                if pair[0] in begin:
+                    appearing += self.n_gram_frequencies[begin]
+            self.n_gram_log_probabilities[pair] = math.log(self.n_gram_frequencies[pair] / appearing)
+        if not self.n_gram_log_probabilities:
+            return 1
+        return 0
 
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        pass
+        if not isinstance(k, int):
+            return ()
+        top = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)
+        return tuple(top[:k])
 
 
 # 8
