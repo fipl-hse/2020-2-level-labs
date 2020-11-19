@@ -29,7 +29,7 @@ if __name__ == '__main__':
     encoded_german = lab_3.main.encode_corpus(letter_storage, german_text)
     encoded_unknown = lab_3.main.encode_corpus(letter_storage, unknown_text)
 
-    language_detector = lab_3.main.ProbabilityLanguageDetector((2, 3, 4), 800)
+    language_detector = lab_3.main.ProbabilityLanguageDetector((3, 4, 5), 1000)
     language_detector.new_language(encoded_english, 'english')
     language_detector.new_language(encoded_german, 'german')
 
@@ -40,4 +40,4 @@ if __name__ == '__main__':
 
     RESULT = actual['german'] > actual['english']
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, ''
+    assert RESULT == 1, ''
