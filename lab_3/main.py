@@ -299,9 +299,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
             for word in sent:
                 for n_gram in word:
                     if n_gram in n_gram_storage.n_gram_log_probabilities.keys():
-                        print("here we go again")
                         probability += n_gram_storage.n_gram_log_probabilities[n_gram]
-        print(probability)
         return probability
 
     def detect_language(self, encoded_text: tuple) -> dict:
