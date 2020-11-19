@@ -33,7 +33,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         sent = re.sub('[^a-z \n]', '', sentence)
         sent = sent.split()
         tokenized_sent = []
-        if not len(sent):
+        if not sent:
             continue
         for word in sent:
             word = ['_'] + list(word) + ['_']
@@ -145,7 +145,7 @@ class NGramTrie:
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        if not len(self.n_grams):
+        if not self.n_grams:
             return 1
 
         for sent in self.n_grams:
@@ -178,7 +178,7 @@ class NGramTrie:
         """
         if (not isinstance(k, int) or
                 k < 0 or
-                not len(self.n_gram_frequencies)):
+                not self.n_gram_frequencies):
             return ()
         top_n_grams = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)[:k]
         return tuple(top_n_grams)
@@ -201,7 +201,7 @@ class LanguageDetector:
         """
         if (not isinstance(encoded_text, tuple) or
                 not isinstance(language_name, str) or
-                not len(encoded_text) or
+                not encoded_text or
                 not isinstance(encoded_text[0], (tuple, str))):
             return 1
 
@@ -251,7 +251,7 @@ class LanguageDetector:
         :return: a dictionary where a key is a language, a value – the distance
         """
         if (not isinstance(encoded_text, tuple) or
-                not len(encoded_text)):
+                not encoded_text):
             return {}
 
         lang_distance = {}
