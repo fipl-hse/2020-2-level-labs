@@ -1,10 +1,10 @@
 """
 Language detection using n-grams
 """
-import math
+
 import re
 from statistics import mean
-
+from math import log
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
@@ -155,15 +155,17 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        if not self.n_gram_log_probabilities:
+        if not len(self.n_gram_frequencies):
             return 1
 
-        for elem in self.n_gram_frequencies:
-            count = 0
-            for other_elem in self.n_gram_frequencies:
-                if elem[0] == other_elem:
-                    count += self.n_gram_frequencies[other_elem]
-            self.n_gram_log_probabilities[elem] = math.log(self.n_gram_frequencies[elem] / count)
+        for n_gram in self.n_gram_frequencies:
+            summary = 0
+            for next_n_grams in self.n_gram_frequencies:
+                if next_n_grams[0] == n_gram[0]:
+                    summary += self.n_gram_frequencies[next_n_grams]
+
+            probability = self.n_gram_frequencies[n_gram] / summary
+            self.n_gram_log_probabilities[n_gram] = log(probability)
         return 0
 
 
