@@ -5,6 +5,7 @@ Language detection using n-grams
 import re
 from math import log
 
+
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
@@ -188,7 +189,6 @@ class LanguageDetector:
             self.n_gram_storages[language_name][level] = language_storage
         return 0
 
-
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
@@ -196,7 +196,7 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
-        if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple) or not all(first_n_grams)\
+        if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple) or not all(first_n_grams) \
                 or not all(second_n_grams):
             return -1
         distance = 0
@@ -213,15 +213,19 @@ class LanguageDetector:
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary where a key is a language, a value – the distance
         """
-        # if not isinstance(encoded_text, tuple):
-        #     return {}
-        # language_distance = {}
-        # for language, storage in self.n_gram_storages.items():
-        #     language_distance[language] = 0
-        #     for size, trie in storage.items():
-
-
-
+        if not isinstance(encoded_text, tuple):
+            return {}
+        language_distance = {}
+        for language, storage in self.n_gram_storages.items():
+            language_prob = 0
+            for size, trie in storage.items():
+                unknown_lang = NGramTrie(size)
+                unknown_lang.fill_n_grams(encoded_text)
+                unknown_lang.calculate_n_grams_frequencies()
+                language_prob += self._calculate_distance(trie.top_n_grams(self.top_k),
+                                                          unknown_lang.top_n_grams(self.top_k))
+            language_distance[language] = language_prob / len(storage)
+        return language_distance
 
 
 # 10
