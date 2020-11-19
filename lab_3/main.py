@@ -181,7 +181,7 @@ class NGramTrie:
         if not isinstance(k, int):
             return tuple()
 
-        if not (k > 0 and self.calculate_log_probabilities()):
+        if not (k > 0 and not self.calculate_log_probabilities()):
             return tuple()
 
         frequencies = list(self.n_gram_frequencies.items())
