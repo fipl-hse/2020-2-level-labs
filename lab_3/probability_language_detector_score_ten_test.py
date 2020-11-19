@@ -18,14 +18,14 @@ class ProbabilityLanguageDetectorTest(unittest.TestCase):
     Checks for ProbabilityLanguageDetector class
     """
 
-    @unittest.skip('')
+
     def test_probability_language_detector_check_creation(self):
         language_detector = ProbabilityLanguageDetector((3, 5), 10)
         self.assertEqual(language_detector.trie_levels, (3, 5))
         self.assertEqual(language_detector.top_k, 10)
         self.assertEqual(language_detector.n_gram_storages, {})
 
-    @unittest.skip('')
+
     def test_probability_language_detector_calculate_probability_ideal(self):
         english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
         german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
@@ -66,7 +66,7 @@ class ProbabilityLanguageDetectorTest(unittest.TestCase):
         print(f'Deutsch_sentence_prob: {german_prob}')
         self.assertTrue(english_prob > german_prob)
 
-    @unittest.skip('')
+
     def test_probability_language_detector_calculate_probability_incorrect_storage(self):
         language_detector = ProbabilityLanguageDetector((2, 3), 10)
         bad_inputs = [(), [], {}, '', None, True, set()]
@@ -78,7 +78,7 @@ class ProbabilityLanguageDetectorTest(unittest.TestCase):
                                                                        patches_encoded_unknown)
             self.assertEqual(expected, actual)
 
-    @unittest.skip('')
+
     def test_probability_language_detector_calculate_probability_incorrect_text(self):
         language_detector = ProbabilityLanguageDetector((2, 3), 10)
         bad_inputs = [[], {}, '', None, True, set()]
@@ -90,7 +90,7 @@ class ProbabilityLanguageDetectorTest(unittest.TestCase):
                                                                        bad_input)
             self.assertEqual(expected, actual)
 
-    @unittest.skip('')
+
     def test_probability_language_detector_several_ngrams_case(self):
         language_detector = ProbabilityLanguageDetector((3, 5), 1000)
 
@@ -128,7 +128,7 @@ class ProbabilityLanguageDetectorTest(unittest.TestCase):
         ger = language_detector._calculate_sentence_probability(ger_prob, ngram_trie.n_grams)
         self.assertTrue(ger > eng)
 
-    @unittest.skip('')
+
     def test_probability_language_detector_detect_language_ideal(self):
         unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
         german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
@@ -160,7 +160,7 @@ class ProbabilityLanguageDetectorTest(unittest.TestCase):
         actual = language_detector.detect_language(ngram_unknown.n_grams)
         self.assertTrue(actual['german'] > actual['english'])
 
-    @unittest.skip('')
+
     def test_probability_language_detector_detect_incorrect(self):
         language_detector = ProbabilityLanguageDetector((3, 5), 100)
         bad_inputs = [[], {}, '', 1, None, True, (None,)]
@@ -172,7 +172,7 @@ class ProbabilityLanguageDetectorTest(unittest.TestCase):
 
     @patch('lab_3.main.ProbabilityLanguageDetector._calculate_sentence_probability',
            side_effect=ProbabilityLanguageDetector()._calculate_sentence_probability)
-    @unittest.skip('')
+
     def test_probability_language_detector_calls_required_method(self, mock):
         unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
         german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
