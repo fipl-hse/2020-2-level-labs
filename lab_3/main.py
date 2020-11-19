@@ -3,7 +3,6 @@ Language detection using n-grams
 """
 import re
 import math
-import copy
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -109,7 +108,6 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     for sentence in corpus:
         for word in sentence:
             for sign in word:
-                storage._put_letter(sign)
                 current_word.append(storage.get_id_by_letter(sign))
             current_sent.append(tuple(current_word))
             current_word = []
@@ -140,10 +138,8 @@ class NGramTrie:
         for sentence in encoded_text:
             current_sent = []
             for word in sentence:
-                counter = 0
                 for number in range(0, len(word) - self.size + 1):
-                    current_word.append(tuple(word[counter:self.size + counter]))
-                    counter += 1
+                    current_word.append(tuple(word[number:self.size + number]))
                 current_sent.append(tuple(current_word))
                 current_word = []
             result.append(tuple(current_sent))
@@ -171,11 +167,9 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        for gram in self.n_gram_frequencies.keys():
+        for gram in self.n_gram_frequencies:
             current_summ = 0
-            for key in self.n_gram_frequencies.keys():
-                if isinstance(key, int):
-                    print(key, self.n_gram_frequencies[key])
+            for key in self.n_gram_frequencies:
                 if key[0:-1] == gram[0:-1]:
                     current_summ += self.n_gram_frequencies[key]
             self.n_gram_log_probabilities[gram] = math.log(self.n_gram_frequencies[gram]/current_summ)
@@ -229,6 +223,7 @@ class LanguageDetector:
             self.n_gram_storages[language_name][number] = language_data
         return 0
 
+    @staticmethod
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
@@ -276,6 +271,7 @@ class LanguageDetector:
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
+    @staticmethod
     def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
