@@ -2,6 +2,7 @@
 Language detection using n-grams
 """
 import re
+import math
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -151,14 +152,28 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if not self.n_gram_frequencies:
+            return 1
+        for gram_1 in self.n_gram_frequencies:
+            sum_gr = 0
+            for gram_2 in self.n_gram_frequencies:
+                if gram_1[0]==gram_2[0]:
+                    sum_gr+=self.n_gram_frequencies[gram_2]
+            prob=self.n_gram_frequencies[gram_1]/sum_gr
+            self.n_gram_log_probabilities[gram_1]=math.log(prob)
+        return 0
 
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        pass
+        if not isinstance(k,int) or k<0 or not self.n_gram_frequencies:
+            return ()
+        top_n_grams=sorted(self.n_gram_frequencies,key=self.n_gram_frequencies.get,reverse=True)
+        return tuple(top_n_grams[:k])
+
+
 
 
 # 8
