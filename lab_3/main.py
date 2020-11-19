@@ -159,7 +159,6 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-
         if not self.n_gram_frequencies:
             return 1
 
@@ -276,8 +275,8 @@ class LanguageDetector:
 
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
-
-    def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+    @staticmethod
+    def _calculate_sentence_probability(n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
         :param n_gram_storage: a filled NGramTrie with log-probabilities
