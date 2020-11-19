@@ -115,7 +115,7 @@ class NGramTrie:
         top = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)
         return tuple(top[:k])
 
-    
+
 # 8
 class LanguageDetector:
 
@@ -138,7 +138,7 @@ class LanguageDetector:
             trie.calculate_log_probabilities()
             self.n_gram_storages[language_name].update({trie_level: trie})
         return 0
-    
+
     @staticmethod
     def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple) or \
