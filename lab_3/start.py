@@ -2,42 +2,28 @@
 Language detector implementation starter
 """
 
-import lab_3.main
+import main
 
 if __name__ == '__main__':
+    text = 'Horse is beautiful. Dog is beautiful.'
+    tokens = main.tokenize_by_sentence(text)
+    print(tokens)
 
-    # here goes your function calls
+    storage = main.LetterStorage()
+    storage.update(tokens)
+    print(storage.storage)
 
-    eng_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
-    germ_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
-    unk_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
+    encoded_corpus = main.encode_corpus(storage, tokens)
+    print(encoded_corpus)
 
-    eng_text = lab_3.main.tokenize_by_sentence(eng_file.read())
-    germ_text = lab_3.main.tokenize_by_sentence(germ_file.read())
-    unk_text = lab_3.main.tokenize_by_sentence(unk_file.read())
+    three_gram = main.NGramTrie(3)
+    filles = three_gram.fill_n_grams(encoded_corpus)
+    frequencies = three_gram.calculate_n_grams_frequencies()
+    top = three_gram.top_n_grams(5)
+    print('Frequencies: ', frequencies)
+    print('Top 5: ', top)
 
-    eng_file.close()
-    germ_file.close()
-    unk_file.close()
-
-    letter_storage = lab_3.main.LetterStorage()
-    letter_storage.update(eng_text)
-    letter_storage.update(germ_text)
-    letter_storage.update(unk_text)
-
-    encoded_eng = lab_3.main.encode_corpus(letter_storage, eng_text)
-    encoded_germ = lab_3.main.encode_corpus(letter_storage, germ_text)
-    encoded_unk = lab_3.main.encode_corpus(letter_storage, unk_text)
-
-    language_detector = lab_3.main.LanguageDetector((3, 4, 5), 1000)
-    language_detector.new_language(encoded_eng, 'english')
-    language_detector.new_language(encoded_germ, 'german')
-
-    ngram_unknown = lab_3.main.NGramTrie(3)
-    ngram_unknown.fill_n_grams(encoded_unk)
-
-    actual = language_detector.detect_language(ngram_unknown.n_grams)
-
-    RESULT = actual['german'] > actual['english']
+    RESULT = top
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == 1, "Detector does not work"
+    assert RESULT, ((1, 7, 5), (7, 5, 1), (1, 8, 6), (8, 6, 9), (6, 9, 10))
+    'Not working'
