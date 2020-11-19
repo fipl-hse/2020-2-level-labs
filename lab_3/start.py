@@ -7,7 +7,7 @@ import lab_3.main
 if __name__ == '__main__':
 
     SENTENCE = 'I love you to the moon and back'
-    tokenized_sentence = lab_3.main.tokenize_by_sentence(sentence)
+    tokenized_sentence = lab_3.main.tokenize_by_sentence(SENTENCE)
     print(f'TOKENS: {tokenized_sentence}')
 
     storage = lab_3.main.LetterStorage()
