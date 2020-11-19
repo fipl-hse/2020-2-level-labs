@@ -29,7 +29,7 @@ if __name__ == '__main__':
     unk_encoded = encode_corpus(letter_storage, text_unk)
     ger_encoded = encode_corpus(letter_storage, text_ger)
 
-    ngram_unknown = NGramTrie(2)
+    ngram_unknown = NGramTrie(3)
     ngram_unknown.fill_n_grams(unk_encoded)
 
     actual = language_detector.detect_language(ngram_unknown.n_grams)
