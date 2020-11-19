@@ -160,16 +160,10 @@ class LanguageDetector:
     
     @staticmethod
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
-        checks = [not isinstance(first_n_grams, tuple)
-                  or not isinstance(second_n_grams, tuple)
-                  or None in first_n_grams
-                  or None in second_n_grams]
-
-        if all(checks):
+        if not isinstance(first_n_grams, tuple) or not isinstance(second_n_grams, tuple) or \
+                None in first_n_grams or None in second_n_grams:
             return -1
-
         distance = []
-
         for first_index, first_n_gram in enumerate(first_n_grams):
             if first_n_gram not in second_n_grams:
                 distance.append(len(second_n_grams))
@@ -177,24 +171,6 @@ class LanguageDetector:
                 if first_n_gram == second_n_gram:
                     distance.append(abs(first_index - second_index))
         return sum(distance)
-
-    def detect_language(self, encoded_text: tuple) -> dict:
-        if not isinstance(encoded_text, tuple) or None in encoded_text or \
-                encoded_text == () or self.n_gram_storages == {}:
-            return {}
-        dis_dict = {}
-        for language in self.n_gram_storages:
-            language_distance = []
-            for size in self.trie_levels:
-                unknown = NGramTrie(size)
-                unknown.fill_n_grams(encoded_text)
-                unknown.calculate_n_grams_frequencies()
-                top_unknown = unknown.top_n_grams(self.top_k)
-                top_language = self.n_gram_storages[language][size].top_n_grams(self.top_k)
-                language_distance.append(self._calculate_distance(top_unknown, top_language))
-            if language_distance:
-                dis_dict[language] = mean(language_distance)
-        return dis_dict
 
 
 # 10
