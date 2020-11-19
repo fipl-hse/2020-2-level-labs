@@ -166,8 +166,8 @@ class NGramTrie:
             for gram_2 in self.n_gram_frequencies:
                 if gram_1[0] == gram_2[0]:
                     sum_gr += self.n_gram_frequencies[gram_2]
-            prob = self.n_gram_frequencies[gram_1] / sum_gr
-            self.n_gram_log_probabilities[gram_1] = math.log(prob)
+            probability = self.n_gram_frequencies[gram_1] / sum_gr
+            self.n_gram_log_probabilities[gram_1] = math.log(probability)
         return 0
     def top_n_grams(self, k: int) -> tuple:
         """
