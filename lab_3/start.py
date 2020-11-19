@@ -6,23 +6,36 @@ import lab_3.main
 
 if __name__ == '__main__':
 
-    SENTENCE = 'The, first sentence - nice. The second sentence: bad!'
-    tokenized_sentence = lab_3.main.tokenize_by_sentence(SENTENCE)
-    print(f'TOKENS: {tokenized_sentence}')
 
-    storage = lab_3.main.LetterStorage()
-    storage.update(tokenized_sentence)
-    print(f'STORAGE: {storage.storage}')
+    unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
+    german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
+    english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
 
-    encoded_corpus = lab_3.main.encode_corpus(storage, tokenized_sentence)
-    print(f'ENCODED_CORPUS: {encoded_corpus}')
+    text_unk = lab_3.main.tokenize_by_sentence(unknown_file.read())
+    text_ger = lab_3.main.tokenize_by_sentence(german_file.read())
+    text_eng = lab_3.main.tokenize_by_sentence(english_file.read())
+    english_file.close()
+    german_file.close()
+    unknown_file.close()
 
-    n_gram = lab_3.main.NGramTrie(2)
-    FILL_N_GRAM = n_gram.fill_n_grams(encoded_corpus)
-    FREQUENCIES = n_gram.calculate_n_grams_frequencies()
-    top = n_gram.top_n_grams(5)
-    print(f'TOP_5: {top}')
+    letter_storage = lab_3.main.LetterStorage()
+    letter_storage.update(text_eng)
+    letter_storage.update(text_ger)
+    letter_storage.update(text_unk)
 
-    RESULT = top
+    eng_encoded = lab_3.main.encode_corpus(letter_storage, text_eng)
+    unk_encoded = lab_3.main.encode_corpus(letter_storage, text_unk)
+    ger_encoded = lab_3.main.encode_corpus(letter_storage, text_ger)
+
+    language_detector = lab_3.main.ProbabilityLanguageDetector((3, 4, 5), 1000)
+    language_detector.new_language(eng_encoded, 'english')
+    language_detector.new_language(ger_encoded, 'german')
+
+    ngram_unknown = lab_3.main.NGramTrie(4)
+    ngram_unknown.fill_n_grams(unk_encoded)
+
+    actual = language_detector.detect_language(ngram_unknown.n_grams)
+
+    RESULT = actual['german'] > actual['english']
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == ((4, 1), (1, 8), (8, 4), (12, 1), (4, 9)), 'Not working'
+    assert RESULT == 1, "It doesn't work"
