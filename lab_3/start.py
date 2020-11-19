@@ -2,41 +2,39 @@
 Language detector implementation starter
 """
 
-from lab_3.main import NGramTrie
 from lab_3.main import tokenize_by_sentence
 from lab_3.main import encode_corpus
 from lab_3.main import LetterStorage
-from lab_3.main import ProbabilityLanguageDetector
+from lab_3.main import LanguageDetector
 
 
 if __name__ == '__main__':
-    unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
-    german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
-    english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
-
-    text_unk = tokenize_by_sentence(unknown_file.read())
-    text_ger = tokenize_by_sentence(german_file.read())
-    text_eng = tokenize_by_sentence(english_file.read())
-    english_file.close()
-    german_file.close()
-    unknown_file.close()
-
     letter_storage = LetterStorage()
-    letter_storage.update(text_eng)
-    letter_storage.update(text_ger)
-    letter_storage.update(text_unk)
+    language_detector = LanguageDetector((3,), 100)
 
-    eng_encoded = encode_corpus(letter_storage, text_eng)
-    unk_encoded = encode_corpus(letter_storage, text_unk)
-    ger_encoded = encode_corpus(letter_storage, text_ger)
+    file_first = open('lab_3/Frank_Baum.txt', 'r', encoding='utf-8')
+    file_second = open('lab_3/Thomas_Mann.txt', 'r', encoding='utf-8')
+    file_third = open('lab_3/unknown_Arthur_Conan_Doyle.txt', 'r', encoding='utf-8')
 
-    language_detector = ProbabilityLanguageDetector((3, 4, 5), 1000)
-    language_detector.new_language(eng_encoded, 'english')
-    language_detector.new_language(ger_encoded, 'german')
+    text_english = tokenize_by_sentence(file_first.read())
+    text_german = tokenize_by_sentence(file_second.read())
+    text_unknown = tokenize_by_sentence(file_third.read())
+    letter_storage.update(text_english)
+    letter_storage.update(text_german)
+    letter_storage.update(text_unknown)
+    encoded_english = encode_corpus(letter_storage, text_english)
+    encoded_german = encode_corpus(letter_storage, text_german)
+    encoded_unknown = encode_corpus(letter_storage, text_unknown)
+    file_first.close()
+    file_second.close()
+    file_third.close()
 
-    ngram_unknown = NGramTrie(4)
-    ngram_unknown.fill_n_grams(unk_encoded)
+    language_detector.new_language(encoded_english, 'english')
+    language_detector.new_language(encoded_german, 'german')
 
-    RESULT =
+    actual = language_detector.detect_language(encoded_unknown)
+    expected = {'english': 98200.0, 'german': 196400.0}
+
+    RESULT = actual
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, "Language detector doesn't work"
+    assert RESULT == expected, "Language detector doesn't work"
