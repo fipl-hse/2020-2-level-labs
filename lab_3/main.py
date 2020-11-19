@@ -245,10 +245,13 @@ class LanguageDetector:
                 None in first_n_grams or None in second_n_grams:
             return -1
 
-        length = [fabs(first_n_grams.index(n_gram) - second_n_grams.index(n_gram))
-                  for n_gram in first_n_grams if n_gram in second_n_grams]
-
-        return sum(length)
+        distance = 0
+        for n_gram in first_n_grams:
+            if n_gram in second_n_grams:
+                distance += abs(first_n_grams.index(n_gram) - second_n_grams.index(n_gram))
+            else:
+                distance += len(second_n_grams)
+        return distance
 
     def detect_language(self, encoded_text: tuple) -> dict:
         """
