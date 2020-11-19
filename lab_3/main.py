@@ -141,12 +141,13 @@ class NGramTrie:
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
+        if not self.n_gram_frequencies:
+            return 1
         for sent in self.n_grams:
             for token in sent:
                 for letter in token:
                     self.n_gram_frequencies[letter] = self.n_gram_frequencies.get(letter, 0) + 1
-        if not self.n_gram_frequencies:
-            return 1
+
         return 0
 
     def calculate_log_probabilities(self) -> int:
@@ -160,10 +161,9 @@ class NGramTrie:
         for elem in self.n_gram_frequencies:
             count = 0
             for other_elem in self.n_gram_frequencies:
-                if elem[0] == other_elem[0]:
+                if elem[0] == other_elem:
                     count += self.n_gram_frequencies[other_elem]
-            #натуральный логарифм от числа
-            self.n_gram_log_probabilities[elem] = math.log(self.n_gram_frequencies[elem]/count)
+            self.n_gram_log_probabilities[elem] = math.log(self.n_gram_frequencies[elem] / count)
         return 0
 
 
