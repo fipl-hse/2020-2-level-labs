@@ -3,7 +3,7 @@ Language detector implementation starter
 """
 
 from lab_3.main import tokenize_by_sentence, NGramTrie
-from lab_3.main import LetterStorage, ProbabilityLanguageDetector
+from lab_3.main import LetterStorage, LanguageDetector
 from lab_3.main import encode_corpus
 
 if __name__ == '__main__':
@@ -28,17 +28,18 @@ if __name__ == '__main__':
     encoded_germ = encode_corpus(letter_storage, germ_text)
     encoded_unkn = encode_corpus(letter_storage, unkn_text)
 
-    language_detector = ProbabilityLanguageDetector((3, 4, 5), 1000)
+    language_detector = LanguageDetector((3, 5), 150)
     language_detector.new_language(encoded_eng, 'english')
     language_detector.new_language(encoded_germ, 'german')
 
     unknown_ngram = NGramTrie(4)
     unknown_ngram.fill_n_grams(encoded_unkn)
 
-    actual = language_detector.detect_language(unknown_ngram.n_grams)
-
-    RESULT = actual['german'] > actual['english']
+    language_log_probability_dict = language_detector.detect_language(unknown_ngram.n_grams)
+    if language_log_probability_dict['german'] > language_log_probability_dict['english']:
+        RESULT = 'english'
+    else:
+        RESULT = 'german'
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, "Doesn't work"
-
+    assert RESULT == 'german', "Doesn't work"
