@@ -1,30 +1,30 @@
 """
 Language detector implementation starter
 """
-
-import lab_3.main
-from lab_3.main import tokenize_by_sentence
-from lab_3.main import LetterStorage
+import main
 
 if __name__ == '__main__':
+    text = 'Horse is beautiful. Dog is beautiful.'
+    tokens = main.tokenize_by_sentence(text)
+    print(tokens)
 
-    # here goes your function calls
-    unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
-    german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
-    english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
+    storage = main.LetterStorage()
+    storage.update(tokens)
+    print(storage.storage)
 
-    text_unk = tokenize_by_sentence(unknown_file.read())
-    text_ger = tokenize_by_sentence(german_file.read())
-    text_eng = tokenize_by_sentence(english_file.read())
-    english_file.close()
-    german_file.close()
-    unknown_file.close()
+    encoded_corpus = main.encode_corpus(storage, tokens)
+    print(encoded_corpus)
 
-    letter_storage = LetterStorage()
-    letter_storage.update(text_eng)
-    letter_storage.update(text_ger)
-    letter_storage.update(text_unk)
+    bi_gram = main.NGramTrie(2)
+    filles = bi_gram.fill_n_grams(encoded_corpus)
+    frequencies = bi_gram.calculate_n_grams_frequencies()
+    the_top = bi_gram.top_n_grams(5)
+    print('Frequencies: ', frequencies)
+    print('Top 5: ', the_top)
 
-    RESULT = ''
+
+
+    RESULT = the_top
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, ''
+    assert RESULT,  ((0, 5), (4, 9), (6, 0), (3, 5), (1, 5))
+    'Not working'
