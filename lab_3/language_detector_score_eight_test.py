@@ -155,9 +155,9 @@ class LanguageDetectorTest(unittest.TestCase):
         letter_storage = LetterStorage()
         language_detector = LanguageDetector((3,), 100)
 
-        file_first = open('Frank_Baum.txt', 'r', encoding='utf-8')
-        file_second = open('Thomas_Mann.txt', 'r', encoding='utf-8')
-        file_third = open('unknown_Arthur_Conan_Doyle.txt', 'r', encoding='utf-8')
+        file_first = open('lab_3/Frank_Baum.txt', 'r', encoding='utf-8')
+        file_second = open('lab_3/Thomas_Mann.txt', 'r', encoding='utf-8')
+        file_third = open('lab_3/unknown_Arthur_Conan_Doyle.txt', 'r', encoding='utf-8')
 
         text_english = tokenize_by_sentence(file_first.read())
         text_german = tokenize_by_sentence(file_second.read())
