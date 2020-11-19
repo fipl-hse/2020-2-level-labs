@@ -8,9 +8,7 @@ if __name__ == '__main__':
 
     # here goes your function calls
 
-    text = 'All emotions, and that one particularly, were abhorrent to his cold, precise but admirably balanced mind. '\
-           'He was, I take it, the most perfect reasoning and observing machine that the world has seen, ' \
-           'but as a lover he would have placed himself in a false position. '
+    text = 'To Sherlock Holmes she is always the woman. I have seldom heard him mention her under any other name.'
     tokenized_text = lab_3.main.tokenize_by_sentence(text)
     print(tokenized_text)
 
@@ -27,4 +25,4 @@ if __name__ == '__main__':
 
     RESULT = top_bi_grams
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == ((8, 5), (5, 6), (15, 5), (11, 5), (5, 11)), 'Not working'
+    assert RESULT == ((9, 10), (5, 9), (10, 11), (10, 5), (5, 8)), 'Not working'
