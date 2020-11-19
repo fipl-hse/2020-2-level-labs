@@ -7,9 +7,9 @@ import lab_3.main
 if __name__ == '__main__':
 
     # here goes your function calls
-    unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
-    german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
-    english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
+    unknown_file = open('unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
+    german_file = open('Thomas_Mann.txt', encoding='utf-8')
+    english_file = open('Frank_Baum.txt', encoding='utf-8')
 
     text_unknown = lab_3.main.tokenize_by_sentence(unknown_file.read())
     text_german = lab_3.main.tokenize_by_sentence(german_file.read())
@@ -31,10 +31,6 @@ if __name__ == '__main__':
     language_detector.new_language(encoded_english, "english")
     language_detector.new_language(encoded_german, "german")
 
-    language = language_detector.detect_language(encoded_unknown)
-    if language["german"] > language["english"]:
-        RESULT = "english"
-    else:
-        RESULT = "german"
+    RESULT = language_detector.detect_language(encoded_unknown)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == "german", "Not working"
+    assert RESULT['german'] > RESULT['english'], 'Not working'
