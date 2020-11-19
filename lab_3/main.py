@@ -94,7 +94,7 @@ class LetterStorage:
         for sentence in corpus:
             for word in sentence:
                 for symbol in word:
-                   self._put_letter(symbol)
+                    self._put_letter(symbol)
         return 0
 
 
@@ -121,8 +121,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     for sentence in encoded_corpus:  # меняем буквы на индексы
         for word in sentence:
             for index, symbol in enumerate(word):
-                    word.remove(symbol)
-                    word.insert(index, storage.get_id_by_letter(symbol))
+                word.remove(symbol)
+                word.insert(index, storage.get_id_by_letter(symbol))
     for sentence in encoded_corpus:  # превращаем список в кортеж
         sentence_tuple = []
         for word in sentence:
@@ -210,7 +210,8 @@ class NGramTrie:
         wrong_circumstances = not isinstance(k, int) or isinstance(k, bool) or k <= 0
         if wrong_circumstances:
             return ()
-        sorted_n_grams = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)  # отсортированный список ключей по убыванию значений
+        # отсортированный список ключей по убыванию значений
+        sorted_n_grams = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)
         top = tuple(sorted_n_grams[0: k])  # берем нужное кол-во n-рамм
         return top
 
@@ -242,10 +243,12 @@ class LanguageDetector:
             n_g_t.calculate_n_grams_frequencies()
             n_g_t.calculate_log_probabilities()
             dict_for_language[element] = n_g_t  # записываем число в ключ, заполненный экземпляр в значение
-        self.n_gram_storages[language_name] = dict_for_language  # записываем в основной словарь: язык в ключ, словарь в значение
+        # записываем в основной словарь: язык в ключ, словарь в значение
+        self.n_gram_storages[language_name] = dict_for_language
         return 0
 
-    def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
+    @staticmethod
+    def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
         :param first_n_grams: a tuple of the top_k n-grams
@@ -289,32 +292,32 @@ class LanguageDetector:
             top_u.append(unknown.top_n_grams(self.top_k))
 
         if 'english' in self.n_gram_storages:
-            top_e = []  # топы для английского
+            top_l = []  # топы для английского
             eng_storage = self.n_gram_storages['english']
             for example in eng_storage.values():
-                top_e.append(example.top_n_grams(self.top_k))
+                top_l.append(example.top_n_grams(self.top_k))
 
             dif_e = []  # разница с английским
 
-            for u in top_u:  # находим расстояние между топами английского и неизвестного языков
-                for e in top_e:
-                    dif_e.append(self._calculate_distance(u, e))
+            for exact_top_u in top_u:  # находим расстояние между топами английского и неизвестного языков
+                for exact_top_l in top_l:
+                    dif_e.append(self._calculate_distance(exact_top_u, exact_top_l))
 
             dif_e = mean(dif_e)  # среднее расстояние
 
             storage['english'] = dif_e  # записываем среднее расстояние между английским и неизвестным
 
         if 'german' in self.n_gram_storages:
-            top_g = []  # топы для немецкого
+            top_l = []  # топы для немецкого
             ger_storage = self.n_gram_storages['german']
             for example in ger_storage.values():
-                top_g.append(example.top_n_grams(self.top_k))
+                top_l.append(example.top_n_grams(self.top_k))
 
             dif_g = []  # разница с немецким
 
-            for u in top_u:  # находим расстояние между топами немецкого и неизвестного языков
-                for g in top_g:
-                    dif_g.append(self._calculate_distance(u, g))
+            for exact_top_u in top_u:  # находим расстояние между топами немецкого и неизвестного языков
+                for exact_top_l in top_l:
+                    dif_g.append(self._calculate_distance(exact_top_u, exact_top_l))
 
             dif_g = mean(dif_g)  # среднее расстояние
 
