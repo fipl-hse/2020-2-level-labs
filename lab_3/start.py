@@ -31,16 +31,15 @@ if __name__ == '__main__':
     german_encoded_text = encode_corpus(letter_storage, german_text)
     unknown_encoded_text = encode_corpus(letter_storage, unknown_text)
 
-    language_detector = LanguageDetector((3, 4, 5), 1000)
+    language_detector = LanguageDetector((3, 5), 150)
     language_detector.new_language(english_encoded_text, 'english')
     language_detector.new_language(german_encoded_text, 'german')
 
     unknown_n_gram = NGramTrie(4)
     unknown_n_gram.fill_n_grams(unknown_encoded_text)
 
-    actual = language_detector.detect_language(unknown_n_gram.n_grams)
-    print(actual)
+    RESULT = language_detector.detect_language(unknown_n_gram.n_grams)
+    print(RESULT)
 
-    RESULT = actual['english'] < actual['german']
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, ''
+    assert RESULT['german'] > RESULT['english'], 'not working'
