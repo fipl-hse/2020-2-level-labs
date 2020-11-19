@@ -242,7 +242,7 @@ class LanguageDetector:
                                                                          storage_text.top_n_grams(self.top_k)))
             lang_dict[language_name] = sum(lang_dict[language_name]) / len(lang_dict[language_name])
         return lang_dict
-    
+
 
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
