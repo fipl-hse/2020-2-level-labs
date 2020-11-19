@@ -19,7 +19,7 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    if not isinstance(text, str) or len(text) == 0:
+    if not isinstance(text, str) or not text:
         return ()
 
     sentences = re.split('[!?.] ', text)
@@ -46,7 +46,7 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        if not isinstance(letter, str) or not 0 < len(letter) <= 1:
+        if not isinstance(letter, str) or not len(letter) <= 1:
             return 1
         if letter not in self.storage:
             self.storage[letter] = len(self.storage) + 1
@@ -90,9 +90,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 
     encoded_corpus = []
     for sentence in corpus:
-        list_sentence = []
-        for token in sentence:
-            list_sentence.append(tuple([storage.get_id_by_letter(letter) for letter in token]))
+        list_sentence = [tuple([storage.get_id_by_letter(letter) for letter in token]) for token in sentence]
         encoded_corpus.append(tuple(list_sentence))
 
     return tuple(encoded_corpus)
@@ -277,9 +275,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
 
         lang_prob_dict = {}
         for language_name in self.n_gram_storages:
-            language_prob = []
-            for n_gram_trie in self.n_gram_storages[language_name].values():
-                language_prob.append(self._calculate_sentence_probability(n_gram_trie, encoded_text))
+            language_prob = [self._calculate_sentence_probability(n_gram_trie, encoded_text)
+                             for n_gram_trie in self.n_gram_storages[language_name].values()]
             lang_prob_dict[language_name] = sum(language_prob) / len(language_prob)
 
         return lang_prob_dict
