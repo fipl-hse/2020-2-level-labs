@@ -217,12 +217,12 @@ class LanguageDetector:
         distance = 0
 
         for first_index, first_n_gram in enumerate(first_n_grams):
-            if first_n_gram in second_n_grams:
+            if first_n_gram not in second_n_grams:
                 distance += len(second_n_grams)
             for second_index, second_n_gram in enumerate(second_n_grams):
                 if first_n_gram == second_n_gram:
                     distance += abs(first_index - second_index)
-        return distance
+        return sum(distance)
 
 
     def detect_language(self, encoded_text: tuple) -> dict:
