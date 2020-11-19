@@ -7,35 +7,35 @@ from lab_3.main import LetterStorage, ProbabilityLanguageDetector
 from lab_3.main import encode_corpus
 
 if __name__ == '__main__':
-    unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
-    german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
-    english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
+    english_language = open('lab_3/Frank_Baum.txt', encoding='utf-8')
+    german_language = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
+    unknown_language = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
 
-    text_unk = tokenize_by_sentence(unknown_file.read())
-    text_ger = tokenize_by_sentence(german_file.read())
-    text_eng = tokenize_by_sentence(english_file.read())
+    eng_text = tokenize_by_sentence(english_language.read())
+    germ_text = tokenize_by_sentence(german_language.read())
+    unkn_text = tokenize_by_sentence(unknown_language.read())
 
-    english_file.close()
-    german_file.close()
-    unknown_file.close()
+    english_language.close()
+    german_language.close()
+    unknown_language.close()
 
     letter_storage = LetterStorage()
-    letter_storage.update(text_eng)
-    letter_storage.update(text_ger)
-    letter_storage.update(text_unk)
+    letter_storage.update(eng_text)
+    letter_storage.update(germ_text)
+    letter_storage.update(unkn_text)
 
-    eng_encoded = encode_corpus(letter_storage, text_eng)
-    unk_encoded = encode_corpus(letter_storage, text_unk)
-    ger_encoded = encode_corpus(letter_storage, text_ger)
+    encoded_eng = encode_corpus(letter_storage, eng_text)
+    encoded_germ = encode_corpus(letter_storage, germ_text)
+    encoded_unkn = encode_corpus(letter_storage, unkn_text)
 
     language_detector = ProbabilityLanguageDetector((3, 4, 5), 1000)
-    language_detector.new_language(eng_encoded, 'english')
-    language_detector.new_language(ger_encoded, 'german')
+    language_detector.new_language(encoded_eng, 'english')
+    language_detector.new_language(encoded_germ, 'german')
 
-    ngram_unknown = NGramTrie(4)
-    ngram_unknown.fill_n_grams(unk_encoded)
+    unknown_ngram = NGramTrie(4)
+    unknown_ngram.fill_n_grams(encoded_unkn)
 
-    actual = language_detector.detect_language(ngram_unknown.n_grams)
+    actual = language_detector.detect_language(unknown_ngram.n_grams)
 
     RESULT = actual['german'] > actual['english']
 

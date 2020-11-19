@@ -215,14 +215,13 @@ class LanguageDetector:
             return -1
 
         distance = 0
-
         for first_index, first_n_gram in enumerate(first_n_grams):
             if first_n_gram not in second_n_grams:
                 distance += len(second_n_grams)
             for second_index, second_n_gram in enumerate(second_n_grams):
                 if first_n_gram == second_n_gram:
                     distance += abs(first_index - second_index)
-        return sum(distance)
+        return distance
 
 
     def detect_language(self, encoded_text: tuple) -> dict:
@@ -235,20 +234,18 @@ class LanguageDetector:
             return {}
 
         detect_language_dict = {}
-        
         for language in self.n_gram_storages:
             language_distance = []
-            for level in self.trie_levels:
-                unknown_n_gram = NGramTrie(level)
+            for size in self.trie_levels:
+                unknown_n_gram = NGramTrie(size)
                 unknown_n_gram.fill_n_grams(encoded_text)
                 unknown_n_gram.calculate_n_grams_frequencies()
                 top_unknown_n_gram = unknown_n_gram.top_n_grams(self.top_k)
-                top_language = self.n_gram_storages[language][level].top_n_grams(self.top_k)
+                top_language = self.n_gram_storages[language][size].top_n_grams(self.top_k)
                 language_distance.append(self._calculate_distance(top_unknown_n_gram, top_language))
             if language_distance:
-                detect_language_dict[language] = sum(language_distance[language]) / len(language_distance[language])
+                detect_language_dict[language] = sum(language_distance) / len(language_distance)
         return detect_language_dict
-
 
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
