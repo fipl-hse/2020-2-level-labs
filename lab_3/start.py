@@ -6,7 +6,7 @@ import lab_3.main
 
 if __name__ == '__main__':
 
-    SENTENCE = 'I love you to the moon and back'
+    SENTENCE = 'The, first sentence - nice. The second sentence: bad!'
     tokenized_sentence = lab_3.main.tokenize_by_sentence(SENTENCE)
     print(f'TOKENS: {tokenized_sentence}')
 
