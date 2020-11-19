@@ -58,11 +58,10 @@ class LetterStorage:
         :param letter: a letter
         :return: 0 if succeeds, 1 if not
         """
-        letters = 'abcdefghijklmnopqrstuvwxyz_'
         if not isinstance(letter, str) or letter not in 'abcdefghijklmnopqrstuvwxyz_':
             return 1
         if letter not in self.storage.keys():
-            self.storage[letter] = letters.index(letter)
+            self.storage[letter] = len(self.storage)
         return 0
 
 
