@@ -6,7 +6,7 @@ import lab_3.main
 
 if __name__ == '__main__':
 
-    sentence = 'I love you to the moon and back'
+    SENTENCE = 'I love you to the moon and back'
     tokenized_sentence = lab_3.main.tokenize_by_sentence(sentence)
     print(f'TOKENS: {tokenized_sentence}')
 
@@ -18,8 +18,8 @@ if __name__ == '__main__':
     print(f'ENCODED_CORPUS: {encoded_corpus}')
 
     n_gram = lab_3.main.NGramTrie(2)
-    fill_n_gram = n_gram.fill_n_grams(encoded_corpus)
-    frequencies = n_gram.calculate_n_grams_frequencies()
+    FILL_N_GRAM = n_gram.fill_n_grams(encoded_corpus)
+    FREQUENCIES = n_gram.calculate_n_grams_frequencies()
     top = n_gram.top_n_grams(5)
     print(f'TOP_5: {top}')
 
