@@ -38,12 +38,9 @@ if __name__ == '__main__':
     n3_gram_unknown = lab_3.main.NGramTrie(3)
     n3_gram_unknown.fill_n_grams(unknown_encoded)
 
-    english_prob = language_detector._calculate_sentence_probability(n3_gram_trie_english,
-                                                                     n3_gram_unknown.n_grams)
-    german_prob = language_detector._calculate_sentence_probability(n3_gram_trie_german,
-                                                                    n3_gram_unknown.n_grams)
+    detected_language = language_detector.detect_language(n3_gram_unknown.n_grams)
 
-    if english_prob > german_prob:
+    if detected_language['english'] > detected_language['german']:
         RESULT = 'english'
     else:
         RESULT = 'german'

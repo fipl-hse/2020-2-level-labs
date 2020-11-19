@@ -1,7 +1,8 @@
 """
 Language detection using n-grams
 """
-import re, math
+import re
+import math
 
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
@@ -115,7 +116,7 @@ class NGramTrie:
             n_gram_sentence = []
             for word in sentence:
                 n_gram_word = []
-                for index, letter in enumerate(word[: len(word) + 1 - self.size]):
+                for index in range(len(word[: len(word) + 1 - self.size])):
                     n_gram_word.append(tuple(word[index:index + self.size]))
                 n_gram_sentence.append(tuple(n_gram_word))
             n_gram_res.append(tuple(n_gram_sentence))
@@ -152,8 +153,8 @@ class NGramTrie:
             for n_gram_2 in self.n_gram_frequencies:
                 if n_gram_2[0] == n_gram[0]:
                     sum_n_gram += self.n_gram_frequencies[n_gram_2]
-            p = self.n_gram_frequencies[n_gram] / sum_n_gram
-            self.n_gram_log_probabilities[n_gram] = math.log(p)
+            prob = self.n_gram_frequencies[n_gram] / sum_n_gram
+            self.n_gram_log_probabilities[n_gram] = math.log(prob)
         return 0
 
     def top_n_grams(self, k: int) -> tuple:
@@ -200,8 +201,8 @@ class LanguageDetector:
             self.n_gram_storages[language_name][num] = language
         return 0
 
-
-    def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
+    @staticmethod
+    def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
         :param first_n_grams: a tuple of the top_k n-grams
@@ -256,7 +257,8 @@ class LanguageDetector:
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
-    def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+    @staticmethod
+    def _calculate_sentence_probability(n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
         :param n_gram_storage: a filled NGramTrie with log-probabilities
@@ -286,9 +288,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
         detected_language = {}
         for language, inf in self.n_gram_storages.items():
             prob = 0
-            for num, n_gram in inf.items():
+            for n_gram in inf.values():
                 prob += self._calculate_sentence_probability(n_gram, encoded_text)
             detected_language[language] = prob
         return detected_language
-
-
