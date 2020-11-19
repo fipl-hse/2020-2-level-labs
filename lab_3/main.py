@@ -285,10 +285,11 @@ class ProbabilityLanguageDetector(LanguageDetector):
         """
         if not isinstance(n_gram_storage, NGramTrie) or not isinstance(sentence_n_grams, tuple):
             return -1
-        n_gram_storage.n_grams = sentence_n_grams
         result = 0
-        for value in n_gram_storage.n_gram_log_probabilities.values():
-            result += value
+        for sentence in sentence_n_grams:
+            for word in sentence:
+                for n_gram in word:
+                    result += n_gram_storage.n_gram_log_probabilities.get(n_gram, 0)
         return result
 
     def detect_language(self, encoded_text: tuple) -> dict:
@@ -300,13 +301,9 @@ class ProbabilityLanguageDetector(LanguageDetector):
         if not isinstance(encoded_text, tuple):
             return {}
         result_dict = {}
-        detect_dict = LanguageDetector.detect_language(self, encoded_text)
-        for key, value in detect_dict.items():
+        for language in self.n_gram_storages:
             value = 0
-            for number in self.trie_levels:
-                object = NGramTrie(number)
-                n_grams = object.fill_n_grams(encoded_text)
-                value += self._calculate_sentence_probability(object, n_grams)
-            result_dict[key] = value
+            for data in self.n_gram_storages[language].values():
+                value += self._calculate_sentence_probability(data, encoded_text)
+            result_dict[language] = value/len(self.trie_levels)
         return result_dict
-
