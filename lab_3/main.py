@@ -62,10 +62,10 @@ class LetterStorage:
         :param letter: a letter
         :return: an id
         """
-        if not isinstance(letter, str) and letter not in self.storage:
-            return -1
+        if letter in self.storage:
+            return self.storage[letter]
 
-        return self.storage[letter]
+        return -1
 
     def update(self, corpus: tuple) -> int:
         """
@@ -76,10 +76,10 @@ class LetterStorage:
         if not isinstance(corpus, tuple):
             return 1
 
-        for word in corpus:
-            for letter in word:
-                self._put_letter(letter)
-
+        for element in corpus:
+            for token in element:
+                for letter in token:
+                    self._put_letter(letter)
         return 0
 
 
