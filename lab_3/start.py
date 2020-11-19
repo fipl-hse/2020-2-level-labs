@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     file_first = open("lab_3/Frank_Baum.txt", 'r', encoding='utf-8')
     file_second = open("lab_3/Thomas_Mann.txt", 'r', encoding='utf-8')
-    text_third = """
+    TEXT = """
     Extroversion is conducive to working well with people. 
     One of the things that characterizes extroverts is they need stimulation. 
     And that stimulation can be achieved by finding things that are exciting: loud noises, parties and social events. 
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     text_english = lab_3.main.tokenize_by_sentence(file_first.read())
     text_german = lab_3.main.tokenize_by_sentence(file_second.read())
-    text_unknown = lab_3.main.tokenize_by_sentence(text_third)
+    text_unknown = lab_3.main.tokenize_by_sentence(TEXT)
     letter_storage.update(text_english)
     letter_storage.update(text_german)
     letter_storage.update(text_unknown)
