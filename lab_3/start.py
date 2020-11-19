@@ -8,9 +8,9 @@ if __name__ == '__main__':
 
     # here goes your function calls
 
-    eng_file = open('Frank_Baum.txt', encoding='utf-8')
-    germ_file = open('Thomas_Mann.txt', encoding='utf-8')
-    unk_file = open('unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
+    eng_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
+    germ_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
+    unk_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
 
     eng_text = lab_3.main.tokenize_by_sentence(eng_file.read())
     germ_text = lab_3.main.tokenize_by_sentence(germ_file.read())
