@@ -30,12 +30,8 @@ if __name__ == '__main__':
     eng_encoded = encode_corpus(letter_storage, text_eng)
     unk_encoded = encode_corpus(letter_storage, text_unk)
     ger_encoded = encode_corpus(letter_storage, text_ger)
-
-    language_detector = ProbabilityLanguageDetector((3, 4, 5), 1000)
-    language_detector.new_language(eng_encoded, 'english')
-    language_detector.new_language(ger_encoded, 'german')
-
-    ngram_unknown = NGramTrie(4)
+    
+    ngram_unknown = NGramTrie(2)
     ngram_unknown.fill_n_grams(unk_encoded)
 
     actual = language_detector.detect_language(ngram_unknown.n_grams)
