@@ -135,7 +135,7 @@ class NGramTrie:
             sent = []
             for word in sentence:
                 new_word = []
-                for index, character in enumerate(word):
+                for index in range(0, len(word) - 1):
                     if index < len(word) - self.size + 1:
                         n_gram = tuple(word[index: index + self.size])
                         new_word.append(tuple(n_gram))
@@ -215,7 +215,8 @@ class LanguageDetector:
         self.n_gram_storages[language_name] = {n: NGramTrie(n) for n in self.trie_levels}
         return 0
 
-    def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
+    @staticmethod
+    def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
         :param first_n_grams: a tuple of the top_k n-grams
@@ -267,12 +268,8 @@ class LanguageDetector:
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
-    def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
-        self.trie_levels = trie_levels
-        self.top_k = top_k
-        self.n_gram_storages = {}
-
-    def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+    @staticmethod
+    def _calculate_sentence_probability(n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
         :param n_gram_storage: a filled NGramTrie with log-probabilities
@@ -283,8 +280,8 @@ class ProbabilityLanguageDetector(LanguageDetector):
             return -1.0
 
         to_return = 0
-        for sent in sentence_n_grams:
-            for word in sent:
+        for sentence in sentence_n_grams:
+            for word in sentence:
                 for n_gram in word:
                     if n_gram in n_gram_storage.n_gram_log_probabilities:
                         to_return += n_gram_storage.n_gram_log_probabilities[n_gram]
