@@ -275,8 +275,7 @@ class LanguageDetector:
 
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
-    @staticmethod
-    def _calculate_sentence_probability(n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+    def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
         :param n_gram_storage: a filled NGramTrie with log-probabilities
