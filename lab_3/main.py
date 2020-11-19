@@ -165,7 +165,7 @@ class NGramTrie:
             for n_gram1 in self.n_gram_frequencies:
                 if n_gram1[:-1] == n_gram[:-1]:
                     sum_frequencies += self.n_gram_frequencies[n_gram1]
-            probability = self.n_gram_frequencies[n_gram] / sum_frequencies
+            probability = frequency / sum_frequencies
 
             self.n_gram_log_probabilities[n_gram] = math.log(probability)
 
