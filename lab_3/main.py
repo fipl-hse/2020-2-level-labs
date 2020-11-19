@@ -36,7 +36,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.id = 0
+        self.n_size = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -48,8 +48,8 @@ class LetterStorage:
             return 1
 
         if letter not in self.storage:
-            self.storage[letter] = self.id
-            self.id += 1
+            self.storage[letter] = self.n_size
+            self.n_size += 1
         return 0
 
     def get_id_by_letter(self, letter: str) -> int:
@@ -157,8 +157,9 @@ class NGramTrie:
             return 1
 
         for n_gram in self.n_gram_frequencies:
-            probability = self.n_gram_frequencies[n_gram] / sum([self.n_gram_frequencies[other_n_gram] for other_n_gram in
-                                                                 self.n_gram_frequencies if other_n_gram[0] == n_gram[0]])
+            probability = self.n_gram_frequencies[n_gram] / sum([self.n_gram_frequencies[other_n_gram]
+                                                                 for other_n_gram in self.n_gram_frequencies
+                                                                 if other_n_gram[0] == n_gram[0]])
             self.n_gram_log_probabilities[n_gram] = log(probability)
         return 0
 
