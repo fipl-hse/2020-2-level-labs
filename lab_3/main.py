@@ -50,7 +50,7 @@ class LetterStorage:
             return 1
 
         if letter not in self.storage:
-            self.storage[letter] = len(self.storage)
+            self.storage[letter] = len(self.storage)  # индификатор буквы -- длина storage (каждый раз другая)
 
         return 0
 
@@ -77,7 +77,7 @@ class LetterStorage:
         for sentence in corpus:
             for token in sentence:
                 for letter in token:
-                    self._put_letter(letter)
+                    self._put_letter(letter)  # заполняем storage буквами из кортежа предложений
 
         return 0
 
@@ -100,9 +100,11 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         for word in sentence:
             word_class = []
             for letter in word:
-                word_class.append(storage.get_id_by_letter(letter))
-            sentence_class.append(tuple(word_class))
-        encoded_corpus.append(tuple(sentence_class))
+                word_class.append(storage.get_id_by_letter(letter))  # добавляем в word_class идентификаторы \
+                # букв и получаем из ('a') --> (1)
+            sentence_class.append(tuple(word_class))  # добавляем в sentence_class набор идентификаторов-букв \
+            # и будет из ('a','b','c') --> (1,2,3)
+        encoded_corpus.append(tuple(sentence_class))  # добавляем в encoded_corpus набор идентификаторов-слов
 
     return tuple(encoded_corpus)
 
@@ -111,10 +113,10 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 class NGramTrie:
 
     def __init__(self, n: int):
-        self.size = n
-        self.n_grams = ()
-        self.n_gram_frequencies = {}
-        self.n_gram_log_probabilities = {}
+        self.size = n  # размер грамм
+        self.n_grams = ()  # тут хранятся n-граммы
+        self.n_gram_frequencies = {}  # тут хранятся повторы n-грамм (например, self.n_gram_frequencies[(1,2)] = 10)
+        self.n_gram_log_probabilities = {}  # тут хранятся лог-вероятность появления соответствующего кортежа в тексте
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
@@ -129,10 +131,12 @@ class NGramTrie:
             sentence_l = []
             for word in sentence:
                 word_l = []
-                for i in range(len(word) - self.size + 1):
-                    word_l.append(tuple((word[i], word[i + 1])))
-                sentence_l.append(tuple(word_l))
-            bi_gram.append(tuple(sentence_l))
+                for i in range(len(word) - self.size + 1):  # число символов в слове минус размер н-грамм \
+                    # и + 1 для индекса. так, слово (1,2,3,4) --> (4 - 2 + 1 = 3) получаем число 3
+                    word_l.append(tuple((word[i], word[i + 1])))  # к списку слов присоединяем пару из индекса слова
+                    # (буковки) и индекса слова но плюс один (чтобы получить пару)
+                sentence_l.append(tuple(word_l))  # ну присоединяем нашу получившуюся пару в список предложений
+            bi_gram.append(tuple(sentence_l))  # к нашим би-граммам добавляем все получившееся
 
         self.n_grams = tuple(bi_gram)
 
@@ -149,7 +153,11 @@ class NGramTrie:
         for sentence in self.n_grams:
             for word in sentence:
                 for n_gram in word:
-                    self.n_gram_frequencies[n_gram] = self.n_gram_frequencies.get(n_gram, 0) + 1
+                    if n_gram in self.n_gram_frequencies:
+                        self.n_gram_frequencies[n_gram] += 1
+                    else:
+                        self.n_gram_frequencies[n_gram] = 1
+
         return 0
 
     def calculate_log_probabilities(self) -> int:
@@ -162,12 +170,12 @@ class NGramTrie:
 
         for n_gram, frequency in self.n_gram_frequencies.items():
             sum_frequencies = 0  # все n-граммы, которые имеют одну и ту же n - 1 первую букву с данной n-граммой
-            for n_gram1 in self.n_gram_frequencies:
+            for n_gram1 in self.n_gram_frequencies:  # n_gram1 - интересующая наша буква
                 if n_gram1[:-1] == n_gram[:-1]:
-                    sum_frequencies += self.n_gram_frequencies[n_gram1]
-            probability = frequency / sum_frequencies
+                    sum_frequencies += self.n_gram_frequencies[n_gram1]  # если совпадают, добавляем в sum_frequencies
+            probability = frequency / sum_frequencies  # рассчитываем
 
-            self.n_gram_log_probabilities[n_gram] = math.log(probability)
+            self.n_gram_log_probabilities[n_gram] = math.log(probability)  # логарифмируем
 
         return 0
 
@@ -188,9 +196,11 @@ class NGramTrie:
 class LanguageDetector:
 
     def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
-        self.trie_levels = trie_levels
-        self.top_k = top_k
-        self.n_gram_storages = {}
+        self.trie_levels = trie_levels  # кортеж, задающий сколько нужно построить моделей NGram и какого размера
+        # сюда передаётся кортеж из одного элемента `(3,)`, который означает, что
+        # нужно построить одну модель NGram на основе триграм
+        self.top_k = top_k  # число самых частотных n-грамм
+        self.n_gram_storages = {}  # тут будут храниться заполненные `NGramTrie` для разных языков
 
     def new_language(self, encoded_text: tuple, language_name: str) -> int:
         """
@@ -203,14 +213,19 @@ class LanguageDetector:
                 or not isinstance(language_name, str)):
             return 1
 
-        self.n_gram_storages[language_name] = {}
+        self.n_gram_storages[language_name] = {}  # словарь, где ключами выступают названия языков,
+        #  значения - словари, где ключами выступают размеры N-грамм из поля `trie_levels`, а значениями –
+        #  заполненные `NGramTrie`.
+        #  Например, после обработки английского языка с `trie_levels = (2, 3)`:
+        #  self.n_gram_storages['English'] = {2: NGramTrie(2), 3: NGramTrie(3)}
 
         for i in self.trie_levels:
             new_language = NGramTrie(i)
-            new_language.fill_n_grams(encoded_text)
-            new_language.calculate_n_grams_frequencies()
-            new_language.calculate_log_probabilities()
-            self.n_gram_storages[language_name][i] = new_language
+            new_language.fill_n_grams(encoded_text)  # принимаем закодированный текст
+            new_language.calculate_n_grams_frequencies()  # считаем повторы n-грамм
+            new_language.calculate_log_probabilities()  # логарифмируем
+            self.n_gram_storages[language_name][i] = new_language  # заполняем `NGramTrie` для конкретного языка
+            # и добавляем в поле `self.n_gram_storages`
 
         return 0
 
@@ -236,13 +251,18 @@ class LanguageDetector:
 
         for ind, n_gram in enumerate(first_n_grams):
             if n_gram in second_n_grams:
-                distance += abs(second_n_grams.index(n_gram) - ind)
+                distance += abs(second_n_grams.index(n_gram) - ind)  # функция abs() возвращает
+                # абсолютное значение числа (т.е. всегда положительное).
+                # тут мы к расстоянию прибавляем индекс определенной n-граммы из второго кортежа минус индекс
+                # этой n-граммы из первого кортежа. n-грамма = (4,5) --> 4-5 = -1 --> расстояние = 1
             else:
                 distance += len(second_n_grams)
 
         return distance
 
-    def detect_language(self, encoded_text: tuple) -> dict:
+    def detect_language(self, encoded_text: tuple) -> dict:  # Функция возвращает словарь,
+        # где ключом является язык, значением – расстояние.
+
         """
         Detects the language the unknown text is written in using the function _calculate_distance
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
@@ -252,16 +272,20 @@ class LanguageDetector:
             return {}
 
         languages_dict = {}
-        for language, dictionary in self.n_gram_storages.items():
+        for language, dictionary in self.n_gram_storages.items():  # метод items() возвращает
+            # список кортежей dict (ключ, значение)
             distances = 0
             for n_gram_size, n_gram_trie in dictionary.items():
                 top_n_grams = n_gram_trie.top_n_grams(self.top_k)
-                unknown_n_gram_trie = NGramTrie(n_gram_size)
-                unknown_n_gram_trie.fill_n_grams(encoded_text)
-                unknown_n_gram_trie.calculate_n_grams_frequencies()
-                top_n_grams1 = unknown_n_gram_trie.top_n_grams(self.top_k)
-                distances += self._calculate_distance(top_n_grams, top_n_grams1)
-            languages_dict[language] = distances / len(dictionary)
+                unknown_n_gram_trie = NGramTrie(n_gram_size)  # заполняем NGramTrie для неизвестного языка
+                unknown_n_gram_trie.fill_n_grams(encoded_text)  # извлекаем n-граммы для неизвестного языка
+                unknown_n_gram_trie.calculate_n_grams_frequencies()  # считаем повторы n-грамм для неизвестного языка
+                top_n_grams1 = unknown_n_gram_trie.top_n_grams(self.top_k)  # находим топ n-граммы для н. языка
+                distances += self._calculate_distance(top_n_grams, top_n_grams1)  # прибавляем к разнице высчитанную
+                # разницу между топ граммами определенного языка и неизвестно языка, т.к. язык определяется
+                # по расстоянию между `top_k` N-грамм.
+                # Чем меньше расстояние, тем вероятнее тот или иной язык.
+            languages_dict[language] = distances / len(dictionary)  # в ключ (язык) записываем усредненное значение
 
         return languages_dict
 
