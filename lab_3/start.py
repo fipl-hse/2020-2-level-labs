@@ -5,6 +5,7 @@ from lab_3.main import tokenize_by_sentence
 from lab_3.main import encode_corpus
 from lab_3.main import NGramTrie
 from lab_3.main import LetterStorage
+from lab_3.main import LanguageDetector
 
 if __name__ == '__main__':
 
@@ -29,10 +30,21 @@ if __name__ == '__main__':
     unk_encoded = encode_corpus(letter_storage, text_unk)
     ger_encoded = encode_corpus(letter_storage, text_ger)
 
-    ngram_unknown = NGramTrie(3)
+    language_detector = LanguageDetector((3, 4, 5), 1000)
+    language_detector.new_language(eng_encoded, 'english')
+    language_detector.new_language(ger_encoded, 'german')
+
+    ngram_unknown = NGramTrie(4)
     ngram_unknown.fill_n_grams(unk_encoded)
 
+    language_log_probability_dict = language_detector.detect_language(ngram_unknown.n_grams)
 
-    RESULT = actual['english'] < actual['german']
+    if language_log_probability_dict['german'] > language_log_probability_dict['english']:
+        RESULT = 'english'
+    else:
+        RESULT = 'german'
+
+    print('this is a {} text.'.format(RESULT))
+
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == 1, ''
+    assert RESULT == 'german', 'Not working'
