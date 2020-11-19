@@ -209,8 +209,7 @@ class LanguageDetector:
         """
         incorrect_inputs = (not isinstance(first_n_grams, tuple) or
                             not isinstance(second_n_grams, tuple) or
-                            None in first_n_grams or
-                            None in second_n_grams)
+                            None in first_n_grams or None in second_n_grams)
         if incorrect_inputs:
             return -1
 
