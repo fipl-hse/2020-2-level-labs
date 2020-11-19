@@ -7,7 +7,6 @@ import lab_3.main
 if __name__ == '__main__':
 
     # here goes your function calls
-
     english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
     german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
     unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
