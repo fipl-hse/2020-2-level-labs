@@ -164,9 +164,9 @@ class LanguageDetector:
                 storage = NGramTrie(size)
                 storage.fill_n_grams(encoded_text)
                 storage.calculate_n_grams_frequencies()
-                top_unknown = unknown.top_n_grams(self.top_k)
+                top_storage = storage.top_n_grams(self.top_k)
                 top_language = self.n_gram_storages[language][size].top_n_grams(self.top_k)
-                language_distance.append(self._calculate_distance(top_unknown, top_language))
+                language_distance.append(self._calculate_distance(top_storage, top_language))
             if language_distance:
                 detected[language] = mean(language_distance)
         return detected
