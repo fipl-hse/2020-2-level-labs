@@ -125,9 +125,11 @@ class LetterStorageTest(unittest.TestCase):
         ideal case for update
         """
         letter_storage = LetterStorage()
-        sentence = (('_', 't', 'e', 's', 't', '_'), )
+        sentences = (
+            (('_', 't', 'e', 's', 't', '_'),),
+        )
         expected = 0
-        actual = letter_storage.update(sentence)
+        actual = letter_storage.update(sentences)
         self.assertEqual(len(letter_storage.storage), 4)
         self.assertEqual(expected, actual)
 
@@ -137,10 +139,12 @@ class LetterStorageTest(unittest.TestCase):
         ideal case for update
         """
         letter_storage = LetterStorage()
-        sentence = (('_', 't', 'e', 's', 't', '_'),
-                    ('_', 't', 'e', 's', 't', '_'))
+        sentences = (
+            (('_', 't', 'e', 's', 't', '_'),),
+            (('_', 't', 'e', 's', 't', '_'),)
+        )
         expected = 0
-        actual = letter_storage.update(sentence)
+        actual = letter_storage.update(sentences)
         self.assertEqual(len(letter_storage.storage), 4)
         self.assertEqual(expected, actual)
 
@@ -150,9 +154,9 @@ class LetterStorageTest(unittest.TestCase):
         ideal case for update
         """
         letter_storage = LetterStorage()
-        sentence = ()
+        sentences = ()
         expected = 0
-        actual = letter_storage.update(sentence)
+        actual = letter_storage.update(sentences)
         self.assertEqual(letter_storage.storage, {})
         self.assertEqual(expected, actual)
 
@@ -162,9 +166,9 @@ class LetterStorageTest(unittest.TestCase):
         ideal case for update
         """
         letter_storage = LetterStorage()
-        sentence = None
+        sentences = None
         expected = 1
-        actual = letter_storage.update(sentence)
+        actual = letter_storage.update(sentences)
         self.assertEqual(letter_storage.storage, {})
         self.assertEqual(expected, actual)
 
@@ -174,8 +178,10 @@ class LetterStorageTest(unittest.TestCase):
         ideal case for update
         """
         letter_storage = LetterStorage()
-        sentences = [('_', 't', 'e', 's', 't', '_'),
-                     ('_', 's', 'e', 'c', 'o', 'n', 'd', '_')]
+        sentences = [
+            (('_', 't', 'e', 's', 't', '_'),),
+            (('_', 's', 'e', 'c', 'o', 'n', 'd', '_'),)
+        ]
         expected = 1
         actual = letter_storage.update(sentences)
         self.assertEqual(letter_storage.storage, {})
@@ -188,6 +194,8 @@ class LetterStorageTest(unittest.TestCase):
         ideal case for update calling put_letter method
         """
         letter_storage = LetterStorage()
-        sentences = (('_', 't', 'e', 's', 't', '_'),)
+        sentences = (
+            (('_', 't', 'e', 's', 't', '_'),),
+        )
         letter_storage.update(sentences)
         self.assertTrue(mock.called)
