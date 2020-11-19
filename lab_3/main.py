@@ -1,17 +1,15 @@
 """
 Language detection using n-grams
 """
-<<<<<<< HEAD
-import re
-import math
-=======
-
 
 import re
 import math
 
 
->>>>>>> a7e5de24891fec8c2d747536877f4b546f9fbf44
+import re
+import math
+
+
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
@@ -39,9 +37,6 @@ def tokenize_by_sentence(text: str) -> tuple:
                 tokenized_sent.append(tuple(['_'] + letters + ['_']))
             tokenized_txt.append(tuple(tokenized_sent))
     return tuple(tokenized_txt)
-<<<<<<< HEAD
-=======
-
 
 
 # 4
@@ -88,9 +83,6 @@ class LetterStorage:
                 for letter in token: # проходим по символам в кортеже слова
                     self._put_letter(letter)
         return 0
-<<<<<<< HEAD
-=======
-
 
 
 # 6
@@ -110,9 +102,6 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             new_sent.append(storage.get_id_by_letter(letter))
         encoded_corpus.append(tuple(new_sent))
     return tuple(encoded_corpus)
-<<<<<<< HEAD
-=======
-
 
 
 # 6
@@ -168,14 +157,15 @@ class NGramTrie:
         """
         if not self.n_gram_frequencies:
             return 1
-        for elem in self.n_gram_frequencies:
-            probability = self.n_gram_frequencies[elem] / sum(
-                [self.n_gram_frequencies[n_gram] for n_gram in self.n_gram_frequencies if n_gram[0] == elem[0]])
-            self.n_gram_log_probabilities[elem] = math.log(probability)
-<<<<<<< HEAD
 
-=======
-
+        for n_gram, freq in self.n_gram_frequencies.items():
+            total_n_grams = 0
+            for n_gram1 in self.n_gram_frequencies:
+                if n_gram1[:-1] == n_gram[:-1]:
+                    total_n_grams += self.n_gram_frequencies[n_gram1]
+            probability = freq / total_n_grams
+            self.n_gram_log_probabilities[n_gram] = log(probability)
+        return 0
 
     def top_n_grams(self, k: int) -> tuple:
         """
