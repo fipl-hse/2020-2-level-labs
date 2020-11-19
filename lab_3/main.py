@@ -160,7 +160,7 @@ class NGramTrie:
         for elem in self.n_gram_frequencies:
             count = 0
             for other_elem in self.n_gram_frequencies:
-                if elem[0] in other_elem:
+                if elem[0] == other_elem[0]:
                     count += self.n_gram_frequencies[other_elem]
             #натуральный логарифм от числа
             self.n_gram_log_probabilities[elem] = math.log(self.n_gram_frequencies[elem]/count)
