@@ -329,32 +329,3 @@ class ProbabilityLanguageDetector(LanguageDetector):
         for language in probabilities:
             probabilities[language] = sum(probabilities[language]) / len(probabilities[language])
         return probabilities
-
-unknown_file = open('unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
-german_file = open('Thomas_Mann.txt', encoding='utf-8')
-english_file = open('Frank_Baum.txt', encoding='utf-8')
-
-text_unk = tokenize_by_sentence(unknown_file.read(10))
-text_ger = tokenize_by_sentence(german_file.read(10))
-text_eng = tokenize_by_sentence(english_file.read(10))
-english_file.close()
-german_file.close()
-unknown_file.close()
-
-letter_storage = LetterStorage()
-letter_storage.update(text_eng)
-letter_storage.update(text_ger)
-letter_storage.update(text_unk)
-
-eng_encoded = encode_corpus(letter_storage, text_eng)
-unk_encoded = encode_corpus(letter_storage, text_unk)
-ger_encoded = encode_corpus(letter_storage, text_ger)
-
-language_detector = ProbabilityLanguageDetector((3, 4, 5), 1000)
-language_detector.new_language(eng_encoded, 'english')
-language_detector.new_language(ger_encoded, 'german')
-
-ngram_unknown = NGramTrie(4)
-ngram_unknown.fill_n_grams(unk_encoded)
-
-actual = language_detector.detect_language(ngram_unknown.n_grams)
