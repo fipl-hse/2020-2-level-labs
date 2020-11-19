@@ -133,14 +133,11 @@ class NGramTrie:
             listed_sent = []
             for word in sent:
                 listed_word = []
-                n_grams_number = len(word) - self.size + 1
-                count = 0
-                while len(listed_word) < n_grams_number:
-                    listed_word.append(tuple(word[count:count + self.size]))
-                    count += 1
+                for ind in range(len(word) - self.size + 1):
+                    listed_word.append(tuple(word[ind:ind + self.size]))
                 listed_sent.append(tuple(listed_word))
             listed_n_grams.append(tuple(listed_sent))
-        tuple(listed_n_grams)
+        self.n_grams = tuple(listed_n_grams)
         return 0
 
     def calculate_n_grams_frequencies(self) -> int:
@@ -220,16 +217,18 @@ class LanguageDetector:
         return 0
 
     @staticmethod
-    def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
+    def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
         :param first_n_grams: a tuple of the top_k n-grams
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
+        if first_n_grams == () or second_n_grams == ():
+            return 0
+
         if (not isinstance(first_n_grams, tuple) or
                 not isinstance(second_n_grams, tuple) or
-                not len(first_n_grams) or not len(second_n_grams) or
                 not isinstance(first_n_grams[0], (tuple, str)) or
                 not isinstance(second_n_grams[0], (tuple, str))):
             return -1
@@ -239,10 +238,9 @@ class LanguageDetector:
         for ind_1, n_gram_1 in enumerate(first_n_grams):
             if n_gram_1 not in second_n_grams:
                 distance.append(len(second_n_grams))
-            else:
-                for ind_2, n_gram_2 in enumerate(second_n_grams):
-                    if n_gram_1 == n_gram_2:
-                        distance.append(abs(ind_1 - ind_2))
+            for ind_2, n_gram_2 in enumerate(second_n_grams):
+                if n_gram_1 == n_gram_2:
+                    distance.append(abs(ind_1 - ind_2))
 
         return sum(distance)
 
@@ -277,7 +275,7 @@ class LanguageDetector:
 class ProbabilityLanguageDetector(LanguageDetector):
 
     @staticmethod
-    def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+    def _calculate_sentence_probability(n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
         :param n_gram_storage: a filled NGramTrie with log-probabilities
