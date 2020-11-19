@@ -97,10 +97,13 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         return ()
     encoded_corpus = []
     for sent in corpus:
-        new_sent = []
-        for letter in sent:
-            new_sent.append(storage.get_id_by_letter(letter))
-        encoded_corpus.append(tuple(new_sent))
+        encoded_sent = []
+        for word in sent:
+            encoded_word = []
+            for letter in word:
+                encoded_word.append(storage.get_id_by_letter(letter))
+            encoded_sent.append(tuple(encoded_word))
+        encoded_corpus.append(tuple(encoded_sent))
     return tuple(encoded_corpus)
 
 
@@ -158,25 +161,23 @@ class NGramTrie:
         if not self.n_gram_frequencies:
             return 1
 
-        for n_gram, freq in self.n_gram_frequencies.items():
-            total_n_grams = 0
-            for n_gram1 in self.n_gram_frequencies:
-                if n_gram1[:-1] == n_gram[:-1]:
-                    total_n_grams += self.n_gram_frequencies[n_gram1]
-            probability = freq / total_n_grams
-            self.n_gram_log_probabilities[n_gram] = log(probability)
+        for gram_1 in self.n_gram_frequencies:
+            sum_gr = 0
+            for gram_2 in self.n_gram_frequencies:
+                if gram_1[0] == gram_2[0]:
+                    sum_gr += self.n_gram_frequencies[gram_2]
+            prob = self.n_gram_frequencies[gram_1] / sum_gr
+            self.n_gram_log_probabilities[gram_1] = math.log(prob)
         return 0
-
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        if not isinstance(k, int) or isinstance(k, bool):
+        if not isinstance(k, int) or isinstance(k, bool) or k < 0 or not self.n_gram_frequencies:
             return ()
 
-        top_n_grams = sorted(self.n_gram_frequencies.keys(), key=lambda n_gram: n_gram[1], reverse=True)
-
+        top_n_grams = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)
         return tuple(top_n_grams[:k])
 
 
