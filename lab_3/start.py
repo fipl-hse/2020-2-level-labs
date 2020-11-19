@@ -32,8 +32,6 @@ if __name__ == '__main__':
     ngram_unknown = NGramTrie(3)
     ngram_unknown.fill_n_grams(unk_encoded)
 
-    actual = language_detector.detect_language(ngram_unknown.n_grams)
-    print(actual)
 
     RESULT = actual['english'] < actual['german']
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
