@@ -2,6 +2,7 @@
 Language detection using n-grams
 """
 
+
 import re
 import math
 # 4
@@ -62,8 +63,8 @@ class LetterStorage:
         """
         if not isinstance(letter, str) or isinstance(letter, bool) or letter not in self.storage.keys() or not letter:
             return -1
-        for letter in self.storage.keys():
-            return self.storage[letter]
+
+        return self.storage[letter]
 
     def update(self, corpus: tuple) -> int:
         """
@@ -91,23 +92,19 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    if not isinstance(corpus, tuple) or not isinstance(storage, LetterStorage):
+    if not isinstance(storage, LetterStorage) or not isinstance(corpus, tuple):
         return ()
-    letter_storage = LetterStorage()
     indicators = []
     sent_ind = []
     text_ind = []
     for sent in corpus:
-        if not isinstance(sent, tuple):
-            return ()
         for word in sent:
             for letter in word:
-                indicator = letter_storage.get_id_by_letter(letter)
+                indicator = storage.get_id_by_letter(letter)
                 indicators.append(indicator)
             sent_ind.append(tuple(indicators))
         text_ind.append(tuple(sent_ind))
     return tuple(text_ind)
-
 
 
 # 6
@@ -118,7 +115,6 @@ class NGramTrie:
         self.n_grams = ()
         self.n_gram_frequencies = {}
         self.n_gram_log_probabilities = {}
-
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
@@ -139,7 +135,6 @@ class NGramTrie:
             n_grams.append(tuple(new_sent))
             self.n_grams = tuple(n_grams)
         return 0
-
 
     def calculate_n_grams_frequencies(self) -> int:
         """
@@ -177,7 +172,6 @@ class NGramTrie:
             self.n_gram_log_probabilities[gram] = math.log(freq_prob)
         return 0
 
-
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
@@ -188,7 +182,6 @@ class NGramTrie:
         dict_of_freq = self.n_gram_frequencies
         top_n_grams = sorted(dict_of_freq, key=dict_of_freq.get, reverse=True)
         return tuple(top_n_grams[:k])
-
 
 
 # 8
