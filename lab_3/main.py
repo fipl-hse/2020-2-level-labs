@@ -23,7 +23,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
 
-    n_text = re.sub('[^a-z \n]', '', text.lower()).split('.')
+    n_text = re.sub('[^a-z \n.]', '', text.lower()).split('.')
     good_text = []
 
     for sentence in n_text:
