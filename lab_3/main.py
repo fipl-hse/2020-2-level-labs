@@ -3,7 +3,6 @@ Language detection using n-grams
 """
 
 import re
-from statistics import mean
 from math import log
 
 
@@ -251,9 +250,11 @@ class LanguageDetector:
                 top_elem = about_lang.top_n_grams(self.top_k)
                 top_lang = self.n_gram_storages[lang][elem].top_n_grams(self.top_k)
                 dis_lang.append(self._calculate_distance(top_elem, top_lang))
+            if dis_lang:
+                distant_dict[lang] = sum(dis_lang) / len(dis_lang)
+        return distant_dict
 
-            distant_dict[lang] = mean(dis_lang)
-            return distant_dict
+
 
 
 # 10
