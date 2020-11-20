@@ -23,7 +23,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
 
-    n_text = re.sub('[^a-z \n \.]', '', text.lower()).split('.')
+    n_text = re.sub('[^a-z \n]', '', text.lower()).split('.')
     good_text = []
 
     for sentence in n_text:
@@ -39,7 +39,7 @@ class LetterStorage:
 
     def __init__(self):
         self.storage = {}
-        self.id = 0
+        self.ids = 0
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -51,8 +51,8 @@ class LetterStorage:
             return 1
 
         if letter not in self.storage:
-            self.storage[letter] = self.id
-            self.id += 1
+            self.storage[letter] = self.ids
+            self.ids += 1
 
         return 0
 
@@ -153,7 +153,7 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        if not len(self.n_gram_frequencies):
+        if not self.n_gram_frequencies:
             return 1
 
         for n_gram in self.n_gram_frequencies:
@@ -208,7 +208,8 @@ class LanguageDetector:
             self.n_gram_storages[language_name][elem] = about_language
         return 0
 
-    def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
+    @staticmethod
+    def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
         :param first_n_grams: a tuple of the top_k n-grams
@@ -254,13 +255,11 @@ class LanguageDetector:
                 distant_dict[lang] = sum(dis_lang) / len(dis_lang)
         return distant_dict
 
-
-
-
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
-    def _calculate_sentence_probability(self, n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
+    @staticmethod
+    def _calculate_sentence_probability(n_gram_storage: NGramTrie, sentence_n_grams: tuple) -> float:
         """
         Calculates sentence probability
         :param n_gram_storage: a filled NGramTrie with log-probabilities
