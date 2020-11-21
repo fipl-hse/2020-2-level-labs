@@ -144,7 +144,7 @@ class NGramTrie:
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        if len(self.n_gram_frequencies) == 0:
+        if not self.n_gram_frequencies:
             return 1
 
         for n_gram in self.n_gram_frequencies:
