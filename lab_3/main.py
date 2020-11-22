@@ -215,7 +215,7 @@ class ProbabilityLanguageDetector(LanguageDetector):
     def detect_language(self, encoded_text: tuple) -> dict:
         """
         Detects the language the unknown sentence is written in using sentence probability in different languages
-        :param encoded_text: a tuple of sentences with tuples of tokens split into letters
+        :param encoded_text: a tuple of sentences with tuple s of tokens split into letters
         :return: a dictionary with language_name: probability
         """
         pass
