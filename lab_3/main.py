@@ -168,7 +168,6 @@ class NGramTrie:
             return ()
         top = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)
         return tuple(top[:k])
-
 # 8
 class LanguageDetector:
 
