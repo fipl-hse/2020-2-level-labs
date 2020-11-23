@@ -39,7 +39,8 @@ class NGramTextGeneratorTest(unittest.TestCase):
         ngram = NGramTrie(3, encoded)
 
         generator = NGramTextGenerator(word_storage, ngram)
-        context = (1, 2)
+        context = (word_storage.get_id('i'),
+                   word_storage.get_id('have'))
         expected = word_storage.get_id('a')
         actual = generator._generate_next_word(context)
         self.assertEqual(expected, actual)
@@ -74,7 +75,8 @@ class NGramTextGeneratorTest(unittest.TestCase):
         ngram = NGramTrie(3, encoded)
 
         generator = NGramTextGenerator(word_storage, ngram)
-        context = (0, 6)  # there is no such context in ngrams, so return most frequent option
+        context = (word_storage.get_id('i'),
+                   word_storage.get_id('name'),)  # there is no such context in ngrams, so return most frequent option
         expected_top_freq = word_storage.get_id('<END>')  # as it appears twice
         actual = generator._generate_next_word(context)
         self.assertEqual(expected_top_freq, actual)
@@ -136,7 +138,6 @@ class NGramTextGeneratorTest(unittest.TestCase):
 
         generator = NGramTextGenerator(word_storage, trie)
         actual = generator._generate_sentence(context)
-        print(actual)
 
         expected = '<END>'
         actual = word_storage.get_word(actual[-1])
