@@ -2,27 +2,46 @@
 Language detector implementation starter
 """
 
-import lab_3.main
+from lab_3.main import tokenize_by_sentence
+from lab_3.main import encode_corpus
+from lab_3.main import NGramTrie
+from lab_3.main import LetterStorage
+from lab_3.main import ProbabilityLanguageDetector
+
 
 if __name__ == '__main__':
 
     # here goes your function calls
-    text = "Once Mr Stamp-About went though Dimity Wood in a great rage. " \
-           "He stamped as he went and muttered to himself, and he even shook his first in the air."
-    text_with_letters = lab_3.main.tokenize_by_sentence(text)
-    print('Letters in the text: ', text_with_letters)
+    unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
+    german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
+    english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
 
-    letter_storage = lab_3.main.LetterStorage()
-    letter_storage.update(text_with_letters)
-    print('Dictionary with letters and their values: ', letter_storage.storage)
+    text_unk = tokenize_by_sentence(unknown_file.read())
+    text_ger = tokenize_by_sentence(german_file.read())
+    text_eng = tokenize_by_sentence(english_file.read())
+    english_file.close()
+    german_file.close()
+    unknown_file.close()
 
-    encoded_text = lab_3.main.encode_corpus(letter_storage, text_with_letters)
+    letter_storage = LetterStorage()
+    letter_storage.update(text_eng)
+    letter_storage.update(text_ger)
+    letter_storage.update(text_unk)
 
-    bi_gram = lab_3.main.NGramTrie(2)
-    bi_gram.fill_n_grams(encoded_text)
-    bi_gram.calculate_n_grams_frequencies()
-    print('Top 7 bi-grams: ', bi_gram.top_n_grams(7))
+    eng_encoded = encode_corpus(letter_storage, text_eng)
+    unk_encoded = encode_corpus(letter_storage, text_unk)
+    ger_encoded = encode_corpus(letter_storage, text_ger)
 
-    RESULT = bi_gram.top_n_grams(7)
+    language_detector = ProbabilityLanguageDetector((3, 4, 5), 1000)
+    language_detector.new_language(eng_encoded, 'english')
+    language_detector.new_language(ger_encoded, 'german')
+
+    ngram_unknown = NGramTrie(4)
+    ngram_unknown.fill_n_grams(unk_encoded)
+
+    actual = language_detector.detect_language(ngram_unknown.n_grams)
+    print(actual)
+
+    RESULT = actual['english'] < actual['german']
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == ((0, 1), (8, 9), (4, 0), (9, 5), (1, 2), (5, 6), (2, 3)), "Something went wrong"
+    assert RESULT == 1, ''
