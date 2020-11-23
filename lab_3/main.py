@@ -232,7 +232,7 @@ class NGramTrie:
 # 8
 class LanguageDetector:
 
-    def __init__(self, trie_levels: 2, top_k: int = 10):
+    def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
         self.top_k = top_k
         self.trie_levels = trie_levels
         self.n_gram_storages = {}
@@ -309,11 +309,11 @@ class LanguageDetector:
         dict_result = {}
         for lang, storage in self.n_gram_storages.items():
             dict_result[lang] = 1000000000
-            for i in range(1, self.trie_levels + 1):
+            for i in self.trie_levels:
                 trie = NGramTrie(i)
                 trie.fill_n_grams(encoded_text)
                 dict_result[lang] += self._calculate_distance(self.n_gram_storages[i].top_n_grams(self.top_k), trie.top_n_grams(self.top_k))
-            dict_result[lang] /= self.trie_levels
+            dict_result[lang] /= len(self.trie_levels)
         return dict_result
 
 language_detector = LanguageDetector((3, ), 10)
