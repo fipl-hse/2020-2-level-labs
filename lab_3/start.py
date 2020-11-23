@@ -6,9 +6,11 @@ from lab_3.main import tokenize_by_sentence
 from lab_3.main import encode_corpus
 from lab_3.main import NGramTrie
 from lab_3.main import LetterStorage
-from lab_3.main import LanguageDetector
+from lab_3.main import ProbabilityLanguageDetector
+
 
 if __name__ == '__main__':
+
     # here goes your function calls
     unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
     german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
@@ -30,21 +32,16 @@ if __name__ == '__main__':
     unk_encoded = encode_corpus(letter_storage, text_unk)
     ger_encoded = encode_corpus(letter_storage, text_ger)
 
-    language_detector = LanguageDetector((3, 4, 5), 1000)
+    language_detector = ProbabilityLanguageDetector((3, 4, 5), 1000)
     language_detector.new_language(eng_encoded, 'english')
     language_detector.new_language(ger_encoded, 'german')
 
     ngram_unknown = NGramTrie(4)
     ngram_unknown.fill_n_grams(unk_encoded)
 
-    language_log_probability_dict = language_detector.detect_language(ngram_unknown.n_grams)
+    actual = language_detector.detect_language(ngram_unknown.n_grams)
+    print(actual)
 
-    if language_log_probability_dict['german'] > language_log_probability_dict['english']:
-        RESULT = 'english'
-    else:
-        RESULT = 'german'
-
-    print('this is a {} text.'.format(RESULT))
-
+    RESULT = actual['english'] < actual['german']
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == 'english', 'Not working'
+    assert RESULT == 1, ''
