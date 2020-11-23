@@ -29,9 +29,11 @@ class SaveModelTest(unittest.TestCase):
 
         generator = NGramTextGenerator(storage, trie)
 
-        expected = 0
-        actual = save_model(generator, 'my_awesome_model')
-        self.assertEqual(expected, actual)
+        save_model(generator, 'my_awesome_model')
+
+        with open('my_awesome_model', 'r', encoding='utf-8') as file_to_read:
+            data = file_to_read.read()
+        self.assertTrue(data)
 
     def test_save_model_incorrect(self):
         bad_inputs = [(), [], 123, None, WordStorage]
@@ -75,5 +77,5 @@ class LoadModelTest(unittest.TestCase):
         self.assertEqual(len(generator._word_storage.storage),
                          len(loaded_model._word_storage.storage))
         for word, id_num in generator._word_storage.storage.items():
-            self.assertTrue(word in loaded_model._n_gram_trie.n_gram_frequencies)
+            self.assertTrue(word in loaded_model._word_storage.storage)
             self.assertEqual(id_num, loaded_model._word_storage.storage[word])
