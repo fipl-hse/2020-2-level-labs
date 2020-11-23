@@ -53,8 +53,8 @@ Unknown text: {unknown_text[0]}
             if top_k == 600 and level == 5:
                 RESULT = actual
 
-    print('\nSo, when level = 5, detector works maximally correctly;\nby level = 2 it works not so well\n'
-          'by level = 2 it works incorrectly.\nTop_k doesn\'t change the result')
+    print('\nSo, when level = 2, detector works maximally correctly;\nby level = 5 and 10 it works incorrectly.'
+          '\nTop_k doesn\'t change the result')
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT['english'] > RESULT['german'], 'The detector doesn\'t work.'
