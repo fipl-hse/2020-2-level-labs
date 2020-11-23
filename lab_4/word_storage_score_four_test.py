@@ -30,9 +30,9 @@ class WordStorageTest(unittest.TestCase):
         """
         word_storage = WordStorage()
         word = 'word'
-        expected = 1
         actual = word_storage._put_word(word)
         self.assertTrue(word in word_storage.storage)
+        expected = word_storage.get_id(word)
         self.assertEqual(expected, actual)
 
     def test_word_storage_put_word_none(self):
