@@ -18,17 +18,24 @@
 3. [Определение языка предложения с помощью n-грамм](./lab_3/lab_work_3.md)
 4. TBD (to be defined)
 
-## Дополнительные материалы
+## Литература
+
+### Базовый уровень
 
 1. Mark Lutz. 
    [Learning Python](https://www.amazon.com/Learning-Python-5th-Mark-Lutz/dp/1449355730).
-2. Mark Lutz. 
-   [Programming Python: Powerful Object-Oriented Programming](https://www.amazon.com/Programming-Python-Powerful-Object-Oriented/dp/0596158106)
-3. Хирьянов Тимофей Фёдорович. Видеолекции. 
+2. Хирьянов Тимофей Фёдорович. Видеолекции. 
    [Практика программирования на Python 3](https://www.youtube.com/watch?v=fgf57Sa5A-A&list=PLRDzFCPr95fLuusPXwvOPgXzBL3ZTzybY) 
-4. Хирьянов Тимофей Фёдорович. Видеолекции. 
+3. Хирьянов Тимофей Фёдорович. Видеолекции. 
    [Алгоритмы и структуры данных на Python 3](https://www.youtube.com/watch?v=KdZ4HF1SrFs&list=PLRDzFCPr95fK7tr47883DFUbm4GeOjjc0)
-5. [Official Python 3 documentation](https://docs.python.org/3/).
+4. [Official Python 3 documentation](https://docs.python.org/3/).
+
+### Продвинутый уровень
+
+1. Mark Lutz.
+   [Programming Python: Powerful Object-Oriented Programming](https://www.amazon.com/Programming-Python-Powerful-Object-Oriented/dp/0596158106)
+1. J. Burton Browning. 
+   [Pro Python 3: Features and Tools for Professional Development](https://www.amazon.com/Pro-Python-Features-Professional-Development/dp/1484243846).
 
 ## Порядок сдачи и оценивания лабораторной работы
 
