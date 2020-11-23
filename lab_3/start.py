@@ -2,13 +2,16 @@
 Language detector implementation starter
 """
 
-from lab_3.main import NGramTrie
 from lab_3.main import tokenize_by_sentence
 from lab_3.main import encode_corpus
+from lab_3.main import NGramTrie
 from lab_3.main import LetterStorage
 from lab_3.main import ProbabilityLanguageDetector
 
+
 if __name__ == '__main__':
+
+    # here goes your function calls
     unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
     german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
     english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
@@ -36,6 +39,9 @@ if __name__ == '__main__':
     ngram_unknown = NGramTrie(4)
     ngram_unknown.fill_n_grams(unk_encoded)
 
-    RESULT = language_detector.detect_language(ngram_unknown.n_grams)
+    actual = language_detector.detect_language(ngram_unknown.n_grams)
+    print(actual)
+
+    RESULT = actual['english'] < actual['german']
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, {'english': -224408.28678107276, 'german': -130668.54786000199}
+    assert RESULT == 1, ''
