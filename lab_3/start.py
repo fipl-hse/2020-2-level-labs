@@ -2,59 +2,46 @@
 Language detector implementation starter
 """
 
-from lab_3.main import tokenize_by_sentence, LetterStorage, encode_corpus, ProbabilityLanguageDetector, NGramTrie
+from lab_3.main import tokenize_by_sentence
+from lab_3.main import encode_corpus
+from lab_3.main import NGramTrie
+from lab_3.main import LetterStorage
+from lab_3.main import ProbabilityLanguageDetector
+
 
 if __name__ == '__main__':
 
-    print('Reading text files and tokenizing.\n')
-    with open('lab_3/Frank_Baum.txt', encoding='utf-8') as english_file:
-        english_text = tokenize_by_sentence(english_file.read())
+    # here goes your function calls
+    unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
+    german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
+    english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
 
-    with open('lab_3/Thomas_Mann.txt', encoding='utf-8') as german_file:
-        german_text = tokenize_by_sentence(german_file.read())
+    text_unk = tokenize_by_sentence(unknown_file.read())
+    text_ger = tokenize_by_sentence(german_file.read())
+    text_eng = tokenize_by_sentence(english_file.read())
+    english_file.close()
+    german_file.close()
+    unknown_file.close()
 
-    with open('lab_3/unknown_Vorleser.txt', encoding='utf-8') as unknown_file:
-        unknown_text = tokenize_by_sentence(unknown_file.read())
-
-    print(f'''English text: {english_text[0]}
-German text: {german_text[0]}
-Unknown text: {unknown_text[0]}
-
-''')
-
-    print('Creating a letter storage and filling it with letters from texts.')
     letter_storage = LetterStorage()
-    letter_storage.update(english_text)
-    letter_storage.update(german_text)
-    letter_storage.update(unknown_text)
+    letter_storage.update(text_eng)
+    letter_storage.update(text_ger)
+    letter_storage.update(text_unk)
 
-    print(letter_storage.storage, '\n')
+    eng_encoded = encode_corpus(letter_storage, text_eng)
+    unk_encoded = encode_corpus(letter_storage, text_unk)
+    ger_encoded = encode_corpus(letter_storage, text_ger)
 
-    print('Processing texts encoding')
-    english_encoded = encode_corpus(letter_storage, english_text)
-    german_encoded = encode_corpus(letter_storage, german_text)
-    unknown_encoded = encode_corpus(letter_storage, unknown_text)
+    language_detector = ProbabilityLanguageDetector((3, 4, 5), 1000)
+    language_detector.new_language(eng_encoded, 'english')
+    language_detector.new_language(ger_encoded, 'german')
 
-    print('English example: ', english_encoded[0], '\n')
+    ngram_unknown = NGramTrie(4)
+    ngram_unknown.fill_n_grams(unk_encoded)
 
-    print('Creating language detector with different n-gram tries and top_k-s')
+    actual = language_detector.detect_language(ngram_unknown.n_grams)
+    print(actual)
 
-    for level in (2, 5, 10):
-        ngram_unknown = NGramTrie(level)
-        ngram_unknown.fill_n_grams(unknown_encoded)
-        for top_k in (600, 1000, 2500):
-            language_detector = ProbabilityLanguageDetector((level,), top_k)
-            language_detector.new_language(english_encoded, 'english')
-            language_detector.new_language(german_encoded, 'german')
-
-            actual = language_detector.detect_language(ngram_unknown.n_grams)
-
-            print('top_k =', top_k, 'level =', level, actual)
-            if top_k == 600 and level == 5:
-                RESULT = actual
-
-    print('\nSo, when level = 5, detector works maximally correctly;\nby level = 2 it works not so well\n'
-          'by level = 2 it works incorrectly.\nTop_k doesn\'t change the result')
-
+    RESULT = actual['english'] < actual['german']
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT['english'] > RESULT['german'], 'The detector doesn\'t work.'
+    assert RESULT == 1, ''
