@@ -275,10 +275,14 @@ class LanguageDetector:
         :return: a distance
         """
         for n_gram in first_n_grams:
+            if not isinstance(n_gram, tuple):
+                return -1
             for element in n_gram:
                 if not self.is_number(element):
                     return -1
         for n_gram in second_n_grams:
+            if not isinstance(n_gram, tuple):
+                return -1
             for element in n_gram:
                 if not self.is_number(element):
                     return -1
@@ -311,6 +315,17 @@ class LanguageDetector:
                 dict_result[lang] += self._calculate_distance(self.n_gram_storages[i].top_n_grams(self.top_k), trie.top_n_grams(self.top_k))
             dict_result[lang] /= self.trie_levels
         return dict_result
+
+language_detector = LanguageDetector((3, ), 10)
+
+patches_ngrams = ((1, 2), (3, 4), (7, 8), (9, 10), (5, 6), (13, 14))
+
+expected = -1
+bad_inputs = [[], {}, '', 1, -1, 9.22, None, True, (None,)]
+for bad_input in bad_inputs:
+    actual_first = language_detector._calculate_distance(bad_input, patches_ngrams)
+    actual_second = language_detector._calculate_distance(patches_ngrams, bad_input)
+    print(actual_first, actual_second)
 
 
 # 10
