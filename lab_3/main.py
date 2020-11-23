@@ -312,7 +312,7 @@ class LanguageDetector:
             for i in self.trie_levels:
                 trie = NGramTrie(i)
                 trie.fill_n_grams(encoded_text)
-                dict_result[lang] += self._calculate_distance(self.n_gram_storages[i].top_n_grams(self.top_k), trie.top_n_grams(self.top_k))
+                dict_result[lang] += self._calculate_distance(self.n_gram_storages[lang][i].top_n_grams(self.top_k), trie.top_n_grams(self.top_k))
             dict_result[lang] /= len(self.trie_levels)
         return dict_result
 
