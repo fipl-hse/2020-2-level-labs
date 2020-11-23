@@ -232,7 +232,7 @@ class NGramTrie:
 # 8
 class LanguageDetector:
 
-    def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
+    def __init__(self, trie_levels: 2, top_k: int = 10):
         self.top_k = top_k
         self.trie_levels = trie_levels
         self.n_gram_storages = {}
