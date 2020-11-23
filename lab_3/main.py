@@ -133,6 +133,9 @@ class LetterStorage:
                     self._put_letter(letter)
         return 0
 
+a = LetterStorage()
+corpus = tokenize_by_sentence("I am gay")
+a.update(corpus)
 
 @universal_input_checker((), LetterStorage, tuple)
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -153,8 +156,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             result_sentence.append(tuple(result_word))
         result.append(tuple(result_sentence))
     return tuple(result)
-
-
+#?как должен выглядеть вызов этой функции?
+#print(encode_corpus(a, corpus))
 # 6
 class NGramTrie:
 
@@ -198,7 +201,7 @@ class NGramTrie:
                         self.n_gram_frequencies[n_gram] = 1
         return 0
 
-    def calculate_log_probabilities(self) -> int:
+    def calculate_log_probabilities(self) -> int: #?
         """
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
@@ -292,13 +295,22 @@ class LanguageDetector:
                 distance += abs(index - i)
         return distance
 
+    @universal_input_checker_method({}, tuple)
     def detect_language(self, encoded_text: tuple) -> dict:
         """
         Detects the language the unknown text is written in using the function _calculate_distance
         :param encoded_text: a tuple of sentences with tuples of tokens split into letters
         :return: a dictionary where a key is a language, a value – the distance
         """
-        pass
+        dict_result = {}
+        for lang, storage in self.n_gram_storages.items():
+            dict_result[lang] = 1000000000
+            for i in range(1, self.trie_levels + 1):
+                trie = NGramTrie(i)
+                trie.fill_n_grams(encoded_text)
+                dict_result[lang] += self._calculate_distance(self.n_gram_storages[i].top_n_grams(self.top_k), trie.top_n_grams(self.top_k))
+            dict_result[lang] /= self.trie_levels
+        return dict_result
 
 
 # 10
