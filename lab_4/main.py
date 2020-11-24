@@ -1,7 +1,7 @@
 """
 Lab 4
 """
-
+'''
 from ngrams.ngram_trie import NGramTrie
 
 
@@ -72,3 +72,4 @@ def save_model(model: NGramTextGenerator, path_to_saved_model: str):
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
     pass
+'''
