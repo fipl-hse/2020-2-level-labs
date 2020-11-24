@@ -123,8 +123,8 @@ class NGramTrie:
             sentence_gram = []
             for token in sentence:
                 token_gram = []
-                for element in range(len(token) - self.size + 1):
-                    token_gram.append(tuple(token[element], token[element + 1]))
+                for i in range(len(token) - self.size + 1):
+                    token_gram.append(tuple(token[i], token[i + 1]))
                 sentence_gram.append(tuple(token_gram))
             result.append(tuple(sentence_gram))
         self.n_grams = tuple(result)
