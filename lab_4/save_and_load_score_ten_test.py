@@ -13,6 +13,7 @@ class SaveModelTest(unittest.TestCase):
     checks for save_model unction.
     """
 
+    @unittest.skip('')
     def test_save_model_ideal(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
@@ -35,6 +36,7 @@ class SaveModelTest(unittest.TestCase):
             data = file_to_read.read()
         self.assertTrue(data)
 
+    @unittest.skip('')
     def test_save_model_incorrect(self):
         bad_inputs = [(), [], 123, None, WordStorage]
 
@@ -47,6 +49,7 @@ class LoadModelTest(unittest.TestCase):
     checks for load_model unction.
     """
 
+    @unittest.skip('')
     def test_load_model_ideal(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
