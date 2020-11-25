@@ -248,9 +248,9 @@ class LanguageDetector:
 
         if isinstance(encoded_text, tuple):
             return 1
-        
+
         for el in encoded_text:
-            if el is not None:
+            if el is None:
                 return 1
 
         self.n_gram_storages[language_name] = {}
@@ -324,15 +324,6 @@ class LanguageDetector:
         return dict_result
 
 
-language_detector = LanguageDetector((3,), 10)
-
-expected = 1
-bad_inputs = [[], {}, '', 123, None, True, (None,)]
-for bad_input in bad_inputs:
-    actual = language_detector.new_language(bad_input, 'english')
-    print(expected, actual)
-
-
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
@@ -352,3 +343,30 @@ class ProbabilityLanguageDetector(LanguageDetector):
         :return: a dictionary with language_name: probability
         """
         pass
+
+
+letter_storage = LetterStorage()
+language_detector = LanguageDetector((3,), 100)
+
+file_first = open('Frank_Baum.txt', 'r', encoding='utf-8')
+file_second = open('Thomas_Mann.txt', 'r', encoding='utf-8')
+file_third = open('unknown_Arthur_Conan_Doyle.txt', 'r', encoding='utf-8')
+
+text_english = tokenize_by_sentence(file_first.read())
+text_german = tokenize_by_sentence(file_second.read())
+text_unknown = tokenize_by_sentence(file_third.read())
+letter_storage.update(text_english)
+letter_storage.update(text_german)
+letter_storage.update(text_unknown)
+encoded_english = encode_corpus(letter_storage, text_english)
+encoded_german = encode_corpus(letter_storage, text_german)
+encoded_unknown = encode_corpus(letter_storage, text_unknown)
+file_first.close()
+file_second.close()
+file_third.close()
+
+language_detector.new_language(encoded_english, 'english')
+language_detector.new_language(encoded_german, 'german')
+
+actual = language_detector.detect_language(encoded_unknown)
+print(actual)
