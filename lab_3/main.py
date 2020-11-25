@@ -230,12 +230,12 @@ class NGramTrie:
 
 
 # 8
-def is_number(x):
-    if x is None:
+def is_number(my_x):
+    if my_x is None:
         return False
-    if str(type(x)) == "<class 'bool'>":
+    if str(type(my_x)) == "<class 'bool'>":
         return False
-    if not isinstance(x, int):
+    if not isinstance(my_x, int):
         return False
     return True
 
@@ -269,8 +269,8 @@ class LanguageDetector:
         if not isinstance(encoded_text, tuple):
             return 1
 
-        for el in encoded_text:
-            if el is None:
+        for element in encoded_text:
+            if element is None:
                 return 1
 
         self.n_gram_storages[language_name] = {}
@@ -320,7 +320,7 @@ class LanguageDetector:
         :return: a dictionary where a key is a language, a value – the distance
         """
         dict_result = {}
-        for lang in self.n_gram_storages.keys():
+        for lang in self.n_gram_storages:
             dict_result[lang] = 0
             for i in self.trie_levels:
                 trie = NGramTrie(i)
