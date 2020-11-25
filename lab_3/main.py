@@ -321,12 +321,15 @@ class LanguageDetector:
         """
         dict_result = {}
         for lang, storage in self.n_gram_storages.items():
-            dict_result[lang] = 1000000000
+            dict_result[lang] = 0
             for i in self.trie_levels:
                 trie = NGramTrie(i)
                 trie.fill_n_grams(encoded_text)
-                dict_result[lang] += self._calculate_distance(self.n_gram_storages[lang][i].top_n_grams(self.top_k),
+                trie.calculate_n_grams_frequencies()
+                trie.calculate_log_probabilities()
+                distance = self._calculate_distance(self.n_gram_storages[lang][i].top_n_grams(self.top_k),
                                                               trie.top_n_grams(self.top_k))
+                dict_result[lang] += distance
             dict_result[lang] /= len(self.trie_levels)
         return dict_result
 
