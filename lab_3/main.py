@@ -245,7 +245,10 @@ class LanguageDetector:
         :param language_name: a language
         :return: 0 if succeeds, 1 if not
         """
-
+        for el in encoded_text:
+            if not isinstance(encoded_text, tuple):
+                return 1
+        
         self.n_gram_storages[language_name] = {}
 
         for i in self.trie_levels:
