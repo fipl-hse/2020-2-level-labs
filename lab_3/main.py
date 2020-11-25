@@ -245,10 +245,14 @@ class LanguageDetector:
         :param language_name: a language
         :return: 0 if succeeds, 1 if not
         """
-        for el in encoded_text:
-            if not isinstance(encoded_text, tuple):
-                return 1
+
+        if isinstance(encoded_text, tuple):
+            return 1
         
+        for el in encoded_text:
+            if el is not None:
+                return 1
+
         self.n_gram_storages[language_name] = {}
 
         for i in self.trie_levels:
@@ -319,16 +323,14 @@ class LanguageDetector:
             dict_result[lang] /= len(self.trie_levels)
         return dict_result
 
-language_detector = LanguageDetector((3, ), 10)
 
-patches_ngrams = ((1, 2), (3, 4), (7, 8), (9, 10), (5, 6), (13, 14))
+language_detector = LanguageDetector((3,), 10)
 
-expected = -1
-bad_inputs = [[], {}, '', 1, -1, 9.22, None, True, (None,)]
+expected = 1
+bad_inputs = [[], {}, '', 123, None, True, (None,)]
 for bad_input in bad_inputs:
-    actual_first = language_detector._calculate_distance(bad_input, patches_ngrams)
-    actual_second = language_detector._calculate_distance(patches_ngrams, bad_input)
-    print(actual_first, actual_second)
+    actual = language_detector.new_language(bad_input, 'english')
+    print(expected, actual)
 
 
 # 10
