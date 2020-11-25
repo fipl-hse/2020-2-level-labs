@@ -320,7 +320,7 @@ class LanguageDetector:
         :return: a dictionary where a key is a language, a value – the distance
         """
         dict_result = {}
-        for lang, storage in self.n_gram_storages.items():
+        for lang in self.n_gram_storages.keys():
             dict_result[lang] = 0
             for i in self.trie_levels:
                 trie = NGramTrie(i)
