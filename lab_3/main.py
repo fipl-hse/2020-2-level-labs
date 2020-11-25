@@ -226,7 +226,7 @@ class NGramTrie:
         """
         n_grams_list = [(n_gram, freq) for n_gram, freq in self.n_gram_frequencies.items()]
         n_grams_list = sorted(n_grams_list, key=lambda x: -x[1])
-        return tuple([element[0] for element in n_grams_list[0: k])
+        return tuple(element[0] for element in n_grams_list[0: k])
 
 
 # 8
