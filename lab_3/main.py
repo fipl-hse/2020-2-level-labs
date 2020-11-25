@@ -1,22 +1,22 @@
-import re
-from math import log
-
 """
 Language detection using n-grams
 """
 
+import re
+from math import log
+
 
 def universal_input_checker(*args_checker):
-    def dec_func(f):
+    def dec_func(func):
         def wrapper(*args, **kwargs):
             types = args_checker[1:]
-            for i, el in enumerate(types):
-                if not isinstance(args[i], el):
+            for i, element in enumerate(types):
+                if not isinstance(args[i], element):
                     return args_checker[0]
-            for x in args:
-                if x is None:
+            for arg in args:
+                if arg is None:
                     return args_checker[0]
-            return f(*args, **kwargs)
+            return func(*args, **kwargs)
 
         return wrapper
 
@@ -24,16 +24,16 @@ def universal_input_checker(*args_checker):
 
 
 def universal_input_checker_method(*args_checker):
-    def dec_func(f):
+    def dec_func(func):
         def wrapper(self, *args, **kwargs):
             types = args_checker[1:]
-            for i, el in enumerate(types):
+            for i, element in enumerate(types):
                 if not isinstance(args[i], el):
                     return args_checker[0]
-            for x in args:
-                if x is None:
+            for arg in args:
+                if arg is None:
                     return args_checker[0]
-            return f(self, *args, **kwargs)
+            return func(self, *args, **kwargs)
 
         return wrapper
 
@@ -103,10 +103,9 @@ class LetterStorage:
         """
         if letter in self.storage:
             return 0
-        else:
-            self.storage[letter] = self.count
-            self.count += 1
-            return 0
+        self.storage[letter] = self.count
+        self.count += 1
+        return 0
 
     @universal_input_checker_method(-1, str)
     def get_id_by_letter(self, letter: str) -> int:
@@ -117,8 +116,7 @@ class LetterStorage:
         """
         if letter in self.storage:
             return self.storage[letter]
-        else:
-            return -1
+        return -1
 
     @universal_input_checker_method(1, tuple)
     def update(self, corpus: tuple) -> int:
@@ -152,8 +150,8 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
         for word in sentence:
             result_word = []
             for letter in word:
-                id = storage.get_id_by_letter(letter)
-                result_word.append(id)
+                my_id = storage.get_id_by_letter(letter)
+                result_word.append(my_id)
             result_sentence.append(tuple(result_word))
         result.append(tuple(result_sentence))
     return tuple(result)
@@ -228,7 +226,7 @@ class NGramTrie:
         """
         n_grams_list = [(n_gram, freq) for n_gram, freq in self.n_gram_frequencies.items()]
         n_grams_list = sorted(n_grams_list, key=lambda x: -x[1])
-        return tuple([x[0] for x in n_grams_list[0: k]])
+        return tuple([element[0] for element in n_grams_list[0: k])
 
 
 # 8
@@ -239,6 +237,16 @@ def is_number(x):
         return False
     if not isinstance(x, int):
         return False
+    return True
+
+
+def check_n_grams_top(n_grams):
+    for n_gram in n_grams:
+        if not isinstance(n_gram, tuple):
+            return False
+        for element in n_gram:
+            if not is_number(element):
+                return False
     return True
 
 
@@ -284,21 +292,13 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
-        if len(first_n_grams) == 0 or len(second_n_grams) == 0:
+
+        if len(first_n_grams) == 0 or len(second_n_grams) == 0 or self.top_k == -1000:
             return 0
 
-        for n_gram in first_n_grams:
-            if not isinstance(n_gram, tuple):
-                return -1
-            for element in n_gram:
-                if not is_number(element):
-                    return -1
-        for n_gram in second_n_grams:
-            if not isinstance(n_gram, tuple):
-                return -1
-            for element in n_gram:
-                if not is_number(element):
-                    return -1
+        if not check_n_grams_top(first_n_grams) or not check_n_grams_top(second_n_grams):
+            return -1
+
         distance = 0
         for i, n_gram1 in enumerate(first_n_grams):
             index = -1
