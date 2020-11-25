@@ -133,9 +133,10 @@ class LetterStorage:
                     self._put_letter(letter)
         return 0
 
-a = LetterStorage()
-corpus = tokenize_by_sentence("I am gay")
-a.update(corpus)
+
+# a = LetterStorage()
+# corpus = tokenize_by_sentence("I am gay")
+# a.update(corpus)
 
 @universal_input_checker((), LetterStorage, tuple)
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
@@ -156,8 +157,9 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
             result_sentence.append(tuple(result_word))
         result.append(tuple(result_sentence))
     return tuple(result)
-#?как должен выглядеть вызов этой функции?
-#print(encode_corpus(a, corpus))
+
+
+# print(encode_corpu(a, corpus))
 # 6
 class NGramTrie:
 
@@ -201,7 +203,7 @@ class NGramTrie:
                         self.n_gram_frequencies[n_gram] = 1
         return 0
 
-    def calculate_log_probabilities(self) -> int: #?
+    def calculate_log_probabilities(self) -> int:  # ?
         """
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
@@ -230,6 +232,16 @@ class NGramTrie:
 
 
 # 8
+def is_number(x):
+    if x is None:
+        return False
+    if str(type(x)) == "<class 'bool'>":
+        return False
+    if not isinstance(x, int):
+        return False
+    return True
+
+
 class LanguageDetector:
 
     def __init__(self, trie_levels: tuple = (2,), top_k: int = 10):
@@ -264,15 +276,6 @@ class LanguageDetector:
 
         return 0
 
-    def is_number(self, x):
-        if x is None:
-            return False
-        if str(type(x)) == "<class 'bool'>":
-            return False
-        if not isinstance(x, int):
-            return False
-        return True
-
     @universal_input_checker_method(-1, tuple, tuple)
     def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
@@ -281,17 +284,20 @@ class LanguageDetector:
         :param second_n_grams: a tuple of the top_k n-grams
         :return: a distance
         """
+        if len(first_n_grams) == 0 or len(second_n_grams) == 0:
+            return 0
+
         for n_gram in first_n_grams:
             if not isinstance(n_gram, tuple):
                 return -1
             for element in n_gram:
-                if not self.is_number(element):
+                if not is_number(element):
                     return -1
         for n_gram in second_n_grams:
             if not isinstance(n_gram, tuple):
                 return -1
             for element in n_gram:
-                if not self.is_number(element):
+                if not is_number(element):
                     return -1
         distance = 0
         for i, n_gram1 in enumerate(first_n_grams):
@@ -319,7 +325,8 @@ class LanguageDetector:
             for i in self.trie_levels:
                 trie = NGramTrie(i)
                 trie.fill_n_grams(encoded_text)
-                dict_result[lang] += self._calculate_distance(self.n_gram_storages[lang][i].top_n_grams(self.top_k), trie.top_n_grams(self.top_k))
+                dict_result[lang] += self._calculate_distance(self.n_gram_storages[lang][i].top_n_grams(self.top_k),
+                                                              trie.top_n_grams(self.top_k))
             dict_result[lang] /= len(self.trie_levels)
         return dict_result
 
