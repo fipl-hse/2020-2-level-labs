@@ -28,7 +28,7 @@ def universal_input_checker_method(*args_checker):
         def wrapper(self, *args, **kwargs):
             types = args_checker[1:]
             for i, element in enumerate(types):
-                if not isinstance(args[i], el):
+                if not isinstance(args[i], element):
                     return args_checker[0]
             for arg in args:
                 if arg is None:
