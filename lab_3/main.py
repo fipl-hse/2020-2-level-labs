@@ -246,7 +246,7 @@ class LanguageDetector:
         :return: 0 if succeeds, 1 if not
         """
 
-        if isinstance(encoded_text, tuple):
+        if not isinstance(encoded_text, tuple):
             return 1
 
         for el in encoded_text:
