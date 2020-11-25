@@ -224,7 +224,7 @@ class NGramTrie:
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        n_grams_list = [(n_gram, freq) for n_gram, freq in self.n_gram_frequencies.items()]
+        n_grams_list = self.n_gram_frequencies.items()
         n_grams_list = sorted(n_grams_list, key=lambda x: -x[1])
         result = [element[0] for element in n_grams_list[0: k]]
         return tuple(result)
