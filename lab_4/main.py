@@ -30,26 +30,65 @@ def tokenize_by_sentence(text: str) -> tuple:
     return tuple(output)
 
 
-
 class WordStorage:
     def __init__(self):
-        pass
+        self.storage = {}
+        self.id = 1
 
     def _put_word(self, word: str):
-        pass
+
+        if not isinstance(word, str):
+            raise ValueError
+
+        if word not in self.storage:
+            self.storage[word] = self.id
+            self.id += 1
+
+        return self.storage[word]
 
     def get_id(self, word: str) -> int:
-        pass
+
+        if not isinstance(word, str):
+            raise ValueError
+
+        for word_another in self.storage:
+            if word_another in self.storage:
+                if word == word_another:
+                    return self.storage[word_another]
+
+        raise KeyError
 
     def get_word(self, word_id: int) -> str:
-        pass
+
+        if not isinstance(word_id, int):
+            raise ValueError
+
+        for key, word_id_another in self.storage.items():
+            if word_id == word_id_another:
+                return key
+
+        raise KeyError
 
     def update(self, corpus: tuple):
-        pass
+
+        if not isinstance(corpus, tuple):
+            raise ValueError
+
+        for word in corpus:
+            self._put_word(word)
 
 
 def encode_text(storage: WordStorage, text: tuple) -> tuple:
-    pass
+
+    if not isinstance(storage, WordStorage) or not isinstance(text, tuple):
+        raise ValueError
+
+    encoded_corpus = []
+    for word in text:
+        word_id = storage.get_id(word)
+        encoded_corpus.append(word_id)
+
+    return tuple(encoded_corpus)
 
 
 class NGramTextGenerator:
