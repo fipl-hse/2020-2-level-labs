@@ -6,7 +6,9 @@ from ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    pass
+    text = text.split()
+
+    return tuple(text)
 
 
 class WordStorage:
