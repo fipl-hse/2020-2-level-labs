@@ -2,6 +2,7 @@
 Lab 4
 """
 
+
 from ngrams.ngram_trie import NGramTrie
 
 
