@@ -8,9 +8,7 @@ from main import remove_stop_words
 
 
 class RemoveStopWordsTest(unittest.TestCase):
-    """
-    Tests remove stop words function
-    """
+
     STOP_WORDS = ['the', 'a', 'is']
 
     def test_remove_stop_words_ideal(self):
