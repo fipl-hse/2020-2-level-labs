@@ -21,8 +21,8 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     if not isinstance(text, str) or not len(text):
         return ()
-    tokens = re.split(r'[!.?] ', text)
     separ_tokens = []
+    tokens = re.split(r'[!.?] ', text)
     for token in tokens:
         token_list = re.sub('[^a-z \n]', '', token.lower()).split()
         if not token_list:
@@ -124,7 +124,7 @@ class NGramTrie:
                 ngram_token = []
                 for id_unique in token[:-1]:
                     index_tok = token.index(id_unique)
-                    n_gram = (token[index_tok: index_tok + self.size])
+                    n_gram = (token[index_tok : index_tok + self.size])
                     ngram_token.append(n_gram)
                 ngram_sentence.append(tuple(ngram_token))
             self.n_grams.append(tuple(ngram_sentence))
