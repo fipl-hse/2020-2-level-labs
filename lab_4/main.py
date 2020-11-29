@@ -80,16 +80,65 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
 
 class NGramTextGenerator:
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie):
-        pass
+        self._word_storage = word_storage
+        self._n_gram_trie = n_gram_trie
+        self.context_size = self._n_gram_trie.size - 1
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+        if not isinstance(context, tuple) or len(context) != self.context_size:
+            raise ValueError
+        contextual_n_grams = {
+            n_gram: freq for n_gram, freq in self._n_gram_trie.n_gram_frequencies.items()
+            if n_gram[:self.context_size] == context
+        }
+
+        if not contextual_n_grams:
+            return sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)[0][0]
+
+        top_contextual_n_gram = sorted(contextual_n_grams.items(), key=lambda item: item[1])[0][0]
+        return top_contextual_n_gram[-1]
 
     def _generate_sentence(self, context: tuple) -> tuple:
-        pass
+        if not isinstance(context, tuple) or len(context) != self.context_size:
+            raise ValueError
+        generated_sentence = []
+        generation_context = context
+        end = self._word_storage.get_id(SENTENCE_END)
+
+        generated_sentence.append(context)
+
+        for _ in range(20):
+            if _ > 0:
+                generation_context = generated_sentence[-self.context_size:]
+            next_word = self._generate_next_word(tuple(generation_context))
+            generated_sentence.append(next_word)
+            if next_word == end:
+                break
+
+        if generated_sentence[-1] != end:
+            generated_sentence.append(end)
+
+        return tuple(generated_sentence)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
-        pass
+        if (
+            not isinstance(context, tuple) or
+            not isinstance(number_of_sentences, int) or
+            isinstance(number_of_sentences, bool)
+        ):
+            raise ValueError
+
+        generated_sentences = []
+        generation_context = context
+
+        for _ in range(number_of_sentences):
+            #print(generation_context, "i =", _)
+            if _ != 0:
+                generation_context = generated_sentences[-1][-self.context_size:]
+            generated_sentences.append(self._generate_sentence(generation_context))
+
+        generated_text = [word for sentence in generated_sentences for word in sentence if isinstance(word, int)]
+        return tuple(list(context) + generated_text)
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
