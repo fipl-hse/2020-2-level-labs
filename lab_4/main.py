@@ -3,10 +3,25 @@ Lab 4
 """
 
 from ngrams.ngram_trie import NGramTrie
+import re
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    pass
+    if not isinstance(text, str):
+        raise ValueError
+    sentences = re.split('[.!?]|\n', text)
+
+    list_ = []
+    for sentence in sentences:
+        list_tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
+        if not list_tokens:
+            continue
+        list_tokens.append('<END>')
+        for word in list_tokens:
+            list_.append(word)
+    return tuple(list_)
+
+
 
 
 class WordStorage:
