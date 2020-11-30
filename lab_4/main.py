@@ -148,14 +148,16 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
         raise ValueError
     text_raw = [[]]
     for word in encoded_text:
-        print(word)
         real_word = storage.get_word(word)
         print(real_word)
         if real_word == '<END>':
             text_raw.append([])
         else:
             text_raw[-1].append(real_word)
-    text_ready = [sentence[0][0].upper()+sentence[0][1:] + ' ' + ' '.join(sentence[1:]) + '.' for sentence in text_raw]
+    text_ready = [
+        sentence[0][0].upper()+sentence[0][1:] + ' ' + ' '.join(sentence[1:])
+        for sentence in text_raw if sentence
+    ]
     return tuple(text_ready)
 
 
