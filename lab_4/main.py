@@ -5,6 +5,7 @@ Lab 4
 from ngrams.ngram_trie import NGramTrie
 
 
+
 def tokenize_by_sentence(text: str) -> tuple:
     pass
 
