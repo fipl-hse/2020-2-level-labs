@@ -13,7 +13,6 @@ def tokenize_by_sentence(text: str) -> tuple:
         sentences = re.split('[!?.] ', n_line_sentences)
         for sentence in sentences:
             tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
-            print(tokens)
             if tokens:
                 list_tokens.extend(tokens + ['<END>'])
 
