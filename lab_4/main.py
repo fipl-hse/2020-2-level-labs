@@ -146,10 +146,39 @@ class NGramTextGenerator:
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
     def _calculate_maximum_likelihood(self, word: int, context: tuple) -> float:
-        pass
+        if not isinstance(word, int) or not isinstance(context, tuple) or (word,) not in self._n_gram_trie.uni_grams \
+                or len(context)+1 != self._n_gram_trie.size:
+            raise ValueError
+
+        context_len = len(context)
+        context_frequency = sum([n_gram_freq for n_gram, n_gram_freq in self._n_gram_trie.n_gram_frequencies.items()
+                               if n_gram[:context_len] == context])
+
+        context_word = context + (word,)
+        context_word_frequency = self._n_gram_trie.n_gram_frequencies.get(context_word, 0.0)
+
+        if context_frequency:
+            return context_word_frequency / context_frequency
+
+        return context_word_frequency
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+        if not isinstance(context, tuple) or context[0] > len(self._word_storage.storage):
+            raise ValueError
+
+        next_word = 0
+        next_word_frequency = 0.0
+
+        for word in self._word_storage.storage.values():
+            word_frequency = self._calculate_maximum_likelihood(word, context)
+            if word_frequency > next_word_frequency:
+                next_word = word
+                next_word_frequency = word_frequency
+
+        if not next_word:
+            next_word = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
+
+        return next_word
 
 
 class BackOffGenerator(NGramTextGenerator):
