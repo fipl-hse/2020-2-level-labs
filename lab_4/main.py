@@ -7,7 +7,6 @@ import re
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-
     if not isinstance(text, str):
         raise ValueError
 
@@ -109,16 +108,16 @@ class NGramTextGenerator:
 
         end_code = self._word_storage.get_id('<END>')
 
-        if context[-1] != end_code:
-            sentence = [word for word in context]
-        else:
+        if context[-1] == end_code:
             sentence = []
+        else:
+            sentence = list(context)
 
         context_len = len(context)
         count = 0
         while count != 20:
             sentence.append(self._generate_next_word(context))
-            context = tuple(sentence[-context_len:])
+            context = tuple(list(context) + sentence)[-context_len:]
             count += 1
 
             if sentence[-1] == end_code:
@@ -128,8 +127,8 @@ class NGramTextGenerator:
         return tuple(sentence)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
-        if not isinstance(context, tuple) or not isinstance(number_of_sentences, int)\
-                or len(context) + 1 != self._n_gram_trie.size:
+        if not isinstance(context, tuple) or not isinstance(number_of_sentences, int) \
+                or (len(context) + 1) != self._n_gram_trie.size:
             raise ValueError
 
         context_len = len(context)
@@ -138,7 +137,7 @@ class NGramTextGenerator:
         for i in range(number_of_sentences):
             new_sentence = self._generate_sentence(context)
             text.extend(new_sentence)
-            context = new_sentence[-context_len:]
+            context = tuple(text[-context_len:])
 
         return tuple(text)
 
@@ -147,12 +146,12 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
     def _calculate_maximum_likelihood(self, word: int, context: tuple) -> float:
         if not isinstance(word, int) or not isinstance(context, tuple) or (word,) not in self._n_gram_trie.uni_grams \
-                or len(context)+1 != self._n_gram_trie.size:
+                or len(context) + 1 != self._n_gram_trie.size:
             raise ValueError
 
         context_len = len(context)
         context_frequency = sum([n_gram_freq for n_gram, n_gram_freq in self._n_gram_trie.n_gram_frequencies.items()
-                               if n_gram[:context_len] == context])
+                                 if n_gram[:context_len] == context])
 
         context_word = context + (word,)
         context_word_frequency = self._n_gram_trie.n_gram_frequencies.get(context_word, 0.0)
@@ -191,7 +190,24 @@ class BackOffGenerator(NGramTextGenerator):
 
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
-    pass
+    if not isinstance(storage, WordStorage) or not isinstance(encoded_text, tuple) or not encoded_text:
+        raise ValueError
+
+    decoded_text = []
+    decoded_sentence = []
+    for word_id in encoded_text:
+        decoded_word = storage.get_word(word_id)
+        if decoded_word.lower() == '<end>':
+            decoded_text.append(' '.join(decoded_sentence))
+            decoded_sentence = []
+            continue
+
+        if not decoded_sentence:
+            decoded_sentence.append(decoded_word.capitalize())
+        else:
+            decoded_sentence.append(decoded_word)
+
+    return tuple(decoded_text)
 
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
