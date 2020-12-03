@@ -4,8 +4,8 @@ Tests decode_text function
 """
 
 import unittest
-from lab_4.main import encode_text, WordStorage, LikelihoodBasedTextGenerator, decode_text
-from lab_4.ngrams.ngram_trie import NGramTrie
+from main import encode_text, WordStorage, LikelihoodBasedTextGenerator, decode_text
+from ngrams.ngram_trie import NGramTrie
 
 
 class DecodeCorpusTest(unittest.TestCase):
@@ -25,13 +25,11 @@ class DecodeCorpusTest(unittest.TestCase):
         storage.update(corpus)
 
         encoded = encode_text(storage, corpus)
-
         trie = NGramTrie(3, encoded)
 
         context = (storage.get_id('name'),
                    storage.get_id('is'),)
         end = storage.get_id('<END>')
-
         generator = LikelihoodBasedTextGenerator(storage, trie)
 
         to_decode = generator.generate_text(context, 2)
@@ -108,3 +106,15 @@ class DecodeCorpusTest(unittest.TestCase):
             self.assertTrue('<END>' not in sentence)
             self.assertTrue(sentence[0].isupper())
             self.assertTrue(sentence[-1].isalpha())
+
+    def test_empty_to_decode(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+        bad_decode = ()
+        self.assertRaises(ValueError, decode_text, storage, bad_decode)
