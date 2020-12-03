@@ -18,14 +18,8 @@ class NGramTrie:
         if not isinstance(self.encoded_text, tuple):
             raise ValueError
 
-        n_grams = []
-        for i in range(len(self.encoded_text) - self.size + 1):
-            n_grams.append(tuple(self.encoded_text[i:i + self.size]))
-        self.n_grams = tuple(n_grams)
-
-        for word in self.encoded_text:
-            if (word, ) not in self.uni_grams:
-                self.uni_grams[(word, )] = self.encoded_text.count(word)
+        self.n_grams = self.get_tuple_n_grams()
+        self.fill_uni_grams()
 
     def _calculate_n_grams_frequencies(self):
 
@@ -34,3 +28,14 @@ class NGramTrie:
                 self.n_gram_frequencies[n_gram] += 1
             else:
                 self.n_gram_frequencies[n_gram] = 1
+
+    def get_tuple_n_grams(self):
+        n_grams = []
+        for i in range(len(self.encoded_text) - self.size + 1):
+            n_grams.append(tuple(self.encoded_text[i:i + self.size]))
+        return tuple(n_grams)
+
+    def fill_uni_grams(self):
+        for word in self.encoded_text:
+            if (word, ) not in self.uni_grams:
+                self.uni_grams[(word, )] = self.encoded_text.count(word)

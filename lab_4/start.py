@@ -21,6 +21,6 @@ if __name__ == '__main__':
                storage.get_id('is'),)
     generator = LikelihoodBasedTextGenerator(storage, trie)
 
-    RESULT = generator._generate_next_word(context)
+    RESULT = generator.generate_text(context, 3)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == storage.get_id('rex'), 'Encoding not working'
+    assert isinstance(RESULT[-1], str), 'Encoding not working'

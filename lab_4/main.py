@@ -42,8 +42,7 @@ class WordStorage:
         for word, w_id in self.storage.items():
             if word_id == w_id:
                 return word
-        else:
-            raise KeyError
+        raise KeyError
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple) or (corpus and not isinstance(corpus[0], str)):
@@ -66,12 +65,7 @@ class NGramTextGenerator:
     def _generate_next_word(self, context: tuple) -> int:
         if not isinstance(context, tuple) or len(context)+1 != self._n_gram_trie.size:
             raise ValueError
-        max_freq = 0
-        full_context = ()
-        for key, freq in self._n_gram_trie.n_gram_frequencies.items():
-            if key[:len(context)] == context and freq > max_freq:
-                max_freq = freq
-                full_context = key
+        full_context = self.get_most_frequent_gram(context)
         if not full_context:
             return max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
         return full_context[-1]
@@ -99,6 +93,17 @@ class NGramTextGenerator:
             sentences.extend(new_sent)
             context = tuple(sentences[-len(context):])
         return tuple(sentences)
+
+    def get_most_frequent_gram(self, context: tuple) -> tuple:
+        if not isinstance(context, tuple) or not context:
+            return ()
+        max_freq = 0
+        full_context = ()
+        for key, freq in self._n_gram_trie.n_gram_frequencies.items():
+            if key[:len(context)] == context and freq > max_freq:
+                max_freq = freq
+                full_context = key
+        return full_context
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
@@ -140,6 +145,9 @@ class BackOffGenerator(NGramTextGenerator):
         super().__init__(word_storage, n_gram_trie)
 
     def _generate_next_word(self, context: tuple) -> int:
+        pass
+
+    def get_auxiliary_param(self):
         pass
 
 
