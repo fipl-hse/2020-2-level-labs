@@ -4,8 +4,8 @@ Tests for LikelihoodBasedTextGenerator class
 """
 
 import unittest
-from lab_4.main import WordStorage, encode_text, LikelihoodBasedTextGenerator
-from lab_4.ngrams.ngram_trie import NGramTrie
+from main import WordStorage, encode_text, LikelihoodBasedTextGenerator
+from ngrams.ngram_trie import NGramTrie
 
 
 class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
@@ -118,6 +118,29 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
         actual = generator._calculate_maximum_likelihood(word, context)
         self.assertEqual(expected, actual)
 
+    def test_float_return(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(3, encoded)
+        word = storage.get_id('dog')
+        context = (storage.get_id('have'),
+                   storage.get_id('a'),)
+
+        generator = LikelihoodBasedTextGenerator(storage, trie)
+
+        expected = float
+        actual = type(generator._calculate_maximum_likelihood(word, context))
+        self.assertEqual(expected, actual)
+
 # -----------------------------------------------------------------------
 
     def test_generate_next_word_ideal(self):
@@ -131,7 +154,6 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
         storage.update(corpus)
 
         encoded = encode_text(storage, corpus)
-
         trie = NGramTrie(3, encoded)
 
         expected_word = storage.get_id('rex')
@@ -186,3 +208,4 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
 
         actual = generator._generate_next_word(context)
         self.assertEqual(expected_word, actual)
+
