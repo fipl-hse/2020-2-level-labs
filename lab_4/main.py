@@ -106,10 +106,9 @@ class NGramTextGenerator:
         next_word = -1
         next_word_freq = 0
         for n_gram, freq in self._n_gram_trie.n_gram_frequencies.items():
-            if context[:self._n_gram_trie.size-1] == n_gram[:self._n_gram_trie.size-1]:
-                if freq > next_word_freq:
-                    next_word_freq = freq
-                    next_word = n_gram[-1]
+            if context[:self._n_gram_trie.size-1] == n_gram[:self._n_gram_trie.size-1] and freq > next_word_freq:
+                next_word_freq = freq
+                next_word = n_gram[-1]
         if next_word == -1:
             uni = list(self._n_gram_trie.uni_grams.items())
             uni.sort(key=lambda x: x[1], reverse=True)
@@ -121,20 +120,13 @@ class NGramTextGenerator:
                 len([w for w in context if w in self._word_storage.storage.values()]) != len(context):
             raise ValueError
 
-        length = 0
-        copy_context = list(context)
-        if self._word_storage.get_id("<END>") in copy_context:
-            copy_context.remove(self._word_storage.get_id("<END>"))
-        sent = copy_context
+        length = len(context)
+        sent = list(context)
 
-        while length != 20:
-            word = self._generate_next_word(context)
-            sent.append(word)
-            context = (word, )
-            length += 1
-            if self._word_storage.get_word(word) == "<END>":
+        for _ in range(20):
+            sent.append(self._generate_next_word(tuple(sent[-length:])))
+            if sent[-1] == self._word_storage.get_id("<END>"):
                 return tuple(sent)
-
         sent.append(self._word_storage.get_id("<END>"))
         return tuple(sent)
 
@@ -144,10 +136,12 @@ class NGramTextGenerator:
             raise ValueError
 
         text = []
-        context_size = len(context)
+        length = self._n_gram_trie.size - 1
         for sent_id in range(number_of_sentences):
             new_sent = self._generate_sentence(context)
-            context = new_sent[-context_size:]
+            if new_sent[len(context) - 1] == self._word_storage.storage['<END>']:
+                new_sent = new_sent[len(context):]
+            context = new_sent[-len(context):]
             text += list(new_sent)
         return tuple(text)
 
@@ -163,8 +157,9 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
         word_freq = 0
         average_freq = 0
+        length = self._n_gram_trie.size - 1
         for n_gram in self._n_gram_trie.n_grams:
-            if context == n_gram[:len(context)]:
+            if context == n_gram[:length]:
                 average_freq += 1
                 if word == n_gram[-1]:
                     word_freq += 1
@@ -218,29 +213,34 @@ class BackOffGenerator(NGramTextGenerator):
 
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
-    if not isinstance(storage, WordStorage) or not isinstance(encoded_text, tuple):
+    if not isinstance(storage, WordStorage) or not isinstance(encoded_text, tuple) or not encoded_text:
         raise ValueError
 
     end = storage.get_id('<END>')
-    upper_condition = False
+    upper_condition = True
     sentence_decoded = []
     text = []
+
     for word_id in encoded_text:
+        word = storage.get_word(word_id)
         if word_id == end:
             upper_condition = True
             text.append(" ".join(sentence_decoded))
             sentence_decoded = []
         else:
-            word = storage.get_word(word_id)
             if upper_condition:
                 word = word[0].upper() + word[1:]
+                upper_condition = False
+
             sentence_decoded.append(word)
     return tuple(text)
 
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
+    # i will do it later
     pass
 
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
+    # i will do it later
     pass
