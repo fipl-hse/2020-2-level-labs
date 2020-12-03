@@ -4,7 +4,7 @@ Tests for LikelihoodBasedTextGenerator class
 """
 
 import unittest
-from main import WordStorage, encode_text, LikelihoodBasedTextGenerator
+from lab_4.main import WordStorage, encode_text, LikelihoodBasedTextGenerator
 from ngrams.ngram_trie import NGramTrie
 
 
