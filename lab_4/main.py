@@ -51,12 +51,10 @@ class WordStorage:
         if not isinstance(word, str):
             raise ValueError
 
-        for word_another in self.storage:
-            if word_another in self.storage:
-                if word == word_another:
-                    return self.storage[word_another]
+        if word not in self.storage:
+            raise KeyError
 
-        raise KeyError
+        return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
 
@@ -93,10 +91,26 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
 
 class NGramTextGenerator:
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie):
-        pass
+        self._word_storage = word_storage
+        self._n_gram_trie = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+
+        if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
+            raise ValueError
+
+        max_frequency = 0
+        full_context = ()
+
+        for key, frequency in self._n_gram_trie.n_gram_frequencies.items():
+            if key[:len(context)] == context and frequency > max_frequency:
+                max_frequency = frequency
+                full_context = key
+
+        if not full_context:
+            return max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
+
+        return full_context[-1]
 
     def _generate_sentence(self, context: tuple) -> tuple:
         pass
