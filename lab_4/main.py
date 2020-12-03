@@ -69,13 +69,43 @@ class NGramTextGenerator:
 
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+        if not isinstance(context, tuple) or not all(isinstance(num, int) for num in context)\
+                or self._n_gram_trie.size != len(context) + 1:
+            raise ValueError
+        word_freq = 0
+        for n_gram, freq in self._n_gram_trie.n_gram_frequencies.items():
+            if n_gram[:len(context)] == context and freq > word_freq:
+                word_freq = freq
+                word_ind = n_gram[-1]
+        if not word_freq:
+            max_freq_word = max(self._n_gram_trie.uni_grams.values())
+            return list(word[0] for word, value in self._n_gram_trie.uni_grams.items() if value == max_freq_word)[0]
+        return word_ind
+
 
     def _generate_sentence(self, context: tuple) -> tuple:
-        pass
+        if not isinstance(context, tuple) or not all(isinstance(num, int) for num in context):
+            raise ValueError
+        sentence = list(context)
+        for counter in range(20):
+            sentence.append(NGramTextGenerator._generate_next_word(self, tuple(sentence[-(self._n_gram_trie.size-1):])))
+            if sentence[-1] == self._word_storage.get_id('<END>'):
+                break
+        if self._word_storage.get_id('<END>') not in sentence:
+            sentence.append(self._word_storage.get_id('<END>'))
+        return sentence
+
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
-        pass
+        if not isinstance(context, tuple) or not all(isinstance(num, int) for num in context)\
+                or not isinstance(number_of_sentences, int):
+            raise ValueError
+        generated_text = list(context)
+        for counter in range(number_of_sentences):
+            sentence = self._generate_sentence(tuple(generated_text[-(self._n_gram_trie.size-1):]))
+            generated_text.extend(sentence[1:])
+        return generated_text
+
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
