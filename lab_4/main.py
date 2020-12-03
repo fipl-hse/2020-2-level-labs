@@ -162,7 +162,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         return context_word_frequency
 
     def _generate_next_word(self, context: tuple) -> int:
-        if not isinstance(context, tuple) or context[0] > len(self._word_storage.storage):
+        if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size or \
+                context[0] > len(self._word_storage.storage):
             raise ValueError
 
         next_word = 0
@@ -180,13 +181,42 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         return next_word
 
 
+def _generate_next_word_different_level(context, n_gram_tries):
+    most_frequent_word = ''
+    word_frequency = 0
+
+    for n_gram_trie in n_gram_tries:
+        for n_gram, n_gram_frequency in n_gram_trie.n_gram_frequencies.items():
+            if n_gram[:-1] == context and n_gram_frequency > word_frequency:
+                most_frequent_word = n_gram[-1]
+                word_frequency = n_gram_frequency
+
+        if most_frequent_word:
+            return most_frequent_word
+
+    return most_frequent_word
+
+
 class BackOffGenerator(NGramTextGenerator):
 
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
+        self._n_gram_tries = (n_gram_trie,) + args
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+        if not isinstance(context, tuple) or not context:
+            raise ValueError
+
+        context_correct = all(word in self._word_storage.storage.values() for word in context)
+        if not context_correct:
+            raise ValueError
+
+        most_frequent_word = _generate_next_word_different_level(context, self._n_gram_tries)
+
+        if not most_frequent_word:
+            most_frequent_word = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
+
+        return most_frequent_word
 
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
