@@ -4,8 +4,8 @@ Tests for NGramTextGenerator class
 """
 
 import unittest
-from lab_4.main import NGramTextGenerator, WordStorage, encode_text
-from lab_4.ngrams.ngram_trie import NGramTrie
+from main import NGramTextGenerator, WordStorage, encode_text
+from ngrams.ngram_trie import NGramTrie
 
 
 class NGramTextGeneratorTest(unittest.TestCase):
@@ -159,8 +159,25 @@ class NGramTextGeneratorTest(unittest.TestCase):
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, generator._generate_sentence, bad_input)
 
-# ---------------------------------------------------------------------------------
+    def test_length_of_sentence(self):
+        """
+        generates sentences with length less than 20
+        """
+        corpus = ('i', 'have', 'a', 'cat', 'his', 'name', 'is', 'bruno', 'i', 'have', 'a', 'dog', 'too',
+                  'his', 'name', 'is', 'rex', 'her', 'name', 'is', 'rex', 'too', 'he', 'funny', '<END>')
+        word_storage = WordStorage()
+        word_storage.update(corpus)
+        encoded = encode_text(word_storage, corpus)
+        trie = NGramTrie(2, encoded)
+        context = (word_storage.get_id('cat'),)
 
+        generator = NGramTextGenerator(word_storage, trie)
+        actual = len(generator._generate_sentence(context))
+        expected = len(context) + 21 # cause we generate not more than 20 words + end
+        self.assertLessEqual(actual, expected)
+
+
+# ---------------------------------------------------------------------------------
     def test_generate_text_ideal(self):
         """
         should generate simple case with three sentences out of small corpus
