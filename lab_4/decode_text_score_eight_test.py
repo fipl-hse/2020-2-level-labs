@@ -4,7 +4,7 @@ Tests decode_text function
 """
 
 import unittest
-from main import encode_text, WordStorage, LikelihoodBasedTextGenerator, decode_text
+from lab_4.main import encode_text, WordStorage, LikelihoodBasedTextGenerator, decode_text
 from ngrams.ngram_trie import NGramTrie
 
 
