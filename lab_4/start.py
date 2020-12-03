@@ -23,4 +23,4 @@ if __name__ == '__main__':
 
     RESULT = generator.generate_text(context, 3)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert isinstance(RESULT[-1], str), 'Encoding not working'
+    assert isinstance(RESULT[-1], int), 'Encoding not working'
