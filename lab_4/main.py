@@ -1,33 +1,65 @@
 """
 Lab 4
 """
-
+import re
 from ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    return tokens
+    if not isinstance(text, str) or not text:
+        raise ValueError
+    sentences = text.split('[!?.] W')
+    tokens = []
+    for sentence in sentences:
+        list_tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
+        if not list_tokens:
+            continue
+        tokens += list_tokens + '<END>'
+    return tuple(tokens)
 
 
 class WordStorage:
     def __init__(self):
-        pass
+        self.storage = {}
 
     def _put_word(self, word: str):
-        pass
+        if not isinstance(word, str) or not word:
+            raise ValueError
+        if word not in self.storage:
+            self.storage[word] = len(self.storage) + 1
+        return len(self.storage)
 
     def get_id(self, word: str) -> int:
-        pass
+        if not isinstance(word, str) or not word:
+            raise ValueError
+        if word not in self.storage:
+            raise KeyError
+        return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
-        pass
+        if not isinstance(word_id, int):
+            raise ValueError
+        if word_id not in self.storage.values():
+            raise KeyError
+        for key, value in self.storage.items():
+            if value == word_id:
+                return key
 
     def update(self, corpus: tuple):
-        pass
+        if not isinstance(corpus, tuple) or not tuple:
+            raise ValueError
+        for word in corpus:
+            self._put_word(word)
 
 
 def encode_text(storage: WordStorage, text: tuple) -> tuple:
-    pass
+    if not isinstance(text, tuple) or not all(isinstance(word, str) for word in text) \
+            or not isinstance(storage, WordStorage):
+        raise ValueError
+    encoded_text = []
+    for word in text:
+        encoded_text.append(storage.get_id(word))
+    return tuple(encoded_text)
 
 
 class NGramTextGenerator:
