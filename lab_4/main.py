@@ -6,15 +6,15 @@ from ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    if not isinstance(text, str) or not text:
+    if not isinstance(text, str):
         raise ValueError
-    sentences = text.split('[!?.] W')
+    sentences = re.split('[.?!]\W', text)
     tokens = []
     for sentence in sentences:
         list_tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
         if not list_tokens:
             continue
-        tokens += list_tokens + '<END>'
+        tokens += list_tokens + ['<END>']
     return tuple(tokens)
 
 
@@ -64,7 +64,9 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
 
 class NGramTextGenerator:
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie):
-        pass
+        self._word_storage = word_storage
+        self._n_gram_trie = n_gram_trie
+
 
     def _generate_next_word(self, context: tuple) -> int:
         pass
