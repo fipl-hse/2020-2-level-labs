@@ -22,7 +22,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str) or text == '':
         return ()
 
-    text_outputt = re.split('[.] ', text)
+    text_outputt = re.split('[.!] ', text)
     token_text = []
     for i in text_outputt:
         w_list = re.sub('[^a-z \n]', '', i.lower()).split()
@@ -79,8 +79,6 @@ class LetterStorage:
         return 1
 
 
-
-
 # 6
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     """
@@ -109,7 +107,6 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     return tuple(encoded_corpus)
 
 
-
 # 6
 class NGramTrie:
 
@@ -132,13 +129,13 @@ class NGramTrie:
         for sent in encoded_text:
             for word in sent:
                 for i in range(len(word) - 1):
-                    ngram_list.append(tuple(word[i:i+self.size]))
+                    ngram_list.append(tuple(word[i:i + self.size]))
                 ngrams_sent.append(tuple(ngram_list))
                 ngram_list = []
             ngrams_text.append(tuple(ngrams_sent))
         self.n_grams = tuple(ngrams_text)
+        print(self.n_grams)
         return 0
-
 
     def calculate_n_grams_frequencies(self) -> int:
         """
@@ -157,6 +154,7 @@ class NGramTrie:
                         self.n_gram_frequencies[ngram] = 1
         print(self.n_gram_frequencies)
         return 0
+
 
     def calculate_log_probabilities(self) -> int:
         """
@@ -183,7 +181,9 @@ class NGramTrie:
 
         most_common = sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)[:k]
         return tuple(most_common)
-
+sentences = (((1, 2, 1, 2, 1, 2), (10, 11, 12)),)
+ngram = NGramTrie(2)
+ngram.fill_n_grams(sentences)
 
 # 8
 class LanguageDetector:
