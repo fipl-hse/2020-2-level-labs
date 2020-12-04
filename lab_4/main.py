@@ -3,31 +3,72 @@ Lab 4
 """
 
 from ngrams.ngram_trie import NGramTrie
+import re
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    pass
+    if not isinstance(text, str) or text is None:
+        raise ValueError()
+
+    sentences = re.split('[!?.]', text)
+    list_sentences = []
+
+    for token in sentences:
+        new_sentence = re.sub('[^a-z \n]', '', token.lower()).split()
+        length = len(new_sentence)
+        for new_token in new_sentence:
+            list_sentences.append(str(new_token))
+            if new_sentence.index(new_token) == length - 1:
+                list_sentences.append('<END>')
+    return tuple(list_sentences)
 
 
 class WordStorage:
     def __init__(self):
-        pass
+        self.storage = {}
 
     def _put_word(self, word: str):
-        pass
+        if not isinstance(word, str) or word is None:
+            raise ValueError()
+        index = len(self.storage)
+        if word not in self.storage:
+            self.storage[word] = index
+        return index
 
     def get_id(self, word: str) -> int:
-        pass
+        if not isinstance(word, str) or word is None:
+            raise ValueError()
+        if word not in self.storage:
+            raise KeyError()
+        else:
+            return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
-        pass
+        if not isinstance(word_id, int) or word_id is None:
+            raise ValueError
+        if word_id not in self.storage.values():
+            raise KeyError()
+        words = list(self.storage.keys())
+        ids = list(self.storage.values())
+        index = ids.index(word_id)
+        return words[index]
 
     def update(self, corpus: tuple):
-        pass
+        if not isinstance(corpus, tuple) or corpus is None:
+            raise ValueError
+        for word in corpus:
+            self._put_word(word)
 
 
 def encode_text(storage: WordStorage, text: tuple) -> tuple:
-    pass
+    if not isinstance(storage, WordStorage) or not isinstance(text, tuple) \
+            or storage is None or text is None:
+        raise ValueError
+    encoded_text = []
+    for word in text:
+        index = storage.get_id(word)
+        encoded_text.append(index)
+    return tuple(encoded_text)
 
 
 class NGramTextGenerator:
