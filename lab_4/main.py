@@ -14,9 +14,8 @@ def tokenize_by_sentence(text: str) -> tuple:
     text = re.sub(r'[!?.]', ' <END> ', text)
 
     tokens = text.split()
-    if tokens:
-        if tokens[-1] != '<END>':
-            tokens.append('<END>')
+    if tokens and tokens[-1] != '<END>':
+        tokens.append('<END>')
     return tuple(tokens)
 
 
@@ -92,7 +91,6 @@ class NGramTextGenerator:
         if not check_context_in_n_grams:
             freq_uni_gram = 0
             for key, value in self._n_gram_trie.uni_grams.items():
-                print(key)
                 if value > freq_uni_gram:
                     freq_uni_gram = value
                     uni_gram = key
@@ -103,28 +101,42 @@ class NGramTextGenerator:
             for n_gram in n_grams:
                 if key == n_gram and value > freq_n_gram:
                     freq_n_gram = value
-                    N_GRAM = key
-        return N_GRAM[-1]
+                    ngram = key
+        return ngram[-1]
 
     def _generate_sentence(self, context: tuple) -> tuple:
-        pass
+        if not isinstance(context, tuple):
+            raise ValueError
+
+        id_with_end = self._word_storage.get_id('<END>')
+
+        sentence = list(context)
+
+        attempts = 0
+        while attempts < 20:
+            id_in_sentence = self._generate_next_word(tuple(sentence[-self.context_size:]))
+            sentence.append(id_in_sentence)
+            if id_in_sentence == id_with_end:
+                break
+            attempts += 1
+            if attempts == 20:
+                sentence.append(id_with_end)
+        return tuple(sentence)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
-        pass
+        if not isinstance(context, tuple) or not isinstance(number_of_sentences, int):
+            raise ValueError
 
-
-'''
-a = WordStorage()
-a.update(('my', 'name', 'is', 'ann'))
-print(a.storage)
-b = NGramTrie(3, (1, 2, 3, 4, 1, 3, 6, 8, 0, 4, 3, 1, 2, 6))
-b._fill_n_grams()
-b._calculate_n_grams_frequencies()
-print(b.n_gram_frequencies)
-print(b.uni_grams)
-c = NGramTextGenerator(a, b)
-print(c._generate_next_word((100, 2345)))
-'''
+        text = ()
+        sentence = self._generate_sentence(context)
+        text += sentence
+        attempts = 1
+        while attempts < number_of_sentences:
+            new_sentence = self._generate_sentence(sentence[-self.context_size:])[self.context_size + 1:]
+            text += new_sentence
+            sentence = new_sentence
+            attempts += 1
+        return text
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
