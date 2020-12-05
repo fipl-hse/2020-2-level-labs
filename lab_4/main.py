@@ -68,7 +68,8 @@ class WordStorage:
     def _put_word(self, word: str) -> int:
         if word not in self.storage:
             self.storage[word] = self.count
-        self.count += 1
+            self.count += 1
+            return 1
         return 0
 
     @universal_input_checker_method(ValueError, str)
