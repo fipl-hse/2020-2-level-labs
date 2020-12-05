@@ -54,8 +54,8 @@ def tokenize_by_sentence(text: str) -> tuple:
         for word in sentence:
             result.append(word)
         result.append('<END>')
-    if len(result) == 0:
-        result.append('<END>')
+    # if len(result) == 0:
+    #    result.append('<END>')
     return tuple(result)
 
 
