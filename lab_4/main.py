@@ -22,35 +22,69 @@ def tokenize_by_sentence(text: str) -> tuple:
     return tuple(list_)
 
 
-
-
 class WordStorage:
     def __init__(self):
-        pass
+        self.storage = {}
+        self.value = 1
 
     def _put_word(self, word: str):
-        pass
+        if not isinstance(word, str) or len(word) == 0:
+            raise ValueError
+
+        if word not in self.storage:
+            self.storage[word] = self.value
+            self.value += 1
+            return 1
+
+        if word in self.storage:
+            return self.storage[word]
 
     def get_id(self, word: str) -> int:
-        pass
+        if not isinstance(word, str) or not word:
+            raise ValueError
+
+        return self.storage[word]
+
 
     def get_word(self, word_id: int) -> str:
-        pass
+
+        if not isinstance(word_id, int) or not word_id:
+            raise ValueError
+
+        for key, value in self.storage.items():
+            if word_id == value:
+                return key
+            else:
+                raise KeyError
 
     def update(self, corpus: tuple):
-        pass
+        if not isinstance(corpus, tuple):
+            raise ValueError
+
+        for word in corpus:
+            self._put_word(word)
 
 
 def encode_text(storage: WordStorage, text: tuple) -> tuple:
-    pass
+    if not isinstance(storage, WordStorage) or not isinstance(text, tuple):
+        raise ValueError
+
+    encoded_text = []
+
+    for word in text:
+        encoded_text.append(storage.get_id(word))
+
+    return tuple(encoded_text)
 
 
 class NGramTextGenerator:
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie):
-        pass
+        self.word_storage = word_storage
+        self.n_gram_trie = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+        if not isinstance(context, tuple) or len(context) <= 1:
+            raise ValueError
 
     def _generate_sentence(self, context: tuple) -> tuple:
         pass
