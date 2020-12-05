@@ -69,8 +69,8 @@ class WordStorage:
         if word not in self.storage:
             self.storage[word] = self.count
             self.count += 1
-            return 1
-        return 0
+            return 0
+        return 1
 
     @universal_input_checker_method(ValueError, str)
     def get_id(self, word: str) -> int:
