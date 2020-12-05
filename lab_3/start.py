@@ -2,7 +2,6 @@
 Language detector implementation starter
 """
 
-
 from lab_3.main import tokenize_by_sentence
 from lab_3.main import encode_corpus
 from lab_3.main import NGramTrie
