@@ -157,7 +157,7 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     return tuple(result)
 
 
-# print(encode_corpu(a, corpus))
+# print(encode_corpus(a, corpus))
 # 6
 class NGramTrie:
 
