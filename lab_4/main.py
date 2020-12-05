@@ -48,9 +48,13 @@ def tokenize_by_sentence(text: str) -> tuple:
         text = text.replace(letter, "")
     text = re.split(r"[.?!]", text.lower())
     for sentence in text:
+        if sentence == '':
+            continue
         sentence = sentence.split()
         for word in sentence:
             result.append(word)
+        result.append('<END>')
+    if len(result) == 0:
         result.append('<END>')
     return tuple(result)
 
