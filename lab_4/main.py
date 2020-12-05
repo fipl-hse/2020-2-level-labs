@@ -181,15 +181,16 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
             decoded_text.append(' '.join(decoded_sentence))
             decoded_sentence = []
             continue
-
         if not decoded_sentence:
             decoded_sentence.append(decoded_word.capitalize())
         else:
             decoded_sentence.append(decoded_word)
 
+"""
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
     pass
 
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
     pass
+"""
