@@ -89,6 +89,7 @@ class WordStorage:
             raise ValueError
         if word_id not in self.storage.values():
             raise KeyError
+        key = None
         for key in self.storage:
             if self.storage[key] == word_id:
                 return key
