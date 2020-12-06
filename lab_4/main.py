@@ -1,16 +1,16 @@
 """
 Lab 4
 """
-
-from ngrams.ngram_trie import NGramTrie
 import re
+from ngrams.ngram_trie import NGramTrie
+
 
 def split_into_sentences(text: str) -> tuple:
     if not isinstance(text, str):
         return ()
     for sign in ['?', '!']:
         text = text.replace(sign, '.')   # unify ending symbols
-    potential_sentences = re.split('\.\\s', text)
+    potential_sentences = re.split(r'\.\s', text)
     proven_sentences = []
     solved_indexes = []  # for cases with ambuguous separation
     for index, sentence in enumerate(potential_sentences):
@@ -89,7 +89,7 @@ class WordStorage:
             raise ValueError
         if word_id not in self.storage.values():
             raise KeyError
-        for key in self.storage.keys():
+        for key in self.storage:
             if self.storage[key] == word_id:
                 return key
 
@@ -116,6 +116,7 @@ class NGramTextGenerator:
         # trie.uni_grams - {unigram : frequency)
         self._word_storage = word_storage
         self._n_gram_trie = n_gram_trie
+        self.public_thing = 'i hope lint will love it'
 
     def _generate_next_word(self, context: tuple) -> int:
         if not isinstance(context, tuple):
@@ -201,8 +202,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         for word in context:
             try:
                 self._word_storage.get_word(word)
-            except KeyError:
-                raise ValueError
+            except KeyError as e:
+                raise ValueError from e
 
         smart_frequencies = {}
         for word in self._word_storage.storage.values():
@@ -221,7 +222,7 @@ class BackOffGenerator(NGramTextGenerator):
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
         self._word_storage = word_storage
-        self._n_gram_tries = [n_gram_trie] + [i for i in args]
+        self._n_gram_tries = [n_gram_trie] + list(args)
 
     def _generate_next_word(self, context: tuple) -> int:
         if not isinstance(context, tuple):
@@ -232,6 +233,7 @@ class BackOffGenerator(NGramTextGenerator):
             unis.sort(key=lambda x: x[1], reverse=True)
             return int(unis[0][0][0])
 
+        trie = None
         for trie in self._n_gram_tries:
             if len(context) == len(trie.n_grams[0]) - 1:
                 break
