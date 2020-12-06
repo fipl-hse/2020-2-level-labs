@@ -2,12 +2,14 @@
 Lab 4
 """
 import re
+from functools import wraps
 
 from ngrams.ngram_trie import NGramTrie
 
 
 def universal_input_checker(*args_checker):
     def dec_func(func):
+        @wraps(func)
         def wrapper(*args, **kwargs):
             types = args_checker[1:]
             for i, element in enumerate(types):
@@ -25,6 +27,7 @@ def universal_input_checker(*args_checker):
 
 def universal_input_checker_method(*args_checker):
     def dec_func(func):
+        @wraps(func)
         def wrapper(self, *args, **kwargs):
             types = args_checker[1:]
             for i, element in enumerate(types):
@@ -116,6 +119,8 @@ class NGramTextGenerator:
 
     @universal_input_checker_method(ValueError, tuple)
     def _generate_next_word(self, context: tuple) -> int:
+        if len(context) <= 1:
+            raise ValueError
         max_frequency = -1
         next_word_n_gram = ()
         top_word = ()
@@ -159,27 +164,22 @@ class NGramTextGenerator:
 
         return tuple(result)
 
-
 corpus = ('i', 'have', 'a', 'cat', '<END>',
-          'his', 'name', 'is', 'bruno', '<END>',
-          'i', 'have', 'a', 'dog', 'too', '<END>',
-          'his', 'name', 'is', 'rex', '<END>',
-          'her', 'name', 'is', 'rex', 'too', '<END>')
+          'his', 'name', 'is', 'bruno', '<END>')
+word_storage = WordStorage()
+word_storage.update(corpus)
+encoded = encode_text(word_storage, corpus)
+ngram = NGramTrie(3, encoded)
 
-storage = WordStorage()
-storage.update(corpus)
-
-encoded = encode_text(storage, corpus)
-
-trie = NGramTrie(2, encoded)
-
-generator = NGramTextGenerator(storage, trie)
-
-conext = (storage.get_id('bruno'),)
-end = storage.get_id('<END>')
-actual = generator.generate_text(conext, 3)
-print(actual.count(end), 3)
-
+generator = NGramTextGenerator(word_storage, ngram)
+bad_inputs = [[], {}, (3, ), None, 9, 9.34, True]  # (3, ) - it is incorrect sized ngram
+i = 0
+for bad_input in bad_inputs:
+    try:
+        generator._generate_next_word(bad_input)
+    except ValueError:
+        i += 1
+print(i)
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
