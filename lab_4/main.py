@@ -111,6 +111,7 @@ class NGramTextGenerator:
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie):
         self._word_storage = word_storage
         self.storage = word_storage
+        self._n_gram_trie = n_gram_trie
         self.trie = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
@@ -129,7 +130,7 @@ class NGramTextGenerator:
                     next_word_n_gram = n_gram
                     max_frequency = self.trie.n_gram_frequencies[n_gram]
         if len(next_word_n_gram) == 0:
-            return top_word
+            return top_word[0]
         return next_word_n_gram[-1]
 
     def _generate_sentence(self, context: tuple) -> tuple:
@@ -142,14 +143,39 @@ class NGramTextGenerator:
             last_word = result[-1]
         if last_word != self.storage.get_id("<END>"):
             result.append(self.storage.get_id("<END>"))
+        print(result)
         return tuple(result)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
         result = []
         for i in range(number_of_sentences):
-            result.append(self._generate_sentence(context))
-            context = result[-1][1:len(result[-1])]
+            temp = self._generate_sentence(context)
+            for word in temp:
+                result.append(word)
+            context = temp[1:len(temp)]
+
         return tuple(result)
+
+
+corpus = ('i', 'have', 'a', 'cat', '<END>',
+          'his', 'name', 'is', 'bruno', '<END>',
+          'i', 'have', 'a', 'dog', 'too', '<END>',
+          'his', 'name', 'is', 'rex', '<END>',
+          'her', 'name', 'is', 'rex', 'too', '<END>')
+
+storage = WordStorage()
+storage.update(corpus)
+
+encoded = encode_text(storage, corpus)
+
+trie = NGramTrie(2, encoded)
+
+generator = NGramTextGenerator(storage, trie)
+
+context = (storage.get_id('bruno'),)
+end = storage.get_id('<END>')
+actual = generator.generate_text(context, 3)
+print(actual.count(end), 3)
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
