@@ -77,6 +77,7 @@ class WordStorage:
         if word in self.storage:
             return self.storage[word]
         raise KeyError
+
     @universal_input_checker_method(ValueError, int)
     def get_word(self, word_id: int) -> str:
         for k, v in self.storage.items():
@@ -114,11 +115,20 @@ class NGramTextGenerator:
     def _generate_next_word(self, context: tuple) -> int:
         max_frequency = -1
         next_word_n_gram = ()
+        top_word = ()
+        top_freq = -1
+        for uni_gram, freq in self.trie.uni_grams.items():
+            if freq > top_freq:
+                top_word = uni_gram
+                top_freq = freq
+
         for n_gram in self.trie.n_grams:
             if context == tuple(n_gram[0:len(context)]):
                 if self.trie.n_gram_frequencies[n_gram] > max_frequency:
                     next_word_n_gram = n_gram
                     max_frequency = self.trie.n_gram_frequencies[n_gram]
+        if len(next_word_n_gram) == 0:
+            return top_word
         return next_word_n_gram[-1]
 
     def _generate_sentence(self, context: tuple) -> tuple:
