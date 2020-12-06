@@ -114,6 +114,7 @@ class NGramTextGenerator:
         self._n_gram_trie = n_gram_trie
         self.trie = n_gram_trie
 
+    @universal_input_checker_method(ValueError, tuple)
     def _generate_next_word(self, context: tuple) -> int:
         max_frequency = -1
         next_word_n_gram = ()
@@ -133,6 +134,7 @@ class NGramTextGenerator:
             return top_word[0]
         return next_word_n_gram[-1]
 
+    @universal_input_checker_method(ValueError, tuple)
     def _generate_sentence(self, context: tuple) -> tuple:
         generated = 0
         last_word = -1
@@ -146,6 +148,7 @@ class NGramTextGenerator:
         print(result)
         return tuple(result)
 
+    @universal_input_checker_method(ValueError, tuple, int)
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
         result = []
         for i in range(number_of_sentences):
@@ -172,9 +175,9 @@ trie = NGramTrie(2, encoded)
 
 generator = NGramTextGenerator(storage, trie)
 
-context = (storage.get_id('bruno'),)
+conext = (storage.get_id('bruno'),)
 end = storage.get_id('<END>')
-actual = generator.generate_text(context, 3)
+actual = generator.generate_text(conext, 3)
 print(actual.count(end), 3)
 
 
