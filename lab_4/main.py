@@ -145,7 +145,10 @@ class NGramTextGenerator:
         last_word = -1
         result = []
         while generated < 20 and last_word != self.storage.get_id("<END>"):
-            result.append(self._generate_next_word(context))
+            try:
+                result.append(self._generate_next_word(context))
+            except ValueError:
+                result.append(self.storage.get_id("<END>"))
             generated += 1
             last_word = result[-1]
         if last_word != self.storage.get_id("<END>"):
