@@ -30,6 +30,7 @@ class DecodeCorpusTest(unittest.TestCase):
 
         context = (storage.get_id('name'),
                    storage.get_id('is'),)
+        print('Я ТЕСТ', context)
         end = storage.get_id('<END>')
 
         generator = LikelihoodBasedTextGenerator(storage, trie)
