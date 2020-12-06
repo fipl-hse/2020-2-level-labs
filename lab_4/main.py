@@ -141,6 +141,7 @@ class NGramTextGenerator:
         if not isinstance(context, tuple):
             raise ValueError
         if not len(context) == len(self._n_gram_trie.n_grams[0]) - 1:
+            print('ima raise error rn', context)
             raise ValueError
         stop_word = self._word_storage.get_id('<END>')
         sentence = list(context)
@@ -149,19 +150,24 @@ class NGramTextGenerator:
             if sentence[-1] == stop_word:
                 break
             context = tuple(sentence[-len(self._n_gram_trie.n_grams[0]) + 1:])
-        if sentence[1] == stop_word:
+        print('before chopchop', sentence)
+        if sentence[len(context) - 1] == stop_word:
             sentence = sentence[2:]
         if len(sentence) == 20 and not sentence[-1] == stop_word:
             sentence.append(stop_word)
+        print('i return sentence', sentence)
         return tuple(sentence)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
+        print('beginning', context)
         if not isinstance(number_of_sentences, int) or not isinstance(context, tuple):
             raise ValueError
         text = []
         for _ in range(number_of_sentences):
             sentence = self._generate_sentence(context)
             context = sentence[-len(self._n_gram_trie.n_grams[0])+1:]
+            print('sent', sentence)
+            print('new cont', context)
             text += sentence
         return tuple(text)
 
