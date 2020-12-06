@@ -92,6 +92,7 @@ class WordStorage:
         for key in self.storage:
             if self.storage[key] == word_id:
                 return key
+            return key
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple):
@@ -172,6 +173,9 @@ class NGramTextGenerator:
             text += sentence
         return tuple(text)
 
+    def another_public_method(self):
+        pass
+
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
@@ -202,8 +206,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         for word in context:
             try:
                 self._word_storage.get_word(word)
-            except KeyError as e:
-                raise ValueError from e
+            except KeyError as key_error:
+                raise ValueError from key_error
 
         smart_frequencies = {}
         for word in self._word_storage.storage.values():
