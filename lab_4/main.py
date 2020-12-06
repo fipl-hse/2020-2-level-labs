@@ -119,7 +119,7 @@ class NGramTextGenerator:
 
     @universal_input_checker_method(ValueError, tuple)
     def _generate_next_word(self, context: tuple) -> int:
-        if len(context) <= 1:
+        if len(context) < self.trie.size - 1:
             raise ValueError
         max_frequency = -1
         next_word_n_gram = ()
@@ -167,22 +167,26 @@ class NGramTextGenerator:
 
         return tuple(result)
 
-corpus = ('i', 'have', 'a', 'cat', '<END>',
-          'his', 'name', 'is', 'bruno', '<END>')
-word_storage = WordStorage()
-word_storage.update(corpus)
-encoded = encode_text(word_storage, corpus)
-ngram = NGramTrie(3, encoded)
 
-generator = NGramTextGenerator(word_storage, ngram)
-bad_inputs = [[], {}, (3, ), None, 9, 9.34, True]  # (3, ) - it is incorrect sized ngram
-i = 0
-for bad_input in bad_inputs:
-    try:
-        generator._generate_next_word(bad_input)
-    except ValueError:
-        i += 1
-print(i)
+corpus = ('i', 'have', 'a', 'cat', '<END>',
+          'his', 'name', 'is', 'bruno', '<END>',
+          'i', 'have', 'a', 'dog', 'too', '<END>',
+          'his', 'name', 'is', 'rex', '<END>',
+          'her', 'name', 'is', 'rex', 'too', '<END>')
+storage = WordStorage()
+storage.update(corpus)
+encoded = encode_text(storage, corpus)
+trie = NGramTrie(2, encoded)
+context = (storage.get_id('i'),)
+
+first_generated = storage.get_id('have')
+last_generated = storage.get_id('<END>')
+
+generator = NGramTextGenerator(storage, trie)
+actual = generator._generate_sentence(context)
+print(actual[1], first_generated)
+print(actual[-1], last_generated)
+
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
