@@ -3,7 +3,7 @@ Lab 4
 """
 
 import re
-from ngrams.ngram_trie import NGramTrie
+from lab_4.ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
