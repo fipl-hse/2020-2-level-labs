@@ -3,10 +3,26 @@ Lab 4
 """
 
 from ngrams.ngram_trie import NGramTrie
+import re
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    pass
+    wrong_circumstances = not isinstance(text, str) or isinstance(text, bool) \
+                          or list(filter(lambda symbol: symbol.isalpha(), text)) == []  # строка из символов
+    if wrong_circumstances:
+        raise ValueError
+    text = 'I have a cat.\nHis name is Bruno.'
+    text = text.lower()
+    text = re.split(r'[.?!][\n\s]', text)
+    text_tuple = ''
+    for sentence in text:
+        for element in sentence:
+            if element.isalpha() is False and element != ' ':
+                sentence = sentence.replace(element, '')
+        text_tuple += sentence + ' ' + '<END>' + ' '
+    text_tuple = text_tuple[0:len(text_tuple) - 1]
+    text_tuple = tuple(text_tuple.split(' '))
+    return text_tuple
 
 
 class WordStorage:
