@@ -97,11 +97,18 @@ class NGramTextGenerator:
             raise ValueError
 
         generated_text = []
-        while generated_text.count(self._word_storage.get_id('<END>')) != number_of_sentences:
+        for _ in range(number_of_sentences):
             new_sent = self._generate_sentence(context)
+            if new_sent[len(context) - 1] == self._word_storage.get_id('<END>'):
+                new_sent = new_sent[len(context):]
             generated_text.extend(list(new_sent))
-            context = new_sent[-(len(context)):]
+            context = new_sent[-len(context):]
         return tuple(generated_text)
+        # while generated_text.count(self._word_storage.get_id('<END>')) != number_of_sentences:
+        #     new_sent = self._generate_sentence(context)
+        #     generated_text.extend(list(new_sent))
+        #     context = new_sent[-(len(context)):]
+        # return tuple(generated_text)
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
