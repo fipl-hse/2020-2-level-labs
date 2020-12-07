@@ -5,10 +5,10 @@ Lab 4
 from ngrams.ngram_trie import NGramTrie
 
 
+SENTENCE_END = "<END>"
+
+
 def tokenize_by_sentence(text: str) -> tuple:
-
-    SENTENCE_END = "<END>"
-
     if not isinstance(text, str):
         raise ValueError
     if not text:
