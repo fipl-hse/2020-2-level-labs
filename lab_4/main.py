@@ -206,6 +206,7 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
         raise ValueError
 
     text = [[]]
+
     for encoded_word in encoded_text:
         decoded_word = storage.get_word(encoded_word)
         if decoded_word == '<END>':
