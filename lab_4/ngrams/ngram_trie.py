@@ -42,6 +42,3 @@ class NGramTrie:
 
     def public_method(self):
         pass
-
-
-
