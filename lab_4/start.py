@@ -1,5 +1,14 @@
-from lab_4.main import *
+'''
+I really wanna finish this lab here is docstring
+'''
 import ngrams.ngram_trie as ngrams
+from lab_4.main import WordStorage
+from lab_4.main import encode_text
+from lab_4.main import decode_text
+from lab_4.main import NGramTextGenerator
+from lab_4.main import LikelihoodBasedTextGenerator
+from lab_4.main import BackOffGenerator
+
 
 if __name__ == '__main__':
     corpus = ('i', 'have', 'a', 'cat', '<END>',
