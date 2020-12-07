@@ -43,3 +43,4 @@ if __name__ == '__main__':
     actual = generator.generate_text(context, 5)
     actual = decode_text(storage, actual)
     print(actual)
+    assert actual == ('Name is rex', 'Her name is rex', 'Her name is rex', 'Her name is rex', 'Her name is rex')
