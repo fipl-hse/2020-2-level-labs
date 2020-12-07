@@ -21,7 +21,6 @@ def tokenize_by_sentence(text: str) -> tuple:
 
     return tuple(tokens_list)
 
-
 class WordStorage:
     def __init__(self):
         self.storage = {}
