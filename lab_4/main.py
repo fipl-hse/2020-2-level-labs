@@ -2,8 +2,8 @@
 Lab 4
 """
 
-from ngrams.ngram_trie import NGramTrie
 import re
+from ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
@@ -104,11 +104,9 @@ class NGramTextGenerator:
             generated_text.extend(list(new_sent))
             context = new_sent[-len(context):]
         return tuple(generated_text)
-        # while generated_text.count(self._word_storage.get_id('<END>')) != number_of_sentences:
-        #     new_sent = self._generate_sentence(context)
-        #     generated_text.extend(list(new_sent))
-        #     context = new_sent[-(len(context)):]
-        # return tuple(generated_text)
+
+    def public_method(self):
+        pass
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
@@ -139,6 +137,9 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             return sorted(max_lh_dict, key=max_lh_dict.get, reverse=True)[0]
         return sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)[0][0]
 
+    def public_method_2(self):
+        pass
+
 
 class BackOffGenerator(NGramTextGenerator):
 
@@ -146,6 +147,9 @@ class BackOffGenerator(NGramTextGenerator):
         super().__init__(word_storage, n_gram_trie)
 
     def _generate_next_word(self, context: tuple) -> int:
+        pass
+
+    def public_method_3(self):
         pass
 
 
