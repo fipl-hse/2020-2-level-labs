@@ -43,12 +43,12 @@ class WordStorage:
     def get_word(self, word_id: int) -> str:
         if not isinstance(word_id, int) or not word_id:
             raise ValueError
-        if word_id not in self.storage.values():
-            raise KeyError
 
         for word, w_id in self.storage.items():
             if w_id == word_id:
                 return word
+        else:
+            raise KeyError
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple):
