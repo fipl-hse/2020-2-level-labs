@@ -2,8 +2,8 @@
 Lab 4
 """
 
-from ngrams.ngram_trie import NGramTrie
 import re
+from ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
@@ -48,12 +48,11 @@ class WordStorage:
         if not isinstance(word_id, int):
             raise ValueError
 
-        if word_id not in self.storage.values():
-            raise KeyError
-
         for key, value in self.storage.items():
             if value == word_id:
                 return key
+
+        raise KeyError
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple):
@@ -61,8 +60,6 @@ class WordStorage:
 
         for word in corpus:
             self._put_word(word)
-
-        return
 
 
 def encode_text(storage: WordStorage, text: tuple) -> tuple:
@@ -100,10 +97,7 @@ class NGramTextGenerator:
         if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
             raise ValueError
 
-        if context[-1] == self._word_storage.get_id('<END>'):
-            sentence = []
-        else:
-            sentence = list(context)
+        sentence = self.sentence_is(context)
 
         for _ in range(20):
             sentence.append(self._generate_next_word(context))
@@ -115,6 +109,13 @@ class NGramTextGenerator:
         sentence.append(self._word_storage.get_id('<END>'))
 
         return tuple(sentence)
+
+    def sentence_is(self, context):
+        if context[-1] == self._word_storage.get_id('<END>'):
+            sentence = []
+        else:
+            sentence = list(context)
+        return sentence
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
         if not isinstance(context, tuple) or not isinstance(number_of_sentences, int):
@@ -159,9 +160,13 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                 word_frequency = frequency
                 next_word = word
 
+        next_word = self.if_not_word_freq(next_word, word_frequency)
+
+        return next_word
+
+    def if_not_word_freq(self, next_word, word_frequency):
         if not word_frequency:
             next_word = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
-
         return next_word
 
 
@@ -169,9 +174,32 @@ class BackOffGenerator(NGramTextGenerator):
 
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
+        self._n_gram_tries = (n_gram_trie,) + args
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+        if not isinstance(context, tuple) or not context or \
+                not all(word in self._word_storage.storage.values() for word in context):
+            raise ValueError
+
+        most_frequent_word = self.most_freq_word(context)
+
+        if not most_frequent_word:
+            most_frequent_word = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
+
+        return most_frequent_word
+
+    def most_freq_word(self, context):
+
+        most_frequent_word = ''
+        word_frequency = 0
+
+        for n_gram_trie in self._n_gram_tries:
+            for n_gram, n_gram_frequency in n_gram_trie.n_gram_frequencies.items():
+                if n_gram[:-1] == context and n_gram_frequency > word_frequency:
+                    most_frequent_word = n_gram[-1]
+                    word_frequency = n_gram_frequency
+
+        return most_frequent_word
 
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
@@ -191,11 +219,11 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
 
     return tuple(decoded_text)
 
-"""
+
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
     pass
 
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
     pass
-"""
+
