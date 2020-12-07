@@ -80,6 +80,7 @@ class NGramTextGenerator:
             raise ValueError
 
         word_freq = 0
+        word_ind = 0
         for n_gram, freq in self._n_gram_trie.n_gram_frequencies.items():
             if n_gram[:len(context)] == context and freq > word_freq:
                 word_freq = freq
@@ -101,7 +102,7 @@ class NGramTextGenerator:
                 break
         if self._word_storage.get_id('<END>') not in sentence:
             sentence.append(self._word_storage.get_id('<END>'))
-        return sentence
+        return tuple(sentence)
 
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
@@ -142,6 +143,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             raise ValueError
 
         likelihood = 0
+        generated_word = 0
         for word in self._word_storage.storage.values():
             likelihood_0 = self._calculate_maximum_likelihood(word, context)
             if likelihood_0 > likelihood:
