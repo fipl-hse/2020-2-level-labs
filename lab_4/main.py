@@ -47,8 +47,7 @@ class WordStorage:
         for word, w_id in self.storage.items():
             if w_id == word_id:
                 return word
-        else:
-            raise KeyError
+        raise KeyError
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple):
