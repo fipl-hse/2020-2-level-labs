@@ -8,7 +8,6 @@ from lab_4.main import tokenize_by_sentence, encode_text
 if __name__ == '__main__':
     text = 'I have a cat. His name is Bruno. I have a dog. Her name is Rex. Her name is Rex too.'
     text_tokenized = tokenize_by_sentence(text)
-    print(text_tokenized)
 
     word_storage = WordStorage()
     word_storage.update(text_tokenized)

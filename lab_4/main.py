@@ -92,8 +92,7 @@ class NGramTextGenerator:
 
         generated_sentence = list(context)
         for number in range(20):
-            generated_sentence.append(
-                NGramTextGenerator._generate_next_word(self, tuple(generated_sentence[-(len(context)):])))
+            generated_sentence.append((self._generate_next_word(tuple(generated_sentence[-(len(context)):]))))
             if generated_sentence[-1] == self._word_storage.get_id('<END>'):
                 return tuple(generated_sentence)
         if self._word_storage.get_id('<END>') not in generated_sentence:
