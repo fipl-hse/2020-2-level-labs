@@ -200,3 +200,83 @@ class NGramTextGeneratorTest(unittest.TestCase):
 
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, generator.generate_text, bad_input, 10)
+
+# ---------------------------------New Tests -----------------------
+
+    def test_text_generator_generate_sentence_proper_beginning(self):
+        """
+        Checks that class creates correct sentence from a context '<END>' without '<END>' in the beginning
+        """
+        corpus = ('my', 'favourite', 'subject', 'is', 'maths', '<END>',
+                  'his', 'favourite', 'thing', 'is', 'music' '<END>',
+                  'i', 'have', 'a', 'favourite', 'film', '<END>',
+                  'my', 'family', 'likes', 'avatar', '<END>',
+                  'my', 'favourite', 'subject', 'is', 'music', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+        encoded = encode_text(storage, corpus)
+        trie = NGramTrie(2, encoded)
+        context = (storage.get_id('<END>'),)
+
+        first_generated = storage.get_id('my')
+        last_generated = storage.get_id('<END>')
+
+        generator = NGramTextGenerator(storage, trie)
+        actual = generator._generate_sentence(context)
+
+        self.assertNotEqual(storage.get_id('<END>'), actual[0])
+
+        self.assertEqual(first_generated, actual[0])
+        self.assertEqual(last_generated, actual[-1])
+
+    def test_text_generator_generate_sentence_proper_number_of_end(self):
+        """
+        Checks that class creates correct sentence with only one <END>
+        """
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'there', 'are', 'a', 'cat', 'outside', '<END>',
+                  'here', 'is', 'a', 'cat', 'outside', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+        encoded = encode_text(storage, corpus)
+        trie = NGramTrie(3, encoded)
+        context = (storage.get_id('a'),
+                   storage.get_id('is'),
+                   storage.get_id('<END>'))
+
+        generator = NGramTextGenerator(storage, trie)
+        actual = generator._generate_sentence(context)
+
+        self.assertEqual(1, actual.count(storage.get_id('<END>')))
+
+    def test_text_generator_generate_long_text(self):
+        """
+        should generate a bigger text and do crash
+        """
+        corpus = ('i', 'have', 'a', 'cat', 'and', 'a', 'dog', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'there', 'are', 'a', 'cat', 'and', 'a', 'bear', 'outside', '<END>',
+                  'here', 'is', 'a', 'cat', 'outside', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(3, encoded)
+
+        generator = NGramTextGenerator(storage, trie)
+
+        context = (storage.get_id('a'),
+                   storage.get_id('cat'))
+
+        end = storage.get_id('<END>')
+        actual = generator.generate_text(context, 100)
+        self.assertEqual(actual.count(end), 100)
