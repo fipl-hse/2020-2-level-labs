@@ -58,8 +58,8 @@ class WordStorage:
             raise ValueError
         if word_id not in self.storage.values():
             raise KeyError
-        for word, _word_id in self.storage.items():
-            if _word_id == word_id:
+        for word, _ in self.storage.items():
+            if _ == word_id:
                 return word
 
     def update(self, corpus: tuple):
