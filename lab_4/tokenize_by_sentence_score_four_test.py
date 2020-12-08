@@ -85,7 +85,7 @@ class TokenizeBySentenceTest(unittest.TestCase):
         actual = tokenize_by_sentence(text)
         self.assertEqual(expected, actual)
 
-    def test_all_upper(self):
+    def test_all_text_upper(self):
         """
             Checks that tokenize_by_sentence function
             can handle text written in upper letters
