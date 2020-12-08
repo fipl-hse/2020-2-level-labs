@@ -83,25 +83,22 @@ class NGramTextGenerator:
     def _generate_sentence(self, context: tuple) -> tuple:
         if not isinstance(context, tuple) or not context:
             raise ValueError
-        generated_sentence = []
-        if self._word_storage.get_id('<END>') not in context:
-            for word in context[:self._n_gram_trie.size-1]:
-                generated_sentence.append(word)
-        while self._word_storage.get_id('<END>') not in generated_sentence:
-            generated_word = self._generate_next_word(context)
-            context = context[:self._n_gram_trie.size-1] + (generated_word,)
-            context = context[-(self._n_gram_trie.size - 1):]
-            generated_sentence.append(generated_word)
-            if len(generated_sentence) == 20:
-                generated_sentence.append(self._word_storage.get_id('<END>'))
-                return tuple(generated_sentence)
-        return tuple(generated_sentence)
+        gen_sentence = list(context[:self._n_gram_trie.size-1])
+        for _ in range(20):
+            gen_sentence.append(self._generate_next_word(tuple(gen_sentence[-(self._n_gram_trie.size - 1):])))
+            if self._word_storage.get_id('<END>') in gen_sentence[:-len(context)]:
+                gen_sentence = gen_sentence[gen_sentence.index(self._word_storage.get_id('<END>')) + 1:]
+            if gen_sentence[-1] == self._word_storage.get_id('<END>'):
+                break
+        if self._word_storage.get_id('<END>') not in gen_sentence:
+            gen_sentence.append(self._word_storage.get_id('<END>'))
+        return tuple(gen_sentence)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
         if not isinstance(context, tuple) or not isinstance(number_of_sentences, int) or not context:
             raise ValueError
         generated_text = []
-        while generated_text.count(self._word_storage.get_id('<END>')) != number_of_sentences:
+        for _ in range(number_of_sentences):
             generated_sentence = self._generate_sentence(context)
             context = generated_sentence[-(self._n_gram_trie.size - 1):]
             generated_text.extend(list(generated_sentence))
@@ -150,9 +147,8 @@ class BackOffGenerator(NGramTextGenerator):
         for word in context:
             if word not in self._word_storage.storage.values():
                 raise ValueError
-        trie_size_max = []
-        for trie in self._n_gram_tries:
-            trie_size_max.append(trie.size)
+        tries_sorted = sorted(list(self._n_gram_tries), key=lambda n_gram_trie: n_gram_trie.size, reverse=True)
+        for trie in tries_sorted:
             common_beg = []
             for n_gram in trie.n_grams:
                 if n_gram[:trie.size-1] == context[:trie.size-1]:
@@ -160,8 +156,6 @@ class BackOffGenerator(NGramTextGenerator):
             if common_beg:
                 top = sorted(common_beg, key=trie.n_gram_frequencies.get, reverse=True)
                 return top[0][-1]
-        if not min(trie_size_max) - 1 <= len(context) <= max(trie_size_max) - 1:
-            raise ValueError
         top = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)
         return top[0][0]
 
