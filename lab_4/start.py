@@ -30,7 +30,7 @@ def main():
     actual = generator._generate_next_word(context)
 
     print(f'TEXT:\n{text}')
-    print(f'\nEXPECTED WORD AFTER name is IS rex')
+    print('\nEXPECTED WORD AFTER name is IS rex')
     print(f'ACTUAL WORD AFTER name is IS {storage.get_word(actual)}')
 
 
