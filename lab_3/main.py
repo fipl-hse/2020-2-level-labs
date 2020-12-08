@@ -82,6 +82,11 @@ class LetterStorage:
                     self._put_letter(letter)
         return 0
 
+    def get_letter_by_id(self, num):
+        for letter,ids in self.storage.items():
+            if num == ids:
+                return self.storage.keys(letter)
+
 
 # 6
 def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
