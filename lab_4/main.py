@@ -7,36 +7,61 @@ import re
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    wrong_circumstances = not isinstance(text, str) or isinstance(text, bool) \
-                          or list(filter(lambda symbol: symbol.isalpha(), text)) == []  # строка из символов
-    if wrong_circumstances:
+    wrong_type = not isinstance(text, str) or isinstance(text, bool)
+    if wrong_type:
         raise ValueError
-    text = 'I have a cat.\nHis name is Bruno.'
-    text = text.lower()
-    text = re.split(r'[.?!][\n\s]', text)
-    text_tuple = ''
-    for sentence in text:
+    wrong_string = list(filter(lambda symbol: symbol.isalpha(), text)) == []
+    if wrong_string:
+        return ()
+    text = text.lower()  # переводим в нижний регистр
+    text = re.split(r'[.?!][\n\s]', text)  # разделяем на предложения
+    text_modernised = ''
+    for sentence in text:  # удаляем ненужные символы
         for element in sentence:
             if element.isalpha() is False and element != ' ':
                 sentence = sentence.replace(element, '')
-        text_tuple += sentence + ' ' + '<END>' + ' '
-    text_tuple = text_tuple[0:len(text_tuple) - 1]
-    text_tuple = tuple(text_tuple.split(' '))
-    return text_tuple
+        text_modernised += sentence + ' ' + '<END>' + ' '  # добавляем <END> после каждого предложения
+    text_modernised = (text_modernised.split(' '))  # разделяем предложения на слова
+    text_tuple = []
+    for word in text_modernised:  # удаляем все ненужные элементы'
+        if word != '':
+            text_tuple.append(word)
+    return tuple(text_tuple)
 
 
 class WordStorage:
     def __init__(self):
-        pass
+        self.storage = {}
 
     def _put_word(self, word: str):
-        pass
+        wrong_circumstances = isinstance(word, bool) or not isinstance(word, str) or word == ''
+        if wrong_circumstances:
+            raise ValueError
+        if word not in self.storage:
+            if self.storage != {}:  # если словарь не пустой, то последнее значение словаря + 1
+                all_keys = list(self.storage.keys())  # список всех ключей словаря
+                self.storage[word] = self.storage[all_keys[-1]] + 1
+            elif self.storage == {}:  # если словарь пустой, то идентификатор равен 1
+                self.storage[word] = 1
+        return self.storage[word]
+
 
     def get_id(self, word: str) -> int:
-        pass
+        wrong_circumstances = isinstance(word, bool) or not isinstance(word, str) or word == ''
+        wrong_word = word not in self.storage
+        if wrong_circumstances:
+            raise ValueError
+        if wrong_word:
+            raise KeyError
+        return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
-        pass
+        wrong_circumstances = isinstance(word_id, bool) or not isinstance(word_id, int)
+        if wrong_circumstances:
+            raise ValueError
+        for key, value in self.storage.items():
+            if value == word_id:
+                return key
 
     def update(self, corpus: tuple):
         pass
