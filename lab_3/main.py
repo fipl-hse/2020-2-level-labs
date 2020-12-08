@@ -195,7 +195,7 @@ class LanguageDetector:
 
     @staticmethod
 
-    def _calculate_distance(self, first_n_grams: tuple, second_n_grams: tuple) -> int:
+    def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
         :param first_n_grams: a tuple of the top_k n-grams
