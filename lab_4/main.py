@@ -21,10 +21,6 @@ def tokenize_by_sentence(text: str) -> tuple:
     return tuple(list_tokens)
 
 
-tokenize_by_sentence('Hi! '
-                     'My name is Sasha. Am I tired? Yep.')
-
-
 class WordStorage:
     def __init__(self):
         self.storage = {}
@@ -99,7 +95,7 @@ class NGramTextGenerator:
             generated_sentence.append(
                 NGramTextGenerator._generate_next_word(self, tuple(generated_sentence[-(len(context)):])))
             if generated_sentence[-1] == self._word_storage.get_id('<END>'):
-                break
+                return tuple(generated_sentence)
         if self._word_storage.get_id('<END>') not in generated_sentence:
             generated_sentence.append(self._word_storage.get_id('<END>'))
         return tuple(generated_sentence)
@@ -111,9 +107,12 @@ class NGramTextGenerator:
         generated_text = []
         while generated_text.count(self._word_storage.get_id('<END>')) != number_of_sentences:
             new_sent = self._generate_sentence(context)
+            if new_sent[len(context) - 1] == self._word_storage.get_id('<END>'):
+                new_sent = new_sent[len(context):]
             generated_text.extend(list(new_sent))
-            context = new_sent[-(len(context)):]
+            context = new_sent[-len(context):]
         return tuple(generated_text)
+
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
