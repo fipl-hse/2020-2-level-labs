@@ -186,3 +186,27 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
 
         actual = generator._generate_next_word(context)
         self.assertEqual(expected_word, actual)
+
+    def test_float_result(self):
+        """
+            Checks that returned result is float
+        """
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+        trie = NGramTrie(2, encoded)
+        context = (storage.get_id('i'),)
+        word = storage.get_id('have')
+
+        generator = LikelihoodBasedTextGenerator(storage, trie)
+
+        actual = generator._calculate_maximum_likelihood(word, context)
+        self.assertEqual(float, type(actual))
+
