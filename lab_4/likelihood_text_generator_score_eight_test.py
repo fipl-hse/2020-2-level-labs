@@ -157,7 +157,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
 
         trie = NGramTrie(3, encoded)
 
-        bad_inputs = [[], {}, (2000, 1000, ), None, 9, 9.34, True]
+        bad_inputs = [[], {}, (2000, 1000, 1000, ), None, 9, 9.34, True]
 
         generator = LikelihoodBasedTextGenerator(storage, trie)
 

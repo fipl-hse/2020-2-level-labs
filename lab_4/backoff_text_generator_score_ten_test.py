@@ -157,7 +157,7 @@ class BackOffGeneratorTest(unittest.TestCase):
         two = NGramTrie(2, encoded)
         four = NGramTrie(4, encoded)
 
-        bad_inputs = [[], {}, (2000, 1000, ), None, 9, 9.34, True]
+        bad_inputs = [[], {}, None, 9, 9.34, True]
 
         generator = BackOffGenerator(storage, trie, two, four)
 
