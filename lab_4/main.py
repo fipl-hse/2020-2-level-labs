@@ -86,8 +86,9 @@ class NGramTextGenerator:
         if not isinstance(context, tuple):
             raise ValueError
         sentence = list(context)
+        length = len(context)
         for _ in range(20):
-            sentence.append(self._generate_next_word((tuple(sentence[-(len(context)):]))))
+            sentence.append(self._generate_next_word(tuple(sentence[-length:])))
             if sentence[-1] == self._word_storage.storage['<END>']:
                 break
         else:
