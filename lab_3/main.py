@@ -19,7 +19,6 @@ def tokenize_by_sentence(text: str) -> tuple:
     """
     if not isinstance(text, str) or len(text) == 0:
         return ()
-    
     sentences = re.split('[!?.] ', text)
     spl_tok = []
 
@@ -81,43 +80,32 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
     :param corpus: a tuple of sentences
     :return: a tuple of the encoded sentences
     """
-    pass
 
 
 # 6
 class NGramTrie:
-
     def __init__(self, n: int):
-        pass
-
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
         """
-        pass
 
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        pass
-
     def calculate_log_probabilities(self) -> int:
         """
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
-
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        pass
-
 
 # 8
 class LanguageDetector:
