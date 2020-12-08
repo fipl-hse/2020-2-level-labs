@@ -25,17 +25,3 @@ if __name__ == '__main__':
 
     RESULT = text
     assert RESULT == (5, 5), 'Not working'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
