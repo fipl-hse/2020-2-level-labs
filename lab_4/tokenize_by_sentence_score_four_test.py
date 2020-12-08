@@ -87,7 +87,7 @@ class TokenizeBySentenceTest(unittest.TestCase):
 
     def test_all_upper(self):
         """
-        Tests that tokenize_by_sentence function
+            Checks that tokenize_by_sentence function
             can handle text written in upper letters
         """
         text = 'I HAVE A CAT. HIS NAME IS BRUNO.'
