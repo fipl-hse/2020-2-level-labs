@@ -84,3 +84,13 @@ class TokenizeBySentenceTest(unittest.TestCase):
         expected = ()
         actual = tokenize_by_sentence(text)
         self.assertEqual(expected, actual)
+
+    def test_all_upper(self):
+        """
+        Tests that tokenize_by_sentence function
+            can handle text written in upper letters
+        """
+        text = 'I HAVE A CAT. HIS NAME IS BRUNO.'
+        expected = ('i', 'have', 'a', 'cat', '<END>', 'his', 'name', 'is', 'bruno', '<END>')
+        actual = tokenize_by_sentence(text)
+        self.assertEqual(expected, actual)
