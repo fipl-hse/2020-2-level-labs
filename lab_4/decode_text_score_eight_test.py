@@ -108,3 +108,29 @@ class DecodeCorpusTest(unittest.TestCase):
             self.assertTrue('<END>' not in sentence)
             self.assertTrue(sentence[0].isupper())
             self.assertTrue(sentence[-1].isalpha())
+
+    def test_end(self):
+        """
+            checks that after decoding no end in result
+        """
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'cat', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(3, encoded)
+        context = (storage.get_id('a'),
+                   storage.get_id('cat'),)
+
+        generator = LikelihoodBasedTextGenerator(storage, trie)
+
+        to_decode = generator.generate_text(context, 1)
+        actual = decode_text(storage, to_decode)
+        expected = ('A cat',)
+        self.assertEqual(expected, actual)
