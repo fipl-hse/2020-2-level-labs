@@ -129,10 +129,8 @@ class LanguageDetectorTest(unittest.TestCase):
         expected = -1
         bad_inputs = [[], {}, '', 1, -1, 9.22, None, True, (None,)]
         for bad_input in bad_inputs:
-            actual_first = language_detector._calculate_distance(bad_input,
-                                                                 patches_ngrams)
-            actual_second = language_detector._calculate_distance(patches_ngrams,
-                                                                  bad_input)
+            actual_first = language_detector._calculate_distance(bad_input, patches_ngrams)
+            actual_second = language_detector._calculate_distance(patches_ngrams, bad_input)
             self.assertEqual(expected, actual_first)
             self.assertEqual(expected, actual_second)
 
