@@ -59,16 +59,31 @@ class WordStorage:
         wrong_circumstances = isinstance(word_id, bool) or not isinstance(word_id, int)
         if wrong_circumstances:
             raise ValueError
+        storage_values = self.storage.values()
+        if word_id not in storage_values:
+            raise KeyError
         for key, value in self.storage.items():
             if value == word_id:
                 return key
 
     def update(self, corpus: tuple):
-        pass
+        wrong_circumstances = isinstance(corpus, bool) or not isinstance(corpus, tuple)
+        if wrong_circumstances:
+            raise ValueError
+        for word in corpus:
+            self._put_word(word)
 
 
 def encode_text(storage: WordStorage, text: tuple) -> tuple:
-    pass
+    wrong_circumstances = isinstance(text, bool) or not isinstance(text, tuple) or isinstance(storage, bool) or \
+        not isinstance(storage, WordStorage)
+    if wrong_circumstances:
+        raise ValueError
+    storage.update(text)  # присваиваем словам словаря индексы слов
+    text_encoded = []
+    for word in text:
+        text_encoded.append(storage.get_id(word))
+    text_encoded = tuple(text_encoded)
 
 
 class NGramTextGenerator:
