@@ -9,8 +9,6 @@ from lab_4.ngrams.ngram_trie import NGramTrie
 def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         raise ValueError
-    if not isinstance(text, str):
-        raise ValueError
 
     sentences = re.split('[.!?]', text)
     list_words = []
