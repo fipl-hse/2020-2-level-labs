@@ -1,7 +1,7 @@
 """
 Lab 4 starter
 """
-from lab_4.main import LikelihoodBasedTextGenerator, encode_text, WordStorage
+from lab_4.main import BackOffGenerator, encode_text, WordStorage, decode_text
 from lab_4.ngrams.ngram_trie import NGramTrie
 
 if __name__ == '__main__':
@@ -14,9 +14,13 @@ if __name__ == '__main__':
     storage.update(corpus)
     encoded_text = encode_text(storage, corpus)
     trie = NGramTrie(3, encoded_text)
-    context = (storage.get_id('i'),
-               storage.get_id('have'))
-    generator = LikelihoodBasedTextGenerator(storage, trie)
+    four = NGramTrie(4, encoded_text)
+    context = (storage.get_id('his'),
+               storage.get_id('name'),
+               storage.get_id('is'),)
+    generator = BackOffGenerator(storage, trie, four)
 
-    RESULT = generator.generate_text(context, 3)
-    assert RESULT, 'Not work'
+    text = generator.generate_text(context, 3)
+    actual = decode_text(storage, text)
+    RESULT = ('His name is bruno', 'I have a cat', 'His name is bruno')
+    assert RESULT == actual, 'Not work'
