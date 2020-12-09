@@ -1,6 +1,7 @@
 """
 N-gram model
 """
+from math import log
 
 
 class NGramTrie:
@@ -34,3 +35,20 @@ class NGramTrie:
                 self.n_gram_frequencies[n_gram] += 1
             else:
                 self.n_gram_frequencies[n_gram] = 1
+
+    def top_n_grams(self, k: int) -> tuple:
+
+        if not isinstance(k, int) or k < 0 or not self.n_gram_frequencies:
+            return ()
+        return tuple(sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)[:k])
+
+    def calculate_probabilities(self) -> int:
+        if not self.n_gram_frequencies:
+            return 1
+
+        for n_gram in self.n_gram_frequencies:
+            probability = self.n_gram_frequencies[n_gram] / \
+                          sum([self.n_gram_frequencies[other_n_gram]
+                               for other_n_gram in self.n_gram_frequencies
+                               if n_gram[:self.size - 1] == other_n_gram[:self.size - 1]])
+        return probability

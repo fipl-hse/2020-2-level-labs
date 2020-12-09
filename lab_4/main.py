@@ -2,10 +2,10 @@
 Lab 4
 """
 
-from ngrams.ngram_trie import NGramTrie
 import re
 import random
 import json
+from ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
@@ -45,12 +45,10 @@ class WordStorage:
         if not isinstance(word, str):
             raise ValueError
 
-        try:
-            self.storage[word]
-        except KeyError:
+        if word not in self.storage:
             raise KeyError
-        else:
-            return self.storage[word]
+
+        return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
         if isinstance(word_id, bool) or not isinstance(word_id, int) or word_id < 0:
@@ -59,7 +57,7 @@ class WordStorage:
         if word_id not in self.storage.values():
             raise KeyError
 
-        inverted_storage = dict([(v, k) for k, v in self.storage.items()])
+        inverted_storage = {v: k for k, v in self.storage.items()}
 
         return inverted_storage[word_id]
 
@@ -142,7 +140,7 @@ class NGramTextGenerator:
         context_len = len(context)
         text = []
 
-        for i in range(number_of_sentences):
+        for _ in range(number_of_sentences):
             new_sentence = self._generate_sentence(context)
 
             text.extend(new_sentence)
@@ -273,8 +271,8 @@ def save_model(model: NGramTextGenerator, path_to_saved_model: str):
         with open(path_to_saved_model, 'w') as file:
             file.write(json.dumps(model_to_save))
 
-    except FileNotFoundError:
-        return
+    except FileNotFoundError as error:
+        print(error)
 
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
@@ -298,5 +296,5 @@ def load_model(path_to_saved_model: str) -> NGramTextGenerator:
         model_generator = NGramTextGenerator(word_storage, trie)
 
         return model_generator
-    except FileNotFoundError:
-        return
+    except FileNotFoundError as error:
+        print(error)
