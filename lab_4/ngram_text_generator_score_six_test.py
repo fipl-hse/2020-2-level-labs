@@ -57,7 +57,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         ngram = NGramTrie(3, encoded)
 
         generator = NGramTextGenerator(word_storage, ngram)
-        bad_inputs = [[], {}, (3, ), None, 9, 9.34, True]  # (3, ) - it is incorrect sized ngram
+        bad_inputs = ([], {}, tuple(), (3, ), None, 9, 9.34, True)  # (3, ) - it is incorrect sized ngram
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, generator._generate_next_word, bad_input)
 
@@ -147,7 +147,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         """
         throws errors with bad inputs
         """
-        bad_inputs = [[], {}, None, 9, 9.34, True]
+        bad_inputs = ([], {}, tuple(), None, 9, 9.34, True)
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>')
         word_storage = WordStorage()
@@ -163,7 +163,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         """
         throws errors with bad inputs
         """
-        bad_inputs = [0, -1]
+        bad_inputs = (0, -1)
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>')
         word_storage = WordStorage()
@@ -205,7 +205,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         """
         throws errors with bad inputs
         """
-        bad_inputs = [[], {}, None, 9, 9.34, True]
+        bad_inputs = (tuple(), [], {}, None, 9, 9.34, True)
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>')
         word_storage = WordStorage()

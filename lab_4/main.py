@@ -2,8 +2,10 @@
 Lab 4
 """
 
-## add test for empty inputs
-## add input handling for input 0 in generate_text
+## added test for empty inputs, incorrect num inputs
+## added test for save and load model
+
+## to add input handling for input 0 in generate_text
 
 import ast
 from pprint import pprint
