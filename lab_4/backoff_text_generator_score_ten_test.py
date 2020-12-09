@@ -188,3 +188,152 @@ class BackOffGeneratorTest(unittest.TestCase):
 
         actual = generator._generate_next_word(context)
         self.assertEqual(expected_word, actual)
+
+# -----------------------------------------------------------------------
+
+    def test_most_freq_word_ideal(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        two = NGramTrie(2, encoded)
+        trie = NGramTrie(3, encoded)
+
+        expected_word = storage.get_id('rex')
+        context = (storage.get_id('name'),
+                   storage.get_id('is'),)
+
+        generator = BackOffGenerator(storage, trie, two)
+
+        actual = generator.most_freq_word(context)
+        self.assertEqual(expected_word, actual)
+
+    def test_most_freq_word_swap(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        two = NGramTrie(2, encoded)
+        trie = NGramTrie(3, encoded)
+        four = NGramTrie(4, encoded)
+
+        expected_word = storage.get_id('name')
+        context = (storage.get_id('his'),)
+
+        generator = BackOffGenerator(storage, two, trie, four)
+
+        actual = generator.most_freq_word(context)
+        self.assertEqual(expected_word, actual)
+
+    def test_most_freq_word_after_end(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        two = NGramTrie(2, encoded)
+        trie = NGramTrie(3, encoded)
+        four = NGramTrie(4, encoded)
+
+        expected_word = storage.get_id('his')
+        context = (storage.get_id('<END>'),)
+
+        generator = BackOffGenerator(storage, two, trie, four)
+
+        actual = generator.most_freq_word(context)
+        self.assertEqual(expected_word, actual)
+
+    def test_most_freq_word_end(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        five = NGramTrie(5, encoded)
+        trie = NGramTrie(3, encoded)
+        four = NGramTrie(4, encoded)
+
+        expected_word = storage.get_id('<END>')
+        context = (storage.get_id('his'),
+                   storage.get_id('name'),
+                   storage.get_id('is'),
+                   storage.get_id('bruno'),)
+
+        generator = BackOffGenerator(storage, five, trie, four)
+
+        actual = generator.most_freq_word(context)
+        self.assertEqual(expected_word, actual)
+
+    def test_most_freq_word_incorrect_context(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(3, encoded)
+        two = NGramTrie(2, encoded)
+        four = NGramTrie(4, encoded)
+
+        bad_inputs = [[], {}, (2000, 1000, ), None, 9, 9.34, True]
+
+        generator = BackOffGenerator(storage, trie, two, four)
+
+        for bad_context in bad_inputs:
+            self.assertRaises(ValueError, generator.most_freq_word, bad_context)
+
+    def test_most_freq_word_complex(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(3, encoded)
+        two = NGramTrie(2, encoded)
+        four = NGramTrie(4, encoded)
+
+        expected_word = storage.get_id('rex')
+        context = (storage.get_id('name'),
+                   storage.get_id('is'),)
+
+        generator = BackOffGenerator(storage, trie, two, four)
+
+        actual = generator.most_freq_word(context)
+        self.assertEqual(expected_word, actual)

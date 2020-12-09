@@ -47,11 +47,13 @@ class WordStorage:
         if not isinstance(word_id, int):
             raise ValueError
 
+        if word_id not in self.storage.values():
+            raise KeyError
+
         for key, value in self.storage.items():
             if value == word_id:
                 return key
 
-        raise KeyError
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple):
@@ -188,6 +190,9 @@ class BackOffGenerator(NGramTextGenerator):
         return most_frequent_word
 
     def most_freq_word(self, context):
+        if not isinstance(context, tuple) or not context or \
+                not all(word in self._word_storage.storage.values() for word in context):
+            raise ValueError
 
         most_frequent_word = ''
         word_frequency = 0
