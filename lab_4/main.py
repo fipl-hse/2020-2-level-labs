@@ -11,7 +11,7 @@ from pprint import pprint
 import re
 
 from lab_4.ngrams.ngram_trie import NGramTrie
-import lab_4.validation
+from lab_4 import validation
 
 
 def tokenize_by_sentence(text: str) -> tuple:
