@@ -28,14 +28,17 @@ def main():
 
     generator = BackOffGenerator(storage, trie, two)
 
-    actual = generator._generate_next_word(context)
+    expected = 'rex'
+    actual = storage.get_word(generator._generate_next_word(context))
 
     print(f'TEXT:\n{text}')
-    print('\nEXPECTED WORD AFTER name is IS rex')
-    print(f'ACTUAL WORD AFTER name is IS {storage.get_word(actual)}')
+    print(f'\nEXPECTED WORD AFTER name is IS {expected}')
+    print(f'ACTUAL WORD AFTER name is IS {actual}')
 
     save_model(generator, 'model.txt')
-    RESULT = load_model('model.txt')
+    load_model('model.txt')
+
+    RESULT = actual == expected
     assert RESULT, 'Language genenerator work incorrect'
 
 
