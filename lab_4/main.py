@@ -84,6 +84,7 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
     for word in text:
         text_encoded.append(storage.get_id(word))
     text_encoded = tuple(text_encoded)
+    return text_encoded
 
 
 class NGramTextGenerator:
