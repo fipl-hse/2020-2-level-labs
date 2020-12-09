@@ -70,9 +70,6 @@ class WordStorage:
         for word in corpus:
             self._put_word(word)
 
-        if '<END>' not in corpus:
-            self._put_word('<END>')
-
         return
 
 
