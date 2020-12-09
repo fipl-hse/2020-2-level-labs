@@ -35,7 +35,8 @@ def main():
     print(f'ACTUAL WORD AFTER name is IS {storage.get_word(actual)}')
 
     save_model(generator, 'model.txt')
-    generator = load_model('model.txt')
+    RESULT = load_model('model.txt')
+    assert RESULT, 'Language genenerator work incorrect'
 
 
 if __name__ == "__main__":
