@@ -34,6 +34,6 @@ if __name__ == '__main__':
     text = generator.generate_text(context, 3)
     actual = decode_text(storage, text)
 
-    RESULT = ('There are a lot of flowers', 'Flowers there', 'There')
+    RESULT = ('There are a lot of flowers', 'There is a cat outside', 'This is my dog')
 
     assert RESULT == actual, "Something doesn't work"
