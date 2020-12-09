@@ -112,14 +112,12 @@ class NGramTextGenerator:
 
         sentence = list(context)
 
-        attempts = 0
-        while attempts < 20:
+        for attempt in range(1, 21):
             id_in_sentence = self._generate_next_word(tuple(sentence[-self.context_size:]))
             sentence.append(id_in_sentence)
             if id_in_sentence == id_with_end:
                 break
-            attempts += 1
-            if attempts == 20:
+            if attempt == 20:
                 sentence.append(id_with_end)
         return tuple(sentence)
 
@@ -127,15 +125,11 @@ class NGramTextGenerator:
         if not isinstance(context, tuple) or not isinstance(number_of_sentences, int):
             raise ValueError
 
-        text = ()
-        sentence = self._generate_sentence(context)
-        text += sentence
-        attempts = 1
-        while attempts < number_of_sentences:
-            new_sentence = self._generate_sentence(sentence[-self.context_size:])[self.context_size + 1:]
+        text = self._generate_sentence(context)  # with first sentence
+
+        for attempt in range(2, number_of_sentences + 1):
+            new_sentence = self._generate_sentence(text[-self.context_size:])[self.context_size + 1:]
             text += new_sentence
-            sentence = new_sentence
-            attempts += 1
         return text
 
 
