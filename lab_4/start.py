@@ -2,8 +2,8 @@
 Text generation implementation starter
 """
 
-from main import WordStorage, encode_text, LikelihoodBasedTextGenerator, decode_text, BackOffGenerator
-from ngrams.ngram_trie import NGramTrie
+from lab_4.main import WordStorage, encode_text, LikelihoodBasedTextGenerator, decode_text, BackOffGenerator
+from lab_4.ngrams.ngram_trie import NGramTrie
 
 if __name__ == '__main__':
     corpus = ('i', 'have', 'a', 'colourful', 'dog', '<END>',
