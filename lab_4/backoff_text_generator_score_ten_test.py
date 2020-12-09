@@ -4,7 +4,7 @@ Tests for BackOffGenerator class
 """
 
 import unittest
-from lab_4.main import WordStorage, encode_text, BackOffGenerator
+from lab_4.main import WordStorage, encode_text, BackOffGenerator, decode_text
 from lab_4.ngrams.ngram_trie import NGramTrie
 
 
@@ -188,3 +188,28 @@ class BackOffGeneratorTest(unittest.TestCase):
 
         actual = generator._generate_next_word(context)
         self.assertEqual(expected_word, actual)
+
+    def test_text_generator_no_context(self):
+        """
+        checks if the program can generate sentences without given context
+        """
+
+        corpus = ('cat', 'has', 'paws', '<END>',
+                  'dogs', 'have', 'noses', '<END>',
+                  'cat', 'has', 'whiskers', '<END>')
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(3, encoded)
+        two = NGramTrie(2, encoded)
+        four = NGramTrie(4, encoded)
+
+        context = (storage.get_id('cat'),
+                   storage.get_id('dogs'),)
+
+        generator = BackOffGenerator(storage, trie, two, four)
+
+        actual = generator.generate_text(context, 3)
+        self.assertTrue(all(actual))

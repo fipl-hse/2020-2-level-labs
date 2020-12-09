@@ -4,6 +4,8 @@ Lab 4
 
 from ngrams.ngram_trie import NGramTrie
 import re
+import random
+import json
 
 
 def tokenize_by_sentence(text: str) -> tuple:
@@ -51,7 +53,7 @@ class WordStorage:
             return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
-        if isinstance(word_id, bool) or not isinstance(word_id, int):
+        if isinstance(word_id, bool) or not isinstance(word_id, int) or word_id < 0:
             raise ValueError
 
         if word_id not in self.storage.values():
@@ -67,6 +69,9 @@ class WordStorage:
 
         for word in corpus:
             self._put_word(word)
+
+        if '<END>' not in corpus:
+            self._put_word('<END>')
 
         return
 
@@ -121,7 +126,13 @@ class NGramTextGenerator:
             count += 1
 
             if sentence[-1] == end_code:
-                return tuple(sentence)
+                if len(sentence) == 1:
+                    uni_grams_no_end = list(self._n_gram_trie.uni_grams.keys())
+                    uni_grams_no_end.remove((end_code,))
+                    sentence = random.choices(uni_grams_no_end, k=5) + [(end_code,)]
+                    return tuple(word_id[0] for word_id in sentence)
+
+                return sentence
 
         sentence.append(end_code)
         return tuple(sentence)
@@ -136,10 +147,19 @@ class NGramTextGenerator:
 
         for i in range(number_of_sentences):
             new_sentence = self._generate_sentence(context)
+
             text.extend(new_sentence)
             context = tuple(text[-context_len:])
 
         return tuple(text)
+
+    @property
+    def word_storage(self):
+        return self._word_storage
+
+    @property
+    def n_gram_trie(self):
+        return self._n_gram_trie
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
@@ -241,8 +261,45 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
 
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
-    pass
+    if not isinstance(model, NGramTextGenerator) or not isinstance(path_to_saved_model, str):
+        raise ValueError
+
+    str_frequencies = {', '.join(map(str, key)): value for key, value in model.n_gram_trie.n_gram_frequencies.items()}
+    str_unigrams = {key[0]: value for key, value in model.n_gram_trie.uni_grams.items()}
+    model_to_save = {'word_storage': model.word_storage.storage,
+                     'n_grams': model.n_gram_trie.n_grams,
+                     'n_gram_trie_size': model.n_gram_trie.size,
+                     'n_gram_trie_frequencies': str_frequencies,
+                     'uni_grams': str_unigrams}
+
+    try:
+        with open(path_to_saved_model, 'w') as file:
+            file.write(json.dumps(model_to_save))
+
+    except FileNotFoundError:
+        return
 
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
-    pass
+    if not isinstance(path_to_saved_model, str):
+        raise ValueError
+
+    try:
+        with open(path_to_saved_model, 'r') as file:
+            model = json.load(file)
+
+        word_storage = WordStorage()
+        word_storage.storage = model['word_storage']
+
+        trie = NGramTrie(n_gram_size=int(model['n_gram_trie_size']),
+                         encoded_text=('he',) * int(model['n_gram_trie_size']))
+        trie.n_grams = tuple([tuple(n_gram) for n_gram in model['n_grams']])
+        trie.n_gram_frequencies = {tuple(map(int, key.split(', '))): value for key, value
+                                   in model['n_gram_trie_frequencies'].items()}
+        trie.uni_grams = {(int(key),): value for key, value in model['uni_grams'].items()}
+
+        model_generator = NGramTextGenerator(word_storage, trie)
+
+        return model_generator
+    except FileNotFoundError:
+        return

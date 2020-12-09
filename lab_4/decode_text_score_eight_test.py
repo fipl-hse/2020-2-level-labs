@@ -108,3 +108,18 @@ class DecodeCorpusTest(unittest.TestCase):
             self.assertTrue('<END>' not in sentence)
             self.assertTrue(sentence[0].isupper())
             self.assertTrue(sentence[-1].isalpha())
+
+    def test_decode_text_incorrect_numbers_to_decode(self):
+        """
+        the program raises ValueError if numbers to decode are negative or float.
+        """
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        to_decode = ((-1, 3), (3.3, 3, 4, 5))
+
+        for tuple_to_decode in to_decode:
+            self.assertRaises(ValueError, decode_text, storage, tuple_to_decode)

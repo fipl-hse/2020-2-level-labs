@@ -41,6 +41,21 @@ class SaveModelTest(unittest.TestCase):
         for bad_model in bad_inputs:
             self.assertRaises(ValueError, save_model, bad_model, 'my_awesome_model')
 
+    def test_save_model_incorrect_path(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(2, encoded)
+
+        generator = NGramTextGenerator(storage, trie)
+
+        self.assertEqual(None, save_model(generator, r'user\my_awesome_model'))
+
 
 class LoadModelTest(unittest.TestCase):
     """
