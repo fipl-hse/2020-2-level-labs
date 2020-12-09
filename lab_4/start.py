@@ -1,13 +1,11 @@
 import unittest
-from lab_4.main import encode_text, WordStorage, LikelihoodBasedTextGenerator, decode_text
+from lab_4.main import tokenize_by_sentence, encode_text, WordStorage, LikelihoodBasedTextGenerator, decode_text
 from lab_4.ngrams.ngram_trie import NGramTrie
 
 if __name__ == '__main__':
-    corpus = ('i', 'have', 'a', 'cat', '<END>',
-              'his', 'name', 'is', 'bruno', '<END>',
-              'i', 'have', 'a', 'dog', 'too', '<END>',
-              'his', 'name', 'is', 'rex', '<END>',
-              'her', 'name', 'is', 'rex', 'too', '<END>')
+
+    text = 'I have a cat.\nHis name is Bruno. \nI have a dog too. \nHis name is rex. \nHer name is rex too.'
+    corpus = tokenize_by_sentence(text)
 
     storage = WordStorage()
     storage.update(corpus)
