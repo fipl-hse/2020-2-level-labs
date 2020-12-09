@@ -5,7 +5,7 @@ Tests decode_text function
 
 import unittest
 from lab_4.main import encode_text, WordStorage, LikelihoodBasedTextGenerator, decode_text
-from lab_4.ngrams.ngram_trie import NGramTrie
+from ngrams.ngram_trie import NGramTrie
 
 
 class DecodeCorpusTest(unittest.TestCase):

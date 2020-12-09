@@ -79,7 +79,8 @@ class NGramTextGenerator:
         self._n_gram_trie = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
-        if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
+        '''or len(context) + 1 != self._n_gram_trie.size'''
+        if not isinstance(context, tuple):
             raise ValueError
         new_dict = {}
         for key, value in self._n_gram_trie.n_gram_frequencies.items():
@@ -115,9 +116,14 @@ class NGramTextGenerator:
             raise ValueError
         text = []
         sentence = context
-        for x in range(1, number_of_sentences):
-            sentence = self._generate_sentence(sentence[-number_of_sentences:])
+        print(1, sentence)
+        for x in range(0, number_of_sentences):
+            sentence = self._generate_sentence(sentence)
+            print(2, sentence)
             text.extend(sentence)
+            sentence = sentence[:-1]
+            print(3, sentence)
+        print(tuple(text))
         return tuple(text)
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
@@ -126,8 +132,9 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         if not isinstance(word, int) or word not in self._word_storage.storage.values() \
                 or not isinstance(context, tuple):
             raise ValueError
-        if len(context) >= self._n_gram_trie.size:
-            raise ValueError
+        for value in context:
+            if value not in self._word_storage.storage.values():
+                raise ValueError
         n_gram = list(context)
         n_gram.append(word)
         n_gram_number = 0
@@ -153,6 +160,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             if value == max(freq_dict.values()):
                 return key
 
+
 class BackOffGenerator(NGramTextGenerator):
 
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
@@ -163,7 +171,11 @@ class BackOffGenerator(NGramTextGenerator):
 
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
-    pass
+    result = []
+    print(encoded_text)
+    for word in encoded_text:
+        result.append(storage.get_word(word))
+    print(result)
 
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
