@@ -159,6 +159,22 @@ class NGramTextGeneratorTest(unittest.TestCase):
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, generator._generate_sentence, bad_input)
 
+    def test_ngram_text_generator_bad_num_input(self):
+        """
+        throws errors with bad inputs
+        """
+        bad_inputs = [0, -1]
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>')
+        word_storage = WordStorage()
+        word_storage.update(corpus)
+        encoded = encode_text(word_storage, corpus)
+        trie = NGramTrie(2, encoded)
+        generator = NGramTextGenerator(word_storage, trie)
+
+        for bad_input in bad_inputs:
+            self.assertRaises(ValueError, generator._generate_sentence, bad_input)
+
 # ---------------------------------------------------------------------------------
 
     def test_generate_text_ideal(self):

@@ -62,7 +62,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
         encoded = encode_text(storage, corpus)
         trie = NGramTrie(2, encoded)
 
-        bad_inputs = [(), [], None, 123]
+        bad_inputs = [(), [], None, 123, -1]
         context = (storage.get_id('have'),
                    storage.get_id('a'),)
 

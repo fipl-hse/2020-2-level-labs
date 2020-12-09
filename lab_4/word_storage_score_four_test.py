@@ -187,6 +187,17 @@ class WordStorageTest(unittest.TestCase):
         word_storage.storage = {'word': 1}
         self.assertRaises(ValueError, word_storage.get_word, 'word2')
 
+    def test_word_storage_get_word_incorrect_num(self):
+        """
+        id is not incorrect num
+        """
+        word_storage = WordStorage()
+        word_storage.storage = {'word': 1}
+
+        bad_inputs = [-1, 1.5]
+        for bad_input in bad_inputs:
+            self.assertRaises(ValueError, word_storage.get_word, bad_input)
+
     def test_word_storage_get_word_not_in_storage(self):
         """
         word not in storage

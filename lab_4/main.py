@@ -3,7 +3,7 @@ Lab 4
 """
 
 ## add test for empty inputs
-## add test for input 0
+## add input handling for input 0 in generate_text
 
 import ast
 from pprint import pprint
