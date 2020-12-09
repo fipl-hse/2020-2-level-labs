@@ -8,6 +8,7 @@ from lab_4.main import WordStorage, encode_text, NGramTextGenerator, save_model,
 from lab_4.ngrams.ngram_trie import NGramTrie
 
 
+@unittest.skip
 class SaveModelTest(unittest.TestCase):
     """
     checks for save_model unction.
