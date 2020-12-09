@@ -35,7 +35,7 @@ class WordStorage:
     def _put_word(self, word: str) -> int:
         validation.ensure_type((word, str))
         validation.ensure_not_empty(word)
-    
+
         if word not in self.storage:
             word_id = len(self.storage)
             self.storage[word] = word_id
@@ -50,17 +50,12 @@ class WordStorage:
         return self.storage[word]
 
     def update_reversed_storage(self):
-        self.reversed_storage = {
-            key: value for key, value in zip(
-                self.storage.values(),
-                self.storage.keys(),
-                )
-            }
+        self.reversed_storage = {value: key for key, value in self.storage.items()}
 
     def get_word(self, word_id: int) -> str:
         validation.ensure_type((word_id, int))
         validation.ensure_correct_int(word_id, null_is_available=True)
-        
+
         if word_id not in self.reversed_storage:
             self.update_reversed_storage()
 
@@ -116,7 +111,7 @@ class NGramTextGenerator:
         length = self._n_gram_trie.size - 1
         n_gram = sent[-length:]
         end_id = self._word_storage.get_id('<END>')
-        for i in range(20):
+        for _ in range(20):
             sent += (self._generate_next_word(n_gram), )
             if sent[-1] == end_id:
                 break
@@ -135,7 +130,7 @@ class NGramTextGenerator:
 
         text = context
         length = self._n_gram_trie.size - 1
-        for i in range(number_of_sentences):
+        for _ in range(number_of_sentences):
             text += self._generate_sentence(context)[length:]
             context = text[-length:]
         return text
@@ -176,7 +171,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                 likelihood[self._calculate_maximum_likelihood(word, context)].append(word)
             else:
                 likelihood[self._calculate_maximum_likelihood(word, context)] = [word]
-        
+
         max_likelihood = max(likelihood.keys())
 
         return likelihood[max_likelihood][0]
@@ -216,6 +211,7 @@ class BackOffGenerator(NGramTextGenerator):
             if n_gram := super()._generate_next_word(context):
                 return n_gram
             context = context[:-1]
+        return n_gram
 
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
@@ -288,10 +284,10 @@ def load_model(path_to_saved_model: str) -> NGramTextGenerator:
     _word_storage = WordStorage()
     _word_storage.storage = model_dict['data']['_word_storage']['storage']
     _word_storage.reversed_storage = model_dict['data']['_word_storage']['reversed_storage']
-    
+
     if model_dict['name'] == 'NGramTextGenerator':
         generator = NGramTextGenerator(_word_storage, _n_gram_trie)
-    
+
     elif model_dict['name'] == 'LikelihoodBasedTextGenerator':
         generator = LikelihoodBasedTextGenerator(_word_storage, _n_gram_trie)
 
