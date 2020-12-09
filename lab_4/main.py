@@ -94,10 +94,26 @@ class NGramTextGenerator:
 
     def _generate_next_word(self, context: tuple) -> int:
         wrong_circumstances = isinstance(context, bool) or not isinstance(context, tuple) or \
-                              len(context) != self._n_gram_trie.size
+                              len(context) != self._n_gram_trie.size - 1
         if wrong_circumstances:
             raise ValueError
-        
+
+        freq_dict = {}
+        for key, value in self._n_gram_trie.n_gram_frequencies.items(): # добавляем все совпадающие контексты
+            if context == key[0:len(context)]:
+                freq_dict[key] = value
+
+        if freq_dict == {}:  # если контекста нет, возвращаем максимальную частоту
+            max_freq = max(self._n_gram_trie.uni_grams.values())
+            for key, value in self._n_gram_trie.uni_grams.items():
+                if max_freq == value:
+                    return key[0]
+
+        max_freq = max(freq_dict.values())
+        for key, value in freq_dict.items():
+            if value == max_freq:
+                return key[-1]
+
 
     def _generate_sentence(self, context: tuple) -> tuple:
         pass
