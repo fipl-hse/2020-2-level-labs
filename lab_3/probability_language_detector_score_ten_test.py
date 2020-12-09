@@ -62,7 +62,7 @@ class ProbabilityLanguageDetectorTest(unittest.TestCase):
                                                                         n3_gram_unknown.n_grams)
         print(f'English_sentence_prob: {english_prob}')
         print(f'Deutsch_sentence_prob: {german_prob}')
-        self.assertTrue(english_prob > german_prob)
+        self.assertTrue(english_prob < german_prob)
 
     def test_probability_language_detector_calculate_probability_incorrect_storage(self):
         language_detector = ProbabilityLanguageDetector((2, 3), 10)
