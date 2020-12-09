@@ -39,7 +39,7 @@ def main():
     load_model('model.txt')
 
     return actual == expected
-    
+
 
 if __name__ == "__main__":
     RESULT = main()
