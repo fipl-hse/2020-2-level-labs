@@ -17,7 +17,6 @@ def tokenize_by_sentence(text: str) -> tuple:
             tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
             if tokens:
                 list_tokens.extend(tokens + ['<END>'])
-
     return tuple(list_tokens)
 
 
@@ -37,7 +36,6 @@ class WordStorage:
             raise ValueError
         if word not in self.storage:
             raise KeyError
-
         return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
