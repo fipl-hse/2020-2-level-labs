@@ -140,8 +140,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
     def _calculate_maximum_likelihood(self, word: int, context: tuple) -> float:
 
-        if not isinstance(context, tuple) or not isinstance(word, int) or len(context) != self._n_gram_trie.size - 1 \
-                or (word,) not in list(self._n_gram_trie.uni_grams.keys()):
+        if (not isinstance(context, tuple) or not isinstance(word, int) or len(context) != self._n_gram_trie.size - 1
+                or (word,) not in list(self._n_gram_trie.uni_grams.keys())):
             raise ValueError
 
         if context + (word,) not in self._n_gram_trie.n_grams:
@@ -155,14 +155,12 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
     def _generate_next_word(self, context: tuple) -> int:
 
-        if not isinstance(context, tuple) or len(context) != self._n_gram_trie.size - 1 or \
-                not all([context_id <= len(self._word_storage.storage) for context_id in context]):
+        if (not isinstance(context, tuple) or len(context) != self._n_gram_trie.size - 1 or
+                not all([context_id <= len(self._word_storage.storage) for context_id in context])):
             raise ValueError
 
         likelihoods = {}
         for word_id in self._word_storage.storage_by_id.keys():
-            if word_id not in likelihoods:
-                likelihoods[word_id] = self._calculate_maximum_likelihood(word_id, context)
             likelihoods[word_id] = self._calculate_maximum_likelihood(word_id, context)
 
         likelihoods_sorted = list(likelihoods.items())
@@ -176,12 +174,26 @@ class BackOffGenerator(NGramTextGenerator):
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
         self._n_gram_tries = (n_gram_trie,) + args
+        self._n_gram_tries_by_size = {}
+        self.fill_n_gram_tries()
+
+    def fill_n_gram_tries(self):
+
+        for n_gram_trie in self._n_gram_tries:
+            if n_gram_trie.size not in self._n_gram_tries_by_size:
+                self._n_gram_tries_by_size[n_gram_trie.size] = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
 
-        for n_gram_trie in self._n_gram_tries:
-            if not isinstance(context, tuple) or not isinstance(n_gram_trie, NGramTrie) or \
-                    len(context) != n_gram_trie.size - 1:
+        if (not isinstance(context, tuple) or not all([context_id <= len(self._word_storage.storage)
+                                                       for context_id in context])):
+            raise ValueError
+
+        for generate_attempt in range(len(self._n_gram_tries)):
+
+            n_gram_trie = self._n_gram_tries_by_size[len(context) + 1]
+
+            if not isinstance(n_gram_trie, NGramTrie) or len(context) != n_gram_trie.size - 1:
                 raise ValueError
 
             n_gram_context = [n_gram for n_gram in n_gram_trie.n_gram_frequencies.keys()
