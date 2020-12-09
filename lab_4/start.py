@@ -38,9 +38,9 @@ def main():
     save_model(generator, 'model.txt')
     load_model('model.txt')
 
-    RESULT = actual == expected
-    assert RESULT, 'Language genenerator work incorrect'
-
+    return actual == expected
+    
 
 if __name__ == "__main__":
-    main()
+    RESULT = main()
+    assert RESULT, 'Language genenerator work incorrect'
