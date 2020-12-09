@@ -4,8 +4,8 @@ Tests for NGramTextGenerator class
 """
 
 import unittest
-from lab_4.main import NGramTextGenerator, WordStorage, encode_text
-from lab_4.ngrams.ngram_trie import NGramTrie
+from main import NGramTextGenerator, WordStorage, encode_text
+from ngrams.ngram_trie import NGramTrie
 
 
 class NGramTextGeneratorTest(unittest.TestCase):
@@ -159,6 +159,43 @@ class NGramTextGeneratorTest(unittest.TestCase):
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, generator._generate_sentence, bad_input)
 
+    def test_ngram_text_generator_end_at_the_beginning(self):
+        """"
+        should generate a sentence without <END> in any other position except the end of the sentence
+        """
+        corpus = ('i', 'like', 'to', 'read', '<END>',
+                  'he', 'likes', 'to', 'read', 'too',
+                  'i', 'like', 'a', 'book', 'called', '"Harry Potter"', '<END>',
+                  'he', 'likes', 'another', 'book', '<END>',
+                  'he', 'does', 'not', 'tell', 'me', 'name', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+        encoded = encode_text(storage, corpus)
+        trie = NGramTrie(2, encoded)
+        context = (storage.get_id('<END>'),)
+
+        last_generated = storage.get_id('<END>')
+
+        generator = NGramTextGenerator(storage, trie)
+        actual = generator._generate_sentence(context)
+
+        self.assertEqual(last_generated, actual[-1])
+        self.assertEqual(1, actual.count(storage.get_id('<END>')))
+
+    def test_ngram_text_generator_identical_words(self):
+        corpus = ('deadline', 'deadline', 'deadline', 'deadline', 'deadline', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+        encoded = encode_text(storage, corpus)
+        trie = NGramTrie(3, encoded)
+        context = (storage.get_id('deadline'), storage.get_id('deadline'))
+
+        generator = NGramTextGenerator(storage, trie)
+        actual = generator._generate_sentence(context)
+
+        self.assertEqual(20 + len(context) + 1, len(actual))  # +1 it is for <END>
 # ---------------------------------------------------------------------------------
 
     def test_generate_text_ideal(self):

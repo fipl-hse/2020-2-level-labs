@@ -87,6 +87,8 @@ class NGramTextGenerator:
                 break
         else:
             generated_sent.append(self._word_storage.storage['<END>'])
+        if generated_sent[len(context) - 1] == self._word_storage.get_id('<END>'):
+            generated_sent = generated_sent[len(context):]
         return tuple(generated_sent)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
@@ -96,8 +98,8 @@ class NGramTextGenerator:
         generated_text = []
         for _ in range(number_of_sentences):
             new_sent = self._generate_sentence(context)
-            if new_sent[len(context) - 1] == self._word_storage.get_id('<END>'):
-                new_sent = new_sent[len(context):]
+            # if new_sent[len(context) - 1] == self._word_storage.get_id('<END>'):
+            #     new_sent = new_sent[len(context):]
             generated_text.extend(list(new_sent))
             context = new_sent[-len(context):]
         return tuple(generated_text)
