@@ -6,17 +6,7 @@ from ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    if not isinstance(text, str):
-        raise ValueError
 
-    sentences = re.split('[!?.] |[!?.]\n', text)
-    list_tokens = []
-    for sentence in sentences:
-        tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
-        if tokens:
-            list_tokens.extend(tokens + ['<END>'])
-
-    return tuple(list_tokens)
 
 
 class WordStorage:
@@ -24,29 +14,14 @@ class WordStorage:
         self.storage = {}
 
     def _put_word(self, word: str):
-        if not isinstance(word, str) or not word:
-            raise ValueError
 
-        if word not in self.storage:
-            self.storage[word] = len(self.storage) + 1
-        return self.storage[word]
 
     def get_id(self, word: str) -> int:
-        if not isinstance(word, str) or not word:
-            raise ValueError
 
-        if word not in self.storage:
-            raise KeyError
-        return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
-        if not isinstance(word_id, int) or not word_id:
-            raise ValueError
 
-        for word, w_id in self.storage.items():
-            if w_id == word_id:
-                return word
-        raise KeyError
+
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple):
