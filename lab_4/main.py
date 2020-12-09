@@ -5,7 +5,6 @@ Lab 4
 ## added test for empty inputs, incorrect num inputs
 ## added test for save and load model
 
-## to add input handling for input 0 in generate_text
 
 import ast
 from pprint import pprint
@@ -17,6 +16,7 @@ import lab_4.validation
 
 def tokenize_by_sentence(text: str) -> tuple:
     validation.ensure_type((text, str))
+    validation.ensure_not_empty((text, ))
 
     clean_text = re.sub(r'[^.!?\w\s]', '', text)
     tokens = tuple(re.sub(r'([A-Z][\w\s]+)[.!?]?',
@@ -45,6 +45,7 @@ class WordStorage:
 
     def get_id(self, word: str) -> int:
         validation.ensure_type((word, str))
+        validation.ensure_not_empty(word)
 
         return self.storage[word]
 
@@ -58,6 +59,7 @@ class WordStorage:
 
     def get_word(self, word_id: int) -> str:
         validation.ensure_type((word_id, int))
+        validation.ensure_correct_int(word_id, null_is_available=True)
         
         if word_id not in self.reversed_storage:
             self.update_reversed_storage()
@@ -76,6 +78,7 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
         (storage, WordStorage),
         (text, tuple),
         )
+    validation.ensure_not_empty(storage)
 
     return tuple(storage.get_id(word) for word in text)
 
@@ -107,30 +110,33 @@ class NGramTextGenerator:
 
     def _generate_sentence(self, context: tuple) -> tuple:
         validation.ensure_type((context, tuple))
+        validation.ensure_not_empty(context)
 
-        sent = list(context)
+        sent = context
         length = self._n_gram_trie.size - 1
         n_gram = sent[-length:]
         end_id = self._word_storage.get_id('<END>')
         for i in range(20):
-            sent.append(self._generate_next_word(n_gram))
+            sent += (self._generate_next_word(n_gram), )
             if sent[-1] == end_id:
                 break
             n_gram = sent[-length:]
         else:
-            sent.append(end_id)
-        return tuple(sent)
+            sent += (end_id, )
+        return sent
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
         validation.ensure_type(
             (context, tuple),
             (number_of_sentences, int),
             )
+        validation.ensure_not_empty(context)
+        validation.ensure_correct_int(number_of_sentences)
 
-        text = tuple()
+        text = context
         length = self._n_gram_trie.size - 1
         for i in range(number_of_sentences):
-            text += self._generate_sentence(context)[1:]
+            text += self._generate_sentence(context)[length:]
             context = text[-length:]
         return text
 
@@ -143,6 +149,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             (context, tuple),
             )
         validation.ensure_length(context, self._n_gram_trie.size - 1)
+        validation.ensure_correct_int(word, null_is_available=True)
 
         current_n_gram = context + (word, )
         freq = self._n_gram_trie.n_gram_frequencies
@@ -157,16 +164,22 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
     def _generate_next_word(self, context: tuple) -> int:
         validation.ensure_type((context, tuple))
+        validation.ensure_not_empty(context)
+        print(context)
         validation.ensure_length(context, self._n_gram_trie.size - 1)
 
         self._word_storage.update_reversed_storage()
-        likelihood = {
-            self._calculate_maximum_likelihood(word, context): word
-            for word in self._word_storage.reversed_storage
-            }
+
+        likelihood = {}
+        for word in self._word_storage.reversed_storage:
+            if self._calculate_maximum_likelihood(word, context) in likelihood:
+                likelihood[self._calculate_maximum_likelihood(word, context)].append(word)
+            else:
+                likelihood[self._calculate_maximum_likelihood(word, context)] = [word]
+        
         max_likelihood = max(likelihood.keys())
 
-        return likelihood[max_likelihood]
+        return likelihood[max_likelihood][0]
 
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
@@ -174,11 +187,13 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
         (storage, WordStorage),
         (encoded_text, tuple),
         )
+    validation.ensure_not_empty(storage, encoded_text)
 
-    text = ' '.join((storage.get_word(word) for word in encoded_text))
-    text = text.split('<END>')
+    text = ' '.join((storage.get_word(word) for word in encoded_text)) + ' '
+    text = text.split(' <END> ')
+    text = tuple(sent.capitalize() for sent in text)[:-1]
 
-    return tuple(text)
+    return text
 
 
 class BackOffGenerator(NGramTextGenerator):
@@ -191,6 +206,7 @@ class BackOffGenerator(NGramTextGenerator):
 
     def _generate_next_word(self, context: tuple) -> int:
         validation.ensure_type((context, tuple))
+        validation.ensure_not_empty(context)
 
         max_trie_size = len(context) + 1
         self._n_gram_tries = [trie for trie in self._n_gram_tries if trie.size <= max_trie_size]
@@ -207,6 +223,7 @@ def save_model(model: NGramTextGenerator, path_to_saved_model: str):
         (model, NGramTextGenerator),
         (path_to_saved_model, str),
         )
+    validation.ensure_not_empty((path_to_saved_model, ))
 
     #_n_gram_trie = 'encoded_text', 'n_gram_frequencies', 'n_grams', 'size', 'uni_grams'
     _n_gram_trie = {
@@ -253,6 +270,7 @@ def save_model(model: NGramTextGenerator, path_to_saved_model: str):
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
     validation.ensure_type((path_to_saved_model, str))
+    validation.ensure_not_empty((path_to_saved_model, ))
 
     with open(path_to_saved_model, 'r') as file:
         model_dict = file.read()
