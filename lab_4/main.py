@@ -160,7 +160,6 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
     def _generate_next_word(self, context: tuple) -> int:
         validation.ensure_type((context, tuple))
         validation.ensure_not_empty(context)
-        print(context)
         validation.ensure_length(context, self._n_gram_trie.size - 1)
 
         self._word_storage.update_reversed_storage()
