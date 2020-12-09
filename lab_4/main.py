@@ -4,11 +4,14 @@ Lab 4
 
 ## add test for empty inputs
 ## add test for input 0
+## add test load model raise ValueError
 
+import ast
+from pprint import pprint
 import re
 
 from lab_4.ngrams.ngram_trie import NGramTrie
-from lab_4 import validation
+import lab_4.validation
 
 
 def tokenize_by_sentence(text: str) -> tuple:
@@ -26,7 +29,7 @@ class WordStorage:
 
     def __init__(self):
         self.storage = {}
-        self.reverse_storage = {}
+        self.reversed_storage = {}
 
     def _put_word(self, word: str) -> int:
         validation.ensure_type((word, str))
@@ -35,7 +38,7 @@ class WordStorage:
         if word not in self.storage:
             word_id = len(self.storage)
             self.storage[word] = word_id
-            self.reverse_storage[word_id] = word
+            self.reversed_storage[word_id] = word
 
         return self.storage[word]
 
@@ -44,8 +47,8 @@ class WordStorage:
 
         return self.storage[word]
 
-    def update_reverse_storage(self):
-        self.reverse_storage = {
+    def update_reversed_storage(self):
+        self.reversed_storage = {
             key: value for key, value in zip(
                 self.storage.values(),
                 self.storage.keys(),
@@ -55,10 +58,10 @@ class WordStorage:
     def get_word(self, word_id: int) -> str:
         validation.ensure_type((word_id, int))
         
-        if word_id not in self.reverse_storage:
-            self.update_reverse_storage()
+        if word_id not in self.reversed_storage:
+            self.update_reversed_storage()
 
-        return self.reverse_storage[word_id]
+        return self.reversed_storage[word_id]
 
     def update(self, corpus: tuple):
         validation.ensure_type((corpus, tuple))
@@ -155,10 +158,10 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         validation.ensure_type((context, tuple))
         validation.ensure_length(context, self._n_gram_trie.size - 1)
 
-        self._word_storage.update_reverse_storage()
+        self._word_storage.update_reversed_storage()
         likelihood = {
             self._calculate_maximum_likelihood(word, context): word
-            for word in self._word_storage.reverse_storage
+            for word in self._word_storage.reversed_storage
             }
         max_likelihood = max(likelihood.keys())
 
@@ -182,7 +185,7 @@ class BackOffGenerator(NGramTextGenerator):
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
 
-        tries = (n_gram_trie, ) + args
+        tries = [n_gram_trie] + list(args)
         self._n_gram_tries = sorted(tries, key=lambda trie: trie.size)[::-1]
 
     def _generate_next_word(self, context: tuple) -> int:
@@ -199,8 +202,92 @@ class BackOffGenerator(NGramTextGenerator):
 
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
-    pass
+    validation.ensure_type(
+        (model, NGramTextGenerator),
+        (path_to_saved_model, str),
+        )
+
+    #_n_gram_trie = 'encoded_text', 'n_gram_frequencies', 'n_grams', 'size', 'uni_grams'
+    _n_gram_trie = {
+        'encoded_text': model._n_gram_trie.encoded_text,
+        'n_gram_frequencies': model._n_gram_trie.n_gram_frequencies,
+        'n_grams': model._n_gram_trie.n_grams,
+        'size': model._n_gram_trie.size,
+        'uni_grams': model._n_gram_trie.uni_grams,
+        }
+
+    #_word_storage = 'storage', 'reversed_storage'
+    _word_storage = {
+        'storage': model._word_storage.storage,
+        'reversed_storage': model._word_storage.reversed_storage,
+        }
+
+    model_dict = {
+        'name': f'{type(model).__name__}',
+        'data': {
+            '_n_gram_trie' : _n_gram_trie,
+            '_word_storage': _word_storage,
+        }
+    }
+
+    # if *_n_gram_tries
+    if model_dict['name'] == 'BackOffGenerator':
+        _n_gram_tries = []
+
+        for trie in model._n_gram_tries:
+            _n_gram_trie = {
+                'encoded_text': trie.encoded_text,
+                'n_gram_frequencies': trie.n_gram_frequencies,
+                'n_grams': trie.n_grams,
+                'size': trie.size,
+                'uni_grams': trie.uni_grams,
+                }
+            _n_gram_tries.append(_n_gram_trie)
+
+        model_dict['data']['_n_gram_tries'] = _n_gram_tries
+
+    with open(path_to_saved_model, 'w') as file:
+        pprint(model_dict, stream=file, compact=True)
 
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
-    pass
+    validation.ensure_type((path_to_saved_model, str))
+
+    with open(path_to_saved_model, 'r') as file:
+        model_dict = file.read()
+
+    model_dict = ast.literal_eval(model_dict)
+
+    _n_gram_trie = NGramTrie(
+        model_dict['data']['_n_gram_trie']['size'],
+        model_dict['data']['_n_gram_trie']['encoded_text'],
+        )
+    _n_gram_trie.n_gram_frequencies = model_dict['data']['_n_gram_trie']['n_gram_frequencies']
+    _n_gram_trie.n_grams = model_dict['data']['_n_gram_trie']['n_grams']
+    _n_gram_trie.uni_grams = model_dict['data']['_n_gram_trie']['uni_grams']
+
+    _word_storage = WordStorage()
+    _word_storage.storage = model_dict['data']['_word_storage']['storage']
+    _word_storage.reversed_storage = model_dict['data']['_word_storage']['reversed_storage']
+    
+    if model_dict['name'] == 'NGramTextGenerator':
+        generator = NGramTextGenerator(_word_storage, _n_gram_trie)
+    
+    elif model_dict['name'] == 'LikelihoodBasedTextGenerator':
+        generator = LikelihoodBasedTextGenerator(_word_storage, _n_gram_trie)
+
+    elif model_dict['name'] == 'BackOffGenerator':
+        tries = []
+        for trie in model_dict['data']['_n_gram_tries']:
+            _n_gram_trie = NGramTrie(
+                trie['size'],
+                trie['encoded_text'],
+                )
+            _n_gram_trie.n_gram_frequencies = trie['n_gram_frequencies']
+            _n_gram_trie.n_grams = trie['n_grams']
+            _n_gram_trie.uni_grams = trie['uni_grams']
+            tries.append(_n_gram_trie)
+
+        generator = BackOffGenerator(_word_storage, _n_gram_trie, *tries)
+
+    return generator

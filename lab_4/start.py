@@ -2,8 +2,9 @@
 Example of running programm in lab_4
 """
 
-from lab_4.main import tokenize_by_sentence, WordStorage, encode_text, BackOffGenerator
-from lab_4.ngrams.ngram_trie import NGramTrie
+from lab_4.main import tokenize_by_sentence, WordStorage, encode_text
+from lab_4.main import BackOffGenerator, save_model, load_model
+from ngrams.ngram_trie import NGramTrie
 
 
 def main():
@@ -32,7 +33,11 @@ def main():
     print(f'TEXT:\n{text}')
     print('\nEXPECTED WORD AFTER name is IS rex')
     print(f'ACTUAL WORD AFTER name is IS {storage.get_word(actual)}')
+    
+    save_model(generator, 'model.txt')
+    generator = load_model('model.txt')
 
 
 if __name__ == "__main__":
     main()
+
