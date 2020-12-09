@@ -19,7 +19,6 @@ def tokenize_by_sentence(text: str) -> tuple:
         return ()
     if tokens[-1] != '<END>':
         tokens.append('<END>')
-    print(tokens)
     return tuple(tokens)
 
 
@@ -43,8 +42,7 @@ class WordStorage:
 
         if word not in self.storage.keys():
             raise KeyError
-        else:
-            return self.storage.get(word)
+        return self.storage.get(word)
 
 
     def get_word(self, word_id: int) -> str:
