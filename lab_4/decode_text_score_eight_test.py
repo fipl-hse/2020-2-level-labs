@@ -111,7 +111,7 @@ class DecodeCorpusTest(unittest.TestCase):
 
     def test_end(self):
         """
-            Checks that after decoding no end in result
+             Checks that after decoding no end in result
         """
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
