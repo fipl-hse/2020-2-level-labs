@@ -40,11 +40,10 @@ class WordStorage:
     def get_word(self, word_id: int) -> str:
         if not isinstance(word_id, int) or not word_id:
             raise ValueError
-        if word_id not in self.storage.values():
-            raise KeyError
-        for word in self.storage:
-            if self.storage[word] == word_id:
+        for word, word_storage_id in self.storage.items():
+            if word_storage_id == word_id:
                 return word
+        raise KeyError
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple):
@@ -103,6 +102,9 @@ class NGramTextGenerator:
             context = generated_sentence[-(self._n_gram_trie.size - 1):]
             generated_text.extend(list(generated_sentence))
         return tuple(generated_text)
+
+    def public_function(self):
+        pass
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
