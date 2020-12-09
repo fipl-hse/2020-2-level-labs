@@ -44,8 +44,8 @@ class WordStorage:
         if not isinstance(word_id, int) or not word_id:
             raise ValueError
 
-        for word, w_id in self.storage.items():
-            if w_id == word_id:
+        for word in self.storage:
+            if self.storage[word] == word_id:
                 return word
         raise KeyError
 
@@ -73,10 +73,8 @@ class NGramTextGenerator:
 
         same_begin = [n_gram for n_gram in self._n_gram_trie.n_grams if context == n_gram[:len(context)]]
         if same_begin:
-            top_n_grams = sorted(same_begin, key=self._n_gram_trie.n_gram_frequencies.get, reverse=True)
-            return top_n_grams[0][-1]
-        top_ini_grams = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)
-        return top_ini_grams[0][0]
+            return sorted(same_begin, key=self._n_gram_trie.n_gram_frequencies.get, reverse=True)[0][-1]
+        return sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)[0][0]
 
     def _generate_sentence(self, context: tuple) -> tuple:
         if not isinstance(context, tuple):
@@ -113,12 +111,11 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
     def _calculate_maximum_likelihood(self, word: int, context: tuple) -> float:
         if not isinstance(word, int) or not isinstance(context, tuple) or len(context) != self._n_gram_trie.size - 1:
             raise ValueError
-        context_freq = 0.0
 
+        context_freq = 0.0
         for n_gram, freq in self._n_gram_trie.n_gram_frequencies.items():
             if n_gram[:len(context)] == context:
                 context_freq += freq
-
         return self._n_gram_trie.n_gram_frequencies.get(context + (word,), 0) / context_freq if context_freq \
             else context_freq
 
@@ -144,9 +141,22 @@ class BackOffGenerator(NGramTextGenerator):
 
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
+        self._word_storage = word_storage
+        self._n_gram_tries = (n_gram_trie, ) + args
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+        if not isinstance(context, tuple):
+            raise ValueError
+        for word_id in context:
+            if word_id > len(self._word_storage.storage):
+                raise ValueError
+
+        sorted_tries = sorted(self._n_gram_tries, key=lambda n_gram_trie: n_gram_trie.size, reverse=True)
+        for trie in sorted_tries:
+            same_begin = [n_gram for n_gram in trie.n_grams if context[:(trie.size - 1)] == n_gram[:(trie.size - 1)]]
+            if same_begin:
+                return sorted(same_begin, key=trie.n_gram_frequencies.get, reverse=True)[0][-1]
+        return sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)[0][0]
 
     def public_method_3(self):
         pass
