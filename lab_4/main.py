@@ -79,7 +79,7 @@ class NGramTextGenerator:
         self._n_gram_trie = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
-        if not isinstance(context, tuple) or len(context) >= self._n_gram_trie.size or len(context):
+        if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
             raise ValueError
         new_dict = {}
         for key, value in self._n_gram_trie.n_gram_frequencies.items():
