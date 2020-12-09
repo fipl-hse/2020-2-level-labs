@@ -26,7 +26,7 @@ class WordStorage:
         self.value = 1
 
     def _put_word(self, word: str):
-        if not isinstance(word, str) or len(word) == 0:
+        if not isinstance(word, str) or not word:
             raise ValueError
         if word not in self.storage:
             self.storage[word] = self.value
@@ -71,7 +71,6 @@ class NGramTextGenerator:
 
     def _generate_next_word(self, context: tuple) -> int:
         pass
-
     def _generate_sentence(self, context: tuple) -> tuple:
         pass
 
