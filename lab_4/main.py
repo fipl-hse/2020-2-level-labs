@@ -4,7 +4,6 @@ Lab 4
 
 ## add test for empty inputs
 ## add test for input 0
-## add test load model raise ValueError
 
 import ast
 from pprint import pprint

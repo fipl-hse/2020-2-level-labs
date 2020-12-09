@@ -10,7 +10,7 @@ from lab_4.ngrams.ngram_trie import NGramTrie
 
 class SaveModelTest(unittest.TestCase):
     """
-    checks for save_model unction.
+    checks for save_model function.
     """
 
     def test_save_model_ideal(self):
@@ -40,6 +40,30 @@ class SaveModelTest(unittest.TestCase):
 
         for bad_model in bad_inputs:
             self.assertRaises(ValueError, save_model, bad_model, 'my_awesome_model')
+
+    def test_save_model_incorrect(self):
+        """
+        check for save_model function with incorrect inputs
+        """
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(2, encoded)
+
+        generator = NGramTextGenerator(storage, trie)
+
+        bad_inputs = [(), [], 123, None, WordStorage]
+
+        for bad_input in bad_inputs:
+            self.assertRaises(ValueError, save_model, generator, bad_input)
 
 
 class LoadModelTest(unittest.TestCase):
@@ -79,3 +103,12 @@ class LoadModelTest(unittest.TestCase):
         for word, id_num in generator._word_storage.storage.items():
             self.assertTrue(word in loaded_model._word_storage.storage)
             self.assertEqual(id_num, loaded_model._word_storage.storage[word])
+
+    def test_load_model_incorrect(self):
+        """
+        check for load_model function with incorrect inputs
+        """
+        bad_inputs = [(), [], 123, None, WordStorage]
+
+        for bad_input in bad_inputs:
+            self.assertRaises(ValueError, load_model, bad_input)
