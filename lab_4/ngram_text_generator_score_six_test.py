@@ -254,9 +254,9 @@ class NGramTextGeneratorTest(unittest.TestCase):
 
         self.assertEqual(1, actual.count(storage.get_id('<END>')))
 
-    def test_text_generator_generate_long_text(self):
+    def test_text_generator_generate_sentence_includes_context(self):
         """
-        should generate a bigger text and do not crash
+        Checks that class creates correct sentence which starts with context (if <END> not in context)
         """
         corpus = ('i', 'have', 'a', 'cat', 'and', 'a', 'dog', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
@@ -277,6 +277,6 @@ class NGramTextGeneratorTest(unittest.TestCase):
         context = (storage.get_id('a'),
                    storage.get_id('cat'))
 
-        end = storage.get_id('<END>')
-        actual = generator.generate_text(context, 100)
-        self.assertEqual(actual.count(end), 100)
+        actual = generator._generate_sentence(context)
+
+        self.assertEqual(context, actual[:len(context)])
