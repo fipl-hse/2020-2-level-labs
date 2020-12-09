@@ -103,7 +103,7 @@ class NGramTextGenerator:
             if context == key[0:len(context)]:
                 freq_dict[key] = value
 
-        if freq_dict == {}:  # если контекста нет, возвращаем максимальную частоту
+        if freq_dict == {}:  # если контекста нет, возвращаем самое частое слово
             max_freq = max(self._n_gram_trie.uni_grams.values())
             for key, value in self._n_gram_trie.uni_grams.items():
                 if max_freq == value:
@@ -114,12 +114,50 @@ class NGramTextGenerator:
             if value == max_freq:
                 return key[-1]
 
-
     def _generate_sentence(self, context: tuple) -> tuple:
-        pass
+        wrong_circumstances = isinstance(context, bool) or not isinstance(context, tuple) or \
+                              len(context) != self._n_gram_trie.size - 1
+        if wrong_circumstances:
+            raise ValueError
+        sentence = list(context)
+        id_end = self._word_storage.get_id('<END>')
+        index = 0
+        '''
+        while sentence[-1] != id_end:  # пока не будет <END> или 20 итераций, будет поиск контекста
+            if index == 20:
+                sentence.append(id_end)
+                break
+            index += 1
+            word = self._generate_next_word(context)
+            sentence.append(word)
+        return tuple(sentence)
+        '''
+        while True:
+            if index == 20:
+                sentence.append(id_end)
+                break
+            index += 1
+            word = self._generate_next_word(context)
+            sentence.append(word)
+            if sentence[-1] == id_end:
+                break
+        return tuple(sentence)
+
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
-        pass
+        wrong_circumstances = isinstance(context, bool) or not isinstance(context, tuple) or \
+                              len(context) != self._n_gram_trie.size - 1 or isinstance(number_of_sentences, bool) or \
+                              not isinstance(number_of_sentences, int) or number_of_sentences <= 0
+        if wrong_circumstances:
+            raise ValueError
+        text = []
+        for index in range(number_of_sentences):
+            sentence = list(self._generate_sentence(context))  # сгенерированное предложение
+            context = tuple(sentence[len(sentence) - len(context): len(sentence)])  # новый контекст
+            sentence = sentence[0:len(sentence) - len(context)]
+            text.extend(sentence)
+            print(text)
+        return tuple(text)
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
