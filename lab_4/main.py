@@ -199,9 +199,11 @@ class BackOffGenerator(NGramTextGenerator):
             n_gram_context = [n_gram for n_gram in n_gram_trie.n_gram_frequencies.keys()
                               if n_gram[:len(context)] == context]
 
-            if not n_gram_context:
+            if not n_gram_context and len(context) > 1:
                 context = context[:-1]
                 continue
+            elif not n_gram_context and len(context) == 1:
+                return self.get_top_word()
 
             n_gram_context_freq = [n_gram_trie.n_gram_frequencies[n_gram] for n_gram in n_gram_context]
             n_gram_top = n_gram_context[n_gram_context_freq.index(max(n_gram_context_freq))]
