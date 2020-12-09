@@ -256,7 +256,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
 
     def test_text_generator_generate_long_text(self):
         """
-        should generate a bigger text and do crash
+        should generate a bigger text and do not crash
         """
         corpus = ('i', 'have', 'a', 'cat', 'and', 'a', 'dog', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
