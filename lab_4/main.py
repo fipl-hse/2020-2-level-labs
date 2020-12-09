@@ -93,7 +93,11 @@ class NGramTextGenerator:
         self._n_gram_trie = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+        wrong_circumstances = isinstance(context, bool) or not isinstance(context, tuple) or \
+                              len(context) != self._n_gram_trie.size
+        if wrong_circumstances:
+            raise ValueError
+        
 
     def _generate_sentence(self, context: tuple) -> tuple:
         pass
