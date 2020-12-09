@@ -8,8 +8,6 @@ from math import log
 from statistics import mean
 
 
-
-
 # 4
 def tokenize_by_sentence(text: str) -> tuple:
     """
