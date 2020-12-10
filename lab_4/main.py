@@ -79,8 +79,8 @@ class NGramTextGenerator:
         self._n_gram_trie = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
-        '''or len(context) + 1 != self._n_gram_trie.size'''
-        if not isinstance(context, tuple):
+
+        if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
             raise ValueError
         new_dict = {}
         for key, value in self._n_gram_trie.n_gram_frequencies.items():
@@ -102,29 +102,28 @@ class NGramTextGenerator:
         if not isinstance(context, tuple):
             raise ValueError
         sentence = list(context)
-        for word in range(1, 20):
-            next_word_id = self._generate_next_word(tuple(sentence))
+        n = len(context)
+        while True:
+            next_word_id = self._generate_next_word(tuple(sentence[-n:]))
             sentence.append(next_word_id)
             if self._word_storage.get_word(next_word_id) == '<END>':
                 return tuple(sentence)
+            if len(sentence) == 19:
+                break
         sentence.append(self._word_storage.get_id('<END>'))
         return tuple(sentence)
-
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
         if not isinstance(context, tuple) or not isinstance(number_of_sentences, int):
             raise ValueError
         text = []
         sentence = context
-        print(1, sentence)
         for x in range(0, number_of_sentences):
             sentence = self._generate_sentence(sentence)
-            print(2, sentence)
             text.extend(sentence)
             sentence = sentence[:-1]
-            print(3, sentence)
-        print(tuple(text))
         return tuple(text)
+
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
@@ -172,11 +171,9 @@ class BackOffGenerator(NGramTextGenerator):
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
     result = []
-    print(encoded_text)
     for word in encoded_text:
         result.append(storage.get_word(word))
     print(result)
-
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
     pass
