@@ -10,8 +10,8 @@ from lab_4.main import NGramTextGenerator
 
 
 if __name__ == '__main__':
-    text = 'I have a cat. His name is Bruno. I have a dog too. His name is Rex. Her name is Rex too.'
-    tokenized_text = tokenize_by_sentence(text)
+    TEXT = 'I have a cat. His name is Bruno. I have a dog too. His name is Rex. Her name is Rex too.'
+    tokenized_text = tokenize_by_sentence(TEXT)
 
     word_storage = WordStorage()
     word_storage.update(tokenized_text)

@@ -106,8 +106,8 @@ class NGramTextGenerator:
         g_sentence = list(context[:self._n_gram_trie.size - 1])
 
         for _ in range(20):
-            tu = tuple(g_sentence[-(self._n_gram_trie.size - 1):])
-            g_sentence.append(self._generate_next_word(tu))
+            word_in_sentence = tuple(g_sentence[-(self._n_gram_trie.size - 1):])
+            g_sentence.append(self._generate_next_word(word_in_sentence))
 
             if self._word_storage.get_id('<END>') in g_sentence[:-len(context)]:
                 g_sentence = g_sentence[g_sentence.index(self._word_storage.get_id('<END>')) + 1:]
@@ -134,6 +134,9 @@ class NGramTextGenerator:
 
         return tuple(gen_text)
 
+    def public_method(self):
+        pass
+
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
@@ -148,8 +151,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                 c_freq += freq
         if c_freq:
             return self._n_gram_trie.n_gram_frequencies.get(context + (word,), 0) / c_freq
-        else:
-            return c_freq
+        return c_freq
 
     def _generate_next_word(self, context: tuple) -> int:
 
@@ -169,6 +171,9 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         top = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)
         return top[0][0]
 
+    def public_method_1(self):
+        pass
+
 
 class BackOffGenerator(NGramTextGenerator):
 
@@ -176,6 +181,9 @@ class BackOffGenerator(NGramTextGenerator):
         super().__init__(word_storage, n_gram_trie)
 
     def _generate_next_word(self, context: tuple) -> int:
+        pass
+
+    def public_method_2(self):
         pass
 
 
