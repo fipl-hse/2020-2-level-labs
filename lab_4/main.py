@@ -109,13 +109,9 @@ class NGramTextGenerator:
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
         if not isinstance(context, tuple) or not isinstance(number_of_sentences, int):
             raise ValueError
-        text = []
-        sentence = context
         for x in range(number_of_sentences):
-            sentence = self._generate_sentence(sentence)
-            text.extend(sentence)
-            sentence = sentence[-self._n_gram_trie.size + 1:]
-        return tuple(text)
+            context = self._generate_sentence(context[-len(context):])
+        return context
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
@@ -163,10 +159,19 @@ class BackOffGenerator(NGramTextGenerator):
 
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
-    result = []
+    if not isinstance(storage, WordStorage) or not isinstance(encoded_text, tuple):
+        raise ValueError
+    sent_list = []
     for word in encoded_text:
-        result.append(storage.get_word(word))
-
+        sent_list.append(storage.get_word(word))
+    sent_list = ' '.join(sent_list)
+    sent_list = sent_list.split(' <END> ')
+    result = []
+    for sentence in sent_list:
+        if ' <END>' in sentence:
+            sentence = sentence.replace(' <END>', '')
+        result.append(sentence[0].upper() + sentence[1:])
+    return tuple(result)
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
     pass
