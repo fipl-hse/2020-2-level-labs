@@ -1,12 +1,23 @@
 """
 Lab 4
 """
-
+import re
 from ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    pass
+    if not isinstance(text, str):
+        raise ValueError
+
+    text = re.split(r'[.?!]\s', text)
+    text_tokens = []
+    for sentence in text:
+        sentence = re.sub(r'[^\w\s]', '', sentence).lower().split()
+        if sentence:
+            sentence.append('<END>')
+        text_tokens.extend(sentence)
+
+    return tuple(text_tokens)
 
 
 class WordStorage:
