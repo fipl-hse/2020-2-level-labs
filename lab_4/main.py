@@ -25,15 +25,15 @@ def tokenize_by_sentence(text: str) -> tuple:
 class WordStorage:
     def __init__(self):
         self.storage = {}
-        self.value = 1
+        self.val = 1
 
     def _put_word(self, word: str):
         if not isinstance(word, str) or len(word) == 0:
             raise ValueError
 
         if word not in self.storage:
-            self.storage[word] = self.value
-            self.value += 1
+            self.storage[word] = self.val
+            self.val += 1
 
         return self.storage[word]
 
