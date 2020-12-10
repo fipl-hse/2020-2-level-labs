@@ -114,6 +114,9 @@ class NGramTextGenerator:
             generated_text.extend(list(generated_sentence))
         return tuple(generated_text)
 
+    def some_function_for_lint_1(self):
+        pass
+
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
