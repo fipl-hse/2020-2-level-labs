@@ -143,9 +143,24 @@ class BackOffGenerator(NGramTextGenerator):
 
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
+        self._n_gram_tries = tuple([n_gram_trie] + list(args))
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+        if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size or \
+                context[0] > len(self._word_storage.storage):
+            raise ValueError
+
+        full_context = self.get_most_frequent_gram(context)
+        i = 0
+        while not full_context:
+            i += 1
+            try:
+                self._n_gram_trie = self._n_gram_tries[i]
+                full_context = self.get_most_frequent_gram(context)
+            except IndexError:
+                full_context = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
+
+        return full_context[-1]
 
     def get_auxiliary_param(self):
         pass
@@ -170,8 +185,37 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
 
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
-    pass
+    if not isinstance(model, NGramTextGenerator) or not isinstance(path_to_saved_model, str):
+        raise ValueError
+    copy_class_trie = model._n_gram_trie.__dict__.copy()
+
+    copy_class_trie['n_gram_frequencies'] = {str(key): value
+                                             for key, value in model._n_gram_trie.n_gram_frequencies.items()}
+    copy_class_trie['uni_grams'] = {str(key): value
+                                    for key, value in model._n_gram_trie.uni_grams.items()}
+    fields = {
+        '_word_storage': model._word_storage.__dict__,
+        '_n_gram_trie': copy_class_trie
+    }
+
+    import json
+    with open(path_to_saved_model+'.json', 'w', encoding='utf8') as file_save:
+        json.dump(fields, file_save, ensure_ascii=False, indent=4)
 
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
-    pass
+    if not isinstance(path_to_saved_model, str):
+        raise ValueError
+    import json
+    with open(path_to_saved_model + '.json', 'r') as json_file:
+        generator_json = json.load(json_file)
+        words = WordStorage()
+        words.storage = generator_json['_word_storage']['storage']
+        trie = NGramTrie(generator_json['_n_gram_trie']['size'], (0, 1))
+        trie.encoded_text = generator_json['_n_gram_trie']['encoded_text']
+        trie.n_grams = generator_json['_n_gram_trie']['n_grams']
+        trie.n_gram_frequencies = {eval(key): value
+                                   for key, value in generator_json['_n_gram_trie']['n_gram_frequencies'].items()}
+        trie.uni_grams = {eval(key): value
+                          for key, value in generator_json['_n_gram_trie']['uni_grams'].items()}
+        return NGramTextGenerator(words, trie)
