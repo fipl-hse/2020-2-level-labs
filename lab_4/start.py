@@ -22,7 +22,7 @@ def realize_likelihood_generator(text):
     likelihood_storage.update(text)
     context = (likelihood_storage.get_id('i'),
                likelihood_storage.get_id('shall'),)
-    model = load_model('likelihood_model.json')
+    model = load_model('lab_4/likelihood_model.json')
     generator = LikelihoodBasedTextGenerator(model.word_storage, model.n_gram_trie)
     likelihood_text_generated = generator.generate_text(context, 3)
 
@@ -45,7 +45,7 @@ def realize_backoff_generator(text):
 
 if __name__ == '__main__':
 
-    with open('corpus.txt', 'r') as f:
+    with open('lab_4/corpus.txt', 'r') as f:
         text_str = f.read()
 
     corpus = tokenize_by_sentence(text_str)
@@ -58,3 +58,6 @@ if __name__ == '__main__':
 
     backoff_text = realize_backoff_generator(corpus)
     print(backoff_text)
+
+    RESULT = backoff_text
+    assert RESULT, ''
