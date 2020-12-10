@@ -102,6 +102,9 @@ class NGramTextGenerator:
             context = tuple(generated_text[-len(context):])
         return tuple(generated_text)
 
+    def public_method_one(self):
+        pass
+
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
     def _calculate_maximum_likelihood(self, word: int, context: tuple) -> float:
@@ -132,6 +135,9 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         if not frequency:
             word = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
         return word
+
+    def public_method_two(self):
+        pass
 
 
 class BackOffGenerator(NGramTextGenerator):
