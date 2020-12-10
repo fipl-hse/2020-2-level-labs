@@ -92,15 +92,18 @@ class NGramTextGenerator:
         return tuple(list_cont)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
-        if not isinstance(context, tuple) or not isinstance(number_of_sentences, int):
+        if not isinstance(context, tuple) or not isinstance(number_of_sentences, int) \
+                or isinstance(number_of_sentences, bool):
             raise ValueError
+
         text = []
         for i in range(number_of_sentences):
-            sent = self._generate_sentence(context)
-            if sent[len(context) - 1] == self._word_storage.storage['<END>']:
-                sent = sent[len(context):]
-                text.extend(sent)
-                context = tuple(text[-len(context):])
+            new_sentence = self._generate_sentence(context)
+
+            if new_sentence[len(context) - 1] == self._word_storage.storage['<END>']:
+                new_sentence = new_sentence[len(context):]
+            text.extend(new_sentence)
+            context = tuple(text[-len(context):])
         return tuple(text)
 
 
