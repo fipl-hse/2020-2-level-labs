@@ -88,10 +88,10 @@ class NGramTextGenerator:
          for i in range (20):
              word=self._generate_next_word(context)
              list_cont.append(word)
-             if list_cont [-1]!= self._word_storage.storage['<END>']:
-                 list_cont.append(self._word_storage.storage['<END>'])
-             else:
+             if list_cont [-1]== self._word_storage.storage['<END>']:
                  break
+         else:
+             list_cont.append(self._word_storage.storage['<END>'])
          return tuple(list_cont)
 
 
@@ -107,6 +107,8 @@ class NGramTextGenerator:
                 sent=sent [len(context):]
             text.extend(sent)
             context=tuple(text[-len(context):])
+
+
         return tuple(text)
 
 
