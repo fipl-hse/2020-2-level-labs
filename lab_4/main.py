@@ -28,7 +28,7 @@ class WordStorage:
         if not isinstance(word, str) or not word:
             raise ValueError
         if word not in self.storage:
-               self.storage[word] = len(self.storage) + 1
+            self.storage[word] = len(self.storage) + 1
         return self.storage[word]
 
     def get_id(self, word: str) -> int:
@@ -105,7 +105,6 @@ class NGramTextGenerator:
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
-
     def _calculate_maximum_likelihood(self, word: int, context: tuple) -> float:
         if not isinstance(word, int) or not isinstance(context, tuple) or not context \
                 or len(context) != self._n_gram_trie.size - 1:
@@ -137,7 +136,6 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
 
 class BackOffGenerator(NGramTextGenerator):
-
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
         self._n_gram_tries = (n_gram_trie, *args)
@@ -161,6 +159,7 @@ class BackOffGenerator(NGramTextGenerator):
 
     def public_method_3(self):
         pass
+
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
     if not isinstance(storage, WordStorage) or not isinstance(encoded_text, tuple):
