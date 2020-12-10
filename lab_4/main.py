@@ -105,5 +105,5 @@ class BackOffGenerator(NGramTextGenerator):
         pass
 
 
-def load_model(path_to_saved_model: str) -> NGramTextGenerator:
+    def load_model(path_to_saved_model: str) -> NGramTextGenerator:
         pass
