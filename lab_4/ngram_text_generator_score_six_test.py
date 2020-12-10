@@ -4,7 +4,7 @@ Tests for NGramTextGenerator class
 """
 
 import unittest
-from lab_4.main import NGramTextGenerator, WordStorage, encode_text
+from main import NGramTextGenerator, WordStorage, encode_text
 from ngrams.ngram_trie import NGramTrie
 
 

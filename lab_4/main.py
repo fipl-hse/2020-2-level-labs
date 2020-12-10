@@ -92,15 +92,14 @@ class NGramTextGenerator:
             if value == max(self._n_gram_trie.uni_grams.values()):
                 return key[0]
 
-
     def _generate_sentence(self, context: tuple) -> tuple:
         if not isinstance(context, tuple):
             raise ValueError
         sentence = list(context)
-        n = len(context)
         counter = 0
         while counter != 20:
-            next_word_id = self._generate_next_word(tuple(sentence[-n:]))
+            print(1, sentence[-self._n_gram_trie.size + 1:])
+            next_word_id = self._generate_next_word(tuple(sentence[-self._n_gram_trie.size + 1:]))
             sentence.append(next_word_id)
             if self._word_storage.get_word(next_word_id) == '<END>':
                 return tuple(sentence)
@@ -116,7 +115,7 @@ class NGramTextGenerator:
         for x in range(number_of_sentences):
             sentence = self._generate_sentence(sentence)
             text.extend(sentence)
-            sentence = sentence[1:]
+            sentence = sentence[-self._n_gram_trie.size + 1:]
         return tuple(text)
 
 
