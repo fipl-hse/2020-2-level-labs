@@ -5,24 +5,21 @@ import re
 from ngrams.ngram_trie import NGramTrie
 
 
-    def tokenize_by_sentence(text: str) -> tuple: # Функция принимает на вход текст и возвращает кортеж токенов
-        if not isinstance(text, str):
-            raise ValueError    #В качестве разделителя используется завершающий пунктуационный знак, пробел и факт того, что следующее слово начинается с большой буквы.
-        if text == '' or text.isnumeric(): #В качестве разделителя используется завершающий пунктуационный знак, пробел и факт того, что следующее слово начинается с большой буквы.
+def tokenize_by_sentence(text: str) -> tuple:
+    if not isinstance(text, str):
+        raise ValueError
 
-        return ()
+    sentences = re.split('[!?.] |[!?.]\n', text)
+    list_tokens = []
+    for sentence in sentences:
+        tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
+        if tokens:
+            list_tokens.extend(tokens + ['<END>'])
 
-        sentences = re.split('[!?.] |[!?.]\n', text) # разделяет текст на предложения
-        list_tokens = []
-        for sentence in sentences:
-            tokens = re.sub('[^a-z \n]', '', sentence.lower()).split() # разделяем предложения на слова
-            if tokens:
-                list_tokens.extend(tokens + ['<END>']) # text = 'I have a cat.\nHis name is Bruno' --> ('i', 'have', 'a', 'cat', '<END>' ,'his', 'name', 'is', 'bruno', '<END>')
-
-        return tuple(list_tokens)
+    return tuple(list_tokens)
 
 
-class WordStorage:      # создаем класс где храним слова(токены)
+class WordStorage:  
     def __init__(self):
         self.storage = {}
 
@@ -40,7 +37,7 @@ class WordStorage:      # создаем класс где храним слов
 
         if word not in self.storage:
             raise KeyError
-
+        return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
         if not isinstance(word_id, int):
