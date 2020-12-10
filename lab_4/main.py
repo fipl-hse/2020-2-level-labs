@@ -41,11 +41,10 @@ class WordStorage:
     def get_word(self, word_id: int) -> str:
         if not isinstance(word_id, int) or not word_id:
             raise ValueError
-        if word_id not in self.storage.values():
-            raise KeyError
         for word, w_id in self.storage.items():
             if word_id == w_id:
                 return word
+        raise KeyError
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple):
@@ -141,10 +140,10 @@ class BackOffGenerator(NGramTextGenerator):
         self._n_gram_tries = (n_gram_trie, *args)
 
     def _generate_next_word(self, context: tuple) -> int:
-        if not isinstance(context, tuple):
+        if not isinstance(context, tuple) or not context:
             raise ValueError
-        for word_id in context:
-            if word_id > len(self._word_storage.storage):
+        for word in context:
+            if word not in self._word_storage.storage.values():
                 raise ValueError
         frequent_word = ''
         word_frequency = 0
