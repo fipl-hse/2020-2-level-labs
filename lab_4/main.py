@@ -9,7 +9,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         raise ValueError
 
-    sentences = re.split('[.?!]\W', text)
+    sentences = re.split(r'[.?!]\W', text)
     tokens = []
     for sentence in sentences:
         list_tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
@@ -47,7 +47,8 @@ class WordStorage:
             raise KeyError
         for key, value in self.storage.items():
             if value == word_id:
-                return key
+                res = key
+        return res
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple) or not tuple:
@@ -73,7 +74,6 @@ class NGramTextGenerator:
         self._word_storage = word_storage
         self._n_gram_trie = n_gram_trie
 
-
     def _generate_next_word(self, context: tuple) -> int:
         if not isinstance(context, tuple) or not all(isinstance(num, int) for num in context)\
                 or self._n_gram_trie.size != len(context) + 1:
@@ -90,7 +90,6 @@ class NGramTextGenerator:
             return list(word[0] for word, value in self._n_gram_trie.uni_grams.items() if value == max_freq_word)[0]
         return word_ind
 
-
     def _generate_sentence(self, context: tuple) -> tuple:
         if not isinstance(context, tuple) or not all(isinstance(num, int) for num in context):
             raise ValueError
@@ -104,7 +103,6 @@ class NGramTextGenerator:
             sentence.append(self._word_storage.get_id('<END>'))
         return tuple(sentence)
 
-
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
         if not isinstance(context, tuple) or not all(isinstance(num, int) for num in context)\
                 or not isinstance(number_of_sentences, int):
@@ -115,7 +113,6 @@ class NGramTextGenerator:
             sentence = self._generate_sentence(tuple(generated_text[-(self._n_gram_trie.size-1):]))
             generated_text.extend(sentence[self._n_gram_trie.size-1:])
         return tuple(generated_text)
-
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
@@ -135,8 +132,6 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             likelihood = self._n_gram_trie.n_gram_frequencies.get(context_2, 0) / context_freq
         return likelihood
 
-
-
     def _generate_next_word(self, context: tuple) -> int:
         if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size\
                 or not all(isinstance(num, int) for num in context) or context[0] > len(self._word_storage.storage):
@@ -152,13 +147,11 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         return generated_word
 
 
-
-
-
 class BackOffGenerator(NGramTextGenerator):
 
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
+        pass
 
     def _generate_next_word(self, context: tuple) -> int:
         pass
