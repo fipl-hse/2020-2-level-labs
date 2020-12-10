@@ -2,10 +2,9 @@
 Lab 4
 """
 
-
+import re
 from ngrams.ngram_trie import NGramTrie
 
-import re
 
 def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
@@ -46,16 +45,13 @@ class WordStorage:
 
 
     def get_word(self, word_id: int) -> str:
-        if not isinstance(word_id, int):
+        if not isinstance(word_id, int) or not word_id:
             raise ValueError
 
-        if word_id not in self.storage.values():
-            raise KeyError
-
-        for word, id in self.storage.items():
-            if id == word_id:
+        for word, value in self.storage.items():
+            if value == word_id:
                 return word
-
+        raise KeyError
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple):
@@ -76,6 +72,8 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
     return tuple(encoded_text)
 
 
+
+# pylint: disable=too-few-public-methods  
 class NGramTextGenerator:
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie):
         self._word_storage = word_storage
@@ -124,6 +122,8 @@ class NGramTextGenerator:
             context = tuple(generated_text[-len(context):])
         return tuple(generated_text)
 
+
+# pylint: disable=too-few-public-methods  
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
     def _calculate_maximum_likelihood(self, word: int, context: tuple) -> float:
@@ -156,6 +156,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             next_word = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
         return next_word
 
+
+# pylint: disable=too-few-public-methods  
 class BackOffGenerator(NGramTextGenerator):
 
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
