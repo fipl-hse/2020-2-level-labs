@@ -2,6 +2,7 @@
 Lab 4
 """
 import re
+import json
 from ngrams.ngram_trie import NGramTrie
 
 
@@ -172,7 +173,6 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
     text_raw = [[]]
     for word in encoded_text:
         real_word = storage.get_word(word)
-        print(real_word)
         if real_word == '<END>':
             text_raw.append([])
         else:
@@ -184,6 +184,8 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
     return tuple(text_ready)
 
 
+# pylint: disable=protected-access
+# pylint: disable=eval-used
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
     if not isinstance(model, NGramTextGenerator) or not isinstance(path_to_saved_model, str):
         raise ValueError
@@ -197,7 +199,6 @@ def save_model(model: NGramTextGenerator, path_to_saved_model: str):
         '_n_gram_trie': copy_class_trie
     }
 
-    import json
     with open(path_to_saved_model+'.json', 'w', encoding='utf8') as file_save:
         json.dump(fields, file_save, ensure_ascii=False, indent=4)
 
@@ -205,7 +206,7 @@ def save_model(model: NGramTextGenerator, path_to_saved_model: str):
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
     if not isinstance(path_to_saved_model, str):
         raise ValueError
-    import json
+
     with open(path_to_saved_model + '.json', 'r') as json_file:
         generator_json = json.load(json_file)
         words = WordStorage()
