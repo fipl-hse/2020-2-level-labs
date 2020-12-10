@@ -24,8 +24,8 @@ class NGramTrie:
         self.n_grams = tuple(n_grams)
 
         for word in self.encoded_text:
-            if (word, ) not in self.uni_grams:
-                self.uni_grams[(word, )] = self.encoded_text.count(word)
+            if (word,) not in self.uni_grams:
+                self.uni_grams[(word,)] = self.encoded_text.count(word)
 
     def _calculate_n_grams_frequencies(self):
 
@@ -35,5 +35,8 @@ class NGramTrie:
             else:
                 self.n_gram_frequencies[n_gram] = 1
 
-    def public_method_one(self):
+    def public_method_first(self):
+        pass
+
+    def public_method_second(self):
         pass
