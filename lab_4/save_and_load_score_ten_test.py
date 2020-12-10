@@ -31,7 +31,7 @@ class SaveModelTest(unittest.TestCase):
 
         save_model(generator, 'my_awesome_model')
 
-        with open('my_awesome_model', 'r', encoding='utf-8') as file_to_read:
+        with open('my_awesome_model.json', 'r', encoding='utf-8') as file_to_read:
             data = file_to_read.read()
         self.assertTrue(data)
 

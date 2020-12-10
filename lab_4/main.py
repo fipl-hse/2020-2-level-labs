@@ -188,7 +188,6 @@ def save_model(model: NGramTextGenerator, path_to_saved_model: str):
     if not isinstance(model, NGramTextGenerator) or not isinstance(path_to_saved_model, str):
         raise ValueError
     copy_class_trie = model._n_gram_trie.__dict__.copy()
-
     copy_class_trie['n_gram_frequencies'] = {str(key): value
                                              for key, value in model._n_gram_trie.n_gram_frequencies.items()}
     copy_class_trie['uni_grams'] = {str(key): value
@@ -213,7 +212,7 @@ def load_model(path_to_saved_model: str) -> NGramTextGenerator:
         words.storage = generator_json['_word_storage']['storage']
         trie = NGramTrie(generator_json['_n_gram_trie']['size'], (0, 1))
         trie.encoded_text = generator_json['_n_gram_trie']['encoded_text']
-        trie.n_grams = generator_json['_n_gram_trie']['n_grams']
+        trie.n_grams = tuple(tuple(gram) for gram in generator_json['_n_gram_trie']['n_grams'])
         trie.n_gram_frequencies = {eval(key): value
                                    for key, value in generator_json['_n_gram_trie']['n_gram_frequencies'].items()}
         trie.uni_grams = {eval(key): value
