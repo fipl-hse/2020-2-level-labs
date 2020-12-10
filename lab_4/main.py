@@ -22,13 +22,13 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not new_text:
         return ()
     sentences = re.split(r'[.!?] ', new_text)
-    list_letters = []
+    list_words = []
     for sentence in sentences:
         sentence = sentence.lower()
         sentence += ' <END>'
         sentence = sentence.split()
-        list_letters.extend(sentence)
-    return tuple(list_letters)
+        list_words.extend(sentence)
+    return tuple(list_words)
 
 
 class WordStorage:
@@ -88,11 +88,9 @@ class NGramTextGenerator:
         for key, value in new_dict.items():
             if value == max(new_dict.values()):
                 return key[-1]
-        list_of_words = []
-        for key in self._n_gram_trie.n_grams:
-            for word in key:
-                list_of_words.append(word)
-        return max(set(list_of_words), key=list_of_words.count)
+        for key, value in self._n_gram_trie.uni_grams.items():
+            if value == max(self._n_gram_trie.uni_grams.values()):
+                return key[0]
 
 
     def _generate_sentence(self, context: tuple) -> tuple:
@@ -115,13 +113,10 @@ class NGramTextGenerator:
             raise ValueError
         text = []
         sentence = context
-        print(context)
-        for x in range(0, number_of_sentences):
+        for x in range(number_of_sentences):
             sentence = self._generate_sentence(sentence)
             text.extend(sentence)
-            print(sentence)
             sentence = sentence[1:]
-            print(sentence)
         return tuple(text)
 
 
