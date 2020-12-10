@@ -56,10 +56,10 @@ class WordStorage:
             self._put_word(word)
 
 
-    def encode_text(storage: WordStorage, text: tuple) -> tuple:
-        if not isinstance(storage, WordStorage) or not isinstance(text, tuple):
-            raise ValueError
-        return tuple(storage.get_id(word) for word in text)
+def encode_text(storage: WordStorage, text: tuple) -> tuple:
+    if not isinstance(storage, WordStorage) or not isinstance(text, tuple):
+        raise ValueError
+    return tuple(storage.get_id(word) for word in text)
 
 
 class NGramTextGenerator:
