@@ -2,7 +2,7 @@
 Lab 4 implementation starter
 """
 
-from lab_4.main import LikelihoodBasedTextGenerator, encode_text, WordStorage
+from lab_4.main import LikelihoodBasedTextGenerator, encode_text, WordStorage, decode_text
 from lab_4.ngrams.ngram_trie import NGramTrie
 
 if __name__ == '__main__':
@@ -18,12 +18,15 @@ if __name__ == '__main__':
     encoded = encode_text(storage, corpus)
 
     trie = NGramTrie(3, encoded)
-    word = storage.get_id('dog')
-    context = (storage.get_id('have'),
-               storage.get_id('a'),)
+
+    context = (storage.get_id('name'),
+               storage.get_id('is'),)
+    end = storage.get_id('<END>')
 
     generator = LikelihoodBasedTextGenerator(storage, trie)
 
-    EXPECTED = 1 / 2
-    RESULT = generator._calculate_maximum_likelihood(word, context)
+    to_decode = generator.generate_text(context, 2)
+
+    EXPECTED = ('Name is rex', 'Her name is rex')
+    RESULT = decode_text(storage, to_decode)
     assert RESULT == EXPECTED, 'Encoding not working'
