@@ -108,7 +108,7 @@ class NGramTextGenerator:
             raise ValueError
 
         generated_text = []
-        for i in range(number_of_sentences):
+        for _ in range(number_of_sentences):
             generated_sentence = self._generate_sentence(context)
             context = generated_sentence[-len(context):]
             generated_text.extend(list(generated_sentence))

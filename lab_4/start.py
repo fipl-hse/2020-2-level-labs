@@ -9,7 +9,7 @@ from lab_4.main import tokenize_by_sentence, encode_text, decode_text
 
 if __name__ == '__main__':
 
-    text = '''
+    TEXT = '''
            There are many big and small libraries everywhere in our country. 
            They have millions of books in different languages. 
            You can find there the oldest and the newest books.
@@ -21,7 +21,7 @@ if __name__ == '__main__':
            On the table near the window you can always see beautiful spring and autumn flowers.
            Oleg likes to go to the library. He can always find there something new, something he needs.
            '''
-    corpus = tokenize_by_sentence(text)
+    corpus = tokenize_by_sentence(TEXT)
     print(f'TOKENIZE_BY_SENTENCE RESULT: {corpus}\n')
 
     word_storage = WordStorage()
