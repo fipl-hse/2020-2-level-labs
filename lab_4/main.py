@@ -57,13 +57,13 @@ class WordStorage:
         for key, value in self.storage.items():
             if value == word_id:
                 return key
+        raise KeyError
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple):
             raise ValueError
         for word in corpus:
-           self._put_word(word)
-
+            self._put_word(word)
 
 
 def encode_text(storage: WordStorage, text: tuple) -> tuple:
@@ -91,6 +91,7 @@ class NGramTextGenerator:
         for key, value in self._n_gram_trie.uni_grams.items():
             if value == max(self._n_gram_trie.uni_grams.values()):
                 return key[0]
+        raise KeyError
 
     def _generate_sentence(self, context: tuple) -> tuple:
         if not isinstance(context, tuple):
@@ -109,10 +110,12 @@ class NGramTextGenerator:
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
         if not isinstance(context, tuple) or not isinstance(number_of_sentences, int):
             raise ValueError
-        for x in range(number_of_sentences):
+        for _ in range(number_of_sentences):
             context = self._generate_sentence(context[-len(context):])
         return context
 
+    def generate_smth(self):
+        pass
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
@@ -143,11 +146,15 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         for word in context:
             if word not in self._word_storage.storage.values():
                 raise ValueError
-        freq_dict = {value: self._calculate_maximum_likelihood(value, context) for value in self._word_storage.storage.values()}
+        freq_dict = {value: self._calculate_maximum_likelihood(value, context)
+                     for value in self._word_storage.storage.values()}
         for key, value in freq_dict.items():
             if value == max(freq_dict.values()):
                 return key
+        raise KeyError
 
+    def generate_smth(self):
+        pass
 
 class BackOffGenerator(NGramTextGenerator):
 

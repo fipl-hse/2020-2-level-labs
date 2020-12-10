@@ -2,8 +2,8 @@
 Text decoder
 '''
 
-from lab_4.main import encode_text, WordStorage, LikelihoodBasedTextGenerator, decode_text
 from ngrams.ngram_trie import NGramTrie
+from lab_4.main import encode_text, WordStorage, LikelihoodBasedTextGenerator, decode_text
 
 if __name__ == '__main__':
     corpus = ('i', 'have', 'a', 'cat', '<END>',
