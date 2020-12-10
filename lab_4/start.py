@@ -44,7 +44,7 @@ if __name__ == '__main__':
     RESULT = decoded_text
     assert RESULT == ('The walls are light blue',
                       'There are books in english too',
-                      'On the walls you can see pictures of some great writers and poets'), 'Generator does not working'
+                      'On the walls you can see pictures of some great writers and poets'), 'Generator not working'
 
 
 
