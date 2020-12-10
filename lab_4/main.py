@@ -171,7 +171,7 @@ class BackOffGenerator(NGramTextGenerator):
 
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
-        self._n_gram_tries = (n_gram_trie,) + args
+        self._n_gram_tries = sorted((n_gram_trie,) + args, key=lambda x: x.size, reverse=True)
 
     def _generate_next_word(self, context: tuple) -> int:
         if (not isinstance(context, tuple) or
@@ -180,23 +180,20 @@ class BackOffGenerator(NGramTextGenerator):
             raise ValueError
 
         max_size = len(context) + 1
-        self._n_gram_tries = [trie for trie in self._n_gram_tries if trie.size <= max_size]
+        tries = [trie for trie in self._n_gram_tries if trie.size <= max_size]
 
-        for trie in self._n_gram_tries:
-            self._n_gram_trie = trie
+        for trie in tries:
+            if [x for x in trie.n_grams if context[:(trie.size - 1)] == x[:(trie.size - 1)]]:
+                return super()._generate_next_word(context)
 
-            if n_gram := super()._generate_next_word(context):
-                return n_gram
-            context = context[:-1]
-
-        return n_gram
+        return super()._generate_next_word(context)  # for lint
 
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
     if not isinstance(storage, WordStorage) or not isinstance(encoded_text, tuple):
         raise ValueError
 
-    text = ' '.join(storage.get_word(word) for word in encoded_text) + ' '
+    text = f"{' '.join(storage.get_word(word) for word in encoded_text)} "
     text = text.split(' <END> ')
     text = tuple(sent.capitalize() for sent in text)
 
@@ -221,12 +218,6 @@ def load_model(path_to_saved_model: str) -> NGramTextGenerator:
 
     storage = type('WordStorage', (), attrs['_word_storage'])
     trie = type('NGramTrie', (), attrs['_n_gram_trie'])
-
-    class Model(NGramTextGenerator):
-        def __init__(self, word_storage, n_gram_trie):
-            super().__init__(word_storage, n_gram_trie)
-            self.__class__.__name__ = 'NGramTextGenerator'
-
-    model = Model(storage(), trie())
+    model = NGramTextGenerator(storage(), trie())
 
     return model
