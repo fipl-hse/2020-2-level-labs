@@ -173,7 +173,7 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
     result = []
     for word in encoded_text:
         result.append(storage.get_word(word))
-    print(result)
+
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
     pass
