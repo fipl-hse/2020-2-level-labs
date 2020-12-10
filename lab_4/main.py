@@ -90,9 +90,7 @@ class NGramTextGenerator:
 
         new_context = []
         new_context.extend(list(context))
-        counter = 0
-        while counter < 20:
-            counter += 1
+        for _ in range(20):
             new_context.append(self._generate_next_word(tuple(new_context[-len(context):])))
             if new_context[-1] == self._word_storage.storage['<END>']:
                 break
@@ -106,8 +104,7 @@ class NGramTextGenerator:
             raise ValueError
 
         text = []
-        while number_of_sentences:
-            number_of_sentences -= 1
+        for _ in range(number_of_sentences):
             new_sentence = self._generate_sentence(context)
 
             if new_sentence[len(context) - 1] == self._word_storage.storage['<END>']:
