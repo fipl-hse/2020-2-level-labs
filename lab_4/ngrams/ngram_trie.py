@@ -37,6 +37,3 @@ class NGramTrie:
 
     def public_method_one(self):
         pass
-
-    def public_method_two(self):
-        pass
