@@ -188,3 +188,55 @@ class BackOffGeneratorTest(unittest.TestCase):
 
         actual = generator._generate_next_word(context)
         self.assertEqual(expected_word, actual)
+
+# -----------------------------------------------------------------------
+
+    def test_generate_next_word_context_incorrect(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        four = NGramTrie(4, encoded)
+        trie = NGramTrie(3, encoded)
+        two = NGramTrie(2, encoded)
+
+        expected_word = storage.get_id('rex')
+        context = (storage.get_id('name'),
+                   storage.get_id('is'),
+                   storage.get_id('cat'))
+
+        generator = BackOffGenerator(storage, four, two, trie)
+
+        actual = generator._generate_next_word(context)
+        self.assertEqual(expected_word, actual)
+
+    def test_generate_next_word_no_context(self):
+        corpus = ('i', 'watch', 'a', 'horror', 'movie', '<END>',
+                  'would', 'you', 'like', 'to', 'watch' 'with', 'me', '<END>',
+                  'i', 'do', 'not', 'like', 'such', 'films', '<END>',
+                  'i', 'like', 'to', 'watch', 'drama', 'movies', '<END>',
+                  'bye')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        four = NGramTrie(4, encoded)
+        trie = NGramTrie(3, encoded)
+        two = NGramTrie(2, encoded)
+
+        expected_word = storage.get_id('<END>')
+        context = (storage.get_id('bye'),)
+
+        generator = BackOffGenerator(storage, two, four, trie)
+
+        actual = generator._generate_next_word(context)
+        self.assertEqual(expected_word, actual)
