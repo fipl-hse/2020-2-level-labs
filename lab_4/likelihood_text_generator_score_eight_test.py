@@ -73,6 +73,29 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
                               generator._calculate_maximum_likelihood,
                               bad_word, context)
 
+    def test_calculate_likelihood_bad_word(self):     # new test
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+        encoded = encode_text(storage, corpus)
+        trie = NGramTrie(2, encoded)
+
+        bad_inputs = [-9, 1.6]
+        context = (storage.get_id('have'),
+                   storage.get_id('a'),)
+
+        generator = LikelihoodBasedTextGenerator(storage, trie)
+
+        for bad_word in bad_inputs:
+            self.assertRaises(ValueError,
+                              generator._calculate_maximum_likelihood,
+                              bad_word, context)
+
     def test_calculate_likelihood_incorrect_context(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
@@ -85,7 +108,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
         encoded = encode_text(storage, corpus)
         trie = NGramTrie(2, encoded)
 
-        bad_inputs = [[], {}, (2000, 1000, ), None, 9, 9.34, True]  # (2000, 1000, ) -> context for three gram
+        bad_inputs = [[], {}, (2000, 1000, ), None, 9, 9.34, True]
         word = storage.get_id('dog')
 
         generator = LikelihoodBasedTextGenerator(storage, trie)
