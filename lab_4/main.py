@@ -6,28 +6,57 @@ from ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    pass
+    if not isinstance(text, str):
+        raise ValueError
+    sentences = re.split(r'[.?!]', text)
+    tokens_list = []
+    for sentence in sentences:
+        tokens = re.sub(r'[^a-z \n]', '', sentence.lower()).split()
+        if tokens:
+            tokens_list += tokens + ['<END>']
+    return tuple(tokens_list)
 
 
 class WordStorage:
     def __init__(self):
-        pass
+        self.storage = {}
 
     def _put_word(self, word: str):
-        pass
+        if not isinstance(word, str) or not word:
+            raise ValueError
+        if word not in self.storage:
+            self.storage[word] = len(self.storage) + 1
+        return self.storage[word]
 
     def get_id(self, word: str) -> int:
-        pass
+        if not isinstance(word, str) or not word:
+            raise ValueError
+        if word not in self.storage:
+            raise KeyError
+        return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
-        pass
+        if not isinstance(word_id, int) or not word_id:
+            raise ValueError
+        for word, w_id in self.storage.items():
+            if word_id == w_id:
+                return word
+        raise KeyError
 
     def update(self, corpus: tuple):
-        pass
+        if not isinstance(corpus, tuple):
+            raise ValueError
+        for word in corpus:
+            self._put_word(word)
 
 
 def encode_text(storage: WordStorage, text: tuple) -> tuple:
-    pass
+    if not isinstance(storage, WordStorage) or not isinstance(text, tuple):
+        raise ValueError
+    encoded_text = []
+    for word in text:
+        encoded_text.append(storage.get_id(word))
+    return tuple(encoded_text)
 
 
 class NGramTextGenerator:
