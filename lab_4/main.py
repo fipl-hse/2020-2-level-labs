@@ -89,7 +89,7 @@ class NGramTextGenerator:
             if value == max(new_dict.values()):
                 return key[-1]
         list_of_words = []
-        for key in self._n_gram_trie.n_gram_frequencies.keys():
+        for key in self._n_gram_trie.n_grams:
             for word in key:
                 list_of_words.append(word)
         return max(set(list_of_words), key=list_of_words.count)
@@ -100,13 +100,13 @@ class NGramTextGenerator:
             raise ValueError
         sentence = list(context)
         n = len(context)
-        while True:
+        counter = 0
+        while counter != 20:
             next_word_id = self._generate_next_word(tuple(sentence[-n:]))
             sentence.append(next_word_id)
             if self._word_storage.get_word(next_word_id) == '<END>':
                 return tuple(sentence)
-            if len(sentence) == 20:
-                break
+            counter += 1
         sentence.append(self._word_storage.get_id('<END>'))
         return tuple(sentence)
 
