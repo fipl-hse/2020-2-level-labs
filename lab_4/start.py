@@ -4,11 +4,11 @@ from lab_4.main import WordStorage, encode_text, LikelihoodBasedTextGenerator, d
 from lab_4.ngrams.ngram_trie import NGramTrie
 
 if __name__ == '__main__':
-    corpus = ('i', 'have', 'a', 'sister', '<END>',
-              'her', 'name', 'is', 'kate', '<END>',
-              'i', 'have', 'a', 'brother', 'too', '<END>',
-              'his', 'name', 'is', 'samuel', '<END>',
-              'her', 'name', 'is', 'kate', '<END>')
+    corpus = ('i', 'have', 'a', 'cat', '<END>',
+              'his', 'name', 'is', 'bruno', '<END>',
+              'i', 'have', 'a', 'dog', 'too', '<END>',
+              'his', 'name', 'is', 'rex', '<END>',
+              'her', 'name', 'is', 'rex', 'too', '<END>')
 
     storage = WordStorage()
     storage.update(corpus)
@@ -24,4 +24,4 @@ if __name__ == '__main__':
     print(RESULT)
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == ('I have a sister', 'Her name is kate', 'His name is kate'), 'Encoding not working'
+    assert RESULT == ('I have a cat', 'His name is rex', 'Her name is rex'), 'Encoding not working'
