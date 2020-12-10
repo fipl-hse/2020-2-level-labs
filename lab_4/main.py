@@ -102,6 +102,7 @@ class NGramTextGenerator:
             raise ValueError
         text=[]
         for i in range (number_of_sentences):
+            sent=self._generate_sentence(context)
             if sent[len(context)-1]==self._word_storage.storage['<END>']:
                 sent=sent [len(context):]
             text.extend(sent)
