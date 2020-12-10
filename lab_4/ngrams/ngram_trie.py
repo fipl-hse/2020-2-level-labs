@@ -2,7 +2,7 @@
 N-gram model
 """
 
-
+# pylint: disable=too-few-public-methods  
 class NGramTrie:
     def __init__(self, n_gram_size: int, encoded_text: tuple):
         self.size = n_gram_size
