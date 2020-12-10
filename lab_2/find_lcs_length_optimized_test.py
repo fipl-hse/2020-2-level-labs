@@ -6,13 +6,6 @@ import timeit
 import unittest
 from memory_profiler import memory_usage
 from lab_2.main import find_lcs_length_optimized, tokenize_big_file
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/master
-=======
->>>>>>> e596b9f747cc7dc5aa94d98fb9e9624d91f0081d
 
 
 class FindLcsOptimizedTest(unittest.TestCase):

@@ -347,5 +347,3 @@ def tokenize_big_file(path_to_file: str, ids=0) -> tuple:
     with open('id.pkl', 'wb') as out:
         pickle.dump(id_dict, out)
     return tuple(tokens)
-
-
