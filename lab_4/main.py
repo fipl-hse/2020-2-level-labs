@@ -63,10 +63,20 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
 
 class NGramTextGenerator:
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie):
-        pass
+        self._word_storage = word_storage
+        self._n_gram_trie = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+        if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
+            raise ValueError
+        sentence = list(context)
+        for _ in range(20):
+            sentence.append(self._generate_next_word(tuple(sentence[-(len(context)):])))
+            if sentence[-1] == self._word_storage.storage['<END>']:
+                break
+        else:
+            sentence.append(self._word_storage.storage['<END>'])
+        return tuple(sentence)
 
     def _generate_sentence(self, context: tuple) -> tuple:
         pass
