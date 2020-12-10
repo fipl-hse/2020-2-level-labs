@@ -98,12 +98,12 @@ class BackOffGenerator(NGramTextGenerator):
 
 
     def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
-    pass
+        pass
 
 
     def save_model(model: NGramTextGenerator, path_to_saved_model: str):
-    pass
+        pass
 
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
-    pass
+        pass
