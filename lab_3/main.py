@@ -33,7 +33,6 @@ def tokenize_by_sentence(text: str) -> tuple:
             continue
         list_letters.append(tuple(tuple(['_'] + list(token) + ['_']) for token in list_tokens))
 
-
     return tuple(list_letters)
 
 
@@ -194,7 +193,6 @@ class LanguageDetector:
         return 0
 
     @staticmethod
-
     def _calculate_distance(first_n_grams: tuple, second_n_grams: tuple) -> int:
         """
         Calculates distance between top_k n-grams
