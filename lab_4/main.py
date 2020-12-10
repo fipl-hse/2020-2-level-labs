@@ -154,9 +154,9 @@ class BackOffGenerator(NGramTextGenerator):
                     word_frequency = n_gram_frequency
         if not frequent_word:
             frequent_word = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
-            return frequent_word
+        return frequent_word
 
-    def public_method_3(self):
+    def public_method_third(self):
         pass
 
 
