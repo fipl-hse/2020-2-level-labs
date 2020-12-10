@@ -25,4 +25,7 @@ if __name__ == '__main__':
     generator = NGramTextGenerator(storage, trie)
     actual = generator._generate_sentence(context)
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert actual[1] == first_generated, ''
+    RESULT = 0
+    if actual[1] == first_generated:
+        RESULT = 1
+    assert RESULT == 1, ''

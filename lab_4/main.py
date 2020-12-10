@@ -9,12 +9,12 @@ from ngrams.ngram_trie import NGramTrie
 
 def universal_input_checker(*args_checker):
     def dec_func(func):
-        @wraps(func)
+        @wraps(func)   # Переносит информацию (например docstring)
         def wrapper(*args, **kwargs):
             types = args_checker[1:]
             for i, element in enumerate(types):
                 if not isinstance(args[i], element):
-                    raise args_checker[0]
+                    raise args_checker[0]  # f. e. ValueError
             for arg in args:
                 if arg is None:
                     raise args_checker[0]
@@ -63,6 +63,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 
 
 class WordStorage:
+
     def __init__(self):
         self.count = 0
         self.storage = {}
@@ -125,7 +126,7 @@ class NGramTextGenerator:
         next_word_n_gram = ()
         top_word = ()
         top_freq = -1
-        for uni_gram, freq in self.trie.uni_grams.items():
+        for uni_gram, freq in self.trie.uni_grams.items(): # the biggest frequency uni_gram
             if freq > top_freq:
                 top_word = uni_gram
                 top_freq = freq
