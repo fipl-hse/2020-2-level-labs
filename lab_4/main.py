@@ -14,9 +14,8 @@ def tokenize_by_sentence(text: str) -> tuple:
     for sent in sentences:
         tok_sent = re.sub('[^a-z \n]', '', sent.lower()).split()
         if tok_sent:
-            tokens.extend(tok_sent + ['<END>'])
+            tokens.extend(tok_sent+['<END>'])
     return tuple(tokens)
-
 
 class WordStorage:
     def __init__(self):
@@ -37,12 +36,13 @@ class WordStorage:
         return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
-        if not isinstance(word_id, int) or not word_id:
+        if not isinstance(word_id, int):
             raise ValueError
-        for word, w_id in self.storage.items():
-            if word_id == w_id:
+        if word_id not in self.storage.values():
+            raise KeyError
+        for word, id in self.storage.items():
+            if id == word_id:
                 return word
-        raise KeyError
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple):
@@ -85,10 +85,10 @@ class NGramTextGenerator:
         for i in range(20):
             word = self._generate_next_word(context)
             list_cont.append(word)
-            if list_cont[-1] != self._word_storage.storage['<END>']:
-                list_cont.append(self._word_storage.storage['<END>'])
-            else:
+            if list_cont[-1] == self._word_storage.storage['<END>']:
                 break
+        else:
+            list_cont.append(self._word_storage.storage['<END>'])
         return tuple(list_cont)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
@@ -99,8 +99,8 @@ class NGramTextGenerator:
             sent = self._generate_sentence(context)
             if sent[len(context) - 1] == self._word_storage.storage['<END>']:
                 sent = sent[len(context):]
-            text.extend(sent)
-            context = tuple(text[-len(context):])
+                text.extend(sent)
+                context = tuple(text[-len(context):])
         return tuple(text)
 
 
