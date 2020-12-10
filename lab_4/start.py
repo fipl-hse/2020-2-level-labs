@@ -2,8 +2,8 @@
 Text generator implementation starter
 """
 
-import main
-from ngrams.ngram_trie import NGramTrie
+from lab_4.main import tokenize_by_sentence, WordStorage, encode_text, LikelihoodBasedTextGenerator, decode_text
+from lab_4.ngrams.ngram_trie import NGramTrie
 
 
 if __name__ == '__main__':
@@ -21,28 +21,28 @@ if __name__ == '__main__':
     I will have your spam. I love it. I am having spam beaked beans spam and spam! Lovely spam! Wonderful spam! 
     Shut up! Baked beans are off. Well could I have her spam instead of the baked beans then?'''
 
-    corpus = main.tokenize_by_sentence(raw_text)
+    corpus = tokenize_by_sentence(raw_text)
 
-    storage = main.WordStorage()
+    storage = WordStorage()
     storage.update(corpus)
 
-    encoded_text = main.encode_text(storage, corpus)
+    encoded_text = encode_text(storage, corpus)
 
     n_gram_trie = NGramTrie(3, encoded_text)
 
-    generator = main.LikelihoodBasedTextGenerator(storage, n_gram_trie)
+    generator = LikelihoodBasedTextGenerator(storage, n_gram_trie)
 
     context = (storage.get_id('bloody'), storage.get_id('vikings'))
     generated_text = generator.generate_text(context, 5)
 
-    decoded_text = main.decode_text(storage, generated_text)
+    decoded_text = decode_text(storage, generated_text)
 
-    is_working = True
+    IS_WORKING = True
     for sentence in decoded_text:
         if '<END>' in sentence or not sentence[0].isupper() or not sentence[-1].isalpha():
-            is_working = False
+            IS_WORKING = False
 
     print(decoded_text)
 
-    RESULT = is_working
+    RESULT = IS_WORKING
     assert RESULT, 'Not working'
