@@ -62,7 +62,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
         encoded = encode_text(storage, corpus)
         trie = NGramTrie(2, encoded)
 
-        bad_inputs = ({}, tuple(), [], None, 123, -1)
+        bad_inputs = ({}, (), [], None, 123, -1)
         context = (storage.get_id('have'),
                    storage.get_id('a'),)
 
@@ -85,7 +85,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
         encoded = encode_text(storage, corpus)
         trie = NGramTrie(2, encoded)
 
-        bad_inputs = ([], {}, tuple(), (2000, 1000, ), None, 9, 9.34, True)  # (2000, 1000, ) -> context for three gram
+        bad_inputs = ([], {}, (), (2000, 1000, ), None, 9, 9.34, True)  # (2000, 1000, ) -> context for three gram
         word = storage.get_id('dog')
 
         generator = LikelihoodBasedTextGenerator(storage, trie)
@@ -157,7 +157,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
 
         trie = NGramTrie(3, encoded)
 
-        bad_inputs = ([], {}, tuple(), (2000, ), None, 9, 9.34, True)
+        bad_inputs = ([], {}, (), (2000, ), None, 9, 9.34, True)
 
         generator = LikelihoodBasedTextGenerator(storage, trie)
 

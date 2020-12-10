@@ -50,7 +50,7 @@ class TokenizeBySentenceTest(unittest.TestCase):
         Tests that tokenize_by_sentence function
             can handle incorrect input cases
         """
-        bad_inputs = ([], {}, tuple(), None, 9, 9.34, True)
+        bad_inputs = ([], {}, (), None, 9, 9.34, True)
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, tokenize_by_sentence, bad_input)
 

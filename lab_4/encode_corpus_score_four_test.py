@@ -62,7 +62,7 @@ class EncodeCorpusTest(unittest.TestCase):
         Tests that encode_text function
             can handle inappropriate storage instance inputs
         """
-        bad_inputs = (None, 123, 'test', [], {}, tuple())
+        bad_inputs = (None, 123, 'test', [], {}, ())
         corpus = ('i', 'have', 'a', 'cat', '<END>')
 
         for bad_input in bad_inputs:

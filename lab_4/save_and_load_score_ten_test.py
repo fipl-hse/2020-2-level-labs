@@ -36,7 +36,7 @@ class SaveModelTest(unittest.TestCase):
         self.assertTrue(data)
 
     def test_save_model_incorrect(self):
-        bad_inputs = (tuple(), [], 123, None, WordStorage)
+        bad_inputs = ((), [], 123, None, WordStorage)
 
         for bad_model in bad_inputs:
             self.assertRaises(ValueError, save_model, bad_model, 'my_awesome_model')
@@ -60,7 +60,7 @@ class SaveModelTest(unittest.TestCase):
 
         generator = NGramTextGenerator(storage, trie)
 
-        bad_inputs = (tuple(), [], {}, 123, None, WordStorage)
+        bad_inputs = ((), [], {}, 123, None, WordStorage)
 
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, save_model, generator, bad_input)
@@ -108,7 +108,7 @@ class LoadModelTest(unittest.TestCase):
         """
         check for load_model function with incorrect inputs
         """
-        bad_inputs = (tuple(), [], {}, 123, None, WordStorage)
+        bad_inputs = ((), [], {}, 123, None, WordStorage)
 
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, load_model, bad_input)

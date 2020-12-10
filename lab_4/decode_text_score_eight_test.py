@@ -62,7 +62,7 @@ class DecodeCorpusTest(unittest.TestCase):
 
         to_decode = generator.generate_text(context, 2)
 
-        bad_inputs = (tuple(), [], {}, 123, None, NGramTrie)
+        bad_inputs = ((), [], {}, 123, None, NGramTrie)
 
         for bad_storage in bad_inputs:
             self.assertRaises(ValueError, decode_text, bad_storage, to_decode)
@@ -77,7 +77,7 @@ class DecodeCorpusTest(unittest.TestCase):
         storage = WordStorage()
         storage.update(corpus)
 
-        bad_inputs = ([], tuple(), {}, 123, None, NGramTrie)
+        bad_inputs = ([], (), {}, 123, None, NGramTrie)
 
         for bad_decode in bad_inputs:
             self.assertRaises(ValueError, decode_text, storage, bad_decode)
