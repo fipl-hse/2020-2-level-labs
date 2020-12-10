@@ -1,3 +1,5 @@
+"Lab 4 implementation starter"
+
 from lab_4.main import WordStorage, encode_text, LikelihoodBasedTextGenerator, decode_text
 from lab_4.ngrams.ngram_trie import NGramTrie
 
@@ -8,7 +10,7 @@ if __name__ == '__main__':
               'his', 'name', 'is', 'samuel', '<END>',
               'her', 'name', 'is', 'kate', '<END>')
 
-    storage = WordStorage() 
+    storage = WordStorage()
     storage.update(corpus)
     encoded_text = encode_text(storage, corpus)
 
