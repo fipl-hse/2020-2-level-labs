@@ -79,7 +79,6 @@ class NGramTextGenerator:
         self._n_gram_trie = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
-
         if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
             raise ValueError
         new_dict = {}
@@ -89,14 +88,12 @@ class NGramTextGenerator:
         for key, value in new_dict.items():
             if value == max(new_dict.values()):
                 return key[-1]
-        end_freq_dict = {freq[-1]: 0 for freq in self._n_gram_trie.n_gram_frequencies.keys()}
-        for freq in end_freq_dict.keys():
-            for frequency in self._n_gram_trie.n_gram_frequencies.keys():
-                if freq == frequency[-1]:
-                    end_freq_dict[freq] += 1
-        for key, value in end_freq_dict.items():
-            if value == max(end_freq_dict.values()):
-                return key
+        list_of_words = []
+        for key in self._n_gram_trie.n_gram_frequencies.keys():
+            for word in key:
+                list_of_words.append(word)
+        return max(set(list_of_words), key=list_of_words.count)
+
 
     def _generate_sentence(self, context: tuple) -> tuple:
         if not isinstance(context, tuple):
@@ -108,7 +105,7 @@ class NGramTextGenerator:
             sentence.append(next_word_id)
             if self._word_storage.get_word(next_word_id) == '<END>':
                 return tuple(sentence)
-            if len(sentence) == 19:
+            if len(sentence) == 20:
                 break
         sentence.append(self._word_storage.get_id('<END>'))
         return tuple(sentence)
