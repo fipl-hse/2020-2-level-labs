@@ -240,3 +240,23 @@ class BackOffGeneratorTest(unittest.TestCase):
 
         actual = generator._generate_next_word(context)
         self.assertEqual(expected_word, actual)
+
+    def test_generate_next_word_short_context(self):
+        corpus = ('bye', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        four = NGramTrie(4, encoded)
+        trie = NGramTrie(3, encoded)
+        two = NGramTrie(2, encoded)
+
+        expected_word = storage.get_id('bye')
+        context = (storage.get_id('<END>'),)
+
+        generator = BackOffGenerator(storage, two, four, trie)
+
+        actual = generator._generate_next_word(context)
+        self.assertEqual(expected_word, actual)
