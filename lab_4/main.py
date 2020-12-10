@@ -140,6 +140,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         return word
 
 
+# pylint: disable=too-few-public-methods
 class BackOffGenerator(NGramTextGenerator):
 
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
@@ -162,9 +163,6 @@ class BackOffGenerator(NGramTextGenerator):
                 full_context = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
 
         return full_context[-1]
-
-    def get_auxiliary_param(self):
-        pass
 
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
