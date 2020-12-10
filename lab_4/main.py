@@ -98,7 +98,6 @@ class NGramTextGenerator:
         sentence = list(context)
         counter = 0
         while counter != 20:
-            print(1, sentence[-self._n_gram_trie.size + 1:])
             next_word_id = self._generate_next_word(tuple(sentence[-self._n_gram_trie.size + 1:]))
             sentence.append(next_word_id)
             if self._word_storage.get_word(next_word_id) == '<END>':
@@ -167,8 +166,7 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
     result = []
     for word in encoded_text:
         result.append(storage.get_word(word))
-    print(encoded_text)
-    print(result)
+    
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
     pass
