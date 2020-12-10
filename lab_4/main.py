@@ -118,10 +118,13 @@ class NGramTextGenerator:
             raise ValueError
         text = []
         sentence = context
+        print(context)
         for x in range(0, number_of_sentences):
             sentence = self._generate_sentence(sentence)
             text.extend(sentence)
-            sentence = sentence[:-1]
+            print(sentence)
+            sentence = sentence[1:]
+            print(sentence)
         return tuple(text)
 
 
@@ -173,7 +176,8 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
     result = []
     for word in encoded_text:
         result.append(storage.get_word(word))
-
+    print(encoded_text)
+    print(result)
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
     pass
