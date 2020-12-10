@@ -2,15 +2,15 @@
 Lab 4
 """
 
-from lab_4.ngrams.ngram_trie import NGramTrie
 import re
+from lab_4.ngrams.ngram_trie import NGramTrie
 
 def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         raise ValueError
 
-    text = re.sub('[^a-z \.\?\!]', '', text.lower())
-    text = re.sub('[\.\?\!]', ' <END> ', text)
+    text = re.sub(r'[^a-z \.\?\!]', '', text.lower())
+    text = re.sub(r'[\.\?\!]', ' <END> ', text)
     text = re.sub(' +', ' ', text).split(' ')
     prepared_text = [word for word in text if word]
     if prepared_text and prepared_text[-1] != '<END>':
@@ -43,8 +43,8 @@ class WordStorage:
         if not isinstance(word_id, int) or isinstance(word_id, bool):
             raise ValueError
 
-        for word, id in self.storage.items():
-            if id == word_id:
+        for word, id_num in self.storage.items():
+            if id_num == word_id:
                 return word
         raise KeyError
 
@@ -91,7 +91,7 @@ class NGramTextGenerator:
 
         end_id = self._word_storage.get_id('<END>')
         generated_sentence = [word_id for word_id in context[:self._n_gram_trie.size - 1] if end_id not in context]
-        for i in range(20):
+        for _ in range(20):
             new_word = self._generate_next_word(context)
             generated_sentence.append(new_word)
             context = context[:self._n_gram_trie.size - 1] + (new_word,)
