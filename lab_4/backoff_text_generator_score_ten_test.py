@@ -312,28 +312,3 @@ class BackOffGeneratorTest(unittest.TestCase):
 
         for bad_context in bad_inputs:
             self.assertRaises(ValueError, generator.most_freq_word, bad_context)
-
-    def test_most_freq_word_complex(self):
-        corpus = ('i', 'have', 'a', 'cat', '<END>',
-                  'his', 'name', 'is', 'bruno', '<END>',
-                  'i', 'have', 'a', 'dog', 'too', '<END>',
-                  'his', 'name', 'is', 'rex', '<END>',
-                  'her', 'name', 'is', 'rex', 'too', '<END>')
-
-        storage = WordStorage()
-        storage.update(corpus)
-
-        encoded = encode_text(storage, corpus)
-
-        trie = NGramTrie(3, encoded)
-        two = NGramTrie(2, encoded)
-        four = NGramTrie(4, encoded)
-
-        expected_word = storage.get_id('rex')
-        context = (storage.get_id('name'),
-                   storage.get_id('is'),)
-
-        generator = BackOffGenerator(storage, trie, two, four)
-
-        actual = generator.most_freq_word(context)
-        self.assertEqual(expected_word, actual)

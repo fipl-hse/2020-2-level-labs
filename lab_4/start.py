@@ -26,4 +26,4 @@ if __name__ == '__main__':
     print(RESULT)
 
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, 'Encoding not working'
+    assert RESULT == ('I have a cat', 'His name is rex', 'Her name is rex'), 'Encoding not working'
