@@ -69,7 +69,7 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
     return tuple(encoded_text)
 
 
-class NGramTextGenerator:
+class NGramTextGenerator: # pylint: disable=too-few-public-methods
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie):
         self._word_storage = word_storage
         self._n_gram_trie = n_gram_trie
@@ -115,7 +115,7 @@ class NGramTextGenerator:
         return tuple(generated_text)
 
 
-class LikelihoodBasedTextGenerator(NGramTextGenerator):
+class LikelihoodBasedTextGenerator(NGramTextGenerator): # pylint: disable=too-few-public-methods
 
     def _calculate_maximum_likelihood(self, word: int, context: tuple) -> float:
         if not isinstance(word, int) or not isinstance(context, tuple)\
@@ -147,7 +147,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         return generated_word
 
 
-class BackOffGenerator(NGramTextGenerator):
+class BackOffGenerator(NGramTextGenerator): # pylint: disable=too-few-public-methods
 
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
