@@ -2,9 +2,12 @@
 Language detector implementation starter
 """
 
-import lab_3.main
 from lab_3.main import tokenize_by_sentence
+from lab_3.main import encode_corpus
+from lab_3.main import NGramTrie
 from lab_3.main import LetterStorage
+from lab_3.main import ProbabilityLanguageDetector
+
 
 if __name__ == '__main__':
 
@@ -25,6 +28,20 @@ if __name__ == '__main__':
     letter_storage.update(text_ger)
     letter_storage.update(text_unk)
 
-    RESULT = ''
+    eng_encoded = encode_corpus(letter_storage, text_eng)
+    unk_encoded = encode_corpus(letter_storage, text_unk)
+    ger_encoded = encode_corpus(letter_storage, text_ger)
+
+    language_detector = ProbabilityLanguageDetector((3, 4, 5), 1000)
+    language_detector.new_language(eng_encoded, 'english')
+    language_detector.new_language(ger_encoded, 'german')
+
+    ngram_unknown = NGramTrie(4)
+    ngram_unknown.fill_n_grams(unk_encoded)
+
+    actual = language_detector.detect_language(ngram_unknown.n_grams)
+    print(actual)
+
+    RESULT = actual['english'] < actual['german']
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT, ''
+    assert RESULT == 1, ''
