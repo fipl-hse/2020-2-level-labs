@@ -68,8 +68,6 @@ class WordStorage:
         for word in corpus:
             self._put_word(word)
 
-        return
-
 
 def encode_text(storage: WordStorage, text: tuple) -> tuple:
     if not isinstance(storage, WordStorage) or not isinstance(text, tuple):

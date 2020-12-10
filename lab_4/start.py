@@ -1,3 +1,6 @@
+"""
+Lab 4 implementation start.
+"""
 from lab_4.ngrams.ngram_trie import NGramTrie
 from lab_4.main import WordStorage, NGramTextGenerator, LikelihoodBasedTextGenerator, BackOffGenerator, encode_text, \
     decode_text, tokenize_by_sentence, load_model

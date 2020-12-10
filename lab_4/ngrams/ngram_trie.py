@@ -1,7 +1,6 @@
 """
 N-gram model
 """
-from math import log
 
 
 class NGramTrie:
