@@ -2,8 +2,8 @@
 Lab 4
 """
 
-from ngrams.ngram_trie import NGramTrie
 import re
+from ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
@@ -44,7 +44,8 @@ class WordStorage:
 
         if not isinstance(word, str) or not word:
             raise ValueError
-        elif word not in self.storage:
+
+        if word not in self.storage:
             raise KeyError
 
         return self.storage[word]
@@ -53,7 +54,8 @@ class WordStorage:
 
         if not isinstance(word_id, int) or isinstance(word_id, bool):
             raise ValueError
-        elif word_id not in list(self.storage.values()):
+
+        if word_id not in list(self.storage.values()):
             raise KeyError
 
         self.storage_by_id = dict(storage_item[::-1] for storage_item in list(self.storage.items()))
@@ -115,7 +117,7 @@ class NGramTextGenerator:
 
         generated_sentence = list(context)
         end_id = self._word_storage.get_id('<END>')
-        for limit in range(20):
+        for _ in range(20):
             generated_sentence.append(self._generate_next_word(tuple(generated_sentence[-len(context):])))
             if generated_sentence[-1] == end_id:
                 return tuple(generated_sentence)
@@ -130,7 +132,7 @@ class NGramTextGenerator:
             raise ValueError
 
         generated_text = self._generate_sentence(context)
-        for number_sentence in range(number_of_sentences - 1):
+        for _ in range(number_of_sentences - 1):
             generated_text += self._generate_sentence(tuple(generated_text[-len(context):]))[len(context):]
 
         return generated_text
@@ -188,7 +190,7 @@ class BackOffGenerator(NGramTextGenerator):
                                                        for context_id in context])):
             raise ValueError
 
-        for generate_attempt in range(len(self._n_gram_tries)):
+        for _ in range(len(self._n_gram_tries)):
 
             n_gram_trie = self._n_gram_tries_by_size[len(context) + 1]
 
@@ -198,7 +200,8 @@ class BackOffGenerator(NGramTextGenerator):
             if not n_gram_context and len(context) > 1:
                 context = context[:-1]
                 continue
-            elif not n_gram_context and len(context) == 1:
+
+            if not n_gram_context and len(context) == 1:
                 return self.get_top_word()
 
             n_gram_context_freq = [n_gram_trie.n_gram_frequencies[n_gram] for n_gram in n_gram_context]
