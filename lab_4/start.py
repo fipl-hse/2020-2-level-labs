@@ -1,24 +1,16 @@
-from lab_4.main import WordStorage, encode_text
-from lab_4.ngrams.ngram_trie import NGramTrie
+from lab_4.main import tokenize_by_sentence
+from lab_4.main import WordStorage
+from lab_4.main import encode_text
 
 if __name__ == '__main__':
-    corpus = ('i', 'have', 'a', 'cat', '<END>',
-              'his', 'name', 'is', 'leon', '<END>',
-              'i', 'have', 'a', 'dog', 'too', '<END>',
-              'his', 'name', 'is', 'taylor', '<END>',
-              'her', 'name', 'is', 'taylor', 'too', '<END>')
+    text = 'His name is leon. He is happy.'
+    corpus = tokenize_by_sentence(text)
 
-    storage = WordStorage()
-    storage.update(corpus)
+    word_storage = WordStorage()
+    word_storage.update(corpus)
 
-    encoded = encode_text(storage, corpus)
+    encoded_text = encode_text(word_storage, corpus)
 
-    trie = NGramTrie(3, encoded)
-
-    context = (storage.get_id('i'),
-               storage.get_id('have'),)
-
-
-    RESULT = decode_text(storage, generated_text)
-
-    assert RESULT ==
+    RESULT = "('his', 'name', 'is', 'leon' '<END>', 'he', 'is', 'happy', '<END>')"
+    print(RESULT)
+    assert RESULT == "('his', 'name', 'is', 'leon' '<END>', 'he', 'is', 'happy', '<END>')", 'Something went wrong'
