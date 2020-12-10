@@ -52,7 +52,8 @@ class WordStorage:
 
         for key, value in self.storage.items():
             if value == word_id:
-                return key
+                word = key
+        return word
 
 
     def update(self, corpus: tuple):
