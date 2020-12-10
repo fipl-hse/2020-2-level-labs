@@ -23,7 +23,7 @@ def tokenize_by_sentence(text: str) -> tuple:
         text_modernised += sentence + ' ' + '<END>' + ' '  # добавляем <END> после каждого предложения
     text_modernised = (text_modernised.split(' '))  # разделяем предложения на слова
     text_tuple = []
-    for word in text_modernised:  # удаляем все ненужные элементы'
+    for word in text_modernised:  # удаляем все ненужные элементы
         if word != '':
             text_tuple.append(word)
     return tuple(text_tuple)
@@ -82,7 +82,7 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
     storage.update(text)  # присваиваем словам словаря индексы слов
     text_encoded = []
     for word in text:
-        text_encoded.append(storage.get_id(word))
+        text_encoded.append(storage.get_id(word))  # добавляем в декодированный текст id каждого слова
     text_encoded = tuple(text_encoded)
     return text_encoded
 
@@ -98,12 +98,12 @@ class NGramTextGenerator:
         if wrong_circumstances:
             raise ValueError
 
-        freq_dict = {}
-        for key, value in self._n_gram_trie.n_gram_frequencies.items(): # добавляем все совпадающие контексты
+        freq_dict = {}  # все совпадающие контексты из частотного словаря
+        for key, value in self._n_gram_trie.n_gram_frequencies.items():  # добавляем все совпадающие контексты
             if context == key[0:len(context)]:
                 freq_dict[key] = value
 
-        if freq_dict == {}:  # если контекста нет, возвращаем самое частое слово
+        if freq_dict == {}:  # если нет совпадающих контекстов, возвращаем самое частое слово из униграм
             max_freq = max(self._n_gram_trie.uni_grams.values())
             for key, value in self._n_gram_trie.uni_grams.items():
                 if max_freq == value:
@@ -120,26 +120,16 @@ class NGramTextGenerator:
         if wrong_circumstances:
             raise ValueError
         sentence = list(context)
-        id_end = self._word_storage.get_id('<END>')
+        id_end = self._word_storage.get_id('<END>')  # находим id у <END>
         index = 0
-        '''
-        while sentence[-1] != id_end:  # пока не будет <END> или 20 итераций, будет поиск контекста
-            if index == 20:
-                sentence.append(id_end)
-                break
-            index += 1
-            word = self._generate_next_word(context)
-            sentence.append(word)
-        return tuple(sentence)
-        '''
         while True:
-            if index == 20:
-                sentence.append(id_end)
+            if index == 20:  # генерируем предложение в течение 20 итераций
+                sentence.append(id_end)  # если оно не сгенерировалось, завершаем генерацию на <END>
                 break
             index += 1
-            word = self._generate_next_word(context)
+            word = self._generate_next_word(context)  # генерируем следующее слово предложения
             sentence.append(word)
-            if sentence[-1] == id_end:
+            if sentence[-1] == id_end:  # если дошли до конца предложения (до <END>), генерация закончилась
                 break
         return tuple(sentence)
 
@@ -154,9 +144,11 @@ class NGramTextGenerator:
         for index in range(number_of_sentences):
             sentence = list(self._generate_sentence(context))  # сгенерированное предложение
             context = tuple(sentence[len(sentence) - len(context): len(sentence)])  # новый контекст
-            sentence = sentence[0:len(sentence) - len(context)]
-            text.extend(sentence)
-            print(text)
+            if index == 0:  # если это первое предложение, добавляем его целиком
+                text.extend(sentence)
+            else:  # если это не первое предложение, убираем из его начала контекст
+                sentence = sentence[len(context):]
+                text.extend(sentence)
         return tuple(text)
 
 
