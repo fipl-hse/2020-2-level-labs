@@ -133,7 +133,6 @@ class NGramTextGenerator:
                 break
         return tuple(sentence)
 
-
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
         wrong_circumstances = isinstance(context, bool) or not isinstance(context, tuple) or \
                               len(context) != self._n_gram_trie.size - 1 or isinstance(number_of_sentences, bool) or \
