@@ -44,11 +44,10 @@ class WordStorage:
     def get_word(self, word_id: int) -> str:
         if not isinstance(word_id, int) or isinstance(word_id, bool):
             raise ValueError
-        if word_id not in self.storage.values():
-            raise KeyError
         for word, identifier in self.storage.items():
             if identifier == word_id:
                 return word
+        raise KeyError
 
     def update(self, corpus: tuple):
         if not isinstance(corpus, tuple):
@@ -143,6 +142,9 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             next_word_id = sorted(self._n_gram_trie.uni_grams.items(), key=lambda i: i[1], reverse=True)[0][0][0]
         return next_word_id
 
+    def __str__(self):
+        pass
+
 
 class BackOffGenerator(NGramTextGenerator):
 
@@ -150,6 +152,9 @@ class BackOffGenerator(NGramTextGenerator):
         super().__init__(word_storage, n_gram_trie)
 
     def _generate_next_word(self, context: tuple) -> int:
+        pass
+
+    def __str__(self):
         pass
 
 
