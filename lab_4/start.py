@@ -2,25 +2,26 @@
 Lab 4 implementation starter
 """
 
-from lab_4.main import LikelihoodBasedTextGenerator, encode_text, WordStorage
+from lab_4.main import BackOffGenerator, encode_text, WordStorage, decode_text, tokenize_by_sentence
 from lab_4.ngrams.ngram_trie import NGramTrie
 
 if __name__ == '__main__':
-    corpus = ('i', 'have', 'a', 'cat', '<END>',
-              'his', 'name', 'is', 'bruno', '<END>',
-              'i', 'have', 'a', 'dog', 'too', '<END>',
-              'his', 'name', 'is', 'rex', '<END>',
-              'her', 'name', 'is', 'rex', 'too', '<END>')
+    with open('lab_3/Frank_Baum.txt', 'r', encoding='utf-8') as file_frank:
+        corpus = tokenize_by_sentence(file_frank.read())
 
     storage = WordStorage()
     storage.update(corpus)
     encoded = encode_text(storage, corpus)
 
     trie = NGramTrie(3, encoded)
-    context = (storage.get_id('name'),
-               storage.get_id('is'),)
-    generator = LikelihoodBasedTextGenerator(storage, trie)
+    four = NGramTrie(4, encoded)
 
-    RESULT = generator.generate_text(context, 3)
+    context = (storage.get_id('when'),
+               storage.get_id('the'),)
+
+    generator = BackOffGenerator(storage, four, trie)
+    generated_text = generator.generate_text(context, 5)
+    RESULT = decode_text(storage, generated_text)
+
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
     assert RESULT, 'Encoding not working'

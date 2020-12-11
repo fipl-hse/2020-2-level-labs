@@ -148,7 +148,7 @@ class BackOffGenerator(NGramTextGenerator):
         self._n_gram_tries = tuple([n_gram_trie] + list(args))
 
     def _generate_next_word(self, context: tuple) -> int:
-        if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size or \
+        if not isinstance(context, tuple) or len(context) + 1 > self._n_gram_trie.size or \
                 context[0] > len(self._word_storage.storage):
             raise ValueError
 
@@ -160,7 +160,7 @@ class BackOffGenerator(NGramTextGenerator):
                 self._n_gram_trie = self._n_gram_tries[i]
                 full_context = self.get_most_frequent_gram(context)
             except IndexError:
-                full_context = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
+                full_context = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)
 
         return full_context[-1]
 
