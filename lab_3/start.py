@@ -10,9 +10,9 @@ from lab_3.main import LetterStorage
 from lab_3.main import LanguageDetector
 
 if __name__ == '__main__':
-    unknown_file = open('lab_3/unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
-    german_file = open('lab_3/Thomas_Mann.txt', encoding='utf-8')
-    english_file = open('lab_3/Frank_Baum.txt', encoding='utf-8')
+    unknown_file = open('unknown_Arthur_Conan_Doyle.txt', encoding='utf-8')
+    german_file = open('Thomas_Mann.txt', encoding='utf-8')
+    english_file = open('Frank_Baum.txt', encoding='utf-8')
 
     text_unk = tokenize_by_sentence(unknown_file.read())
     text_ger = tokenize_by_sentence(german_file.read())
@@ -39,7 +39,8 @@ if __name__ == '__main__':
 
     language_log_probability_dict = language_detector.detect_language(ngram_unknown.n_grams)
 
-    if language_log_probability_dict['german'] > language_log_probability_dict['english']:
+    if language_log_probability_dict['german'] >\
+language_log_probability_dict['english']:
         RESULT = 'english'
     else:
         RESULT = 'german'
