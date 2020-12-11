@@ -50,11 +50,10 @@ class WordStorage:
         if not isinstance(word, str):
             raise ValueError
 
-        for word1 in self.storage:
-            if word1 in self.storage:
-                if word1 == word:
-                    return self.storage[word]
-        raise KeyError
+        if word not in self.storage:
+            raise KeyError
+
+        return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
 
@@ -92,16 +91,57 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
 
 class NGramTextGenerator:
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie):
-        pass
+        self._word_storage = word_storage
+        self._n_gram_trie = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+
+        if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
+            raise ValueError
+
+        max_frequency = 0
+        context_1 = ()
+
+        for collocation, frequency in self._n_gram_trie.n_gram_frequencies.items():
+            if collocation[:len(context)] == context and frequency > max_frequency:
+                max_frequency = frequency
+                context_1 = collocation
+
+        if not context_1:
+            return max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
+        return context_1[-1]
 
     def _generate_sentence(self, context: tuple) -> tuple:
-        pass
+
+        if not isinstance(context, tuple):
+            raise ValueError
+
+        encode_sent = list(context)
+
+        for time in range(20):
+            encode_sent.append(self._generate_next_word(tuple(encode_sent[-(len(context)):])))
+            if encode_sent[-1] == self._word_storage.storage['<END>']:
+                break
+        else:
+            encode_sent.append(self._word_storage.storage['<END>'])
+
+        return tuple(encode_sent)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
-        pass
+
+        if not isinstance(context, tuple)\
+                or not isinstance(number_of_sentences, int):
+            raise ValueError
+        
+        text = []
+
+        for number in range(number_of_sentences):
+            sentence = self._generate_sentence(context)
+            if sentence[len(context) - 1] == self._word_storage.storage['<END>']:
+                sentence = sentence[len(context):]
+            text.extend(sentence)
+
+        return tuple(text)
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
