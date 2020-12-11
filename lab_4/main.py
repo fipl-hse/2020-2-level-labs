@@ -67,7 +67,7 @@ class NGramTextGenerator:
         self._word_storage = word_storage
         self._n_gram_trie = n_gram_trie
 
-def _generate_next_word(self, context: tuple) -> int:
+    def _generate_next_word(self, context: tuple) -> int:
         if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
             raise ValueError
         new_context = self.get_most_frequent_gram(context)
