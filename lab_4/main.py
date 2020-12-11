@@ -119,7 +119,7 @@ class NGramTextGenerator:
 
         sentence_generated = list(context)
         for _ in range(20):
-            sentence_generated.append(self._generate_next_word(tuple(context)))
+            sentence_generated.append(self._generate_next_word(tuple(sentence_generated[-len(context):])))
             if sentence_generated[-1] == self._word_storage.storage['<END>']:
                 break
 
