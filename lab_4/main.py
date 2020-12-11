@@ -10,15 +10,15 @@ def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         raise ValueError
 
-    sentences = re.split('[!?.] ', text)
-    words = []
+    sentences = re.split('[.!?]', text)
+    list_words = []
     for sentence in sentences:
-        list_tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
-        if not list_tokens:
+        tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
+        if not tokens:
             continue
-        words += list_tokens + ['<END>']
-    return tuple(words)
+        list_words += tokens + ['<END>']
 
+    return tuple(list_words)
 
 
 class WordStorage:
@@ -52,7 +52,7 @@ class WordStorage:
         if not isinstance(corpus, tuple) or (corpus and not isinstance(corpus[0], str)):
             raise ValueError
         for token in corpus:
-            self._put_word(word)
+            self._put_word(token)
 
 
 
