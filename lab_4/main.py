@@ -103,31 +103,28 @@ class NGramTextGenerator:
         if not isinstance(context, tuple):
             raise ValueError
 
-        end_id = self._word_storage.get_id('<END>')
-
-        sentence = list(context)
-
+        generated_sentence = list(context)
         for counts in range(20):
-            sentence.append((self._generate_next_word(tuple(sentence[-(len(context)):]))))
-            if sentence[-1] == end_id:
-                return tuple(sentence)
-        if end_id not in sentence:
-            sentence.append(end_id)
+            generated_sentence.append((self._generate_next_word(tuple(generated_sentence[-(len(context)):]))))
+            if generated_sentence[-1] == self._word_storage.get_id('<END>'):
+                return tuple(generated_sentence)
+        if self._word_storage.get_id('<END>') not in generated_sentence:
+            generated_sentence.append(self._word_storage.get_id('<END>'))
+        return tuple(generated_sentence)
 
-        return tuple(sentence)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
         if not isinstance(context, tuple) or not isinstance(number_of_sentences, int):
             raise ValueError
 
-        text = []
-
-        for _ in range(number_of_sentences):
+        generated_text = []
+        while generated_text.count(self._word_storage.get_id('<END>')) != number_of_sentences:
             new_sent = self._generate_sentence(context)
-            new_context = new_sent[-(self._n_gram_trie.size - 1):]
-            text.extend(tuple(new_context))
-        return tuple(text)
-
+            if new_sent[len(context) - 1] == self._word_storage.get_id('<END>'):
+                new_sent = new_sent[len(context):]
+            generated_text.extend(list(new_sent))
+            context = new_sent[-len(context):]
+        return tuple(generated_text)
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):

@@ -1,23 +1,21 @@
-from lab_4.main import tokenize_by_sentence, WordStorage, encode_text, NGramTextGenerator
-from lab_4.ngrams.ngram_trie import NGramTrie
+from lab_4.main import WordStorage, NGramTrie, NGramTextGenerator
+from lab_4.main import tokenize_by_sentence, encode_text
 
 if __name__ == '__main__':
-    TEXT = 'I have a friend. \n Her name is Beth.'
-    corpus = tokenize_by_sentence(TEXT)
+    text = 'I have a cat. His name is Bruno. I have a dog. Her name is Beth. '
+    text_tokenized = tokenize_by_sentence(text)
 
     word_storage = WordStorage()
-    word_storage.update(corpus)
+    word_storage.update(text_tokenized)
 
-    encoded_corpus = encode_text(word_storage, corpus)
+    encoded = encode_text(word_storage, text_tokenized)
 
-    ngrams = NGramTrie(2, encoded_corpus)
+    trie = NGramTrie(2, encoded)
+    context = (word_storage.get_id('is'),)
+    generator = NGramTextGenerator(word_storage, trie)
 
-    text_generator = NGramTextGenerator(word_storage, ngrams)
+    RESULT = generator.generate_text(context, 4)
 
-    context = (word_storage.get_id('name'),
-               word_storage.get_id('is'))
+    print(RESULT)
 
-    gen_text = text_generator.generate_text(context, 2)
-
-    RESULT = gen_text
-    assert RESULT == (5,5), 'Not working'
+    assert RESULT, "Not working"
