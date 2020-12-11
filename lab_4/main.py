@@ -8,13 +8,13 @@ import re
 
 def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str) or text is None:
-        raise ValueError()
+        raise ValueError
 
     sentences = re.split('[!?.]', text)
     list_sentences = []
 
-    for token in sentences:
-        new_sentence = re.sub('[^a-z \n]', '', token.lower()).split()
+    for sentence in sentences:
+        new_sentence = re.sub('[^a-z \n]', '', sentence.lower()).split()
         length = len(new_sentence)
         for new_token in new_sentence:
             list_sentences.append(str(new_token))
@@ -29,7 +29,7 @@ class WordStorage:
 
     def _put_word(self, word: str):
         if not isinstance(word, str) or word is None:
-            raise ValueError()
+            raise ValueError
         index = len(self.storage)
         if word not in self.storage:
             self.storage[word] = index
@@ -37,9 +37,9 @@ class WordStorage:
 
     def get_id(self, word: str) -> int:
         if not isinstance(word, str) or word is None:
-            raise ValueError()
+            raise ValueError
         if word not in self.storage:
-            raise KeyError()
+            raise KeyError
         else:
             return self.storage[word]
 
@@ -47,7 +47,7 @@ class WordStorage:
         if not isinstance(word_id, int) or word_id is None:
             raise ValueError
         if word_id not in self.storage.values():
-            raise KeyError()
+            raise KeyError
         words = list(self.storage.keys())
         ids = list(self.storage.values())
         index = ids.index(word_id)
@@ -73,17 +73,63 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
 
 class NGramTextGenerator:
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie):
-        pass
+        self._word_storage = word_storage
+        self._n_gram_trie = n_gram_trie
+        self.context_size = self._n_gram_trie.size - 1
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+        n_word_uni = self._n_gram_trie.uni_grams
+        n_word_freq = self._n_gram_trie.n_gram_frequencies
+        if not isinstance(context, tuple) or len(context) != self.context_size:
+            raise ValueError
+
+        list_n_grams = []
+        for n_gram in self._n_gram_trie.n_grams:
+            if context == n_gram[:self.context_size] and n_gram not in list_n_grams:
+                list_n_grams.append(n_gram)
+
+        max_value = 0
+        if len(list_n_grams) == 0:
+            for key, value in n_word_uni.items():
+                if value > max_value:
+                    max_value = value
+                    needed_key = key
+        else:
+            for key, value in n_word_freq.items():
+                for gram in list_n_grams:
+                    if key == gram and value > max_value:
+                        max_value = value
+                        needed_key = gram
+        return needed_key[-1]
 
     def _generate_sentence(self, context: tuple) -> tuple:
-        pass
+        if not isinstance(context, tuple):
+            raise ValueError
+
+        index_end = self._word_storage.get_id('<END>')
+        sentence = list(context)
+        counter = 0
+        while counter <= 20:
+            new_id = self._generate_next_word(tuple(sentence[-self.context_size:]))
+            sentence.append(new_id)
+            counter += 1
+            if new_id == index_end:
+                break
+            elif counter == 21:
+                sentence.append(index_end)
+        return tuple(sentence)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
-        pass
+        if not isinstance(context, tuple) or not isinstance(number_of_sentences, int):
+            raise ValueError
 
+        formed_text = self._generate_sentence(context)
+        counter_sent = 1
+        while counter_sent != number_of_sentences:
+            new_sent = self._generate_sentence(formed_text[-self.context_size:])[self.context_size + 1:]
+            formed_text += new_sent
+            counter_sent += 1
+        return tuple(formed_text)
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
