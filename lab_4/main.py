@@ -4,7 +4,6 @@ Lab 4
 import re
 from ngrams.ngram_trie import NGramTrie
 
-
 def tokenize_by_sentence(text: str) -> tuple:
     if not isinstance(text, str):
         raise ValueError
@@ -19,7 +18,7 @@ def tokenize_by_sentence(text: str) -> tuple:
     return tuple(list_tokens)
 
 
-class WordStorage:  
+class WordStorage:
     def __init__(self):
         self.storage = {}
 
@@ -56,10 +55,10 @@ class WordStorage:
             self._put_word(word)
 
 
-    def encode_text(storage: WordStorage, text: tuple) -> tuple:
-        if not isinstance(storage, WordStorage) or not isinstance(text, tuple):
-            raise ValueError
-        return tuple(storage.get_id(word) for word in text)
+def encode_text(storage: WordStorage, text: tuple) -> tuple:
+    if not isinstance(storage, WordStorage) or not isinstance(text, tuple):
+        raise ValueError
+    return tuple(storage.get_id(word) for word in text)
 
 
 class NGramTextGenerator:
