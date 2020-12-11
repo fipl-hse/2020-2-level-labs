@@ -137,7 +137,7 @@ class NGramTextGenerator:
 
         for number in range(number_of_sentences):
             sentence = self._generate_sentence(context)
-            if sentence[len(context) - 1] == self._word_storage.storage['<END>']:
+            if sentence[-1] == self._word_storage.storage['<END>']:
                 sentence = sentence[len(context):]
             text.extend(sentence)
 
