@@ -2,8 +2,8 @@ from lab_4.main import tokenize_by_sentence
 from lab_4.main import WordStorage
 from lab_4.main import encode_text
 
-if __name__ == '__main__':
-    text = 'His name is leon. He is happy.'
+if __name__ == '__main__': # То есть, условие if __name__ == '__main__' проверяет, был ли файл запущен напрямую.
+    text = 'He is leon. He is happy.'
     corpus = tokenize_by_sentence(text)
 
     word_storage = WordStorage()
@@ -11,6 +11,6 @@ if __name__ == '__main__':
 
     encoded_text = encode_text(word_storage, corpus)
 
-    RESULT = "('his', 'name', 'is', 'leon' '<END>', 'he', 'is', 'happy', '<END>')"
+    RESULT = "('he','is', 'leon' '<END>', 'he', 'is', 'happy', '<END>')"
     print(RESULT)
-    assert RESULT == "('his', 'name', 'is', 'leon' '<END>', 'he', 'is', 'happy', '<END>')", 'Something went wrong'
+    assert RESULT == "('he','is', 'leon' '<END>', 'he', 'is', 'happy', '<END>')", 'Something went wrong'
