@@ -1,7 +1,7 @@
 """
  Text generator
  """
-import re
+
 from lab_4.ngrams.ngram_trie import NGramTrie
 from lab_4.main import tokenize_by_sentence
 from lab_4.main import WordStorage
@@ -9,9 +9,7 @@ from lab_4.main import encode_text
 from lab_4.main import NGramTextGenerator
 
 if __name__ == '__main__':
-text = '''Weiche Butter schaumig rühren, geschmolzene Schokolade unterrühren,' \
-             Staubzucker, Vanillezucker, Salz und Dotter einrühren bis eine cremige Masse entsteht.' \
-            Zuletzt Schnee, Mehl und Backpulver unterheben.'''
+text = 'Weiche Butter schaumig rühren, geschmolzene Schokolade unterrühren.'
 corpus = tokenize_by_sentence(text)
 
 word_storage = WordStorage()
