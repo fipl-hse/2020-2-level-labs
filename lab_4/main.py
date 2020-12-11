@@ -30,10 +30,11 @@ class WordStorage:
             raise ValueError
         if word not in self.storage:
             self.storage[word] = len(self.storage) + 1
+        return self.storage[word]
 
 
     def get_id(self, word: str) -> int:
-        if not isinstance(word, str) or not word :
+        if not isinstance(word, str) or not word:
             raise ValueError
         if word not in self.storage:
             raise KeyError
