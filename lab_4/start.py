@@ -27,11 +27,5 @@ if __name__ == '__main__':
 
     text_generated = n_gram_text_generator.generate_text(context, 2)
     output_text = []
-    for word_id in text_generated:
-        word = word_storage.get_word(word_id)
-            if word != '<END>':
-                output_text.append(word)
-
-    RESULT = ' '.join(output_text)
-    print(RESULT)
+    
     assert RESULT == ''
