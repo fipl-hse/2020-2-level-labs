@@ -1,7 +1,7 @@
 """
  Text generator
  """
-
+import re
 from lab_4.ngrams.ngram_trie import NGramTrie
 from lab_4.main import tokenize_by_sentence
 from lab_4.main import WordStorage
