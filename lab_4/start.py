@@ -11,6 +11,6 @@ if __name__ == '__main__':
 
     encoded_text = encode_text(word_storage, corpus)
 
-    RESULT = "('his', 'name', 'is', 'leon' '<END>', 'he', 'is', 'happy', '<END>')"
+    RESULT = "('he','is', 'leon' '<END>', 'he', 'is', 'happy', '<END>')"
     print(RESULT)
-    assert RESULT == "('his', 'name', 'is', 'leon' '<END>', 'he', 'is', 'happy', '<END>')", 'Something went wrong'
+    assert RESULT == "('he','is', 'leon' '<END>', 'he', 'is', 'happy', '<END>')", 'Something went wrong'
