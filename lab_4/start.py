@@ -6,7 +6,7 @@ from lab_4.main import WordStorage, NGramTrie, NGramTextGenerator
 from lab_4.main import tokenize_by_sentence, encode_text
 
 if __name__ == '__main__':
-    TEXT = 'I have a cat. His name is Bruno. I have a dog. Her name is Bobic. Her name is Bobic too.'
+    TEXT = 'I have a cat. His name is Bruno. I have a dog. Her name is Rex. Her name is Rex too.'
     text_tokenized = tokenize_by_sentence(TEXT)
 
     word_storage = WordStorage()
