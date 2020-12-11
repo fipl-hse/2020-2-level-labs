@@ -8,7 +8,7 @@ from lab_4.ngrams.ngram_trie import NGramTrie
 
 if __name__ == '__main__':
 
-    raw_text = '''You sit here, dear. All right. Morning! Morning! Well, what have you got? Well, there is egg and
+    RAW_TEXT = '''You sit here, dear. All right. Morning! Morning! Well, what have you got? Well, there is egg and
     bacon; egg sausage and bacon; egg and spam; egg bacon and spam; egg bacon sausage and spam; spam bacon sausage and
     spam; spam egg spam bacon and spam; spam sausage spam bacon spam tomato and spam; spam egg and spam; spam baked
     beans spam... Spam! Lovely spam! Lovely spam! ...or Lobster Thermidor au Crevette with a Mornay sauce served in a
@@ -21,7 +21,7 @@ if __name__ == '__main__':
     I will have your spam. I love it. I am having spam beaked beans spam and spam! Lovely spam! Wonderful spam! 
     Shut up! Baked beans are off. Well could I have her spam instead of the baked beans then?'''
 
-    corpus = tokenize_by_sentence(raw_text)
+    corpus = tokenize_by_sentence(RAW_TEXT)
 
     storage = WordStorage()
     storage.update(corpus)
