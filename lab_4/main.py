@@ -70,10 +70,10 @@ class NGramTextGenerator:
     def _generate_next_word(self, context: tuple) -> int:
         if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
             raise ValueError
-        gaining_context = self.get_most_frequent_gram(context)
-        if not gaining_context:
+        new_context = self.get_most_frequent_gram(context)
+        if not new_context:
             return max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
-        return gaining_context[-1]
+        return new_context[-1]
 
     def _generate_sentence(self, context: tuple) -> tuple:
         if not isinstance(context, tuple):
