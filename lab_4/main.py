@@ -53,7 +53,9 @@ class WordStorage:
             raise ValueError
         if word_id not in list(self.storage.values()):
             raise KeyError
-        self.storage_by_id = dict(storage_item[::-1] for storage_item in list(self.storage.items()))
+        for key, value in self.storage.items():
+            if value == word_id:
+                return key
 
         return self.storage_by_id[word_id]
 
@@ -74,8 +76,9 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
         raise ValueError
 
     storage.update(text)
-    text_in_ids = [storage.get_id(token) for token in text]
-
+    text_in_ids = []
+    for token in text:
+        text_in_ids.append(storage.get_id(token))
     return tuple(text_in_ids)
 
 
