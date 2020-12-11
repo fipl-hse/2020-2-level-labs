@@ -79,7 +79,7 @@ class NGramTextGenerator:
         if not isinstance(context, tuple):
             raise ValueError
         sentence = list(context)
-        for num in range(20):
+        for _ in range(20):
             sentence.append(self._generate_next_word(tuple(sentence[-(len(context)):])))
             if sentence[-1] == self._word_storage.storage['<END>']:
                 break
@@ -92,10 +92,10 @@ class NGramTextGenerator:
             raise ValueError
 
         text = []
-        for num in range(number_of_sentences):
+        for _ in range(number_of_sentences):
             sentence = self._generate_sentence(context)
             if sentence[len(context) - 1] == self._word_storage.storage['<END>']:
-                new_sent = sentence[len(context):]
+                sentence = sentence[len(context):]
             text.extend(sentence)
             context = tuple(text[-len(context):])
         return tuple(text)
