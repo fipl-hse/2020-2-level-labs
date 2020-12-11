@@ -42,6 +42,6 @@ if __name__ == '__main__':
     actual = language_detector.detect_language(ngram_unknown.n_grams)
     print(actual)
 
-    RESULT = actual['english'] < actual['german']
+    RESULT = text_eng
     # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == 1, ''
+    assert RESULT == text_eng, ''
