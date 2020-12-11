@@ -82,6 +82,18 @@ class DecodeCorpusTest(unittest.TestCase):
         for bad_decode in bad_inputs:
             self.assertRaises(ValueError, decode_text, storage, bad_decode)
 
+    def test_decode_text_empty_sentence(self):
+        """
+        Tests that decode_corpus function
+            can handle empty sentence input
+        """
+        word_storage = WordStorage()
+        corpus = ()
+        expected = ()
+        word_storage.update(corpus)
+        actual = decode_text(word_storage, corpus)
+        self.assertEqual(expected, actual)
+
     def test_decode_text_ideal_conditions(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',

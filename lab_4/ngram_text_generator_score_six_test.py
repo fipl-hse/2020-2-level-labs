@@ -159,6 +159,35 @@ class NGramTextGeneratorTest(unittest.TestCase):
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, generator._generate_sentence, bad_input)
 
+    def test_ngram_text_generator_duplicates_words(self):
+        corpus = ('stop', 'it', 'stop', 'it', 'stop', 'it', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+        encoded = encode_text(storage, corpus)
+        trie = NGramTrie(2, encoded)
+        context = (storage.get_id('stop'), )
+
+        generator = NGramTextGenerator(storage, trie)
+        actual = generator._generate_sentence(context)
+
+        self.assertEqual(20 + len(context) + 1, len(actual))
+
+    def test_end_in_context(self):
+        """
+        Checks if <END> is in the context
+        """
+        context = ('cat', '<END>')
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>')
+        word_storage = WordStorage()
+        word_storage.update(corpus)
+        encoded = encode_text(word_storage, corpus)
+        trie = NGramTrie(3, encoded)
+        generator = NGramTextGenerator(word_storage, trie)
+
+        self.assertRaises(ValueError, generator._generate_sentence, context)
+
 # ---------------------------------------------------------------------------------
 
     def test_generate_text_ideal(self):
