@@ -74,6 +74,7 @@ class NGramTextGenerator:
         if not gaining_context:
             return max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
         return gaining_context[-1]
+
     def _generate_sentence(self, context: tuple) -> tuple:
         if not isinstance(context, tuple):
             raise ValueError
@@ -90,12 +91,14 @@ class NGramTextGenerator:
         if not isinstance(context, tuple) or not isinstance(number_of_sentences, int):
             raise ValueError
 
-        text = self._generate_sentence(context)  # with first sentence
-
-        for num in range(2, number_of_sentences + 1):
-            sentence = self._generate_sentence(text[-self.context_size:])[self.context_size + 1:]
-            text += sentence
-        return text
+        text = []
+        for num in range(number_of_sentences):
+            sentence = self._generate_sentence(context)
+            if sentence[len(context) - 1] == self._word_storage.storage['<END>']:
+                new_sent = sentence[len(context):]
+            text.extend(sentence)
+            context = tuple(text[-len(context):])
+        return tuple(text)
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
