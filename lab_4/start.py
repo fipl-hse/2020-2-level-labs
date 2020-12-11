@@ -1,5 +1,5 @@
 """
-Generator implementation starter
+Text Generator implementation starter
 """
 
 import lab_4.main
