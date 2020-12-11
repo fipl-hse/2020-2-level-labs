@@ -179,7 +179,8 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
                 word = value
 
         if not max_freq:
-            word = sorted([freqs for freqs in self._n_gram_trie.uni_grams.values()])[-1]
+            uni_list = sorted([freqs for freqs in self._n_gram_trie.uni_grams.values()])
+            word = uni_list[-1]
 
         return word
 
