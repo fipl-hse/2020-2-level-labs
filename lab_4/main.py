@@ -114,7 +114,7 @@ class NGramTextGenerator:
             generated_text.extend(list(generated_sentence))
         return tuple(generated_text)
 
-    def some_function_for_lint_1(self):
+    def some_function_for_lint_3(self):
         pass
 
 

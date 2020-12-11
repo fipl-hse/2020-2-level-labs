@@ -84,3 +84,32 @@ class TokenizeBySentenceTest(unittest.TestCase):
         expected = ()
         actual = tokenize_by_sentence(text)
         self.assertEqual(expected, actual)
+
+    # extra tests
+    def test_tokenize_by_sentence_adds_ends(self):
+        '''
+        Tests that number of "<END>" corresponds
+            the number of sentences
+        '''
+        text = '''There are many big and small libraries everywhere in our country. 
+                  They have millions of books in different languages. 
+                  You can find there the oldest and the newest books.'''
+        expected_end_num = 3
+        actual_end_num = tokenize_by_sentence(text).count('<END>')
+        self.assertEqual(expected_end_num, actual_end_num)
+
+    def test_tokenize_text_lower_case(self):
+        '''
+        Tests that tokens in encoded text
+            are all in a lower case (except "<END>")
+        '''
+        text = '''There are many big and small libraries everywhere in our country. 
+                  They have millions of books in different languages. 
+                  You can find there the oldest and the newest books.'''
+        tokenized_text = tokenize_by_sentence(text)
+
+        actual = True
+        for token in tokenized_text:
+            if token != '<END>' and token.isupper():
+                actual = False
+        self.assertTrue(actual)

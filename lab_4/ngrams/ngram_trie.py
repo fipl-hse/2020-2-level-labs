@@ -35,8 +35,8 @@ class NGramTrie:
             else:
                 self.n_gram_frequencies[n_gram] = 1
 
-    def some_function_for_lint_2(self):
+    def some_function_for_lint_1(self):
         pass
 
-    def some_function_for_lint_3(self):
+    def some_function_for_lint_2(self):
         pass

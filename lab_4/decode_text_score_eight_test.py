@@ -108,3 +108,26 @@ class DecodeCorpusTest(unittest.TestCase):
             self.assertTrue('<END>' not in sentence)
             self.assertTrue(sentence[0].isupper())
             self.assertTrue(sentence[-1].isalpha())
+
+    # extra test
+    def test_decode_text_upper_first_letter(self):
+        '''
+        Tests that number all the letters except
+            first one in a sentence are in a lower case
+        '''
+        corpus = ('first', 'sentence', 'here', '<END>',
+                  'second', 'sentence', 'here', '<END>',
+                  'third', 'sentence', 'here', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded_text = encode_text(storage, corpus)
+        trie = NGramTrie(3, encoded_text)
+        context = (storage.get_id('first'),
+                   storage.get_id('sentence'))
+
+        likelihood_generator = LikelihoodBasedTextGenerator(storage, trie)
+        generated_encoded_text = likelihood_generator.generate_text(context, 1)
+        decoded_text = decode_text(storage, generated_encoded_text)
+        self.assertFalse(decoded_text[0][1:].isupper())
