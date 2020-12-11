@@ -100,6 +100,16 @@ class NGramTextGenerator:
             context = tuple(text[-len(context):])
         return tuple(text)
 
+    def get_most_frequent_gram(self, context: tuple) -> tuple:
+        if not isinstance(context, tuple) or not context:
+            return ()
+        max_freq = 0
+        new_context = ()
+        for key, freq in self._n_gram_trie.n_gram_frequencies.items():
+            if key[:len(context)] == context and freq > max_freq:
+                max_freq = freq
+                new_context = key
+        return new_context
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
