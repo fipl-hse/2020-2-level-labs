@@ -200,3 +200,51 @@ class NGramTextGeneratorTest(unittest.TestCase):
 
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, generator.generate_text, bad_input, 10)
+
+    def test_generate_text_large_context(self):
+        """
+        should generate simple case with three sentences out of small corpus
+        """
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(5, encoded)
+
+        generator = NGramTextGenerator(storage, trie)
+
+        context = (storage.get_id('i'), storage.get_id('have'), storage.get_id('a'), storage.get_id('bruno'),)
+        end = storage.get_id('<END>')
+        actual = generator.generate_text(context, 3)
+        self.assertEqual(actual.count(end), 3)
+
+    def test_generate_text_lots_of_sentences(self):
+        """
+        should generate simple case with three sentences out of small corpus
+        """
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(2, encoded)
+
+        generator = NGramTextGenerator(storage, trie)
+
+        context = (storage.get_id('bruno'),)
+        end = storage.get_id('<END>')
+        actual = generator.generate_text(context, 35)
+        self.assertEqual(actual.count(end), 35)
