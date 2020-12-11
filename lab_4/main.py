@@ -64,10 +64,10 @@ def encode_text(storage: WordStorage, text: tuple) -> tuple:
 
 class NGramTextGenerator:
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie):
-        self.word_storage = word_storage
-        self.n_gram_trie = n_gram_trie
+        self._word_storage = word_storage
+        self._n_gram_trie = n_gram_trie
 
-    def _generate_next_word(self, context: tuple) -> int:
+def _generate_next_word(self, context: tuple) -> int:
         if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
             raise ValueError
         new_context = self.get_most_frequent_gram(context)
