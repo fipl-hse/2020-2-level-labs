@@ -99,8 +99,7 @@ class NGramTextGenerator:
         if not isinstance(context, tuple) or len(context) != self._n_gram_trie.size - 1:
             raise ValueError
 
-        n_gram_context = [n_gram for n_gram in self._n_gram_trie.n_gram_frequencies.keys()
-                          if n_gram[:len(context)] == context]
+        n_gram_context = [n_gram for n_gram in self._n_gram_trie.n_grams if n_gram[:len(context)] == context]
 
         if not n_gram_context:
             return self.get_top_word()
@@ -150,8 +149,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             return 0.0
 
         n_gram_word_freq = self._n_gram_trie.n_gram_frequencies[context + (word,)]
-        n_gram_context = len([n_gram for n_gram in self._n_gram_trie.n_gram_frequencies.keys()
-                              if n_gram[:len(context)] == context])
+        n_gram_context = len([n_gram for n_gram in self._n_gram_trie.n_grams if n_gram[:len(context)] == context])
 
         return n_gram_word_freq / n_gram_context
 
@@ -194,8 +192,7 @@ class BackOffGenerator(NGramTextGenerator):
 
             n_gram_trie = self._n_gram_tries_by_size[len(context) + 1]
 
-            n_gram_context = [n_gram for n_gram in n_gram_trie.n_gram_frequencies.keys()
-                              if n_gram[:len(context)] == context]
+            n_gram_context = [n_gram for n_gram in n_gram_trie.n_grams if n_gram[:len(context)] == context]
 
             if not n_gram_context and len(context) > 1:
                 context = context[:-1]
