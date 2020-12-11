@@ -4,7 +4,6 @@ Lab 4
 
 from ngrams.ngram_trie import NGramTrie
 
-
 SENTENCE_END = "<END>"
 
 
@@ -133,7 +132,6 @@ class NGramTextGenerator:
         generation_context = context
 
         for _ in range(number_of_sentences):
-            #print(generation_context, "i =", _)
             if _ != 0:
                 generation_context = generated_sentences[-1][-self.context_size:]
             generated_sentences.append(self._generate_sentence(generation_context))
