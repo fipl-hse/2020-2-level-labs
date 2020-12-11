@@ -73,9 +73,9 @@ class NGramTextGenerator:
             if context == n_gram[:self._n_gram_trie.size - 1]:
                 freq_cont[n_gram] = freq
         if not freq_cont:
-            top_n_gram = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=False)
+            top_n_gram = sorted(self._n_gram_trie.uni_grams, key = self._n_gram_trie.uni_grams.get, reverse = False)
             return top_n_gram[-1][-1]
-        top_context_n_gram = sorted(freq_cont, key=freq_cont.get, reverse=False)
+        top_context_n_gram = sorted(freq_cont, key = freq_cont.get, reverse = False)
         return top_context_n_gram[-1][-1]
 
     def _generate_sentence(self, context: tuple) -> tuple:
