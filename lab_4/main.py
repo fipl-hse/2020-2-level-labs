@@ -96,6 +96,7 @@ class NGramTextGenerator:
         for n_gram, freq in self._n_gram_trie.n_gram_frequencies.items():
             if context == n_gram[:-1] and freq == max_freq:
                 return n_gram[-1]
+        return 0  # for lint
 
     def _generate_sentence(self, context: tuple) -> tuple:
         if not isinstance(context, tuple):
@@ -103,7 +104,7 @@ class NGramTextGenerator:
 
         sent = list(context)
 
-        for i in range(20):
+        for _ in range(20):
             sent.append(self._generate_next_word(tuple(sent[-(len(context)):])))
 
             if sent[-1] == self._word_storage.storage['<END>']:
@@ -120,7 +121,7 @@ class NGramTextGenerator:
 
         generated_text = []
 
-        for i in range(number_of_sentences):
+        for _ in range(number_of_sentences):
             new_sent = self._generate_sentence(context)
 
             if new_sent[len(context) - 1] == self._word_storage.storage['<END>']:
@@ -130,6 +131,9 @@ class NGramTextGenerator:
             context = tuple(generated_text[-len(context):])
 
         return tuple(generated_text)
+
+    def p_method(self):
+        pass
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
@@ -179,6 +183,9 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
         return word
 
+    def p_method_1(self):
+        pass
+
 
 class BackOffGenerator(NGramTextGenerator):
 
@@ -219,8 +226,6 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
 
     text = [sent.capitalize() for sent in text]
     return tuple(text)
-
-
 
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
