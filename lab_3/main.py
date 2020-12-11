@@ -199,8 +199,6 @@ class LanguageDetector:
 # 10
 class ProbabilityLanguageDetector(LanguageDetector):
 
-        pass
-
     def detect_language(self, encoded_text: tuple) -> dict:
         """
         Detects the language the unknown sentence is written in using sentence probability in different languages

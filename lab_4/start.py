@@ -2,7 +2,7 @@ from lab_4.main import tokenize_by_sentence
 from lab_4.main import WordStorage
 from lab_4.main import encode_text
 
-if __name__ == '__main__': # То есть, условие if __name__ == '__main__' проверяет, был ли файл запущен напрямую.
+if __name__ == '__main__':
     text = 'He is leon. He is happy.'
     corpus = tokenize_by_sentence(text)
 
