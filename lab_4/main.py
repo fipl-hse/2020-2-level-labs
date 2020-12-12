@@ -269,8 +269,8 @@ def save_model(model: NGramTextGenerator, path_to_saved_model: str):
         with open(path_to_saved_model, 'w') as file:
             file.write(json.dumps(model_to_save))
 
-    except FileNotFoundError:
-        raise FileNotFoundError
+    except FileNotFoundError as error:
+        raise FileNotFoundError from error
 
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
@@ -294,5 +294,5 @@ def load_model(path_to_saved_model: str) -> NGramTextGenerator:
         model_generator = NGramTextGenerator(word_storage, trie)
 
         return model_generator
-    except FileNotFoundError:
-        raise FileNotFoundError
+    except FileNotFoundError as error:
+        raise FileNotFoundError from error
