@@ -54,7 +54,7 @@ class SaveModelTest(unittest.TestCase):
 
         generator = NGramTextGenerator(storage, trie)
 
-        self.assertRaises(FileNotFoundError, save_model, generator, r'user\$my_awesome_model')
+        self.assertRaises(FileNotFoundError, save_model, generator, r'some_folder/some_file')
 
 
 class LoadModelTest(unittest.TestCase):
