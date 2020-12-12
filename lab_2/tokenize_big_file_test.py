@@ -19,7 +19,7 @@ class TokenizeBigFileTest(unittest.TestCase):
             works just fine and not fails with big text
         """
         reference_len = 36815824
-        actual = tokenize_big_file('lab_2/data.txt')
+        actual = tokenize_big_file('data.txt')
         print(f"Actual tokenize_big_file function length: {len(actual)}")
         print(f"Reference tokenize_big_file function length: {reference_len}")
         self.assertTrue(actual)

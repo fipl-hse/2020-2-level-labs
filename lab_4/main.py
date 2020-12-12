@@ -2,8 +2,8 @@
 Lab 4
 """
 
-import re
 from ngrams.ngram_trie import NGramTrie
+import re
 
 
 def tokenize_by_sentence(text: str) -> tuple:
@@ -67,22 +67,49 @@ class NGramTextGenerator:
         self._n_gram_trie = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
-        if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
+        if not isinstance(context, tuple) or len(context) != self._n_gram_trie.size - 1:
             raise ValueError
-        sentence = list(context)
-        for _ in range(20):
-            sentence.append(self._generate_next_word(tuple(sentence[-(len(context)):])))
-            if sentence[-1] == self._word_storage.storage['<END>']:
-                break
-        else:
-            sentence.append(self._word_storage.storage['<END>'])
-        return tuple(sentence)
+
+        context_n_grams = {}
+        for n_gram, freq in self._n_gram_trie.n_gram_frequencies.items():
+            if context == n_gram[:self._n_gram_trie.size - 1]:
+                context_n_grams[n_gram] = freq
+
+        if not context_n_grams:
+            finding_top_word = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)
+            return finding_top_word[0][0]
+
+        finding_top_context_n_gram = sorted(context_n_grams, key=context_n_grams.get, reverse=True)
+        return finding_top_context_n_gram[0][-1]
 
     def _generate_sentence(self, context: tuple) -> tuple:
-        pass
+        if not isinstance(context, tuple):
+            raise ValueError
+
+        new_context = []
+        new_context.extend(list(context))
+        for _ in range(20):
+            new_context.append(self._generate_next_word(tuple(new_context[-len(context):])))
+            if new_context[-1] == self._word_storage.storage['<END>']:
+                break
+        else:
+            new_context.append(self._word_storage.storage['<END>'])
+        return tuple(new_context)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
-        pass
+        if not isinstance(context, tuple) or not isinstance(number_of_sentences, int) \
+                or isinstance(number_of_sentences, bool):
+            raise ValueError
+
+        text = []
+        for _ in range(number_of_sentences):
+            new_sentence = self._generate_sentence(context)
+
+            if new_sentence[len(context) - 1] == self._word_storage.storage['<END>']:
+                new_sentence = new_sentence[len(context):]
+            text.extend(new_sentence)
+            context = tuple(text[-len(context):])
+        return tuple(text)
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):

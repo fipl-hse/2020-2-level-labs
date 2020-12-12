@@ -1,6 +1,3 @@
-"""
-Language detection using n-grams
-"""
 import re
 from math import log
 
