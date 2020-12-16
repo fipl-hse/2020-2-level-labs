@@ -227,13 +227,13 @@ class LanguageDetector:
             return 1
 
         self.n_gram_storages[language_name] = {}
-        for level in self.trie_levels:
-            trie = NGramTrie(level)
+        for trie_level in self.trie_levels:
+            trie = NGramTrie(trie_level)
             if (trie.fill_n_grams(encoded_text) or
                     trie.calculate_n_grams_frequencies() or
                     trie.calculate_log_probabilities()):
                 return 1
-            self.n_gram_storages[language_name][level] = trie
+            self.n_gram_storages[language_name][trie_level] = trie
 
         return 0
 
