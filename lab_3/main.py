@@ -221,7 +221,8 @@ class LanguageDetector:
         :param language_name: a language
         :return: 0 if succeeds, 1 if not
         """
-        if not (isinstance(encoded_text, tuple) or isinstance(language_name, str)):
+        if (not isinstance(encoded_text, tuple) or not all(isinstance(i, tuple) for i in encoded_text)
+                or not isinstance(language_name, str)):
             return 1
         if not isinstance(encoded_text[0], tuple):
             return 1
