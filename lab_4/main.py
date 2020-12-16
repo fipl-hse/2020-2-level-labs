@@ -72,12 +72,15 @@ class NGramTextGenerator:
         if not isinstance(context, tuple) or len(context) != self._n_gram_trie.size - 1:
             raise ValueError
 
-        same_beginnig = [n_gram for n_gram in self._n_gram_trie.n_grams if context == n_gram[:len(context)]]
-        if same_beginnig:
-            top_n_grams = sorted(same_beginnig, key=self._n_gram_trie.n_gram_frequencies.get, reverse=True)
-            return top_n_grams[0][-1]
-        top_ini_grams = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)
-        return top_ini_grams[0][0]
+        freq_cont = {}
+        for n_gram, freq in self._n_gram_trie.n_gram_frequencies.items():
+            if context == n_gram[:self._n_gram_trie.size - 1]:
+                freq_cont[n_gram] = freq
+        if not freq_cont:
+            top_n_gram = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=False)
+            return top_n_gram[-1][-1]
+        top_context_n_gram = sorted(freq_cont, key=freq_cont.get, reverse=False)
+        return top_context_n_gram[-1][-1]
 
     def _generate_sentence(self, context: tuple) -> tuple:
         if not isinstance(context, tuple):
@@ -85,7 +88,8 @@ class NGramTextGenerator:
 
         sent_generate = list(context)
         for _ in range(20):
-            sent_generate.append(self._generate_next_word(tuple(sent_generate[-(len(context)):])))
+            word = self._generate_next_word(context)
+            sent_generate.append(word)
             if sent_generate[-1] == self._word_storage.storage['<END>']:
                 break
         else:
@@ -98,11 +102,11 @@ class NGramTextGenerator:
 
         text_generate = []
         for _ in range(number_of_sentences):
-            new_sentance = self._generate_sentence(context)
-            if new_sentance[len(context) - 1] == self._word_storage.get_id('<END>'):
-                new_sentance = new_sentance[len(context):]
-            text_generate.extend(list(new_sentance))
-            context = new_sentance[-len(context):]
+            new_sentence = self._generate_sentence(context)
+            if new_sentence[len(context) - 1] == self._word_storage.storage['<END>']:
+                new_sentence = new_sentence[len(context):]
+            text_generate.extend(new_sentence)
+            context = new_sentence[-len(context):]
         return tuple(text_generate)
 
 
