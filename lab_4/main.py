@@ -7,28 +7,64 @@ import re
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    pass
+    if not isinstance(text, str):
+        raise ValueError
+    list_tokens = []
+    sentences = re.split('[!?.]', text)
+    for sentence in sentences:
+        new_sentence = re.sub('[^a-z \n]', '', sentence.lower()).split()
+        length = len(new_sentence)
+        for token in new_sentence:
+            list_tokens.append(str(token))
+            if new_sentence.index(token) == length - 1:
+                list_tokens.append('<END>')
+    return tuple(list_tokens)
+
 
 
 class WordStorage:
     def __init__(self):
-        pass
+        self.storage = {}
 
     def _put_word(self, word: str):
-        pass
+        if not isinstance(word, str) or not word:
+            raise ValueError
+        if word not in self.storage:
+            self.storage[word] = len(self.storage) + 1
+        return self.storage[word]
 
     def get_id(self, word: str) -> int:
-        pass
+        if not isinstance(word, str) or not word:
+            raise ValueError
+        if word not in self.storage:
+            raise KeyError
+        else:
+            return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
-        pass
+        if not isinstance(word_id, int) or not word_id:
+            raise ValueError
+        if word_id not in self.storage.values():
+            raise KeyError
+        words = list(self.storage.keys())
+        ids = list(self.storage.values())
+        index = ids.index(word_id)
+        return words[index]
 
     def update(self, corpus: tuple):
-        pass
+        if not isinstance(corpus, tuple):
+            raise ValueError
+        for word in corpus:
+            self._put_word(word)
 
 
 def encode_text(storage: WordStorage, text: tuple) -> tuple:
-    pass
+    if not isinstance(storage, WordStorage) or not isinstance(text, tuple):
+        raise ValueError
+    encoded_text = []
+    for word in text:
+        encoded_text.append(storage.get_id(word))
+    return tuple(encoded_text)
 
 
 class NGramTextGenerator:
