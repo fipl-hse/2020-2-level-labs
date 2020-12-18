@@ -1,9 +1,9 @@
 import lab_4
- from lab_4.main import WordStorage,  tokenize_by_sentence, encode_text, NGramTextGenerator
- from lab_4.ngrams.ngram_trie import NGramTrie
+from lab_4.main import WordStorage,  tokenize_by_sentence, encode_text, NGramTextGenerator
+from lab_4.ngrams.ngram_trie import NGramTrie
 
-  if __name__=='__main__':
-     text='I have a cat.\nHer name is Mila'
+if __name__=='__main__':
+     text = 'I have a cat.\nHer name is Mila'
      tok_text = tokenize_by_sentence(text)
      storage = WordStorage()
      storage.update(tok_text)
