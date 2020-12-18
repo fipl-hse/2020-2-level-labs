@@ -7,17 +7,14 @@ import re
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    if not isinstance(text, str) or len(text) == 0:
+    if not isinstance(text, str):
         raise ValueError
-    sentences = re.split('[!?.] ', text)
     tokens = []
-
-    for sentence in sentences:
-        list_tokens = re.sub('[^a-z \n]', '', sentence.lower()).split()
-        if not list_tokens:
-            continue
-        tokens.extend(list_tokens + ['<END>'])
-
+    sentences = re.split('[.!?]', text)
+    for sent in sentences:
+        tok_sent = re.sub('[^a-z \n]', '', sent.lower()).split()
+        if tok_sent:
+            tokens.extend(tok_sent + ['<END>'])
     return tuple(tokens)
 
 
