@@ -14,7 +14,6 @@ class EncodeCorpusTest(unittest.TestCase):
     checks for encode_corpus function.
         Score 6 or above function
     """
-    @unittest.skip('')
     def test_encode_corpus_ideal(self):
         """
         Tests that encode_corpus function
@@ -32,7 +31,7 @@ class EncodeCorpusTest(unittest.TestCase):
             for sentence in text:
                 for character in sentence:
                     self.assertTrue(isinstance(character, int))
-    @unittest.skip('')
+  
     def test_encode_corpus_same_characters_count(self):
         """
         Tests that encode_corpus function
@@ -48,7 +47,7 @@ class EncodeCorpusTest(unittest.TestCase):
         actual = encode_corpus(letter_storage, sentences)
 
         self.assertEqual(actual[0][0], actual[0][1])
-    @unittest.skip('')
+ 
     def test_encode_corpus_inappropriate_sentence(self):
         """
         Tests that encode_corpus function
@@ -61,7 +60,7 @@ class EncodeCorpusTest(unittest.TestCase):
         for bad_input in bad_inputs:
             actual = encode_corpus(letter_storage, bad_input)
             self.assertEqual(expected, actual)
-    @unittest.skip('')
+  
     def test_encode_corpus_inappropriate_storage_instance(self):
         """
         Tests that encode_corpus function
@@ -78,7 +77,7 @@ class EncodeCorpusTest(unittest.TestCase):
         for bad_input in bad_inputs:
             actual = encode_corpus(bad_input, sentences)
             self.assertEqual(expected, actual)
-    @unittest.skip('')
+   
     def test_encode_corpus_empty_sentence(self):
         """
         Tests that encode_corpus function
@@ -90,9 +89,9 @@ class EncodeCorpusTest(unittest.TestCase):
         expected = ()
         actual = encode_corpus(letter_storage, sentences)
         self.assertEqual(expected, actual)
-    @unittest.skip('')
+  
     @patch('lab_3.main.LetterStorage.get_id_by_letter', side_effect=LetterStorage().get_id_by_letter)
-    @unittest.skip('')
+  
     def test_encode_corpus_calls_require_function(self, mock):
         """
         Tests that encode_corpus function
