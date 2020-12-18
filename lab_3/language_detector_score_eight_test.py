@@ -15,7 +15,7 @@ class LanguageDetectorTest(unittest.TestCase):
     """
     Checks for LanguageDetector class
     """
-    @unittest.skip('')
+ 
     def test_language_detector_creates_correctly(self):
         language_detector = LanguageDetector((3,), 10)
         self.assertEqual(language_detector.trie_levels, (3,))
