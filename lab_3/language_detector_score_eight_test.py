@@ -11,7 +11,6 @@ from lab_3.main import LetterStorage
 from lab_3.main import LanguageDetector
 from unittest.mock import patch
 
-@unittest.skip('')
 class LanguageDetectorTest(unittest.TestCase):
     """
     Checks for LanguageDetector class
@@ -24,7 +23,7 @@ class LanguageDetectorTest(unittest.TestCase):
         self.assertEqual(language_detector.n_gram_storages, {})
 
 # ---------------------------------------------------------------
-    @unittest.skip('')
+  
     def test_new_language_ideal_case(self):
         letter_storage = LetterStorage()
         language_detector = LanguageDetector((3,), 10)
@@ -38,7 +37,7 @@ class LanguageDetectorTest(unittest.TestCase):
         language_detector.new_language(encoded_text, 'english')
         self.assertTrue(language_detector.n_gram_storages['english'])
         self.assertEqual(type(language_detector.n_gram_storages['english'][3]), NGramTrie)
-    @unittest.skip('')
+ 
     def test_new_language_incorrect_input(self):
         language_detector = LanguageDetector((3,), 10)
 
@@ -47,7 +46,7 @@ class LanguageDetectorTest(unittest.TestCase):
         for bad_input in bad_inputs:
             actual = language_detector.new_language(bad_input, 'english')
             self.assertEqual(expected, actual)
-    @unittest.skip('')
+
     def test_new_language_incorrect_language_input(self):
         language_detector = LanguageDetector((3,), 10)
 
@@ -57,7 +56,7 @@ class LanguageDetectorTest(unittest.TestCase):
         for bad_input in bad_inputs:
             actual = language_detector.new_language(patches_encoded_text, bad_input)
             self.assertEqual(expected, actual)
-    @unittest.skip('')
+    
     def test_new_language_storage_already_created(self):
         letter_storage = LetterStorage()
         language_detector = LanguageDetector((3,), 10)
@@ -79,7 +78,7 @@ class LanguageDetectorTest(unittest.TestCase):
         self.assertTrue(language_detector.n_gram_storages['english'])
         self.assertEqual(type(language_detector.n_gram_storages['german'][3]), NGramTrie)
         self.assertEqual(type(language_detector.n_gram_storages['english'][3]), NGramTrie)
-    @unittest.skip('')
+   
     def test_new_language_add_existing_language(self):
         letter_storage = LetterStorage()
         language_detector = LanguageDetector((3,), 10)
@@ -94,7 +93,7 @@ class LanguageDetectorTest(unittest.TestCase):
         language_detector.new_language(encoded_text, 'german')
         actual = language_detector.new_language(encoded_text, 'german')
         self.assertEqual(expected, actual)
-    @unittest.skip('')
+    
     def test_new_language_creates_several_ngrams(self):
         letter_storage = LetterStorage()
         language_detector = LanguageDetector((2, 3), 10)
@@ -110,7 +109,7 @@ class LanguageDetectorTest(unittest.TestCase):
         self.assertTrue(language_detector.n_gram_storages['english'][3])
 
 # ----------------------------------------------------------------------------
-    @unittest.skip('')
+   
     def test_calculate_distance_ideal(self):
         language_detector = LanguageDetector((2, 3), 10)
 
@@ -120,7 +119,7 @@ class LanguageDetectorTest(unittest.TestCase):
         expected = 17
         actual = language_detector._calculate_distance(first_n_grams, second_n_grams)
         self.assertEqual(expected, actual)
-    @unittest.skip('')
+ 
     def test_calculate_distance_incorrect_input(self):
         language_detector = LanguageDetector((3, ), 10)
 
@@ -135,7 +134,7 @@ class LanguageDetectorTest(unittest.TestCase):
                                                                   bad_input)
             self.assertEqual(expected, actual_first)
             self.assertEqual(expected, actual_second)
-    @unittest.skip('')
+
     def test_calculate_distance_is_empty(self):
         language_detector = LanguageDetector((3,), 10)
 
@@ -150,7 +149,7 @@ class LanguageDetectorTest(unittest.TestCase):
         self.assertEqual(expected, actual_second)
 
 # ------------------------------------------------------------------------------
-    @unittest.skip('')
+   
     def test_detect_language_ideal(self):
         letter_storage = LetterStorage()
         language_detector = LanguageDetector((3,), 100)
@@ -178,7 +177,7 @@ class LanguageDetectorTest(unittest.TestCase):
         actual = language_detector.detect_language(encoded_unknown)
         self.assertTrue(actual['english'] > actual['german'])
 
-    @unittest.skip('')
+ 
     def test_detect_language_incorrect_text_input(self):
         language_detector = LanguageDetector((3,), 10)
 
@@ -187,7 +186,7 @@ class LanguageDetectorTest(unittest.TestCase):
         for bad_input in bad_inputs:
             actual = language_detector.detect_language(bad_input)
             self.assertEqual(expected, actual)
-    @unittest.skip('')
+    
     def test_detect_language_empty_text_input(self):
         language_detector = LanguageDetector((3,), 10)
 
@@ -195,9 +194,9 @@ class LanguageDetectorTest(unittest.TestCase):
         expected = {}
         actual = language_detector.detect_language(encoded_text)
         self.assertEqual(expected, actual)
-    @unittest.skip('')
+    
     @patch('lab_3.main.LanguageDetector._calculate_distance', side_effect=LanguageDetector()._calculate_distance)
-    @unittest.skip('')
+
     def test_detect_language_calls_required_method(self, mock):
         letter_storage = LetterStorage()
         language_detector = LanguageDetector((3,), 10)
@@ -210,7 +209,7 @@ class LanguageDetectorTest(unittest.TestCase):
         language_detector.new_language(encoded_text, 'english')
         language_detector.detect_language(text_to_detect)
         self.assertTrue(mock.called)
-    @unittest.skip('')
+
     def test_detect_language_uses_several_ngrams(self):
         letter_storage = LetterStorage()
         language_detector = LanguageDetector((2, 3), 100)
@@ -237,7 +236,7 @@ class LanguageDetectorTest(unittest.TestCase):
 
         actual = language_detector.detect_language(encoded_unknown)
         self.assertTrue(actual['german'] > actual['english'])
-    @unittest.skip('')
+  
     def test_detect_language_not_filled_ngram_storages(self):
         language_detector = LanguageDetector((2, 3), 100)
 
