@@ -14,7 +14,7 @@ class DecodeCorpusTest(unittest.TestCase):
         Score 8 or above function
     """
 
-    @unittest.skip('')
+
     def test_decode_text_ideal(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
@@ -42,7 +42,7 @@ class DecodeCorpusTest(unittest.TestCase):
         actual = decode_text(storage, to_decode)
         self.assertEqual(expected, actual)
 
-    @unittest.skip('')
+
     def test_decode_text_incorrect_storage(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
@@ -69,7 +69,7 @@ class DecodeCorpusTest(unittest.TestCase):
         for bad_storage in bad_inputs:
             self.assertRaises(ValueError, decode_text, bad_storage, to_decode)
 
-    @unittest.skip('')
+
     def test_decode_text_incorrect_sentences(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
@@ -85,7 +85,7 @@ class DecodeCorpusTest(unittest.TestCase):
         for bad_decode in bad_inputs:
             self.assertRaises(ValueError, decode_text, storage, bad_decode)
 
-    @unittest.skip('')
+
     def test_decode_text_ideal_conditions(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
