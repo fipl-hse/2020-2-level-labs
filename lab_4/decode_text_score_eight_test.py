@@ -14,7 +14,7 @@ class DecodeCorpusTest(unittest.TestCase):
         Score 8 or above function
     """
 
-
+    @unittest.skip('')
     def test_decode_text_ideal(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
