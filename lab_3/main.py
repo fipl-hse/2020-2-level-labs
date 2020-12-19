@@ -19,7 +19,7 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
-    words = [word.lower() for word in re.findall(r"[a-zA-Z]+"), text]
+    words = [word.lower() for word in re.findall(r"[a-zA-Z]+", text)]
     return tuple(('_', ) + tuple(letter for letter in word) + ('_', ))
 
 
