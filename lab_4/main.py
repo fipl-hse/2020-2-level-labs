@@ -156,25 +156,10 @@ class BackOffGenerator(NGramTextGenerator):
 
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
-        self._n_gram_tries = (n_gram_trie, ) + args
+
 
     def _generate_next_word(self, context: tuple) -> int:
-        if not isinstance(context, tuple) or not context:
-            raise ValueError
-        for word in context:
-            if word not in self._word_storage.storage.values():
-                raise ValueError
-        tries_sorted = sorted(list(self._n_gram_tries), key=lambda n_gram_trie: n_gram_trie.size, reverse=True)
-        for trie in tries_sorted:
-            beg = []
-            for n_gram in trie.n_grams:
-                if n_gram[:trie.size - 1] == context[:trie.size - 1]:
-                    beg.append(n_gram)
-            if beg:
-                top = sorted(beg, key=trie.n_gram_frequencies.get, reverse=True)
-                return top[0][-1]
-        top = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)
-        return top[0][0]
+        pass
 
 
 
@@ -197,10 +182,8 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
 
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
-    if not isinstance(model, NGramTextGenerator) or not isinstance(path_to_saved_model, str):
-        raise ValueError
+    pass
 
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
-    if not isinstance(path_to_saved_model, str):
-        raise ValueError
+    pass
