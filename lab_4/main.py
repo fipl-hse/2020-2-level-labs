@@ -1,9 +1,8 @@
 """
 Lab 4
 """
-
-from ngrams.ngram_trie import NGramTrie
 import re
+from ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
@@ -36,7 +35,7 @@ class WordStorage:
     def get_id(self, word: str) -> int:
         if not isinstance(word, str) or not word:
             raise ValueError
-        if word not in self.storage:
+        elif word not in self.storage:
             raise KeyError
         else:
             return self.storage[word]
@@ -95,7 +94,7 @@ class NGramTextGenerator:
         if not isinstance(context, tuple):
             raise ValueError
         list_cont = list(context)
-        for i in range(20):
+        for word in range(20):
             word = self._generate_next_word(context)
             list_cont.append(word)
             if list_cont[-1] == self._word_storage.storage['<END>']:
@@ -112,7 +111,7 @@ class NGramTextGenerator:
             raise ValueError
 
         text = []
-        for i in range(number_of_sentences):
+        for element in range(number_of_sentences):
             new_sentence = self._generate_sentence(context)
 
             if new_sentence[len(context) - 1] == self._word_storage.storage['<END>']:
@@ -120,6 +119,9 @@ class NGramTextGenerator:
             text.extend(new_sentence)
             context = tuple(text[-len(context):])
         return tuple(text)
+
+    def function(self):
+        pass
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
