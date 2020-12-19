@@ -14,7 +14,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
         All tests should pass for score 8 or above
     """
 
-    @unittest.skip('')
+
     def test_likelihood_generator_instance_creation(self):
         """
         Checks that class creates correct instance
@@ -27,7 +27,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
         self.assertEqual(generator._n_gram_trie, ngram)
 
 # ---------------------------------------------------------------------
-    @unittest.skip('')
+
     def test_calculate_likelihood_ideal(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
@@ -51,7 +51,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
         actual = generator._calculate_maximum_likelihood(word, context)
         self.assertEqual(expected, actual)
 
-    @unittest.skip('')
+
     def test_calculate_likelihood_incorrect_word(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
@@ -75,7 +75,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
                               generator._calculate_maximum_likelihood,
                               bad_word, context)
 
-    @unittest.skip('')
+
     def test_calculate_likelihood_incorrect_context(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
@@ -98,7 +98,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
                               generator._calculate_maximum_likelihood,
                               word, bad_context)
 
-    @unittest.skip('')
+
     def test_calculate_likelihood_no_such_context(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
@@ -123,7 +123,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
         self.assertEqual(expected, actual)
 
 # -----------------------------------------------------------------------
-    @unittest.skip('')
+
     def test_generate_next_word_ideal(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
@@ -147,7 +147,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
         actual = generator._generate_next_word(context)
         self.assertEqual(expected_word, actual)
 
-    @unittest.skip('')
+
     def test_generate_next_word_incorrect_context(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
@@ -169,7 +169,7 @@ class LikelihoodBasedTextGeneratorTest(unittest.TestCase):
         for bad_context in bad_inputs:
             self.assertRaises(ValueError, generator._generate_next_word, bad_context)
 
-    @unittest.skip('')
+
     def test_generate_next_word_same_prob(self):
         corpus = ('i', 'have', 'a', 'cat', '<END>',
                   'his', 'name', 'is', 'bruno', '<END>',
