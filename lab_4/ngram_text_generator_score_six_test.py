@@ -14,7 +14,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         All tests should pass for score 6 or above
     """
 
-    @unittest.skip('')
+
     def test_ngram_text_generator_instance_creation(self):
         """
         Checks that class creates correct instance
@@ -27,7 +27,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         self.assertEqual(generator._n_gram_trie, ngram)
 
 # --------------------------------------------------------------
-    @unittest.skip('')
+
     def test_ngram_text_generator_generate_next_word(self):
         """
         Checks that next word generates properly
@@ -46,7 +46,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         actual = generator._generate_next_word(context)
         self.assertEqual(expected, actual)
 
-    @unittest.skip('')
+
     def test_ngram_text_generator_generate_next_word_incorrect_context(self):
         """
         Checks that method throws error
@@ -63,7 +63,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, generator._generate_next_word, bad_input)
 
-    @unittest.skip('')
+
     def test_ngram_text_generator_generate_next_word_no_such_context(self):
         """
         Checks that next word generates properly if no context found
@@ -85,7 +85,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         self.assertEqual(expected_top_freq, actual)
 
 # --------------------------------------------------------------------------------
-    @unittest.skip('')
+
     def test_ngram_text_generator_generate_sentence_properly(self):
         """
         generates correct output according to simple case
@@ -104,7 +104,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         actual = generator._generate_sentence(context)
         self.assertEqual(actual[-1], end)
 
-    @unittest.skip('')
+
     def test_ngram_text_generator_generate_sentence_ideal(self):
         """
         first and last generated words as expected
@@ -128,7 +128,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         self.assertEqual(actual[1], first_generated)
         self.assertEqual(actual[-1], last_generated)
 
-    @unittest.skip('')
+
     def test_ngram_text_generator_generate_sentence_no_end(self):
         """
         should generate '<END>' anyway
@@ -148,7 +148,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         actual = word_storage.get_word(actual[-1])
         self.assertEqual(expected, actual)
 
-    @unittest.skip('')
+
     def test_ngram_text_generator_throws_errors(self):
         """
         throws errors with bad inputs
@@ -166,7 +166,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
             self.assertRaises(ValueError, generator._generate_sentence, bad_input)
 
 # ---------------------------------------------------------------------------------
-    @unittest.skip('')
+
     def test_generate_text_ideal(self):
         """
         should generate simple case with three sentences out of small corpus
@@ -191,7 +191,7 @@ class NGramTextGeneratorTest(unittest.TestCase):
         actual = generator.generate_text(context, 3)
         self.assertEqual(actual.count(end), 3)
 
-    @unittest.skip('')
+
     def test_text_generator_throws_errors(self):
         """
         throws errors with bad inputs
