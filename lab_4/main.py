@@ -79,7 +79,7 @@ class NGramTextGenerator:
         dict_of_n_grams = {}
         for n_gram, freq in self._n_gram_trie.n_gram_frequencies.items():
             if context == n_gram[:self._n_gram_trie.size - 1]:
-                list_of_n_grams[n_gram] = freq
+                dict_of_n_grams[n_gram] = freq
         if not dict_of_n_grams:
             top_n_gram = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)
             return top_n_gram[0][0]
@@ -115,6 +115,7 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         if not isinstance(context, tuple) or not isinstance(word, int) or not context \
                 or len(context) != self._n_gram_trie.size - 1:
             raise ValueError
+        word_freq = 0.0
         for key, frequency in self._n_gram_trie.n_gram_frequencies.items():
             if key[:len(context)] == context:
                 word_freq += frequency
