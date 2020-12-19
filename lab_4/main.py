@@ -128,13 +128,11 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         if not isinstance(context, tuple) or not isinstance(word, int) or not context \
                 or len(context) != self._n_gram_trie.size - 1:
             raise ValueError
-        word_freq = 0.0
-        for key, frequency in self._n_gram_trie.n_gram_frequencies.items():
-            if key[:len(context)] == context:
-                word_freq += frequency
-        if word_freq:
-            word_freq = self._n_gram_trie.n_gram_frequencies.get(tuple(list(context) + [word]), 0) / word_freq
-        return word_freq
+        context_freq = len([n_gram for n_gram in self._n_gram_trie.n_grams if n_gram[:len(context)] == context])
+        if not context_freq or context + (word,) not in self._n_gram_trie.n_gram_frequencies:
+            return 0.0
+        n_gram_freq = self._n_gram_trie.n_gram_frequencies[context + (word,)]
+        return n_gram_freq / context_freq
 
     def _generate_next_word(self, context: tuple) -> int:
         if not isinstance(context, tuple) or not context or len(context) != self._n_gram_trie.size - 1:
@@ -142,14 +140,14 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         for element in context:
             if element not in self._word_storage.storage.values():
                 raise ValueError
-        likelihood_dict = {}
-        for element in self._word_storage.storage.values():
-            likelihood_dict[element] = self._calculate_maximum_likelihood(element, context)
-        if likelihood_dict:
-            top = sorted(likelihood_dict, key=likelihood_dict.get, reverse=True)
-            return top[0]
-        top = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)
-        return top[0][0]
+        likelihood = {}
+        for word_id in self._word_storage.storage.values():
+            likelihood[word_id] = self._calculate_maximum_likelihood(word_id, context)
+        if likelihood:
+            top_freq = sorted(likelihood, key=likelihood.get, reverse=True)[0]
+            return top_freq
+        top_freq = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)[0]
+        return top_freq[0]
 
 
 class BackOffGenerator(NGramTextGenerator):
