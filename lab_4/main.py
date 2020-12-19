@@ -2,46 +2,132 @@
 Lab 4
 """
 
+import re
 from ngrams.ngram_trie import NGramTrie
 
 
 def tokenize_by_sentence(text: str) -> tuple:
-    pass
+    tokens = []
+
+    if not isinstance(text, str):
+        raise ValueError
+
+    sentences = re.split(r'[.!?][ \n]', text)
+    for sentence in sentences:
+        sentence_tokens = []
+        for word in sentence.lower().split():
+            if not word.isalpha():
+                word = ''.join(filter(str.isalpha, word))
+            if word:
+                sentence_tokens.append(word)
+        if sentence_tokens:
+            sentence_tokens.append('<END>')
+            tokens.extend(sentence_tokens)
+    result = tuple(tokens)
+
+    return result
 
 
 class WordStorage:
     def __init__(self):
-        pass
+        self.storage = {}
 
     def _put_word(self, word: str):
-        pass
+        if not isinstance(word, str) or len(word) < 1:
+            raise ValueError
+
+        if word not in self.storage:
+            self.storage[word] = len(self.storage) + 1
+            return len(self.storage)
+
+        return self.storage[word]
 
     def get_id(self, word: str) -> int:
-        pass
+        if not isinstance(word, str):
+            raise ValueError
+
+        if word not in self.storage:
+            raise KeyError
+
+        return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
-        pass
+        if not isinstance(word_id, int) or isinstance(word_id, bool):
+            raise ValueError
+
+        for word, the_id in self.storage.items():
+            if the_id == word_id:
+                return word
+
+        raise KeyError
 
     def update(self, corpus: tuple):
-        pass
+        if not isinstance(corpus, tuple):
+            raise ValueError
+
+        for token in corpus:
+            self._put_word(token)
 
 
 def encode_text(storage: WordStorage, text: tuple) -> tuple:
-    pass
+    if not isinstance(text, tuple) or not isinstance(storage, WordStorage):
+        raise ValueError
+
+    text_encoded = [storage.get_id(word) for word in text]
+    result = tuple(text_encoded)
+
+    return result
 
 
 class NGramTextGenerator:
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie):
-        pass
+        self._word_storage = word_storage
+        self._n_gram_trie = n_gram_trie
 
     def _generate_next_word(self, context: tuple) -> int:
-        pass
+        if (not isinstance(context, tuple) or len(context) != self._n_gram_trie.size - 1 or
+                not all(isinstance(i, int) for i in context) or any(isinstance(i, bool) for i in context)):
+            raise ValueError
+
+        for n_gram_frequency in sorted(self._n_gram_trie.n_gram_frequencies.items(), key=lambda i: i[1], reverse=True):
+            if n_gram_frequency[0][:-1] == context:
+                return n_gram_frequency[0][-1]
+        result = sorted(self._n_gram_trie.uni_grams.items(), key=lambda i: i[1], reverse=True)
+
+        return result[0][0][0]
 
     def _generate_sentence(self, context: tuple) -> tuple:
-        pass
+        if not isinstance(context, tuple):
+            raise ValueError
+        if not len(context) == len(self._n_gram_trie.n_grams[0]) - 1:
+            raise ValueError
+
+        halt = self._word_storage.get_id('<END>')
+        sentence = list(context)
+        for _ in range(19):
+            sentence.append(self._generate_next_word(context))
+            if sentence[-1] == halt:
+                break
+            context = tuple(sentence[-len(self._n_gram_trie.n_grams[0]) + 1:])
+        if sentence[len(context) - 1] == halt:
+            sentence = sentence[2:]
+        if len(sentence) == 20 and not sentence[-1] == halt:
+            sentence.append(halt)
+
+        return tuple(sentence)
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
-        pass
+        text = []
+
+        if not isinstance(number_of_sentences, int) or not isinstance(context, tuple):
+            raise ValueError
+
+        for _ in range(number_of_sentences):
+            sentence = self._generate_sentence(context)
+            context = sentence[-len(self._n_gram_trie.n_grams[0]) + 1:]
+            text += sentence
+
+        return tuple(text)
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
