@@ -156,7 +156,7 @@ class BackOffGenerator(NGramTextGenerator):
 
     def __init__(self, word_storage: WordStorage, n_gram_trie: NGramTrie, *args):
         super().__init__(word_storage, n_gram_trie)
-        self._n_gram_tries = (n_gram_trie, *args)
+        self._n_gram_tries = (n_gram_trie, ) + args
 
     def _generate_next_word(self, context: tuple) -> int:
         if not isinstance(context, tuple) or not context:
@@ -164,39 +164,43 @@ class BackOffGenerator(NGramTextGenerator):
         for word in context:
             if word not in self._word_storage.storage.values():
                 raise ValueError
-        freq_word = ''
-        word_frequency = 0
-        for n_gram_trie in self._n_gram_tries:
-            for n_gram, n_gram_frequency in n_gram_trie.n_gram_frequencies.items():
-                if n_gram[:-1] == context and n_gram_frequency > word_frequency:
-                    freq_word = n_gram[-1]
-                    word_frequency = n_gram_frequency
-        if not freq_word:
-            freq_word = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
-        return freq_word
+        tries_sorted = sorted(list(self._n_gram_tries), key=lambda n_gram_trie: n_gram_trie.size, reverse=True)
+        for trie in tries_sorted:
+            beg = []
+            for n_gram in trie.n_grams:
+                if n_gram[:trie.size - 1] == context[:trie.size - 1]:
+                    beg.append(n_gram)
+            if beg:
+                top = sorted(beg, key=trie.n_gram_frequencies.get, reverse=True)
+                return top[0][-1]
+        top = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)
+        return top[0][0]
+
 
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
     if not isinstance(storage, WordStorage) or not isinstance(encoded_text, tuple):
         raise ValueError
-    text = []
     sentence = []
-    for element in encoded_text:
-        if element != storage.get_id('<END>'):
+    sentences = []
+    for encoded_word in encoded_text:
+        if encoded_word != storage.get_id('<END>'):
             if len(sentence) == 0:
-                word = storage.get_word(element)
+                word = storage.get_word(encoded_word)
                 sentence.append(word[0].upper() + word[1:])
             else:
-                sentence.append((storage.get_word(element)))
+                sentence.append(storage.get_word(encoded_word))
         else:
-            text.append(' '.join(sentence))
+            sentences.append(' '.join(sentence))
             sentence = []
-    return tuple(text)
+    return tuple(sentences)
 
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
-    pass
+    if not isinstance(model, NGramTextGenerator) or not isinstance(path_to_saved_model, str):
+        raise ValueError
 
 
 def load_model(path_to_saved_model: str) -> NGramTextGenerator:
-    pass
+    if not isinstance(path_to_saved_model, str):
+        raise ValueError
