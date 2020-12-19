@@ -41,7 +41,7 @@ def tokenize_by_sentence(text: str) -> tuple:
 class LetterStorage:
 
     def __init__(self):
-        self.storage = []
+        self.storage = {}
 
     def _put_letter(self, letter: str) -> int:
         """
@@ -51,7 +51,7 @@ class LetterStorage:
         """
         if isinstance(letter, str) and len(letter) == 1:
             if letter not in self.storage:
-                self.storage.append(letter)
+                self.storage[letter] = len(self.storage)
             return 0
         else:
             return 1
@@ -63,7 +63,7 @@ class LetterStorage:
         :return: an id
         """
         if letter in self.storage:
-            return self.storage.index(letter)
+            return self.storage[letter]
         else:
             return -1
 
@@ -80,6 +80,7 @@ class LetterStorage:
                         result = self._put_letter(letter)
                         if result != 0:
                             return 1
+            return 0
         else:
             return 1
 
