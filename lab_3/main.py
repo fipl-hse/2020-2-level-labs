@@ -19,8 +19,12 @@ def tokenize_by_sentence(text: str) -> tuple:
          (('_', 'h', 'e', '_'), ('_', 'i', 's', '_'), ('_', 'h', 'a', 'p', 'p', 'y', '_'))
          )
     """
+    if not isinstance(text, str) or not text:
+        return ()
     sentences = re.split(r"[.!?]+", text.lower())
     sentences = [sentence for sentence in sentences if sentence]
+    if not sentences:
+        return ()
     result = tuple(
         tuple(
             ('_',) + tuple(letter for letter in word) + ('_',)
