@@ -76,51 +76,50 @@ class NGramTextGenerator:
         if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
             raise ValueError
 
-        frequent_word = ''
-        word_frequency = 0
-        for n_gram, n_gram_frequency in self._n_gram_trie.n_gram_frequencies.items():
-            if n_gram[:-1] == context and n_gram_frequency > word_frequency:
-                frequent_word = n_gram[-1]
-                word_frequency = n_gram_frequency
-        if not frequent_word:
-            frequent_word = max(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get)[0]
-        return frequent_word
+        if not isinstance(context, tuple) or len(context) != self._n_gram_trie.size - 1:
+            raise ValueError
+        freq_cont = {}
+        for n_gram, freq in self._n_gram_trie.n_gram_frequencies.items():
+            if context == n_gram[:self._n_gram_trie.size - 1]:
+                freq_cont[n_gram] = freq
+        if not freq_cont:
+            top_n_gram = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=False)
+            return top_n_gram[-1][-1]
+        top_context_n_gram = sorted(freq_cont, key=freq_cont.get, reverse=False)
+        return top_context_n_gram[-1][-1]
+
+
+
 
     def _generate_sentence(self, context: tuple) -> tuple:
-        if not isinstance(context, tuple) or len(context) + 1 != self._n_gram_trie.size:
+        if not isinstance(context, tuple):
             raise ValueError
-
-        end_code = self._word_storage.get_id('<END>')
-        if context[-1] == end_code:
-            sentence = []
+        list_cont = list(context)
+        for i in range(20):
+            word = self._generate_next_word(context)
+            list_cont.append(word)
+            if list_cont[-1] == self._word_storage.storage['<END>']:
+                break
         else:
-            sentence = list(context)
-        context_len = len(context)
-        count = 0
-        while count != 20:
-            sentence.append(self._generate_next_word(context))
-            context = tuple(list(context) + sentence)[-context_len:]
-            count += 1
-            if sentence[-1] == end_code:
-                if len(sentence) == 1:
-                    uni_grams_no_end = list(self._n_gram_trie.uni_grams.keys())
-                    uni_grams_no_end.remove((end_code,))
-                    sentence = random.choices(uni_grams_no_end, k=5) + [(end_code,)]
-                    return tuple(word_id[0] for word_id in sentence)
+            list_cont.append(self._word_storage.storage['<END>'])
+        return tuple(list_cont)
 
-                return sentence
-        sentence.append(end_code)
-        return tuple(sentence)
+
 
     def generate_text(self, context: tuple, number_of_sentences: int) -> tuple:
-        if not isinstance(context, tuple) or not isinstance(number_of_sentences, int) or not context:
+        if not isinstance(context, tuple) or not isinstance(number_of_sentences, int) \
+                or isinstance(number_of_sentences, bool):
             raise ValueError
-        generated_text = []
-        for element in range(number_of_sentences):
-            generated_sentence = self._generate_sentence(context)
-            context = generated_sentence[-(self._n_gram_trie.size - 1):]
-            generated_text.extend(list(generated_sentence))
-        return tuple(generated_text)
+
+        text = []
+        for i in range(number_of_sentences):
+            new_sentence = self._generate_sentence(context)
+
+            if new_sentence[len(context) - 1] == self._word_storage.storage['<END>']:
+                new_sentence = new_sentence[len(context):]
+            text.extend(new_sentence)
+            context = tuple(text[-len(context):])
+        return tuple(text)
 
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
