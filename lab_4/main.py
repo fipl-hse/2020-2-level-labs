@@ -35,10 +35,9 @@ class WordStorage:
     def get_id(self, word: str) -> int:
         if not isinstance(word, str) or not word:
             raise ValueError
-        elif word not in self.storage:
+        if word not in self.storage:
             raise KeyError
-        else:
-            return self.storage[word]
+        return self.storage[word]
 
     def get_word(self, word_id: int) -> str:
         if not isinstance(word_id, int) or not word_id:
@@ -111,9 +110,8 @@ class NGramTextGenerator:
             raise ValueError
 
         text = []
-        for element in range(number_of_sentences):
+        for _ in range(number_of_sentences):
             new_sentence = self._generate_sentence(context)
-
             if new_sentence[len(context) - 1] == self._word_storage.storage['<END>']:
                 new_sentence = new_sentence[len(context):]
             text.extend(new_sentence)
