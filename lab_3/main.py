@@ -30,8 +30,10 @@ def tokenize_by_sentence(text: str) -> tuple:
             ('_',) + tuple(letter for letter in word) + ('_',)
             for word in re.sub(r"[^a-zA-Z\s]", "", sentence).split()
         )
-        for sentence in sentences
+        for sentence in sentences if re.sub(r"[^a-zA-Z\s]", "", sentence).split()
     )
+
+
     return result
 
 
