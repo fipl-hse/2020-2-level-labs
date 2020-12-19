@@ -108,3 +108,17 @@ class DecodeCorpusTest(unittest.TestCase):
             self.assertTrue('<END>' not in sentence)
             self.assertTrue(sentence[0].isupper())
             self.assertTrue(sentence[-1].isalpha())
+
+    def test_decode_text_empty_sentence(self):
+        """
+        tests if decode_corpus function can handle empty sentence input
+        """
+        word_storage = WordStorage()
+
+        corpus = ()
+        expected = ()
+
+        word_storage.update(corpus)
+
+        actual = decode_text(word_storage, corpus)
+        self.assertEqual(expected, actual)

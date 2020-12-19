@@ -8,6 +8,7 @@ from lab_4.main import WordStorage, encode_text, NGramTextGenerator, save_model,
 from lab_4.ngrams.ngram_trie import NGramTrie
 
 
+@unittest.skip
 class SaveModelTest(unittest.TestCase):
     """
     checks for save_model unction.
@@ -42,6 +43,7 @@ class SaveModelTest(unittest.TestCase):
             self.assertRaises(ValueError, save_model, bad_model, 'my_awesome_model')
 
 
+@unittest.skip
 class LoadModelTest(unittest.TestCase):
     """
     checks for load_model unction.

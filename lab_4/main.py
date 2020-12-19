@@ -129,13 +129,16 @@ class NGramTextGenerator:
 
         return tuple(text)
 
+    def method_one(self):
+        pass
+
 
 class LikelihoodBasedTextGenerator(NGramTextGenerator):
 
     def _calculate_maximum_likelihood(self, word: int, context: tuple) -> float:
         if not isinstance(context, tuple):
             raise ValueError
-        if not (len(context) == len(self._n_gram_trie.n_grams[0]) - 1):  # мб лишние скобки
+        if not len(context) == len(self._n_gram_trie.n_grams[0]) - 1:
             raise ValueError
 
         try:
@@ -174,6 +177,9 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
             next_word_id = sorted(self._n_gram_trie.uni_grams.items(), key=lambda i: i[1], reverse=True)[0][0][0]
 
         return next_word_id
+
+    def method_one(self):
+        pass
 
 
 class BackOffGenerator(NGramTextGenerator):

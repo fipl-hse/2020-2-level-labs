@@ -200,3 +200,20 @@ class NGramTextGeneratorTest(unittest.TestCase):
 
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, generator.generate_text, bad_input, 10)
+
+# ---------------------------------------------------------------------------------
+
+    def test_context_end(self):
+        """
+        checks if <END> is in the context
+        """
+        context = ('cat', '<END>')
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>')
+        word_storage = WordStorage()
+        word_storage.update(corpus)
+        encoded = encode_text(word_storage, corpus)
+        trie = NGramTrie(3, encoded)
+        generator = NGramTextGenerator(word_storage, trie)
+
+        self.assertRaises(ValueError, generator._generate_sentence, context)

@@ -34,3 +34,9 @@ class NGramTrie:
                 self.n_gram_frequencies[n_gram] += 1
             else:
                 self.n_gram_frequencies[n_gram] = 1
+
+    def method_one(self):
+        pass
+
+    def method_two(self):
+        pass
