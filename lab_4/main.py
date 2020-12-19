@@ -83,7 +83,7 @@ class NGramTextGenerator:
         if not dict_of_n_grams:
             top_n_gram = sorted(self._n_gram_trie.uni_grams, key=self._n_gram_trie.uni_grams.get, reverse=True)
             return top_n_gram[0][0]
-        top_n_gram = sorted(context_n_grams, key=context_n_grams.get, reverse=True)
+        top_n_gram = sorted(dict_of_n_grams, key=dict_of_n_grams.get, reverse=True)
         return top_n_gram[0][-1]
 
     def _generate_sentence(self, context: tuple) -> tuple:
