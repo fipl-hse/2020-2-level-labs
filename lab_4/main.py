@@ -189,19 +189,7 @@ class BackOffGenerator(NGramTextGenerator):
         self._n_gram_tries = (n_gram_trie,) + args
 
     def _generate_next_word(self, context: tuple) -> int:
-        if (not isinstance(context, tuple) or
-                len(context) + 1 != self._n_gram_trie.size or
-                context[0] > len(self._word_storage.storage)):
-            raise ValueError
-
-        max_size = len(context) + 1
-        tries = [trie for trie in self._n_gram_tries if trie.size <= max_size]
-
-        for trie in tries:
-            if [x for x in trie.n_grams if context[:(trie.size - 1)] == x[:(trie.size - 1)]]:
-                return super()._generate_next_word(context)
-
-        return super()._generate_next_word(context)
+        pass
 
 
 def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
@@ -227,10 +215,8 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
 
 
 def save_model(model: NGramTextGenerator, path_to_saved_model: str):
-    if not isinstance(model, NGramTextGenerator) or not isinstance(path_to_saved_model, str):
-        raise ValueError
+    pass
 
 
 def load_model(path_to_saved_model: str):
-    if not isinstance(path_to_saved_model, str):
-        raise ValueError
+    pass
