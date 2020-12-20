@@ -12,6 +12,7 @@ class CreateDiffReportTest(unittest.TestCase):
     Checks for create_diff_report function
     """
 
+    @unittest.skip
     def test_create_diff_report_ideal(self):
         """
         Tests that create_diff_report function
