@@ -29,4 +29,4 @@ if __name__ == '__main__':
 
     EXPECTED = ('Name is rex', 'Her name is rex')
     RESULT = decode_text(storage, to_decode)
-    assert RESULT == EXPECTED, 'Encoding failed'
+    assert RESULT == EXPECTED, "the thing that won't be printed anyway"
