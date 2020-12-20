@@ -15,6 +15,7 @@ class EncodeCorpusTest(unittest.TestCase):
         Score 4 or above function
     """
 
+    @unittest.skip
     def test_encode_text_ideal(self):
         """
         Tests that encode_text function
@@ -32,6 +33,7 @@ class EncodeCorpusTest(unittest.TestCase):
         for token in actual:
             self.assertTrue(isinstance(token, int))
 
+    @unittest.skip
     def test_encode_text_same_words_count(self):
         """
         Tests that encode_text function
@@ -48,6 +50,7 @@ class EncodeCorpusTest(unittest.TestCase):
 
         self.assertEqual(actual[:5], actual[5:])
 
+    @unittest.skip
     def test_encode_text_inappropriate_sentence(self):
         """
         Tests that encode_text function
@@ -59,6 +62,7 @@ class EncodeCorpusTest(unittest.TestCase):
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, encode_text, word_storage, bad_input)
 
+    @unittest.skip
     def test_encode_text_inappropriate_storage_instance(self):
         """
         Tests that encode_text function
@@ -70,6 +74,7 @@ class EncodeCorpusTest(unittest.TestCase):
         for bad_input in bad_inputs:
             self.assertRaises(ValueError, encode_text, bad_input, corpus)
 
+    @unittest.skip
     def test_encode_text_empty_sentence(self):
         """
         Tests that encode_corpus function
