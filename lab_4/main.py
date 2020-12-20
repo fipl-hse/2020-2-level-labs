@@ -212,7 +212,7 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
 
     for encoded_word in encoded_text:
         if not encoded_word == storage.get_id('<END>'):
-            if not len(sentence):
+            if len(sentence) == 0:
                 word = storage.get_word(encoded_word)
                 sentence.append(word[0].upper() + word[1:])
             else:
