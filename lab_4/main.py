@@ -54,7 +54,8 @@ class WordStorage:
     def get_word(self, word_id: int) -> str:
         if not isinstance(word_id, int) or isinstance(word_id, bool):
             raise ValueError
-
+        if word_id < 0:
+            raise ValueError
         for word, the_id in self.storage.items():
             if the_id == word_id:
                 return word
@@ -163,10 +164,20 @@ class LikelihoodBasedTextGenerator(NGramTextGenerator):
         max_likelihood = 0
         next_word_id = 0
 
-        if (not isinstance(context, tuple) or len(context) != self._n_gram_trie.size - 1 or
-                not all(isinstance(i, int) for i in context) or any(isinstance(i, bool) for i in context) or
-                any(i >= len(self._word_storage.storage) for i in context)):
+        # if (not isinstance(context, tuple) or len(context) != self._n_gram_trie.size - 1 or
+        #         not all(isinstance(i, int) for i in context) or any(isinstance(i, bool) for i in context) or
+        #         any(i >= len(self._word_storage.storage) for i in context)):
+        #     raise ValueError
+
+        if not isinstance(context, tuple):
             raise ValueError
+        if not len(context) == len(self._n_gram_trie.n_grams[0]) - 1:
+            raise ValueError
+        for word in context:
+            try:
+                self._word_storage.get_word(word)
+            except KeyError as key_error:
+                raise ValueError from key_error
 
         for word_id in self._word_storage.storage.values():
             likelihood = self._calculate_maximum_likelihood(word_id, context)
@@ -200,7 +211,7 @@ def decode_text(storage: WordStorage, encoded_text: tuple) -> tuple:
         raise ValueError
 
     for encoded_word in encoded_text:
-        if encoded_word != storage.get_id('<END>'):
+        if not encoded_word == storage.get_id('<END>'):
             if not len(sentence):
                 word = storage.get_word(encoded_word)
                 sentence.append(word[0].upper() + word[1:])
