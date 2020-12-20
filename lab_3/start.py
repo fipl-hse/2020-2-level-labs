@@ -32,16 +32,5 @@ if __name__ == '__main__':
     unk_encoded = encode_corpus(letter_storage, text_unk)
     ger_encoded = encode_corpus(letter_storage, text_ger)
 
-    language_detector = ProbabilityLanguageDetector((3, 4, 5), 1000)
-    language_detector.new_language(eng_encoded, 'english')
-    language_detector.new_language(ger_encoded, 'german')
-
     ngram_unknown = NGramTrie(4)
     ngram_unknown.fill_n_grams(unk_encoded)
-
-    actual = language_detector.detect_language(ngram_unknown.n_grams)
-    print(actual)
-
-    RESULT = actual['english'] < actual['german']
-    # DO NOT REMOVE NEXT LINE - KEEP IT INTENTIONALLY LAST
-    assert RESULT == 1, ''
