@@ -14,6 +14,7 @@ class WordStorageTest(unittest.TestCase):
         All tests should pass for score 4 or above
     """
 
+    @unittest.skip
     def test_word_storage_correct_instance_creation(self):
         """
         word storage instance creates with correct attributes
@@ -24,6 +25,7 @@ class WordStorageTest(unittest.TestCase):
 
 # --------------------------------------------------------
 
+    @unittest.skip
     def test_word_storage_put_word_ideal(self):
         """
         word is added to storage
@@ -35,6 +37,7 @@ class WordStorageTest(unittest.TestCase):
         expected = word_storage.get_id(word)
         self.assertEqual(expected, actual)
 
+    @unittest.skip
     def test_word_storage_put_word_none(self):
         """
         none is not added to storage
@@ -44,6 +47,7 @@ class WordStorageTest(unittest.TestCase):
         self.assertRaises(ValueError, word_storage._put_word, letter)
         self.assertEqual(word_storage.storage, {})
 
+    @unittest.skip
     def test_word_storage_put_word_not_str(self):
         """
         non string word is not added to storage
@@ -53,6 +57,7 @@ class WordStorageTest(unittest.TestCase):
         self.assertRaises(ValueError, word_storage._put_word, letter)
         self.assertEqual(word_storage.storage, {})
 
+    @unittest.skip
     def test_word_storage_put_word_existing(self):
         """
         existing word is not added to storage
@@ -67,6 +72,7 @@ class WordStorageTest(unittest.TestCase):
 
 # -----------------------------------------------------------------
 
+    @unittest.skip
     def test_word_storage_get_id_ideal(self):
         """
         ideal case for get_id
@@ -77,6 +83,7 @@ class WordStorageTest(unittest.TestCase):
         actual = word_storage.get_id('word')
         self.assertEqual(expected, actual)
 
+    @unittest.skip
     def test_word_storage_get_id_none(self):
         """
         get_id none
@@ -85,6 +92,7 @@ class WordStorageTest(unittest.TestCase):
         word_storage.storage = {'word': 1}
         self.assertRaises(ValueError, word_storage.get_id, None)
 
+    @unittest.skip
     def test_word_storage_get_id_not_str(self):
         """
         id is not str get_id
@@ -93,6 +101,7 @@ class WordStorageTest(unittest.TestCase):
         word_storage.storage = {'word': 1}
         self.assertRaises(ValueError, word_storage.get_id, 123)
 
+    @unittest.skip
     def test_word_storage_get_id_not_in_storage(self):
         """
         word not in storage
@@ -103,6 +112,7 @@ class WordStorageTest(unittest.TestCase):
 
 # -----------------------------------------------------------
 
+    @unittest.skip
     def test_word_storage_update_ideal(self):
         """
         ideal case for update
@@ -113,6 +123,7 @@ class WordStorageTest(unittest.TestCase):
         word_storage.update(corpus)
         self.assertEqual(len(word_storage.storage), 9)
 
+    @unittest.skip
     def test_word_storage_update_duplicates(self):
         """
         ideal case for update
@@ -123,6 +134,7 @@ class WordStorageTest(unittest.TestCase):
         word_storage.update(sentences)
         self.assertEqual(len(word_storage.storage), 5)
 
+    @unittest.skip
     def test_word_storage_update_empty(self):
         """
         ideal case for update
@@ -132,6 +144,7 @@ class WordStorageTest(unittest.TestCase):
         word_storage.update(sentences)
         self.assertEqual(word_storage.storage, {})
 
+    @unittest.skip
     def test_word_storage_update_none(self):
         """
         ideal case for update
@@ -140,6 +153,7 @@ class WordStorageTest(unittest.TestCase):
         self.assertRaises(ValueError, word_storage.update, None)
         self.assertEqual(word_storage.storage, {})
 
+    @unittest.skip
     def test_word_storage_update_not_tuple(self):
         """
         ideal case for update
@@ -149,6 +163,7 @@ class WordStorageTest(unittest.TestCase):
         self.assertRaises(ValueError, word_storage.update, sentences)
         self.assertEqual(word_storage.storage, {})
 
+    @unittest.skip
     @patch('lab_4.main.WordStorage._put_word', side_effect=WordStorage()._put_word)
     def test_word_storage_update_calls_required_function(self, mock):
         """
@@ -161,6 +176,7 @@ class WordStorageTest(unittest.TestCase):
 
 # ------------------------------------------------------------------------------------
 
+    @unittest.skip
     def test_word_storage_get_word_ideal(self):
         """
         ideal case for get_word
@@ -171,6 +187,7 @@ class WordStorageTest(unittest.TestCase):
         actual = word_storage.get_word(1)
         self.assertEqual(expected, actual)
 
+    @unittest.skip
     def test_word_storage_get_word_none(self):
         """
         get_word none
@@ -179,6 +196,7 @@ class WordStorageTest(unittest.TestCase):
         word_storage.storage = {'word': 1}
         self.assertRaises(ValueError, word_storage.get_word, None)
 
+    @unittest.skip
     def test_word_storage_get_word_not_num(self):
         """
         id is not str get_word
@@ -187,6 +205,7 @@ class WordStorageTest(unittest.TestCase):
         word_storage.storage = {'word': 1}
         self.assertRaises(ValueError, word_storage.get_word, 'word2')
 
+    @unittest.skip
     def test_word_storage_get_word_not_in_storage(self):
         """
         word not in storage
