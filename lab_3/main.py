@@ -1,3 +1,4 @@
+import math
 import re
 
 """
@@ -118,35 +119,71 @@ def encode_corpus(storage: LetterStorage, corpus: tuple) -> tuple:
 class NGramTrie:
 
     def __init__(self, n: int):
-        pass
+        self.size = n
+        self.n_grams = ()
+        self.n_gram_frequencies = {}
+        self.n_gram_log_probabilities = {}
 
     def fill_n_grams(self, encoded_text: tuple) -> int:
         """
         Extracts n-grams from the given sentence, fills the field n_grams
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if isinstance(encoded_text, tuple):
+            list_n_grams = []
+            for sentence in encoded_text:
+                n_grams_sentence = []
+                for token in sentence:
+                    n_grams_token = []
+                    for ind in range(len(token) - self.size + 1):
+                        n_grams_token.append(tuple(token[ind:ind + self.size]))
+                    n_grams_sentence.append(tuple(n_grams_token))
+                list_n_grams.append(tuple(n_grams_sentence))
+            self.n_grams = tuple(list_n_grams)
+            return 0
+        else:
+            return 1
 
     def calculate_n_grams_frequencies(self) -> int:
         """
         Fills in the n-gram storage from a sentence, fills the field n_gram_frequencies
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if self.n_grams:
+            for sentence in self.n_grams:
+                for word in sentence:
+                    for n_gram in word:
+                        self.n_gram_frequencies[n_gram] = self.n_gram_frequencies.get(n_gram, 0) + 1
+            return 0
+        else:
+            return 1
 
     def calculate_log_probabilities(self) -> int:
         """
         Gets log-probabilities of n-grams, fills the field n_gram_log_probabilities
         :return: 0 if succeeds, 1 if not
         """
-        pass
+        if self.n_gram_frequencies:
+            for n_gram in self.n_gram_frequencies:
+                arr = [self.n_gram_frequencies[other_n_gram]
+                       for other_n_gram in self.n_gram_frequencies
+                       if n_gram[:self.size - 1] == other_n_gram[:self.size - 1]]
+                probability = self.n_gram_frequencies[n_gram] / sum(arr)
+                self.n_gram_log_probabilities[n_gram] = math.log(probability)
+            return 0
+        else:
+            return 1
 
     def top_n_grams(self, k: int) -> tuple:
         """
         Gets k most common n-grams
         :return: a tuple with k most common n-grams
         """
-        pass
+        if self.n_gram_frequencies and isinstance(k, int) and k >= 0:
+            return tuple(sorted(self.n_gram_frequencies, key=self.n_gram_frequencies.get, reverse=True)[:k])
+        else:
+            return ()
+
 
 
 # 8
