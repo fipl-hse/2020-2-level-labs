@@ -79,3 +79,67 @@ class LoadModelTest(unittest.TestCase):
         for word, id_num in generator._word_storage.storage.items():
             self.assertTrue(word in loaded_model._word_storage.storage)
             self.assertEqual(id_num, loaded_model._word_storage.storage[word])
+
+    def test_loaded_model_name(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(2, encoded)
+
+        generator = NGramTextGenerator(storage, trie)
+
+        save_model(generator, 'my_awesome_model')
+        loaded_model = load_model('my_awesome_model')
+
+        self.assertEqual(generator.__class__.__name__,
+                         loaded_model.__class__.__name__)
+
+    def test_load_model_type(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(2, encoded)
+
+        generator = NGramTextGenerator(storage, trie)
+
+        save_model(generator, 'my_awesome_model')
+        loaded_model = load_model('my_awesome_model')
+
+        self.assertIsInstance(loaded_model, NGramTextGenerator)
+
+    def test_load_model_has_generator_methods(self):
+        corpus = ('i', 'have', 'a', 'cat', '<END>',
+                  'his', 'name', 'is', 'bruno', '<END>',
+                  'i', 'have', 'a', 'dog', 'too', '<END>',
+                  'his', 'name', 'is', 'rex', '<END>',
+                  'her', 'name', 'is', 'rex', 'too', '<END>')
+
+        storage = WordStorage()
+        storage.update(corpus)
+
+        encoded = encode_text(storage, corpus)
+
+        trie = NGramTrie(2, encoded)
+
+        generator = NGramTextGenerator(storage, trie)
+
+        save_model(generator, 'my_awesome_model')
+        loaded_model = load_model('my_awesome_model')
+
+        self.assertEquals(dir(loaded_model), dir(generator))
